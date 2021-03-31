@@ -1,7 +1,7 @@
 search_mode=OPTIMIZE_MAX_JOINT
 srdf_filename=engineer.srdf
 robot_name_in_srdf=engineer
-moveit_config_pkg=engineer_moveit_config
+moveit_config_pkg=engineer_arm_config
 robot_name=engineer
 planning_group_name=engineer_arm
 ikfast_plugin_pkg=engineer_arm_ikfast_plugin
