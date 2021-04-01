@@ -48,5 +48,5 @@ engineer_arm_controller:
     joint1: { p: 300, i: 0.0, d: 10, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: true }
     joint2: { p: 2000, i: 10, d: 6, i_clamp_max: 15, i_clamp_min: -15, antiwindup: true, publish_state: true }
     joint3: { p: 1000, i: 2, d: 6, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
-    joint4: { p: 20, i: 0.1, d: 2, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
-    joint5: { p: 20, i: 0.1, d: 2, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
+    joint4: { p: 10, i: 0.1, d: 2, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
+    joint5: { p: 10, i: 0.1, d: 2, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
