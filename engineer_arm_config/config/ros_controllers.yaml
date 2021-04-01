@@ -28,15 +28,14 @@ joint_state_controller:
 controller_list:
   - name: engineer_arm_controller
     action_ns: follow_joint_trajectory
+    default: True
     type: FollowJointTrajectory
-    default: true
     joints:
       - joint1
       - joint2
       - joint3
       - joint4
       - joint5
-
 engineer_arm_controller:
   type: effort_controllers/JointTrajectoryController
   joints:
