@@ -17,7 +17,7 @@
         <joint name="joint5"/>
         <joint name="palm_joint"/>
     </group>
-    <group name="hand">
+    <group name="engineer_hand">
         <link name="palm"/>
         <link name="left_finger"/>
         <link name="right_finger"/>
