@@ -13,7 +13,7 @@ class State;
 class Step;
 
 /*!
- * Base class for a generic swing leg motion.
+ * Base class for a generic arm motion.
  */
 class ArmMotionBase {
  public:
@@ -37,7 +37,7 @@ class ArmMotionBase {
    * @return a clone of this class.
    */
   virtual std::unique_ptr<ArmMotionBase> clone() const {
-    throw std::runtime_error("LegMotionBase::clone() not implemented.");
+    throw std::runtime_error("ArmMotionBase::clone() not implemented.");
   }
 
   /*!
@@ -46,7 +46,7 @@ class ArmMotionBase {
    */
   ArmMotionBase::TargetType getType() const { return type_; }
   ArmMotionBase::TrajectoryType getTrajectoryType() const {
-    throw std::runtime_error("LegMotionBase::getTrajectoryType() not implemented.");
+    throw std::runtime_error("ArmMotionBase::getTrajectoryType() not implemented.");
   }
 
   virtual bool needsComputation() const { throw std::runtime_error("ArmMotionBase::needsComputation() not implemented."); }
@@ -58,13 +58,6 @@ class ArmMotionBase {
    */
   virtual double getDuration() const { throw std::runtime_error("ArmMotionBase::getDuration() not implemented."); }
 
-  /*!
-   * Print the contents to console for debugging.
-   * @param out the output stream.
-   * @param swingTrajectory the swing trajectory to debug.
-   * @return the resulting output stream.
-   */
-  friend std::ostream &operator<<(std::ostream &out, const ArmMotionBase &arm_motion);
   friend class StepCompleter;
 
  protected:
