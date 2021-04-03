@@ -27,12 +27,12 @@ joint_limits:
     has_velocity_limits: true
     max_velocity: 34
     has_acceleration_limits: true
-    max_acceleration: 60
+    max_acceleration: 30
   joint5:
     has_velocity_limits: true
     max_velocity: 34
     has_acceleration_limits: true
-    max_acceleration: 60
+    max_acceleration: 30
   left_finger_joint:
     has_velocity_limits: true
     max_velocity: 3.772
