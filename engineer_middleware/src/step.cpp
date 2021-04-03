@@ -37,7 +37,7 @@ Step::Step(const Step &other)
       is_updated_(other.is_updated_),
       is_computed_(other.is_computed_),
       id_(other.id_) {
-  if (other.base_motion_) base_motion_ = std::move(other.base_motion_->clone());
+  if (other.base_motion_) base_motion_ = other.base_motion_->clone();
   if (other.arm_motion_) arm_motion_ = other.arm_motion_->clone();
 }
 
@@ -47,7 +47,7 @@ Step &Step::operator=(const Step &other) {
   is_updated_ = other.is_updated_;
   is_computed_ = other.is_computed_;
   id_ = other.id_;
-  if (other.base_motion_) base_motion_ = std::move(other.base_motion_->clone());
+  if (other.base_motion_) base_motion_ = other.base_motion_->clone();
   if (other.arm_motion_) arm_motion_ = other.arm_motion_->clone();
   return *this;
 }
@@ -58,7 +58,7 @@ std::unique_ptr<Step> Step::clone() const {
 }
 
 void Step::addBaseMotion(const BaseMotionBase &base_motion) {
-  base_motion_ = std::move(base_motion.clone());
+  base_motion_ = base_motion.clone();
   is_updated_ = false;
   is_computed_ = false;
 }
@@ -148,20 +148,20 @@ void Step::setId(const std::string &id) {
   id_ = id;
 }
 
-std::ostream &operator<<(std::ostream &out, const Step &step) {
-  out << "------" << std::endl;
-  out << "ID: " << step.id_ << std::endl;
-  if (step.hasArmMotion()) {
-    out << "---" << std::endl;
-    out << "Arm motion: " << std::endl;
-    out << *(step.arm_motion_) << std::endl;
-  }
-  if (step.hasBaseMotion()) {
-    out << "---" << std::endl;
-    out << "Base motion: " << std::endl;
-    out << *(step.base_motion_) << std::endl;
-  }
-  return out;
-}
+//std::ostream &operator<<(std::ostream &out, const Step &step) {
+//  out << "------" << std::endl;
+//  out << "ID: " << step.id_ << std::endl;
+//  if (step.hasArmMotion()) {
+//    out << "---" << std::endl;
+//    out << "Arm motion: " << std::endl;
+//    out << *(step.arm_motion_) << std::endl;
+//  }
+//  if (step.hasBaseMotion()) {
+//    out << "---" << std::endl;
+//    out << "Base motion: " << std::endl;
+//    out << *(step.base_motion_) << std::endl;
+//  }
+//  return out;
+//}
 
 } /* namespace */

@@ -33,6 +33,7 @@ catkin_package(
         LIBRARIES
         CATKIN_DEPENDS
         roscpp
+        rm_common
         DEPENDS
 )
 
@@ -50,6 +51,7 @@ include_directories(
 ## Declare a cpp library
 add_library(${PROJECT_NAME}
         src/step.cpp
+        src/step_queue.cpp
         )
 
 

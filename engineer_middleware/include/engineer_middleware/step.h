@@ -100,8 +100,6 @@ class Step {
   const std::string &getId() const;
   void setId(const std::string &id);
 
-  friend std::ostream &operator<<(std::ostream &out, const Step &step);
-
   friend class StepCompleter;
 
  protected:
