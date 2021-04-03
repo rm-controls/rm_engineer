@@ -126,21 +126,14 @@ bool Step::advance(double dt) {
   return true;
 }
 
-double Step::getTotalDuration() const {
-  if (!is_updated_) throw std::runtime_error("Step::getTotalDuration() cannot be called if step is not updated.");
-  return total_duration_;
-}
-
-double Step::getTotalPhase() const {
-  if (!is_updated_) throw std::runtime_error("Step::getTotalPhase() cannot be called if step is not updated.");
-  return mapTo01Range(time_, 0.0, getTotalDuration());
-}
-
 double Step::getBaseMotionPhase() const {
   if (!is_updated_) throw std::runtime_error("Step::getBaseMotionPhase() cannot be called if step is not updated.");
   return mapTo01Range(time_, 0.0, getBaseMotionDuration());
 }
-
+double Step::getArmMotionPhase() const {
+  if (!is_updated_) throw std::runtime_error("Step::getArmMotionPhase() cannot be called if step is not updated.");
+  return mapTo01Range(time_, 0.0, getArmMotionDuration());
+}
 bool Step::isApproachingEnd(double tolerance) const {
   if (!is_updated_) throw std::runtime_error("Step::isApproachingEnd() cannot be called if step is not updated.");
   if (getTime() + tolerance >= getTotalDuration()) return true;
@@ -160,7 +153,7 @@ std::ostream &operator<<(std::ostream &out, const Step &step) {
   out << "ID: " << step.id_ << std::endl;
   if (step.hasArmMotion()) {
     out << "---" << std::endl;
-    out << "ARM motion: " << std::endl;
+    out << "Arm motion: " << std::endl;
     out << *(step.arm_motion_) << std::endl;
   }
   if (step.hasBaseMotion()) {

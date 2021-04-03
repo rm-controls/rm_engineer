@@ -27,14 +27,14 @@ class Step {
    * Add swing data for a arm.
    * @param data the step data.
    */
-  void addArmMotion(const LegMotionBase &legMotion);
+  void addArmMotion(const LegMotionBase &arm_motion);
 
   /*!
    * Add base shift data for a state.
    * @param state the corresponding state of the base shift data.
    * @param data the base shift data.
    */
-  void addBaseMotion(const BaseMotionBase &baseMotion);
+  void addBaseMotion(const BaseMotionBase &base_motion);
 
   bool needsComputation() const;
   bool compute();
@@ -59,7 +59,6 @@ class Step {
     if (!hasBaseMotion()) throw std::out_of_range("No base motion in this step!");
     return *base_motion_;
   };
-
   bool hasBaseMotion() const { return (bool) (base_motion_); };
   const BaseMotionBase &getArmMotion() const {
     if (!hasBaseMotion()) throw std::out_of_range("No arm motion in this step!");
@@ -74,12 +73,27 @@ class Step {
    * Return the current time of the step, starting at 0.0 for each step.
    * @return the current time.
    */
-  double getTime() const;
-  double getTotalDuration() const;
-  double getTotalPhase() const;
-  double getArmMotionDuration() const;
-  double getBaseMotionDuration() const;
+  double getTime() const { return time_; }
+  double getTotalDuration() const {
+    if (!is_updated_) throw std::runtime_error("Step::getTotalDuration() cannot be called if step is not updated.");
+    return total_duration_;
+  }
+  double getTotalPhase() const {
+    if (!is_updated_) throw std::runtime_error("Step::getTotalDuration() cannot be called if step is not updated.");
+    return total_duration_;
+  }
+  double getBaseMotionDuration() const {
+    if (!is_updated_) throw std::runtime_error("Step::getBaseMotionDuration() cannot be called if step is not updated.");
+    if (!hasBaseMotion()) return 0.0;
+    return base_motion_->getDuration();
+  }
   double getBaseMotionPhase() const;
+  double getArmMotionDuration() const {
+    if (!is_updated_) throw std::runtime_error("Step::getBaseMotionDuration() cannot be called if step is not updated.");
+    if (!hasBaseMotion()) return 0.0;
+    return base_motion_->getDuration();
+  }
+  double getArmMotionPhase() const;
 
   bool isApproachingEnd(double tolerance) const;
 
