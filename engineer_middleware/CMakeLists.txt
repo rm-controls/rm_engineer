@@ -49,7 +49,7 @@ include_directories(
 
 ## Declare a cpp library
 add_library(${PROJECT_NAME}
-        src/Algorithm.cpp
+        src/step.cpp
         )
 
 
