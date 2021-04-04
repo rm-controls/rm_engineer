@@ -1,8 +1,5 @@
 #pragma once
 
-#include "engineer_middleware/step.h"
-#include "engineer_middleware/state.h"
-
 // STD
 #include <string>
 #include <memory>
@@ -30,6 +27,7 @@ class ArmMotionBase {
 
   ~ArmMotionBase() = default;
   virtual bool compute(const moveit::core::RobotState &current_state);
+  virtual bool move();
  protected:
   moveit::planning_interface::MoveGroupInterface &arm_group_, &hand_group_;
   moveit::planning_interface::MoveGroupInterface::Plan arm_plan_, hand_plan_;
@@ -42,6 +40,7 @@ class EndEffectorTarget : public ArmMotionBase {
                     moveit::planning_interface::MoveGroupInterface &arm_group,
                     moveit::planning_interface::MoveGroupInterface &hand_group);
   bool compute(const moveit::core::RobotState &current_state) override;
+  bool move() override;
  private:
   bool has_pos_, has_ori_;
   geometry_msgs::PoseStamped target_;
@@ -53,6 +52,7 @@ class JointTarget : public ArmMotionBase {
               moveit::planning_interface::MoveGroupInterface &arm_group,
               moveit::planning_interface::MoveGroupInterface &hand_group);
   bool compute(const moveit::core::RobotState &current_state) override;
+  bool move() override;
  private:
   bool has_joints_;
   std::vector<double> target_;

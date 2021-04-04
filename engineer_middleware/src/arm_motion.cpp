@@ -3,6 +3,7 @@
 //
 
 #include "engineer_middleware/arm_motion.h"
+#include <rm_common/ros_utilities.h>
 
 namespace engineer_middleware {
 
@@ -35,6 +36,13 @@ bool ArmMotionBase::compute(const moveit::core::RobotState &current_state) {
     return true;
   else
     return (hand_group_.plan(hand_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+}
+
+bool ArmMotionBase::move() {
+  if (hand_motion_)
+    return hand_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+  else
+    return true;
 }
 
 EndEffectorTarget::EndEffectorTarget(const XmlRpc::XmlRpcValue &arm_motion,
@@ -78,6 +86,13 @@ bool EndEffectorTarget::compute(const moveit::core::RobotState &current_state) {
       ArmMotionBase::compute(current_state);
 }
 
+bool EndEffectorTarget::move() {
+  if (ArmMotionBase::move())
+    if (has_pos_ || has_ori_)
+      return arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+  return true;
+}
+
 JointTarget::JointTarget(const XmlRpc::XmlRpcValue &arm_motion,
                          moveit::planning_interface::MoveGroupInterface &arm_group,
                          moveit::planning_interface::MoveGroupInterface &hand_group)
@@ -99,6 +114,13 @@ bool JointTarget::compute(const moveit::core::RobotState &current_state) {
   else
     return (arm_group_.plan(arm_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS) &&
         ArmMotionBase::compute(current_state);
+}
+
+bool JointTarget::move() {
+  if (ArmMotionBase::move())
+    if (has_joints_)
+      return arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+  return true;
 }
 
 }

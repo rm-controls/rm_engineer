@@ -1,7 +1,6 @@
 #include "engineer_middleware/step.h"
 
 #include <uuid/uuid.h>
-#include <cmath>
 
 namespace engineer_middleware {
 
@@ -24,6 +23,12 @@ bool Step::compute(const moveit::core::RobotState &current_state) {
     arm_motion_->compute(current_state);
   }
   return true;
+}
+
+bool Step::move() {
+  if (hasArmMotion())
+    return arm_motion_->move();
+  return false;
 }
 
 } /* namespace */
