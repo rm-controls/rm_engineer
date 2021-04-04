@@ -14,9 +14,14 @@ find_package(catkin REQUIRED
         COMPONENTS
         roscpp
         roslint
-
         rm_common
+        moveit_core
+        moveit_ros_planning
+        moveit_ros_planning_interface
+        moveit_visual_tools
         )
+
+find_package(Eigen3 REQUIRED)
 
 ###################################
 ## catkin specific configuration ##
@@ -30,6 +35,7 @@ find_package(catkin REQUIRED
 catkin_package(
         INCLUDE_DIRS
         include
+        ${EIGEN3_INCLUDE_DIR}
         LIBRARIES
         CATKIN_DEPENDS
         roscpp
@@ -46,14 +52,17 @@ catkin_package(
 include_directories(
         include
         ${catkin_INCLUDE_DIRS}
+        ${EIGEN3_INCLUDE_DIR}
 )
 
 ## Declare a cpp library
-add_library(${PROJECT_NAME}
-        src/step.cpp
-        src/step_queue.cpp
-        )
+#add_library(${PROJECT_NAME}
+#        src/step.cpp
+#        src/step_queue.cpp
+#        )
 
+add_executable(${PROJECT_NAME}
+        src/engineer_middleware.cpp)
 
 add_dependencies(${PROJECT_NAME}
         ${catkin_EXPORTED_TARGETS}

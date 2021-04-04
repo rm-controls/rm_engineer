@@ -25,11 +25,12 @@
     <arg name="urdf_path" default="$(find rm_description)/urdf/engineer/engineer.urdf.xacro"/>
 
     <!-- launch the gazebo simulator and spawn the robot -->
-    <include file="$(find engineer_arm_config)/launch/gazebo.launch">
-        <arg name="paused" value="$(arg paused)"/>
-        <arg name="gazebo_gui" value="$(arg gazebo_gui)"/>
-        <arg name="urdf_path" value="$(arg urdf_path)"/>
-    </include>
+    <!--    <include file="$(find engineer_arm_config)/launch/gazebo.launch">-->
+    <!--        <arg name="paused" value="$(arg paused)"/>-->
+    <!--        <arg name="gazebo_gui" value="$(arg gazebo_gui)"/>-->
+    <!--        <arg name="urdf_path" value="$(arg urdf_path)"/>-->
+    <!--    </include>-->
+    <include file="$(find engineer_arm_config)/launch/ros_controllers.launch"/>
 
     <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
     <include file="$(find engineer_arm_config)/launch/planning_context.launch">
