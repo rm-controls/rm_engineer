@@ -24,6 +24,7 @@ ArmMotionBase::ArmMotionBase(const XmlRpc::XmlRpcValue &arm_motion,
     hand_motion_ = FREEZE;
   }
 }
+
 bool ArmMotionBase::compute(const moveit::core::RobotState &current_state) {
   hand_group_.setStartState(current_state);
   if (hand_motion_ > 0 && hand_motion_ < 3)
@@ -45,9 +46,9 @@ EndEffectorTarget::EndEffectorTarget(const XmlRpc::XmlRpcValue &arm_motion,
     target_.header.frame_id = std::string(arm_motion["frame"]);
   if (arm_motion.hasMember("position")) {
     ROS_ASSERT(arm_motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-    target_.pose.position.x = arm_motion["position"][0];
-    target_.pose.position.y = arm_motion["position"][1];
-    target_.pose.position.z = arm_motion["position"][2];
+    target_.pose.position.x = xmlRpcGetDouble(arm_motion["position"], 0, 0.0);
+    target_.pose.position.y = xmlRpcGetDouble(arm_motion["position"], 1, 0.0);
+    target_.pose.position.z = xmlRpcGetDouble(arm_motion["position"], 2, 0.0);
     has_pos_ = true;
   }
   if (arm_motion.hasMember("rpy")) {
@@ -63,7 +64,7 @@ EndEffectorTarget::EndEffectorTarget(const XmlRpc::XmlRpcValue &arm_motion,
 bool EndEffectorTarget::compute(const moveit::core::RobotState &current_state) {
   arm_group_.setStartState(current_state);
   if (!has_pos_ && !has_ori_)
-    return true;
+    return ArmMotionBase::compute(current_state);
   if (has_pos_ && has_pos_)
     arm_group_.setPoseTarget(target_);
   if (has_pos_ && !has_ori_)
@@ -75,6 +76,29 @@ bool EndEffectorTarget::compute(const moveit::core::RobotState &current_state) {
                                     target_.pose.orientation.w);
   return (arm_group_.plan(arm_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS) &&
       ArmMotionBase::compute(current_state);
+}
+
+JointTarget::JointTarget(const XmlRpc::XmlRpcValue &arm_motion,
+                         moveit::planning_interface::MoveGroupInterface &arm_group,
+                         moveit::planning_interface::MoveGroupInterface &hand_group)
+    : ArmMotionBase(arm_motion, arm_group, hand_group) {
+  if (arm_motion.hasMember("joints")) {
+    ROS_ASSERT(arm_motion["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+    target_.push_back(xmlRpcGetDouble(arm_motion["joints"], 0, 0.0));
+    target_.push_back(xmlRpcGetDouble(arm_motion["joints"], 1, 0.0));
+    target_.push_back(xmlRpcGetDouble(arm_motion["joints"], 2, 0.0));
+    target_.push_back(xmlRpcGetDouble(arm_motion["joints"], 3, 0.0));
+    target_.push_back(xmlRpcGetDouble(arm_motion["joints"], 4, 0.0));
+    has_joints_ = true;
+  }
+}
+
+bool JointTarget::compute(const moveit::core::RobotState &current_state) {
+  if (!has_joints_)
+    return ArmMotionBase::compute(current_state);
+  else
+    return (arm_group_.plan(arm_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS) &&
+        ArmMotionBase::compute(current_state);
 }
 
 }

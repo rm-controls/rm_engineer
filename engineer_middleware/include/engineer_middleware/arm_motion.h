@@ -51,10 +51,10 @@ class JointTarget : public ArmMotionBase {
  public:
   JointTarget(const XmlRpc::XmlRpcValue &arm_motion,
               moveit::planning_interface::MoveGroupInterface &arm_group,
-              moveit::planning_interface::MoveGroupInterface &hand_group) :
-      ArmMotionBase(arm_motion, arm_group, hand_group) {
-  }
+              moveit::planning_interface::MoveGroupInterface &hand_group);
+  bool compute(const moveit::core::RobotState &current_state) override;
  private:
+  bool has_joints_;
   std::vector<double> target_;
 };
 

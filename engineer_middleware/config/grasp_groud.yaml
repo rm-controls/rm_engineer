@@ -1,0 +1,10 @@
+steps:
+  - step:
+      end_effector_target:
+        frame: base_link
+        position: [ 0.39, 0.0, 0.2 ]
+        rpy: [ 0., 0., 0. ]
+        hand_open: before
+  - step:
+      joints_target:
+        joint: [ 0., 0., 0., 0., 0. ]
