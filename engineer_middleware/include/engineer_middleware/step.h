@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engineer_middleware/arm_motion/arm_motion_base.h"
+#include "arm_motion.h"
 #include "engineer_middleware/base_motion/base_motion_base.h"
 
 // STL
@@ -9,6 +9,9 @@
 #include <iostream>
 #include <memory>
 #include <string>
+
+// ROS
+#include <rm_common/ros_utilities.h>
 
 namespace engineer_middleware {
 
@@ -19,6 +22,7 @@ class Step {
  public:
   Step();
   ~Step() = default;
+  Step(const XmlRpc::XmlRpcValue &step);
   Step(const Step &other);
   Step &operator=(const Step &other);
 
@@ -87,18 +91,14 @@ class Step {
     if (!hasBaseMotion()) return 0.0;
     return base_motion_->getDuration();
   }
-  double getBaseMotionPhase() const;
   double getArmMotionDuration() const {
     if (!is_updated_) throw std::runtime_error("Step::getBaseMotionDuration() cannot be called if step is not updated.");
     if (!hasBaseMotion()) return 0.0;
     return base_motion_->getDuration();
   }
-  double getArmMotionPhase() const;
 
-  bool isApproachingEnd(double tolerance) const;
-
-  const std::string &getId() const;
-  void setId(const std::string &id);
+  const std::string &getId() const { return id_; }
+  void setId(const std::string &id) { id_ = id; }
 
   friend class StepCompleter;
 

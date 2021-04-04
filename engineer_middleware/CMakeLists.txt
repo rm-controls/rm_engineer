@@ -62,6 +62,8 @@ include_directories(
 #        )
 
 add_executable(${PROJECT_NAME}
+        src/step.cpp
+        src/step_queue.cpp
         src/engineer_middleware.cpp)
 
 add_dependencies(${PROJECT_NAME}

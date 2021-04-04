@@ -5,17 +5,14 @@
 
 namespace engineer_middleware {
 
-inline void boundToRange(double *v, double min, double max) {
-  if (*v < min) *v = min;
-  if (*v > max) *v = max;
-}
+Step::Step(const XmlRpc::XmlRpcValue &step) {
+  ROS_ASSERT(step.getType() == XmlRpc::XmlRpcValue::TypeArray);
+  if (step.hasMember("end_effector_target")) {
 
-inline double mapTo01Range(double v, double min, double max) {
-  double t = v;
-  if (fabs(min - max) < 0.000000001) return 1;
-  boundToRange(&t, min, max);
-  t = (t - min) / (max - min);
-  return t;
+  }
+  if (step.hasMember("base_target")) {
+    //TODO: add base motion
+  }
 }
 
 Step::Step() : time_(0.0), total_duration_(0.0), is_updated_(false), is_computed_(false) {
@@ -104,64 +101,5 @@ void Step::reset() {
     base_motion_.reset();
   }
 }
-
-bool Step::update() {
-  if (needsComputation() && !is_computed_) return false;
-  total_duration_ = 0.0;
-  if (hasArmMotion()) {
-    if (arm_motion_->getDuration() > total_duration_)
-      total_duration_ = arm_motion_->getDuration();
-  }
-  if (hasBaseMotion()) {
-    if (base_motion_->getDuration() > total_duration_)
-      total_duration_ = base_motion_->getDuration();
-  }
-  return is_updated_ = true;
-}
-
-bool Step::advance(double dt) {
-  if (!is_updated_) throw std::runtime_error("Step::advance() cannot be called if step is not updated.");
-  time_ += dt;
-  if (time_ > getTotalDuration()) return false;
-  return true;
-}
-
-double Step::getBaseMotionPhase() const {
-  if (!is_updated_) throw std::runtime_error("Step::getBaseMotionPhase() cannot be called if step is not updated.");
-  return mapTo01Range(time_, 0.0, getBaseMotionDuration());
-}
-double Step::getArmMotionPhase() const {
-  if (!is_updated_) throw std::runtime_error("Step::getArmMotionPhase() cannot be called if step is not updated.");
-  return mapTo01Range(time_, 0.0, getArmMotionDuration());
-}
-bool Step::isApproachingEnd(double tolerance) const {
-  if (!is_updated_) throw std::runtime_error("Step::isApproachingEnd() cannot be called if step is not updated.");
-  if (getTime() + tolerance >= getTotalDuration()) return true;
-  return false;
-}
-
-const std::string &Step::getId() const {
-  return id_;
-}
-
-void Step::setId(const std::string &id) {
-  id_ = id;
-}
-
-//std::ostream &operator<<(std::ostream &out, const Step &step) {
-//  out << "------" << std::endl;
-//  out << "ID: " << step.id_ << std::endl;
-//  if (step.hasArmMotion()) {
-//    out << "---" << std::endl;
-//    out << "Arm motion: " << std::endl;
-//    out << *(step.arm_motion_) << std::endl;
-//  }
-//  if (step.hasBaseMotion()) {
-//    out << "---" << std::endl;
-//    out << "Base motion: " << std::endl;
-//    out << *(step.base_motion_) << std::endl;
-//  }
-//  return out;
-//}
 
 } /* namespace */
