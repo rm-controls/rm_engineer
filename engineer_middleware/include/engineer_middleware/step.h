@@ -1,7 +1,6 @@
 #pragma once
 
 #include "arm_motion.h"
-#include "engineer_middleware/base_motion/base_motion_base.h"
 
 // STL
 #include <string>
