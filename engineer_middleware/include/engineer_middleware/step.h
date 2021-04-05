@@ -17,10 +17,11 @@ namespace engineer_middleware {
 
 class Step {
  public:
-  Step(const XmlRpc::XmlRpcValue &step, moveit::planning_interface::MoveGroupInterface &arm_group);
+  Step(const XmlRpc::XmlRpcValue &step, moveit::planning_interface::MoveGroupInterface &arm_group,
+       moveit::planning_interface::MoveGroupInterface &hand_group);
   ~Step() = default;
 
-  bool compute();
+  bool compute(const moveit::core::RobotState &current_state);
   bool move();
 
   bool hasArmMotion() const { return (bool) (arm_motion_); }

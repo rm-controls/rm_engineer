@@ -1,4 +1,10 @@
 steps:
+  - step: home
+    end_effector_target:
+      frame: base_link
+      position: [ 0.4, 0.0, 0.3 ]
+      rpy: [ 0., 0., 0. ]
+      hand_open: before
 
   - step: top
     end_effector_target:
@@ -11,15 +17,18 @@ steps:
       frame: base_link
       position: [ 0.4, 0.0, 0.1 ]
       rpy: [ 0., 1.5707, 0. ]
+      cartesian: true
 
   - step: 3
     end_effector_target:
       frame: base_link
       position: [ 0.4, 0.0, 0.3 ]
       rpy: [ 0., 1.5707, 0. ]
+      hand_close: before
 
   - step: 4 # number is unnecessary
     end_effector_target:
       frame: base_link
       position: [ 0.0, 0.0, 0.4 ]
       rpy: [ 0., -3.1415926, 0. ]
+      hand_open: after

@@ -16,7 +16,8 @@ namespace engineer_middleware {
 class StepQueue {
  public:
   StepQueue(const XmlRpc::XmlRpcValue &steps,
-            moveit::planning_interface::MoveGroupInterface &arm_group);
+            moveit::planning_interface::MoveGroupInterface &arm_group,
+            moveit::planning_interface::MoveGroupInterface &hand_group);
 
   bool move();
 
@@ -25,7 +26,7 @@ class StepQueue {
 
  private:
   std::deque<Step> queue_;
-  moveit::planning_interface::MoveGroupInterface &arm_group_;
+  moveit::planning_interface::MoveGroupInterface &arm_group_, &hand_group_;
 };
 }
 

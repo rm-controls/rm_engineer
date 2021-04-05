@@ -4,13 +4,13 @@
 
 #include "engineer_middleware/arm_motion.h"
 #include <rm_common/ros_utilities.h>
-#include <std_msgs/Float64.h>
 
 namespace engineer_middleware {
 
 ArmMotionBase::ArmMotionBase(const XmlRpc::XmlRpcValue &arm_motion,
-                             moveit::planning_interface::MoveGroupInterface &arm_group)
-    : arm_group_(arm_group) {
+                             moveit::planning_interface::MoveGroupInterface &arm_group,
+                             moveit::planning_interface::MoveGroupInterface &hand_group)
+    : arm_group_(arm_group), hand_group_(hand_group) {
   if (arm_motion.hasMember("hand_open")) {
     if (arm_motion["hand_open"] == "before")
       hand_motion_ = OPEN_BEFORE_ARM_MOTION;
@@ -23,30 +23,31 @@ ArmMotionBase::ArmMotionBase(const XmlRpc::XmlRpcValue &arm_motion,
       hand_motion_ = CLOSE_AFTER_ARM_MOTION;
   } else {
     hand_motion_ = FREEZE;
-    return;
   }
-  ros::NodeHandle nh("~");
-  hand_pub_ = nh.advertise<std_msgs::Float64>("/engineer_hand_controller/command", 10);
+}
+
+bool ArmMotionBase::compute(const moveit::core::RobotState &current_state) {
+  if (hand_motion_ > 0 && hand_motion_ < 3)
+    hand_group_.setJointValueTarget("right_finger_joint", 0.0);
+  else if (hand_motion_ > 2)
+    hand_group_.setJointValueTarget("right_finger_joint", 0.02);
+  if (hand_motion_ == FREEZE)
+    return true;
+  else
+    return (hand_group_.plan(hand_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
 }
 
 bool ArmMotionBase::move() {
-  std_msgs::Float64 value;
-  value.data = 100.0;
-  if (hand_motion_ == FREEZE)
+  if (hand_motion_)
+    return hand_group_.execute(hand_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+  else
     return true;
-  if (hand_motion_ > 0 && hand_motion_ < 3)
-    hand_pub_.publish(value);
-  else if (hand_motion_ > 2) {
-    value.data = -value.data;
-    hand_pub_.publish(value);
-  }
-  ros::WallDuration(1.0).sleep();
-  return true;
 }
 
 EndEffectorTarget::EndEffectorTarget(const XmlRpc::XmlRpcValue &arm_motion,
-                                     moveit::planning_interface::MoveGroupInterface &arm_group)
-    : ArmMotionBase(arm_motion, arm_group), has_pos_(false), has_ori_(false), is_cartesian_(false) {
+                                     moveit::planning_interface::MoveGroupInterface &arm_group,
+                                     moveit::planning_interface::MoveGroupInterface &hand_group)
+    : ArmMotionBase(arm_motion, arm_group, hand_group) {
   target_.pose.orientation.w = 1.;
   if (arm_motion.hasMember("frame"))
     target_.header.frame_id = std::string(arm_motion["frame"]);
@@ -69,7 +70,7 @@ EndEffectorTarget::EndEffectorTarget(const XmlRpc::XmlRpcValue &arm_motion,
     is_cartesian_ = arm_motion["cartesian"];
 }
 
-bool EndEffectorTarget::compute() {
+bool EndEffectorTarget::compute(const moveit::core::RobotState &current_state) {
   if (is_cartesian_) {
     std::vector<geometry_msgs::Pose> waypoints;
     waypoints.push_back(target_.pose);
@@ -79,7 +80,7 @@ bool EndEffectorTarget::compute() {
       return false;
   } else {
     if (!has_pos_ && !has_ori_)
-      return true;
+      return ArmMotionBase::compute(current_state);
     if (has_pos_ && has_pos_)
       arm_group_.setPoseTarget(target_);
     if (has_pos_ && !has_ori_)
@@ -89,28 +90,30 @@ bool EndEffectorTarget::compute() {
                                       target_.pose.orientation.y,
                                       target_.pose.orientation.z,
                                       target_.pose.orientation.w);
-    return arm_group_.plan(arm_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+    return (arm_group_.plan(arm_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS) &&
+        ArmMotionBase::compute(current_state);
   }
 }
 
 bool EndEffectorTarget::move() {
-  arm_group_.setGoalTolerance(999);
   if (has_pos_ || has_ori_) {
     if (hand_motion_ == CLOSE_BEFORE_ARM_MOTION || hand_motion_ == OPEN_BEFORE_ARM_MOTION) {
-      return (is_cartesian_ ? arm_group_.execute(trajectory_) : arm_group_.move())
-          == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+      if (ArmMotionBase::move())
+        return (is_cartesian_ ? arm_group_.execute(trajectory_) : arm_group_.execute(arm_plan_))
+            == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     } else {
-      bool s = (is_cartesian_ ? arm_group_.execute(trajectory_) : arm_group_.move())
-          == moveit::planning_interface::MoveItErrorCode::SUCCESS;
-      return s;
+      if ((is_cartesian_ ? arm_group_.execute(trajectory_) : arm_group_.execute(arm_plan_))
+          == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        return ArmMotionBase::move();
     }
   }
-  return ArmMotionBase::move();;
+  return ArmMotionBase::move();
 }
 
 JointsTarget::JointsTarget(const XmlRpc::XmlRpcValue &arm_motion,
-                           moveit::planning_interface::MoveGroupInterface &arm_group)
-    : ArmMotionBase(arm_motion, arm_group) {
+                           moveit::planning_interface::MoveGroupInterface &arm_group,
+                           moveit::planning_interface::MoveGroupInterface &hand_group)
+    : ArmMotionBase(arm_motion, arm_group, hand_group) {
   if (arm_motion.hasMember("joints")) {
     ROS_ASSERT(arm_motion["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
     target_.push_back(xmlRpcGetDouble(arm_motion["joints"], 0, 0.0));
@@ -122,13 +125,13 @@ JointsTarget::JointsTarget(const XmlRpc::XmlRpcValue &arm_motion,
   }
 }
 
-bool JointsTarget::compute() {
+bool JointsTarget::compute(const moveit::core::RobotState &current_state) {
   if (!has_joints_)
-    return ArmMotionBase::compute();
+    return ArmMotionBase::compute(current_state);
   else {
     arm_group_.setJointValueTarget(target_);
     return (arm_group_.plan(arm_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS) &&
-        ArmMotionBase::compute();
+        ArmMotionBase::compute(current_state);
   }
 }
 
