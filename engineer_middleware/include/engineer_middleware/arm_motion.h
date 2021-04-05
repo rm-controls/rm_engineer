@@ -42,8 +42,9 @@ class EndEffectorTarget : public ArmMotionBase {
   bool compute(const moveit::core::RobotState &current_state) override;
   bool move() override;
  private:
-  bool has_pos_, has_ori_;
+  bool has_pos_, has_ori_, is_cartesian_;
   geometry_msgs::PoseStamped target_;
+  moveit_msgs::RobotTrajectory trajectory_;
 };
 
 class JointsTarget : public ArmMotionBase {

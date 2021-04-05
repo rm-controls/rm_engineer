@@ -27,7 +27,6 @@ ArmMotionBase::ArmMotionBase(const XmlRpc::XmlRpcValue &arm_motion,
 }
 
 bool ArmMotionBase::compute(const moveit::core::RobotState &current_state) {
-  hand_group_.setStartState(current_state);
   if (hand_motion_ > 0 && hand_motion_ < 3)
     hand_group_.setJointValueTarget("right_finger_joint", 0.0);
   else if (hand_motion_ > 2)
@@ -40,7 +39,7 @@ bool ArmMotionBase::compute(const moveit::core::RobotState &current_state) {
 
 bool ArmMotionBase::move() {
   if (hand_motion_)
-    return hand_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+    return hand_group_.execute(hand_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
   else
     return true;
 }
@@ -67,32 +66,44 @@ EndEffectorTarget::EndEffectorTarget(const XmlRpc::XmlRpcValue &arm_motion,
     target_.pose.orientation = quat_msg;
     has_ori_ = true;
   }
+  if (arm_motion.hasMember("cartesian"))
+    is_cartesian_ = arm_motion["cartesian"];
 }
 
 bool EndEffectorTarget::compute(const moveit::core::RobotState &current_state) {
-  arm_group_.setStartState(current_state);
-  if (!has_pos_ && !has_ori_)
-    return ArmMotionBase::compute(current_state);
-  if (has_pos_ && has_pos_)
-    arm_group_.setPoseTarget(target_);
-  if (has_pos_ && !has_ori_)
-    arm_group_.setPositionTarget(target_.pose.position.x, target_.pose.position.y, target_.pose.position.z);
-  if (!has_pos_ && has_ori_)
-    arm_group_.setOrientationTarget(target_.pose.orientation.x,
-                                    target_.pose.orientation.y,
-                                    target_.pose.orientation.z,
-                                    target_.pose.orientation.w);
-  return (arm_group_.plan(arm_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS) &&
-      ArmMotionBase::compute(current_state);
+  if (is_cartesian_) {
+    std::vector<geometry_msgs::Pose> waypoints;
+    waypoints.push_back(target_.pose);
+    if (arm_group_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory_) > 99.9)
+      return true;
+    else
+      return false;
+  } else {
+    if (!has_pos_ && !has_ori_)
+      return ArmMotionBase::compute(current_state);
+    if (has_pos_ && has_pos_)
+      arm_group_.setPoseTarget(target_);
+    if (has_pos_ && !has_ori_)
+      arm_group_.setPositionTarget(target_.pose.position.x, target_.pose.position.y, target_.pose.position.z);
+    if (!has_pos_ && has_ori_)
+      arm_group_.setOrientationTarget(target_.pose.orientation.x,
+                                      target_.pose.orientation.y,
+                                      target_.pose.orientation.z,
+                                      target_.pose.orientation.w);
+    return (arm_group_.plan(arm_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS) &&
+        ArmMotionBase::compute(current_state);
+  }
 }
 
 bool EndEffectorTarget::move() {
   if (has_pos_ || has_ori_) {
     if (hand_motion_ == CLOSE_BEFORE_ARM_MOTION || hand_motion_ == OPEN_BEFORE_ARM_MOTION) {
       if (ArmMotionBase::move())
-        return arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+        return (is_cartesian_ ? arm_group_.execute(trajectory_) : arm_group_.execute(arm_plan_))
+            == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     } else {
-      if (arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+      if ((is_cartesian_ ? arm_group_.execute(trajectory_) : arm_group_.execute(arm_plan_))
+          == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         return ArmMotionBase::move();
     }
   }
@@ -128,9 +139,9 @@ bool JointsTarget::move() {
   if (has_joints_) {
     if (hand_motion_ == CLOSE_BEFORE_ARM_MOTION || hand_motion_ == OPEN_BEFORE_ARM_MOTION) {
       if (ArmMotionBase::move())
-        return arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+        return arm_group_.execute(arm_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     } else {
-      if (arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+      if (arm_group_.execute(arm_plan_) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         return ArmMotionBase::move();
     }
   }
