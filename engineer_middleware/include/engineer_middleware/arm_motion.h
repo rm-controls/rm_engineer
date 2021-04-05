@@ -22,24 +22,23 @@ enum HandMotion {
 class ArmMotionBase {
  public:
   ArmMotionBase(const XmlRpc::XmlRpcValue &arm_motion,
-                moveit::planning_interface::MoveGroupInterface &arm_group,
-                moveit::planning_interface::MoveGroupInterface &hand_group);
+                moveit::planning_interface::MoveGroupInterface &arm_group);
 
   ~ArmMotionBase() = default;
-  virtual bool compute(const moveit::core::RobotState &current_state);
+  virtual bool compute() { return true; }
   virtual bool move();
  protected:
-  moveit::planning_interface::MoveGroupInterface &arm_group_, &hand_group_;
+  moveit::planning_interface::MoveGroupInterface &arm_group_;
   moveit::planning_interface::MoveGroupInterface::Plan arm_plan_, hand_plan_;
   HandMotion hand_motion_;
+  ros::Publisher hand_pub_;
 };
 
 class EndEffectorTarget : public ArmMotionBase {
  public:
   EndEffectorTarget(const XmlRpc::XmlRpcValue &arm_motion,
-                    moveit::planning_interface::MoveGroupInterface &arm_group,
-                    moveit::planning_interface::MoveGroupInterface &hand_group);
-  bool compute(const moveit::core::RobotState &current_state) override;
+                    moveit::planning_interface::MoveGroupInterface &arm_group);
+  bool compute() override;
   bool move() override;
  private:
   bool has_pos_, has_ori_, is_cartesian_;
@@ -50,9 +49,8 @@ class EndEffectorTarget : public ArmMotionBase {
 class JointsTarget : public ArmMotionBase {
  public:
   JointsTarget(const XmlRpc::XmlRpcValue &arm_motion,
-               moveit::planning_interface::MoveGroupInterface &arm_group,
-               moveit::planning_interface::MoveGroupInterface &hand_group);
-  bool compute(const moveit::core::RobotState &current_state) override;
+               moveit::planning_interface::MoveGroupInterface &arm_group);
+  bool compute() override;
   bool move() override;
  private:
   bool has_joints_;
