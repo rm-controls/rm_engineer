@@ -30,7 +30,7 @@ bool ArmMotionBase::compute(const moveit::core::RobotState &current_state) {
   if (hand_motion_ > 0 && hand_motion_ < 3)
     hand_group_.setJointValueTarget("right_finger_joint", 0.0);
   else if (hand_motion_ > 2)
-    hand_group_.setJointValueTarget("right_finger_joint", 0.02);
+    hand_group_.setJointValueTarget("right_finger_joint", 0.011);
   if (hand_motion_ == FREEZE)
     return true;
   else

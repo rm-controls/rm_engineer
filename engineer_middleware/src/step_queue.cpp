@@ -21,8 +21,8 @@ StepQueue::StepQueue(const XmlRpc::XmlRpcValue &steps,
 bool StepQueue::move() {
   for (auto &step:queue_) {
     step.compute(*arm_group_.getCurrentState());
-    if (!step.move())
-      return false;
+    step.move();
+    ros::WallDuration(1.0).sleep();
   }
   return true;
 }
