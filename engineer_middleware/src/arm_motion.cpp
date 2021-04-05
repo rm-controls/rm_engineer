@@ -87,10 +87,16 @@ bool EndEffectorTarget::compute(const moveit::core::RobotState &current_state) {
 }
 
 bool EndEffectorTarget::move() {
-  if (ArmMotionBase::move())
-    if (has_pos_ || has_ori_)
-      return arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
-  return true;
+  if (has_pos_ || has_ori_) {
+    if (hand_motion_ == CLOSE_BEFORE_ARM_MOTION || hand_motion_ == OPEN_BEFORE_ARM_MOTION) {
+      if (ArmMotionBase::move())
+        return arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+    } else {
+      if (arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        return ArmMotionBase::move();
+    }
+  }
+  return ArmMotionBase::move();
 }
 
 JointTarget::JointTarget(const XmlRpc::XmlRpcValue &arm_motion,
@@ -117,10 +123,16 @@ bool JointTarget::compute(const moveit::core::RobotState &current_state) {
 }
 
 bool JointTarget::move() {
-  if (ArmMotionBase::move())
-    if (has_joints_)
-      return arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
-  return true;
+  if (has_joints_) {
+    if (hand_motion_ == CLOSE_BEFORE_ARM_MOTION || hand_motion_ == OPEN_BEFORE_ARM_MOTION) {
+      if (ArmMotionBase::move())
+        return arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+    } else {
+      if (arm_group_.move() == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        return ArmMotionBase::move();
+    }
+  }
+  return ArmMotionBase::move();
 }
 
 }
