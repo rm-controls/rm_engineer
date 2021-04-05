@@ -46,11 +46,11 @@ class EndEffectorTarget : public ArmMotionBase {
   geometry_msgs::PoseStamped target_;
 };
 
-class JointTarget : public ArmMotionBase {
+class JointsTarget : public ArmMotionBase {
  public:
-  JointTarget(const XmlRpc::XmlRpcValue &arm_motion,
-              moveit::planning_interface::MoveGroupInterface &arm_group,
-              moveit::planning_interface::MoveGroupInterface &hand_group);
+  JointsTarget(const XmlRpc::XmlRpcValue &arm_motion,
+               moveit::planning_interface::MoveGroupInterface &arm_group,
+               moveit::planning_interface::MoveGroupInterface &hand_group);
   bool compute(const moveit::core::RobotState &current_state) override;
   bool move() override;
  private:
