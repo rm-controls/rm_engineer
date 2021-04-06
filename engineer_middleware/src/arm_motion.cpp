@@ -24,13 +24,16 @@ ArmMotionBase::ArmMotionBase(const XmlRpc::XmlRpcValue &arm_motion,
   } else {
     hand_motion_ = FREEZE;
   }
+  if (arm_motion.hasMember("speed")) {
+    speed_ = xmlRpcGetDouble(arm_motion, "speed", 0.1);
+  }
 }
 
 bool ArmMotionBase::compute(const moveit::core::RobotState &current_state) {
   if (hand_motion_ > 0 && hand_motion_ < 3)
     hand_group_.setJointValueTarget("right_finger_joint", 0.0);
   else if (hand_motion_ > 2)
-    hand_group_.setJointValueTarget("right_finger_joint", 0.01);
+    hand_group_.setJointValueTarget("right_finger_joint", 0.011);
   if (hand_motion_ == FREEZE)
     return true;
   else
@@ -75,6 +78,8 @@ EndEffectorTarget::EndEffectorTarget(const XmlRpc::XmlRpcValue &arm_motion,
 }
 
 bool EndEffectorTarget::compute(const moveit::core::RobotState &current_state) {
+  arm_group_.setMaxVelocityScalingFactor(speed_);
+  arm_group_.setMaxAccelerationScalingFactor(speed_);
   if (is_cartesian_) {
     std::vector<geometry_msgs::Pose> waypoints;
     waypoints.push_back(target_.pose);

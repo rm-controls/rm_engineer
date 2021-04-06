@@ -32,6 +32,7 @@ class ArmMotionBase {
   moveit::planning_interface::MoveGroupInterface &arm_group_, &hand_group_;
   moveit::planning_interface::MoveGroupInterface::Plan arm_plan_, hand_plan_;
   HandMotion hand_motion_;
+  double speed_;
 };
 
 class EndEffectorTarget : public ArmMotionBase {
