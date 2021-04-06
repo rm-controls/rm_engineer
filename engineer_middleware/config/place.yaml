@@ -1,0 +1,47 @@
+steps:
+  - step: grasp
+    end_effector_target:
+      hand_open: after
+
+  - step: 4 # number is unnecessary
+    end_effector_target:
+      frame: base_link
+      position: [ 0.05, 0.0, 0.50 ]
+      rpy: [ 0., -3.1415926, 0. ]
+      speed: 1.
+
+  - step: 4 # number is unnecessary
+    end_effector_target:
+      frame: base_link
+      position: [ 0.05, 0.0, 0.41 ]
+      rpy: [ 0., -3.1415926, 0. ]
+      speed: 1.
+      cartesian: true
+
+  - step: grasp
+    end_effector_target:
+      hand_close: after
+
+  - step: top
+    joints_target:
+      joints: [ 0., -1.5358, 0.1, 0.0, 0. ]
+
+  - step: top
+    joints_target:
+      joints: [ 0., -1.4835, 0.3839, 0.94247, 0. ]
+
+  - step: grasp
+    end_effector_target:
+      hand_open: after
+
+  - step: top
+    joints_target:
+      joints: [ 0., -2.16, 1.02, 1.15, 0. ]
+
+  - step: grasp
+    end_effector_target:
+      hand_close: after
+
+  - step: top
+    joints_target:
+      joints: [ 0., -1.4835, 0.3839, 0.94247, -0.5 ]
