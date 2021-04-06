@@ -30,7 +30,7 @@ bool ArmMotionBase::compute(const moveit::core::RobotState &current_state) {
   if (hand_motion_ > 0 && hand_motion_ < 3)
     hand_group_.setJointValueTarget("right_finger_joint", 0.0);
   else if (hand_motion_ > 2)
-    hand_group_.setJointValueTarget("right_finger_joint", 0.011);
+    hand_group_.setJointValueTarget("right_finger_joint", 0.01);
   if (hand_motion_ == FREEZE)
     return true;
   else
@@ -48,6 +48,10 @@ EndEffectorTarget::EndEffectorTarget(const XmlRpc::XmlRpcValue &arm_motion,
                                      moveit::planning_interface::MoveGroupInterface &arm_group,
                                      moveit::planning_interface::MoveGroupInterface &hand_group)
     : ArmMotionBase(arm_motion, arm_group, hand_group) {
+  has_pos_ = false;
+  has_ori_ = false;
+  is_cartesian_ = false;
+
   target_.pose.orientation.w = 1.;
   if (arm_motion.hasMember("frame"))
     target_.header.frame_id = std::string(arm_motion["frame"]);
@@ -101,13 +105,17 @@ bool EndEffectorTarget::move() {
       if (ArmMotionBase::move())
         return (is_cartesian_ ? arm_group_.execute(trajectory_) : arm_group_.execute(arm_plan_))
             == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+      else
+        return false;
     } else {
       if ((is_cartesian_ ? arm_group_.execute(trajectory_) : arm_group_.execute(arm_plan_))
           == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         return ArmMotionBase::move();
+      else
+        return false;
     }
-  }
-  return ArmMotionBase::move();
+  } else
+    return ArmMotionBase::move();
 }
 
 JointsTarget::JointsTarget(const XmlRpc::XmlRpcValue &arm_motion,

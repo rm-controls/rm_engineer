@@ -52,10 +52,10 @@ engineer_arm_controller:
     - joint5
   gains:
     joint1: { p: 300, i: 0.0, d: 10, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: true }
-    joint2: { p: 1500, i: 10, d: 6, i_clamp_max: 15, i_clamp_min: -15, antiwindup: true, publish_state: true }
-    joint3: { p: 1000, i: 2, d: 6, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
-    joint4: { p: 10, i: 0.0, d: 3, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
-    joint5: { p: 10, i: 0.0, d: 3, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
+    joint2: { p: 3000, i: 10, d: 10, i_clamp_max: 15, i_clamp_min: -15, antiwindup: true, publish_state: true }
+    joint3: { p: 2000, i: 2, d: 6, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
+    joint4: { p: 10, i: 0.0, d: 3.5, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
+    joint5: { p: 200, i: 0.0, d: 3.5, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
 
 engineer_hand_controller:
   type: effort_controllers/JointTrajectoryController
