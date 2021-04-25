@@ -13,6 +13,6 @@
     <!-- depend: build, export, and execution dependency -->
     <depend>roscpp</depend>
     <depend>rm_common</depend>
-
+    <depend>control_toolbox</depend>
     <build_depend>roslint</build_depend>
 </package>

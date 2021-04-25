@@ -15,6 +15,7 @@ find_package(catkin REQUIRED
         roscpp
         roslint
         rm_common
+        control_toolbox
         moveit_core
         moveit_ros_planning
         moveit_ros_planning_interface
@@ -40,6 +41,7 @@ catkin_package(
         CATKIN_DEPENDS
         roscpp
         rm_common
+        control_toolbox
         DEPENDS
 )
 
@@ -65,6 +67,8 @@ add_executable(${PROJECT_NAME}
         src/step.cpp
         src/step_queue.cpp
         src/arm_motion.cpp
+        src/chassis.cpp
+        src/middleware.cpp
         src/engineer_middleware.cpp)
 
 add_dependencies(${PROJECT_NAME}
