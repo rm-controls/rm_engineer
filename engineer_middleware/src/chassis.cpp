@@ -6,8 +6,11 @@
 namespace engineer_middleware {
 
 Chassis::Chassis(ros::NodeHandle &nh) : nh_(nh) {
-  pid_x_.init(ros::NodeHandle(nh_, "pid_x"));
-  pid_y_.init(ros::NodeHandle(nh_, "pid_y"));
+  ros::NodeHandle nh_chassis = ros::NodeHandle(nh_, "chassis");
+  ros::NodeHandle nh_pid_x = ros::NodeHandle(nh_chassis, "x");
+  ros::NodeHandle nh_pid_y = ros::NodeHandle(nh_chassis, "y");
+  pid_x_.init(ros::NodeHandle(nh_pid_x, "pid"));
+  pid_y_.init(ros::NodeHandle(nh_pid_y, "pid"));
 
   ros::NodeHandle root_nh;
   vel_cmd_pub_ = root_nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
