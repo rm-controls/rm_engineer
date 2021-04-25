@@ -23,5 +23,8 @@ void Middleware::run() const {
   engineer_middleware::StepQueue step_queue(steps_params, arm_group, hand_group);
   step_queue.move();
   steps_params.clear();
+  nh_.getParam("grasp_groud", steps_params);
+  step_queue.reload(steps_params);
+  step_queue.move();
 }
 }

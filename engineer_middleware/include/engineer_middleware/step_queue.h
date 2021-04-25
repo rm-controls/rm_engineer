@@ -23,7 +23,7 @@ class StepQueue {
 
   const std::deque<Step> &getQueue() const;
   std::deque<Step>::size_type size() const { return queue_.size(); }
-
+  void reload(const XmlRpc::XmlRpcValue &steps);
  private:
   std::deque<Step> queue_;
   moveit::planning_interface::MoveGroupInterface &arm_group_, &hand_group_;
