@@ -1,5 +1,4 @@
-steps:
-
+grasp_small_resource:
   - step: grasp
     end_effector_target:
       hand_open: after
