@@ -15,6 +15,8 @@ Chassis::Chassis(ros::NodeHandle &nh) : nh_(nh) {
   ros::NodeHandle root_nh;
   vel_cmd_pub_ = root_nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
   chassis_cmd_pub_ = root_nh.advertise<rm_msgs::ChassisCmd>("/cmd_chassis", 1);
+
+  this->tf_listener_ = new tf2_ros::TransformListener(this->tf_);
 }
 void Chassis::move(double x, double y) {
 
