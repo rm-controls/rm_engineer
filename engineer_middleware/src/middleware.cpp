@@ -13,20 +13,24 @@ Middleware::Middleware(ros::NodeHandle &nh) : nh_(nh),
   chassis_ = new Chassis(nh);
   arm_group_ = new moveit::planning_interface::MoveGroupInterface("engineer_arm");
   hand_group_ = new moveit::planning_interface::MoveGroupInterface("engineer_hand");
-  step_queue_ = new engineer_middleware::StepQueue(steps_params, *arm_group_, *hand_group_);
-  steps_params = new XmlRpc::XmlRpcValue;
+  steps_params_ = new XmlRpc::XmlRpcValue;
+  nh_.getParam("grasp_big_resource", *steps_params_);
+  step_queue_ = new engineer_middleware::StepQueue(*steps_params_, *arm_group_, *hand_group_);
   action_.start();
 }
+void Middleware::chassisThread() {
+  ROS_INFO_STREAM("chassis thread id=" << boost::this_thread::get_id());
+  ros::NodeHandle n;
+}
 void Middleware::run() const {
+  boost::thread::id main_id = boost::this_thread::get_id();
+  std::cout << "main thread id is :" << main_id << std::endl;
+  boost::thread chassis_thread(chassisThread);
   ros::AsyncSpinner spinner(1);
   spinner.start();
-
-  nh_.getParam("place", *steps_params);
-  engineer_middleware::StepQueue step_queue(steps_params, *arm_group_, *hand_group_);
-  step_queue.move();
-  steps_params->clear();
-  nh_.getParam("grasp_groud", *steps_params);
-  step_queue.reload(*steps_params);
-  step_queue.move();
+  ROS_INFO("start 1 action");
+  step_queue_->move();
+  ROS_INFO("action 1 finish");
 }
+
 }

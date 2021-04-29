@@ -22,7 +22,7 @@ bool StepQueue::move() {
   for (auto &step:queue_) {
     step.compute(*arm_group_.getCurrentState());
     step.move();
-    ros::WallDuration(.5).sleep();
+    ros::WallDuration(1).sleep();
   }
   return true;
 }

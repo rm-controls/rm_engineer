@@ -8,6 +8,7 @@
 //ROS
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
+#include <boost/thread.hpp>
 
 #include <rm_msgs/EngineerAction.h>
 
@@ -26,13 +27,14 @@ class Middleware {
   moveit::planning_interface::MoveGroupInterface *arm_group_;
   moveit::planning_interface::MoveGroupInterface *hand_group_;
   engineer_middleware::StepQueue *step_queue_;
-  XmlRpc::XmlRpcValue *steps_params;
+  XmlRpc::XmlRpcValue *steps_params_;
   //chassis
   Chassis *chassis_;
   void executeCB(const rm_msgs::EngineerGoalConstPtr &goal) {
 
   }
   void run() const;
+  static void chassisThread();
 
 };
 }
