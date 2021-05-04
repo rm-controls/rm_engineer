@@ -29,13 +29,24 @@ class Middleware {
   engineer_middleware::StepQueue *step_queue_;
   XmlRpc::XmlRpcValue *steps_params_;
   //chassis
-  Chassis *chassis_;
   void executeCB(const rm_msgs::EngineerGoalConstPtr &goal) {
 
   }
-  void run() const;
-  static void chassisThread();
+  void setChassisPosition(double x, double y);
+  void disableMiddlewareControl();
+  void enableMiddlewareControl();
+  void run();
 
+};
+struct PipeData {
+  double x;
+  double y;
+};
+struct Pipe {
+  bool spin_lock_ = 0;
+  bool update_ = 0;
+  bool middleware_control_ = 0;
+  PipeData data_{};
 };
 }
 

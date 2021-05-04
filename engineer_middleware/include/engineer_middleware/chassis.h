@@ -18,7 +18,6 @@ namespace engineer_middleware {
 class Chassis {
  public:
   Chassis(ros::NodeHandle &nh);
-  void move(double x, double y);
   ros::NodeHandle nh_;
   rm_msgs::ChassisCmd chassis_cmd_;
   geometry_msgs::Twist cmd_vel_;
@@ -26,9 +25,12 @@ class Chassis {
   ros::Publisher chassis_cmd_pub_;
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener *tf_listener_;
+  double expect_x_, expect_y_;
+  void move();
+  void setExpectPosition(double x, double y);
+  void setChassis(uint8_t chassis_mode, double linear_x, double linear_y, double angular_z);
  private:
   control_toolbox::Pid pid_x_, pid_y_;
-
 };
 }
 
