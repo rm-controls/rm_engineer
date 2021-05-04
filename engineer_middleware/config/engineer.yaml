@@ -1,5 +1,5 @@
 chassis:
   x:
-    pid: { p: 3, i: 0.0, d: 0.1, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
+    pid: { p: 23.0, i: 0.0, d: 23.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
   y:
-    pid: { p: 3, i: 0.0, d: 0.1, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
+    pid: { p: 23.0, i: 0.0, d: 23.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
