@@ -63,7 +63,24 @@ engineer_hand_controller:
     - right_finger_joint
   gains:
     right_finger_joint: { p: 50000, i: 0.0, d: 100, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: true }
-
+joint_group_position_controller:
+  type: effort_controllers/JointGroupPositionController
+  joints:
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
+  joint1:
+    pid: { p: 300, i: 0.0, d: 10 }
+  joint2:
+    pid: { p: 3000, i: 10, d: 10 }
+  joint3:
+    pid: { p: 2000, i: 2, d: 6 }
+  joint4:
+    pid: { p: 10, i: 0.0, d: 3.5 }
+  joint5:
+    pid: { p: 200, i: 0.0, d: 3.5 }
 gazebo_ros_control:
   pid_gains:
     # the following gains are used by the gazebo_mimic_joint plugin
