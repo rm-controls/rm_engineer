@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<library path="lib/libengineer_engineer_arm_moveit_ikfast_plugin">
-    <class name="engineer_engineer_arm/IKFastKinematicsPlugin" type="engineer_engineer_arm::IKFastKinematicsPlugin"
-           base_class_type="kinematics::KinematicsBase">
-        <description>IKFast61 plugin for closed-form kinematics of engineer engineer_arm</description>
-    </class>
-</library>

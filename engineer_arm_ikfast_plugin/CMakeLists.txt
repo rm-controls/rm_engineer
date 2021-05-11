@@ -22,8 +22,8 @@ include_directories(SYSTEM ${catkin_INCLUDE_DIRS})
 
 catkin_package()
 
-set(IKFAST_LIBRARY_NAME engineer_engineer_arm_moveit_ikfast_plugin)
-add_library(${IKFAST_LIBRARY_NAME} src/engineer_engineer_arm_ikfast_moveit_plugin.cpp)
+set(IKFAST_LIBRARY_NAME engineer_arm_moveit_ikfast_plugin)
+add_library(${IKFAST_LIBRARY_NAME} src/engineer_arm_ikfast_moveit_plugin.cpp)
 target_link_libraries(${IKFAST_LIBRARY_NAME} ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${LAPACK_LIBRARIES})
 # suppress warnings about unused variables in OpenRave's solver code
 target_compile_options(${IKFAST_LIBRARY_NAME} PRIVATE -Wno-unused-variable)
@@ -36,7 +36,7 @@ install(TARGETS
 
 install(
         FILES
-        engineer_engineer_arm_moveit_ikfast_plugin_description.xml
+        engineer_arm_moveit_ikfast_plugin_description.xml
         DESTINATION
         ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
