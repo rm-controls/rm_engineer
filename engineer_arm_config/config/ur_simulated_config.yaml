@@ -15,7 +15,7 @@ low_pass_filter_coeff: 2.  # Larger --> trust the filtered data more, trust the 
 
 ## Properties of outgoing commands
 publish_period: 0.008  # 1/Nominal publish rate [seconds]
-low_latency_mode: false  # Set this to true to publish as soon as an incoming Twist command is received (publish_period is ignored)
+low_latency_mode: true  # Set this to true to publish as soon as an incoming Twist command is received (publish_period is ignored)
 
 # What type of topic does your robot driver expect?
 # Currently supported are std_msgs/Float64MultiArray (for ros_control JointGroupVelocityController or JointGroupPositionController)
@@ -32,8 +32,8 @@ move_group_name: engineer_arm  # Often 'manipulator' or 'arm'
 planning_frame: base_link  # The MoveIt planning frame. Often 'base_link' or 'world'
 
 ## Other frames
-ee_frame_name: link5  # The name of the end effector link, used to return the EE pose
-robot_link_command_frame: link5  # commands must be given in the frame of a robot link. Usually either the base or end effector
+ee_frame_name: right_finger  # The name of the end effector link, used to return the EE pose
+robot_link_command_frame: link1  # commands must be given in the frame of a robot link. Usually either the base or end effector
 
 ## Stopping behaviour
 incoming_command_timeout: 0.1  # Stop servoing if X seconds elapse without a new command
@@ -54,7 +54,7 @@ status_topic: status # Publish status to this topic
 command_out_topic: /joint_group_position_controller/command # Publish outgoing commands here
 
 ## Collision checking for the entire robot body
-check_collisions: true # Check collisions?
+check_collisions: false # Check collisions?
 collision_check_rate: 50 # [Hz] Collision-checking can easily bog down a CPU if done too often.
 # Two collision check algorithms are available:
 # "threshold_distance" begins slowing down when nearer than a specified distance. Good if you want to tune collision thresholds manually.
