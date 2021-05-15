@@ -42,7 +42,7 @@ void Chassis::setChassis(uint8_t chassis_mode, double linear_x, double linear_y,
   chassis_cmd_.accel.linear.x = 5;
   chassis_cmd_.accel.linear.y = 5;
   chassis_cmd_.accel.angular.z = 5;
-  chassis_cmd_.effort_limit = 99;
+  chassis_cmd_.power_limit = 99;
   chassis_cmd_.accel.angular.x = 5;
   chassis_cmd_.accel.angular.y = 5;
   chassis_cmd_.accel.angular.z = 5;

@@ -8,6 +8,7 @@
 //ROS
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
+#include <controller_manager_msgs/SwitchController.h>
 #include <boost/thread.hpp>
 
 #include <rm_msgs/EngineerAction.h>
@@ -19,6 +20,9 @@ class Middleware {
  public:
   Middleware(ros::NodeHandle &nh);
   ros::NodeHandle nh_;
+  //server client
+  ros::ServiceClient switch_controller_client_;
+  controller_manager_msgs::SwitchController srv_;
   //action
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> action_;
   rm_msgs::EngineerFeedback freedback_;
@@ -28,15 +32,15 @@ class Middleware {
   moveit::planning_interface::MoveGroupInterface *hand_group_;
   engineer_middleware::StepQueue *step_queue_;
   XmlRpc::XmlRpcValue *steps_params_;
-  //chassis
   void executeCB(const rm_msgs::EngineerGoalConstPtr &goal) {
 
   }
+  //chassis
   void setChassisPosition(double x, double y);
   void disableMiddlewareControl();
   void enableMiddlewareControl();
   void run();
-
+  void switchController();
 };
 struct PipeData {
   double x;
