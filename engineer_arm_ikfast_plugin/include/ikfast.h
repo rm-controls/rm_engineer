@@ -101,7 +101,7 @@ class IkSolutionListBase {
   /// \param vinfos Solution data for each degree of freedom of the manipulator
   /// \param vfree If the solution represents an infinite space, holds free parameters of the solution that users can
   /// freely set.
-  virtual size_t AddSolution(const std::vector<IkSingleDOFSolutionBase<T>> &vinfos, const std::vector<int> &vfree) = 0;
+  virtual size_t AddSolution(const std::vector<IkSingleDOFSolutionBase<T> > &vinfos, const std::vector<int> &vfree) = 0;
 
   /// \brief returns the solution pointer
   virtual const IkSolutionBase<T> &GetSolution(size_t index) const = 0;
@@ -157,7 +157,7 @@ class IkFastFunctions {
 template<typename T>
 class IkSolution : public IkSolutionBase<T> {
  public:
-  IkSolution(const std::vector<IkSingleDOFSolutionBase<T>> &vinfos, const std::vector<int> &vfree) {
+  IkSolution(const std::vector<IkSingleDOFSolutionBase<T> > &vinfos, const std::vector<int> &vfree) {
     _vbasesol = vinfos;
     _vfree = vfree;
   }
@@ -228,7 +228,7 @@ class IkSolution : public IkSolutionBase<T> {
     }
   }
 
-  std::vector<IkSingleDOFSolutionBase<T>> _vbasesol;  ///< solution and their offsets if joints are mimiced
+  std::vector<IkSingleDOFSolutionBase<T> > _vbasesol;  ///< solution and their offsets if joints are mimiced
   std::vector<int> _vfree;
 };
 
@@ -236,7 +236,7 @@ class IkSolution : public IkSolutionBase<T> {
 template<typename T>
 class IkSolutionList : public IkSolutionListBase<T> {
  public:
-  virtual size_t AddSolution(const std::vector<IkSingleDOFSolutionBase<T>> &vinfos, const std::vector<int> &vfree) {
+  virtual size_t AddSolution(const std::vector<IkSingleDOFSolutionBase<T> > &vinfos, const std::vector<int> &vfree) {
     size_t index = _listsolutions.size();
     _listsolutions.push_back(IkSolution<T>(vinfos, vfree));
     return index;
@@ -246,7 +246,8 @@ class IkSolutionList : public IkSolutionListBase<T> {
     if (index >= _listsolutions.size()) {
       throw std::runtime_error("GetSolution index is invalid");
     }
-    typename std::list<IkSolution<T> >::const_iterator it = _listsolutions.begin();
+    typename std::list<IkSolution<T> >::const_iterator
+        it = _listsolutions.begin();
     std::advance(it, index);
     return *it;
   }
@@ -260,7 +261,7 @@ class IkSolutionList : public IkSolutionListBase<T> {
   }
 
  protected:
-  std::list<IkSolution<T>> _listsolutions;
+  std::list<IkSolution<T> > _listsolutions;
 };
 }  // namespace ikfast
 
@@ -302,17 +303,17 @@ typedef double IkReal;
    - For **TranslationLocalGlobal6D**, the diagonal elements ([0],[4],[8]) are the local translation inside the end
    effector coordinate system.
  */
-IKFAST_API bool ComputeIk(const IkReal* eetrans, const IkReal* eerot, const IkReal* pfree,
-                          ikfast::IkSolutionListBase<IkReal>& solutions);
+IKFAST_API bool ComputeIk(const IkReal *eetrans, const IkReal *eerot, const IkReal *pfree,
+                          ikfast::IkSolutionListBase<IkReal> &solutions);
 
 /// \brief Computes the end effector coordinates given the joint values. This function is used to double check ik.
-IKFAST_API void ComputeFk(const IkReal* joints, IkReal* eetrans, IkReal* eerot);
+IKFAST_API void ComputeFk(const IkReal *joints, IkReal *eetrans, IkReal *eerot);
 
 /// \brief returns the number of free parameters users has to set apriori
 IKFAST_API int GetNumFreeParameters();
 
 /// \brief the indices of the free parameters indexed by the chain joints
-IKFAST_API int* GetFreeParameters();
+IKFAST_API int *GetFreeParameters();
 
 /// \brief the total number of indices of the chain
 IKFAST_API int GetNumJoints();
@@ -321,13 +322,13 @@ IKFAST_API int GetNumJoints();
 IKFAST_API int GetIkRealSize();
 
 /// \brief the ikfast version used to generate this file
-IKFAST_API const char* GetIkFastVersion();
+IKFAST_API const char *GetIkFastVersion();
 
 /// \brief the ik type ID
 IKFAST_API int GetIkType();
 
 /// \brief a hash of all the chain values used for double checking that the correct IK is used.
-IKFAST_API const char* GetKinematicsHash();
+IKFAST_API const char *GetKinematicsHash();
 
 #ifdef IKFAST_NAMESPACE
 }
