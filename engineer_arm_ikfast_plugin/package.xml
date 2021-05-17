@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <package format="2">
   <name>engineer_arm_ikfast_plugin</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>IKFast plugin for engineer</description>
   <license>BSD</license>
   <maintainer email="qiayuan@todo.todo">qiayuan</maintainer>
