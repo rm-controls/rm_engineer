@@ -10,7 +10,7 @@ default_acceleration_scaling_factor: 0.1
 joint_limits:
   joint1:
     has_velocity_limits: true
-    max_velocity: 25
+    max_velocity: 10
     has_acceleration_limits: true
     max_acceleration: 20
   joint2:
@@ -25,12 +25,12 @@ joint_limits:
     max_acceleration: 30
   joint4:
     has_velocity_limits: true
-    max_velocity: 34
+    max_velocity: 30
     has_acceleration_limits: true
     max_acceleration: 60
   joint5:
     has_velocity_limits: true
-    max_velocity: 34
+    max_velocity: 18
     has_acceleration_limits: true
     max_acceleration: 60
   left_finger_joint:
