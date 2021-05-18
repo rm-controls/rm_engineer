@@ -4,7 +4,6 @@
 #include <ros/ros.h>
 
 #include "engineer_middleware/middleware.h"
-
 using namespace engineer_middleware;
 int main(int argc, char **argv) {
   ros::init(argc, argv, "engineer_middleware");

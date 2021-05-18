@@ -9,17 +9,19 @@
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
 #include <controller_manager_msgs/SwitchController.h>
-#include <boost/thread.hpp>
 
 #include <rm_msgs/EngineerAction.h>
 
 #include "engineer_middleware/step_queue.h"
-#include "engineer_middleware/chassis.h"
+#include "engineer_middleware/base_motion.h"
 namespace engineer_middleware {
 class Middleware {
  public:
-  Middleware(ros::NodeHandle &nh);
+  explicit Middleware(ros::NodeHandle &nh);
   ros::NodeHandle nh_;
+
+  BaseController *base_motion_;
+  std::thread *base_motion_thread_;
   //server client
   ros::ServiceClient switch_controller_client_;
   controller_manager_msgs::SwitchController srv_;
@@ -35,23 +37,10 @@ class Middleware {
   void executeCB(const rm_msgs::EngineerGoalConstPtr &goal) {
 
   }
-  //chassis
-  void setChassisPosition(double x, double y);
-  void disableMiddlewareControl();
-  void enableMiddlewareControl();
-  void run();
-  void switchController();
+  void run() const;
+  void switchController(const std::string &start_controller, const std::string &stop_controller);
 };
-struct PipeData {
-  double x;
-  double y;
-};
-struct Pipe {
-  bool spin_lock_ = 0;
-  bool update_ = 0;
-  bool middleware_control_ = 0;
-  PipeData data_{};
-};
+
 }
 
 #endif //SRC_RM_SOFTWARE_RM_ENGINEER_ENGINEER_MIDDLEWARE_INCLUDE_ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
