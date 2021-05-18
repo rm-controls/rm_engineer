@@ -22,12 +22,13 @@ Middleware::Middleware(ros::NodeHandle &nh) : nh_(nh),
   base_motion_thread_ = new std::thread(&BaseController::baseControllerThread, base_motion_);
 }
 void Middleware::switchController(const std::string &start_controller, const std::string &stop_controller) {
-  srv_.request.start_controllers.push_back(start_controller);
-  srv_.request.stop_controllers.push_back(stop_controller);
-  srv_.request.strictness = 0;
-  srv_.request.start_asap = false;
-  srv_.request.timeout = 0.0;
-  if (switch_controller_client_.call(srv_))
+  controller_manager_msgs::SwitchController srv;
+  srv.request.start_controllers.push_back(start_controller);
+  srv.request.stop_controllers.push_back(stop_controller);
+  srv.request.strictness = srv.request.BEST_EFFORT;
+  srv.request.start_asap = true;
+  srv.request.timeout = 0.1;
+  if (switch_controller_client_.call(srv))
     ROS_INFO("switch %s to %s", stop_controller.c_str(), start_controller.c_str());
   else
     ROS_INFO("can not switch controller");

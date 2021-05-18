@@ -2,8 +2,8 @@
 // Created by astro on 2021/4/25.
 //
 
-#ifndef SRC_RM_SOFTWARE_RM_ENGINEER_ENGINEER_MIDDLEWARE_INCLUDE_ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
-#define SRC_RM_SOFTWARE_RM_ENGINEER_ENGINEER_MIDDLEWARE_INCLUDE_ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
+#ifndef RM_ENGINEER_ENGINEER_MIDDLEWARE_INCLUDE_ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
+#define RM_ENGINEER_ENGINEER_MIDDLEWARE_INCLUDE_ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
 
 //ROS
 #include <ros/ros.h>
@@ -19,12 +19,13 @@ class Middleware {
  public:
   explicit Middleware(ros::NodeHandle &nh);
   ros::NodeHandle nh_;
-
+  void run() const;
+  void switchController(const std::string &start_controller, const std::string &stop_controller);
+ private:
   BaseController *base_motion_;
   std::thread *base_motion_thread_;
   //server client
   ros::ServiceClient switch_controller_client_;
-  controller_manager_msgs::SwitchController srv_;
   //action
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> action_;
   rm_msgs::EngineerFeedback freedback_;
@@ -37,8 +38,7 @@ class Middleware {
   void executeCB(const rm_msgs::EngineerGoalConstPtr &goal) {
 
   }
-  void run() const;
-  void switchController(const std::string &start_controller, const std::string &stop_controller);
+
 };
 
 }

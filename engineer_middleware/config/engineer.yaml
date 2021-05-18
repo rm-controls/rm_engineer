@@ -1,5 +1,11 @@
-chassis:
+base_motion:
   x:
-    pid: { p: 17.0, i: 0.0, d: 15.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
+    pid: { p: 12.0, i: 0.0, d: 20.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
   y:
+    pid: { p: 12.0, i: 0.0, d: 20.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
+  z:
+    pid: { p: 12.0, i: 0.0, d: 20.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
+  yaw:
+    pid: { p: 17.0, i: 0.0, d: 15.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
+  pitch:
     pid: { p: 17.0, i: 0.0, d: 15.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
