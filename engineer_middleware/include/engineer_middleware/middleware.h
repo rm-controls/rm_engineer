@@ -22,7 +22,7 @@ class Middleware {
   void run() const;
   void switchController(const std::string &start_controller, const std::string &stop_controller);
  private:
-  BaseController *base_motion_;
+  BaseMotion *base_motion_;
   std::thread *base_motion_thread_;
   //server client
   ros::ServiceClient switch_controller_client_;

@@ -17,7 +17,8 @@ class StepQueue {
  public:
   StepQueue(const XmlRpc::XmlRpcValue &steps,
             moveit::planning_interface::MoveGroupInterface &arm_group,
-            moveit::planning_interface::MoveGroupInterface &hand_group);
+            moveit::planning_interface::MoveGroupInterface &hand_group,
+            BaseMotion *base_motion);
 
   bool move();
 
@@ -27,6 +28,7 @@ class StepQueue {
  private:
   std::deque<Step> queue_;
   moveit::planning_interface::MoveGroupInterface &arm_group_, &hand_group_;
+  BaseMotion *base_motion_;
 };
 }
 

@@ -13,12 +13,13 @@
 #include <rm_common/ros_utilities.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 
+#include "engineer_middleware/base_motion.h"
 namespace engineer_middleware {
 
 class Step {
  public:
   Step(const XmlRpc::XmlRpcValue &step, moveit::planning_interface::MoveGroupInterface &arm_group,
-       moveit::planning_interface::MoveGroupInterface &hand_group);
+       moveit::planning_interface::MoveGroupInterface &hand_group, BaseMotion *base_motion);
   ~Step() = default;
 
   bool compute(const moveit::core::RobotState &current_state);
@@ -30,9 +31,11 @@ class Step {
 
  protected:
   std::unique_ptr<ArmMotionBase> arm_motion_;
-
+  BaseMotion *base_motion_;
  private:
+  bool has_gimbal = false, has_chassis = false;
   std::string id_;
+  std::vector<double> base_motion_position_;
 };
 
 } /* namespace */

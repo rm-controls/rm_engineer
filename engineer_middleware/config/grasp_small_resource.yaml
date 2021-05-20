@@ -1,4 +1,9 @@
 grasp_small_resource:
+  - step: base_motion
+    base_target:
+      chassis: [ 2.0, 2.0, 0.0 ]
+      gimbal: [ 0.0, 0.0 ] #[yaw,pitch]
+
   - step: grasp
     end_effector_target:
       hand_open: after
@@ -9,6 +14,8 @@ grasp_small_resource:
       position: [ 0.3, 0.0, 0.5 ]
       rpy: [ 0., 0., 0. ]
       speed: 0.8
+    base_target:
+      chassis: [ 0.0, 0.0, 0.0 ]
 
   - step: top
     joints_target:
