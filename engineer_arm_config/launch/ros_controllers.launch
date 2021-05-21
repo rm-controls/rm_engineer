@@ -18,8 +18,8 @@
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
           output="screen" args="
           controllers/robot_state_controller
-          controllers/chassis_controller
           controllers/joint_state_controller
+          controllers/chassis_controller
           joint_state_controller
           engineer_arm_controller
           engineer_hand_controller"

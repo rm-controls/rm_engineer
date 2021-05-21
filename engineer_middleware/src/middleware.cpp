@@ -5,11 +5,10 @@
 #include "engineer_middleware/middleware.h"
 #include <unistd.h>
 namespace engineer_middleware {
-Middleware::Middleware(ros::NodeHandle &nh) : nh_(nh),
-                                              action_(nh_,
-                                                      "Engineer",
-                                                      boost::bind(&Middleware::executeCB, this, _1),
-                                                      false) {
+Middleware::Middleware(ros::NodeHandle &nh) : nh_(nh), action_(nh_,
+                                                               "move_arm",
+                                                               boost::bind(&Middleware::executeCB, this, _1),
+                                                               false) {
   arm_group_ = new moveit::planning_interface::MoveGroupInterface("engineer_arm");
   hand_group_ = new moveit::planning_interface::MoveGroupInterface("engineer_hand");
   base_motion_ = new BaseMotion(nh);
@@ -20,7 +19,6 @@ Middleware::Middleware(ros::NodeHandle &nh) : nh_(nh),
   switch_controller_client_ =
       nh_.serviceClient<controller_manager_msgs::SwitchControllerRequest>("/controller_manager/switch_controller");
   action_.start();
-
 }
 void Middleware::switchController(const std::string &start_controller, const std::string &stop_controller) {
   controller_manager_msgs::SwitchController srv;
@@ -33,17 +31,6 @@ void Middleware::switchController(const std::string &start_controller, const std
     ROS_INFO("switch %s to %s", stop_controller.c_str(), start_controller.c_str());
   else
     ROS_INFO("can not switch controller");
-}
-void Middleware::run() const {
-  ros::AsyncSpinner spinner(1);
-  spinner.start();
-  base_motion_->setMiddlewareControl(true);
-  ROS_INFO("start 1 action");
-  step_queue_->move();
-  ROS_INFO("action 1 finish");
-  while (ros::ok()) {
-
-  }
 }
 
 }
