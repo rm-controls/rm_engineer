@@ -3,7 +3,7 @@ services:
   - docker:dind
 variables:
   AFTER_SETUP_ROSDEP: 'apt install -y -qq curl && curl ${PACKAGE_SCRIPT_URL}/gitlab-ci/v2/init.sh | bash'
-  AFTER_SCRIPT:       'apt install -y -qq curl && curl ${PACKAGE_SCRIPT_URL}/gitlab-ci/v2/package.sh | bash'
+  AFTER_SCRIPT:       'apt install -y -qq curl && curl ${PACKAGE_SCRIPT_URL}/gitlab-ci/v2/package.sh | bash -s multi'
 stages:
   - prepare
   - build
