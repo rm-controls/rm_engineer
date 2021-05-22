@@ -35,7 +35,7 @@ class BaseMotion {
     std::unique_lock<std::mutex> lock(data_buffer_mutex_);
     expect_x_ = x;
     expect_y_ = y;
-    expect_z_ = z;
+    expect_w_ = z;
   }
   void setGimbalPosition(double yaw, double pitch) {
     std::unique_lock<std::mutex> lock(data_buffer_mutex_);
@@ -43,7 +43,7 @@ class BaseMotion {
     expect_pitch_ = pitch;
   }
  private:
-  control_toolbox::Pid pid_x_, pid_y_, pid_z_, pid_yaw_, pid_pitch_;
+  control_toolbox::Pid pid_x_, pid_y_, pid_w_, pid_yaw_, pid_pitch_;
   double chassis_error_, gimbal_error_;
   bool middleware_control_;
   rm_msgs::ChassisCmd chassis_cmd_;
@@ -53,8 +53,8 @@ class BaseMotion {
   ros::Publisher gimbal_cmd_pub_;
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener *tf_listener_;
-  double expect_x_, expect_y_, expect_z_, expect_yaw_, expect_pitch_;
-  double current_x_, current_y_, current_z_, current_yaw_, current_pitch_;
+  double expect_x_, expect_y_, expect_w_, expect_yaw_, expect_pitch_;
+  double current_x_, current_y_, current_w_, current_yaw_, current_pitch_;
   std::mutex data_buffer_mutex_;
 };
 

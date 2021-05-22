@@ -14,7 +14,7 @@ BaseMotion::BaseMotion(ros::NodeHandle &nh) : nh_(nh) {
   ros::NodeHandle nh_pid_pitch = ros::NodeHandle(nh_base_motion, "pitch");
   pid_x_.init(ros::NodeHandle(nh_pid_x, "pid"));
   pid_y_.init(ros::NodeHandle(nh_pid_y, "pid"));
-  pid_z_.init(ros::NodeHandle(nh_pid_z, "pid"));
+  pid_w_.init(ros::NodeHandle(nh_pid_z, "pid"));
   pid_yaw_.init(ros::NodeHandle(nh_pid_yaw, "pid"));
   pid_pitch_.init(ros::NodeHandle(nh_pid_pitch, "pid"));
   ros::NodeHandle root_nh;
@@ -23,18 +23,18 @@ BaseMotion::BaseMotion(ros::NodeHandle &nh) : nh_(nh) {
   gimbal_cmd_pub_ = root_nh.advertise<rm_msgs::ChassisCmd>("/cmd_gimbal", 1);
   this->tf_listener_ = new tf2_ros::TransformListener(this->tf_);
   middleware_control_ = false;
-  chassis_error_ = getParam(nh_, "base_motion/chassis_error", 0.1);
-  gimbal_error_ = getParam(nh_, "base_motion/gimbal_error", 0.1);
+  chassis_error_ = getParam(nh_, "base_motion/chassis_error", 0.2);
+  gimbal_error_ = getParam(nh_, "base_motion/gimbal_error", 0.2);
 }
 
 void BaseMotion::execute(ros::Duration period) {
   updateCurrent();
   pid_x_.computeCommand(expect_x_ - current_x_, period);
   pid_y_.computeCommand(expect_y_ - current_y_, period);
-  pid_z_.computeCommand(expect_z_ - current_z_, period);
+  pid_w_.computeCommand(expect_w_ - current_w_, period);
   pid_yaw_.computeCommand(expect_yaw_ - current_yaw_, period);
   pid_pitch_.computeCommand(expect_pitch_ - current_pitch_, period);
-  setChassis(chassis_cmd_.RAW, pid_x_.getCurrentCmd(), pid_y_.getCurrentCmd(), pid_z_.getCurrentCmd());
+  setChassis(chassis_cmd_.RAW, pid_x_.getCurrentCmd(), pid_y_.getCurrentCmd(), pid_w_.getCurrentCmd());
 }
 bool BaseMotion::chassisMoveTo(double x, double y, double z) {
   setChassisPosition(x, y, z);
@@ -106,7 +106,7 @@ void BaseMotion::updateCurrent() {
   current_x_ = chassis_transformStamped.transform.translation.x;
   current_y_ = chassis_transformStamped.transform.translation.y;
   quatToRPY(chassis_transformStamped.transform.rotation, roll, pitch, yaw);
-  current_z_ = yaw;
+  current_w_ = yaw;
 }
 
 }
