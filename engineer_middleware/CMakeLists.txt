@@ -19,7 +19,6 @@ find_package(catkin REQUIRED
         moveit_core
         moveit_ros_planning
         moveit_ros_planning_interface
-        moveit_visual_tools
         )
 
 find_package(Eigen3 REQUIRED)
@@ -42,6 +41,9 @@ catkin_package(
         roscpp
         rm_common
         control_toolbox
+        moveit_core
+        moveit_ros_planning
+        moveit_ros_planning_interface
         DEPENDS
 )
 
@@ -58,10 +60,6 @@ include_directories(
 )
 
 ## Declare a cpp library
-#add_library(${PROJECT_NAME}
-#        src/step.cpp
-#        src/step_queue.cpp
-#        )
 
 add_executable(${PROJECT_NAME}
         src/step.cpp
