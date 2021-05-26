@@ -9,12 +9,12 @@ BaseMotion::BaseMotion(ros::NodeHandle &nh) : nh_(nh) {
   ros::NodeHandle nh_base_motion = ros::NodeHandle(nh_, "base_motion");
   ros::NodeHandle nh_pid_x = ros::NodeHandle(nh_base_motion, "x");
   ros::NodeHandle nh_pid_y = ros::NodeHandle(nh_base_motion, "y");
-  ros::NodeHandle nh_pid_z = ros::NodeHandle(nh_base_motion, "z");
+  ros::NodeHandle nh_pid_w = ros::NodeHandle(nh_base_motion, "w");
   ros::NodeHandle nh_pid_yaw = ros::NodeHandle(nh_base_motion, "yaw");
   ros::NodeHandle nh_pid_pitch = ros::NodeHandle(nh_base_motion, "pitch");
   pid_x_.init(ros::NodeHandle(nh_pid_x, "pid"));
   pid_y_.init(ros::NodeHandle(nh_pid_y, "pid"));
-  pid_w_.init(ros::NodeHandle(nh_pid_z, "pid"));
+  pid_w_.init(ros::NodeHandle(nh_pid_w, "pid"));
   pid_yaw_.init(ros::NodeHandle(nh_pid_yaw, "pid"));
   pid_pitch_.init(ros::NodeHandle(nh_pid_pitch, "pid"));
   ros::NodeHandle root_nh;
@@ -29,6 +29,7 @@ BaseMotion::BaseMotion(ros::NodeHandle &nh) : nh_(nh) {
 
 void BaseMotion::execute(ros::Duration period) {
   updateCurrent();
+  ROS_INFO("currnet position:%f %f %f", current_x_, current_y_, current_w_);
   pid_x_.computeCommand(expect_x_ - current_x_, period);
   pid_y_.computeCommand(expect_y_ - current_y_, period);
   pid_w_.computeCommand(expect_w_ - current_w_, period);
@@ -59,7 +60,7 @@ void BaseMotion::setChassis(uint8_t chassis_mode, double linear_x, double linear
   chassis_cmd_.accel.linear.x = 5;
   chassis_cmd_.accel.linear.y = 5;
   chassis_cmd_.accel.angular.z = 5;
-  chassis_cmd_.power_limit = 99;
+  chassis_cmd_.power_limit = 150;
   chassis_cmd_.accel.angular.x = 5;
   chassis_cmd_.accel.angular.y = 5;
   chassis_cmd_.accel.angular.z = 5;
@@ -69,21 +70,23 @@ void BaseMotion::setChassis(uint8_t chassis_mode, double linear_x, double linear
   chassis_cmd_pub_.publish(chassis_cmd_);
   vel_cmd_pub_.publish(cmd_vel_);
 }
+void BaseMotion::setGimbal(uint8_t chassis_mode, double yaw, double pitch) {
+
+}
 void BaseMotion::baseControllerThread() {
   ROS_INFO("start chassis thread");
   ros::Rate loop_rate(100);
   ros::Time last = ros::Time::now();
   while (ros::ok()) {
-    std::unique_lock<std::mutex> lock(data_buffer_mutex_);
-    if (middleware_control_)
+    if (middleware_control_) {
+      std::unique_lock<std::mutex> lock(data_buffer_mutex_);
       execute(ros::Time::now() - last);
+    }
     last = ros::Time::now();
     loop_rate.sleep();
   }
 }
-void BaseMotion::setGimbal(uint8_t chassis_mode, double yaw, double pitch) {
 
-}
 void BaseMotion::updateCurrent() {
   geometry_msgs::TransformStamped chassis_transformStamped;
   geometry_msgs::TransformStamped gimbal_transformStamped;

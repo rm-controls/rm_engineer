@@ -19,6 +19,7 @@ Middleware::Middleware(ros::NodeHandle &nh) : nh_(nh), action_(nh_,
   switch_controller_client_ =
       nh_.serviceClient<controller_manager_msgs::SwitchControllerRequest>("/controller_manager/switch_controller");
   action_.start();
+  base_motion_thread_->detach();
 }
 void Middleware::switchController(const std::string &start_controller, const std::string &stop_controller) {
   controller_manager_msgs::SwitchController srv;
