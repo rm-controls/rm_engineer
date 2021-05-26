@@ -1,0 +1,14 @@
+<launch>
+    <rosparam file="$(find engineer_middleware)/config/grasp_big_resource.yaml" command="load"
+              ns="engineer_middleware"/>
+    <rosparam file="$(find engineer_middleware)/config/grasp_groud.yaml" command="load"
+              ns="engineer_middleware"/>
+    <rosparam file="$(find engineer_middleware)/config/grasp_small_resource.yaml" command="load"
+              ns="engineer_middleware"/>
+    <rosparam file="$(find engineer_middleware)/config/place.yaml" command="load"
+              ns="engineer_middleware"/>
+    <rosparam file="$(find engineer_middleware)/config/engineer.yaml" command="load"
+              ns="engineer_middleware"/>
+    <node name="engineer_middleware" pkg="engineer_middleware" type="engineer_middleware" respawn="false"
+          clear_params="true"/>
+</launch>

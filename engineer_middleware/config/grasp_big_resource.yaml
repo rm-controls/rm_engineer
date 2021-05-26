@@ -1,0 +1,30 @@
+grasp_big_resource:
+  - step: grasp
+    end_effector_target:
+      hand_open: after
+
+  - step: top
+    end_effector_target:
+      frame: base_link
+      position: [ 0.3, 0.0, 0.45 ]
+      rpy: [ 0., 0., 0. ]
+      speed: 0.8
+
+  - step: top
+    joints_target:
+      joints: [ 0., -0.50, 0., 0.68, 0. ]
+
+  - step: grasp
+    end_effector_target:
+      hand_close: after
+
+  - step: 4 # number is unnecessary
+    end_effector_target:
+      frame: base_link
+      position: [ 0.07, 0.0, 0.4 ]
+      rpy: [ 0., -3.1415926, 0. ]
+      speed: .2
+
+  - step: grasp
+    end_effector_target:
+      hand_open: after

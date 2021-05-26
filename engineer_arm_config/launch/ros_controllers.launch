@@ -1,11 +1,41 @@
 <?xml version="1.0"?>
 <launch>
+    <arg name="robot_type" default="$(env ROBOT_TYPE)" doc="Robot type [standard, hero, engineer]"/>
+    <arg name="ekf" default="false"/>
+    <arg name="odom_tf" default="true"/>
+    <arg name="yaw_tf" default="false"/>
+    <arg name="load_bad_yaml" default="false"/>
+
+    <rosparam file="$(find rm_chassis_controllers)/config/$(arg robot_type).yaml" command="load"/>
+    <rosparam if="$(arg ekf)" param="controllers/chassis_controller/enable_odom_tf">false</rosparam>
+    <!-- for test-->
+    <rosparam if="$(arg load_bad_yaml)" file="$(find rm_chassis_controllers)/test/wrong.yaml" command="load"/>
 
     <!-- Load joint controller configurations from YAML file to parameter server -->
     <rosparam file="$(find engineer_arm_config)/config/ros_controllers.yaml" command="load"/>
 
     <!-- Load the controllers -->
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-          output="screen" args=" joint_state_controller engineer_arm_controller engineer_hand_controller"/>
+          output="screen" args="
+          controllers/robot_state_controller
+          controllers/joint_state_controller
+          controllers/chassis_controller
+          controllers/engineer_arm_trajectory_controller
+          controllers/engineer_hand_controller"
+    />
+    <!-- load other controllers -->
+    <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false"
+          output="screen" args="load controllers/engineer_arm_position_controller"/>
+
+    <node if="$(arg ekf)" pkg="robot_localization" type="ekf_localization_node" name="ekf_localization"
+          clear_params="true">
+        <rosparam command="load" file="$(find rm_chassis_controllers)/config/localization.yaml"/>
+    </node>
+    <node if="$(arg odom_tf)" pkg="tf" type="static_transform_publisher" name="odom_tf_publisher"
+          args="0 0 0 0 0 0 1 map odom 100"/>
+
+    <!--  for test !!! -->
+    <node if="$(arg yaw_tf)" pkg="tf" type="static_transform_publisher" name="yaw_tf_publisher"
+          args="0 0 0 0.866 0 0 0.5 map yaw 100"/>
 
 </launch>
