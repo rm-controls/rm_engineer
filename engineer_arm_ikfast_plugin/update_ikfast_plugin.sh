@@ -3,11 +3,11 @@ srdf_filename=engineer.srdf
 robot_name_in_srdf=engineer
 moveit_config_pkg=engineer_moveit_config
 robot_name=engineer
-planning_group_name=arm
+planning_group_name=engineer_arm
 ikfast_plugin_pkg=engineer_arm_ikfast_plugin
 base_link_name=base_link
 eef_link_name=link5
-ikfast_output_path=/home/lings/ros_tem/src/rm_engineer/engineer_arm_ikfast_plugin/src/engineer_arm_ikfast_solver.cpp
+ikfast_output_path=/home/lings/ros_tem/src/rm_engineer/engineer_arm_ikfast_plugin/src/engineer_engineer_arm_ikfast_solver.cpp
 
 rosrun moveit_kinematics create_ikfast_moveit_plugin.py\
   --search_mode=$search_mode\
