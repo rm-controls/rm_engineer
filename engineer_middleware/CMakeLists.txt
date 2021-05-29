@@ -15,6 +15,7 @@ find_package(catkin REQUIRED
         roscpp
         roslint
         rm_common
+        std_msgs
         control_toolbox
         moveit_core
         moveit_ros_planning_interface
@@ -39,6 +40,7 @@ catkin_package(
         CATKIN_DEPENDS
         roscpp
         rm_common
+        std_msgs
         control_toolbox
         moveit_core
         moveit_ros_planning_interface
