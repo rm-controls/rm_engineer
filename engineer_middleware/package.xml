@@ -10,9 +10,11 @@
     <!-- buildtool_depend: dependencies of the build process -->
     <buildtool_depend>catkin</buildtool_depend>
     <!-- build_depend: dependencies only used in source files -->
+    <build_depend>roslint</build_depend>
     <!-- depend: build, export, and execution dependency -->
     <depend>roscpp</depend>
     <depend>rm_common</depend>
+    <depend>moveit_core</depend>
+    <depend>moveit_ros_planning_interface</depend>
 
-    <build_depend>roslint</build_depend>
 </package>

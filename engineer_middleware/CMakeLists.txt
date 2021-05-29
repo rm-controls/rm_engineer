@@ -16,9 +16,7 @@ find_package(catkin REQUIRED
         roslint
         rm_common
         moveit_core
-        moveit_ros_planning
         moveit_ros_planning_interface
-        moveit_visual_tools
         )
 
 find_package(Eigen3 REQUIRED)
@@ -40,6 +38,8 @@ catkin_package(
         CATKIN_DEPENDS
         roscpp
         rm_common
+        moveit_core
+        moveit_ros_planning_interface
         DEPENDS
 )
 
