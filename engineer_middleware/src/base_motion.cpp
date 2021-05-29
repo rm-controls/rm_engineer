@@ -29,7 +29,6 @@ BaseMotion::BaseMotion(ros::NodeHandle &nh) : nh_(nh) {
 
 void BaseMotion::execute(ros::Duration period) {
   updateCurrent();
-  ROS_INFO("currnet position:%f %f %f", current_x_, current_y_, current_w_);
   pid_x_.computeCommand(expect_x_ - current_x_, period);
   pid_y_.computeCommand(expect_y_ - current_y_, period);
   pid_w_.computeCommand(expect_w_ - current_w_, period);
