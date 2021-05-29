@@ -21,21 +21,6 @@
 
     <arg name="capabilities" default=""/>
     <arg name="disable_capabilities" default=""/>
-    <!-- load these non-default MoveGroup capabilities (space seperated) -->
-    <!--
-    <arg name="capabilities" value="
-                  a_package/AwsomeMotionPlanningCapability
-                  another_package/GraspPlanningPipeline
-                  " />
-    -->
-
-    <!-- inhibit these default MoveGroup capabilities (space seperated) -->
-    <!--
-    <arg name="disable_capabilities" value="
-                  move_group/MoveGroupKinematicsService
-                  move_group/ClearOctomapService
-                  " />
-    -->
 
     <arg name="load_robot_description" default="true"/>
     <!-- load URDF, SRDF and joint_limits configuration -->
@@ -54,12 +39,6 @@
         <arg name="moveit_manage_controllers" value="true"/>
         <arg name="moveit_controller_manager" value="engineer" unless="$(arg fake_execution)"/>
         <arg name="moveit_controller_manager" value="fake" if="$(arg fake_execution)"/>
-    </include>
-
-    <!-- Sensors Functionality -->
-    <include ns="move_group" file="$(find engineer_arm_config)/launch/sensor_manager.launch.xml"
-             if="$(arg allow_trajectory_execution)">
-        <arg name="moveit_sensor_manager" value="engineer"/>
     </include>
 
     <!-- Start the actual move_group node/action server -->

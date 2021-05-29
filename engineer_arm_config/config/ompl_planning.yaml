@@ -128,7 +128,7 @@ planner_configs:
     dense_delta_fraction: 0.001  # delta fraction for interface detection. default: 0.001
     max_failures: 5000  # maximum consecutive failure limit. default: 5000
 engineer_arm:
-  default_planner_config: None
+  default_planner_config: RRTConnect
   planner_configs:
     - AnytimePathShortening
     - SBL
@@ -157,7 +157,7 @@ engineer_arm:
   projection_evaluator: joints(joint1,joint2)
   longest_valid_segment_fraction: 0.005
 engineer_hand:
-  default_planner_config: None
+  default_planner_config: RRTConnect
   planner_configs:
     - AnytimePathShortening
     - SBL

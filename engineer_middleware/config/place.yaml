@@ -1,4 +1,4 @@
-steps:
+place:
   - step: grasp
     end_effector_target:
       hand_open: after

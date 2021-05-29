@@ -15,6 +15,7 @@ find_package(catkin REQUIRED
         roscpp
         roslint
         rm_common
+        control_toolbox
         moveit_core
         moveit_ros_planning_interface
         )
@@ -38,6 +39,7 @@ catkin_package(
         CATKIN_DEPENDS
         roscpp
         rm_common
+        control_toolbox
         moveit_core
         moveit_ros_planning_interface
         DEPENDS
@@ -56,15 +58,13 @@ include_directories(
 )
 
 ## Declare a cpp library
-#add_library(${PROJECT_NAME}
-#        src/step.cpp
-#        src/step_queue.cpp
-#        )
 
 add_executable(${PROJECT_NAME}
         src/step.cpp
         src/step_queue.cpp
         src/arm_motion.cpp
+        src/base_motion.cpp
+        src/middleware.cpp
         src/engineer_middleware.cpp)
 
 add_dependencies(${PROJECT_NAME}
