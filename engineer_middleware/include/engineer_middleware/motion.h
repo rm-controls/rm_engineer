@@ -146,30 +146,44 @@ class JointMotion : public MoveitMotionBase {
   std::vector<double> target_;
 };
 
-class JointPositionMotion : public MotionBase<ros::Publisher> {
+template<class MsgType>
+class PublishMotion : public MotionBase<ros::Publisher> {
  public:
-  JointPositionMotion(const XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
-      MotionBase<ros::Publisher>(motion, interface) {
-    ROS_ASSERT(motion.hasMember("target"));
-    msg_.data = xmlRpcGetDouble(motion, "target", 0.0);
-  }
+  PublishMotion(const XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
+      MotionBase<ros::Publisher>(motion, interface) {}
   bool move() override {
     interface_.publish(msg_);
     return true;
   }
   bool isFinish() override { return true; } // TODO: Add feedback
- private:
-  std_msgs::Float64 msg_;
+ protected:
+  MsgType msg_;
 };
 
-class GimbalMotion : public MotionBase<ros::Publisher> {
+class JointPositionMotion : public PublishMotion<std_msgs::Float64> {
+ public:
+  JointPositionMotion(const XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
+      PublishMotion<std_msgs::Float64>(motion, interface) {
+    ROS_ASSERT(motion.hasMember("target"));
+    msg_.data = xmlRpcGetDouble(motion, "target", 0.0);
+  }
+};
+
+class GimbalMotion : public PublishMotion<rm_msgs::GimbalCmd> {
  public:
   GimbalMotion(const XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
-      MotionBase<ros::Publisher>(motion, interface) {
-
+      PublishMotion<rm_msgs::GimbalCmd>(motion, interface) {
+    if (motion.hasMember("frame"))
+      msg_.aim_point.header.frame_id = std::string(motion["frame"]);
+    if (motion.hasMember("position")) {
+      ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      msg_.aim_point.point.x = xmlRpcGetDouble(motion["position"], 0, 0.0);
+      msg_.aim_point.point.y = xmlRpcGetDouble(motion["position"], 1, 0.0);
+      msg_.aim_point.point.z = xmlRpcGetDouble(motion["position"], 2, 0.0);
+    }
+    msg_.mode = msg_.DIRECT;
   }
- private:
-  rm_msgs::GimbalCmd msg_;
+
 };
 
 }
