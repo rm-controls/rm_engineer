@@ -12,10 +12,14 @@
 namespace engineer_middleware {
 class ChassisInterface {
  public:
+  ChassisInterface(ros::NodeHandle &nh) {
+
+  }
   bool setGoal(const geometry_msgs::PoseStamped &pose);
   void update();
   double getPosError();
   double getYawError();
+  void chassisInterfaceThread();
  private:
   control_toolbox::Pid pid_x_, pid_y_, pid_w_;
 };

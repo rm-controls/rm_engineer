@@ -12,7 +12,7 @@
 
 #include <rm_msgs/EngineerAction.h>
 #include "engineer_middleware/step_queue.h"
-
+#include "engineer_middleware/chassis_interface.h"
 namespace engineer_middleware {
 class Middleware {
  public:
@@ -22,9 +22,13 @@ class Middleware {
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> action_;
   rm_msgs::EngineerFeedback feedback;
   rm_msgs::EngineerResult result_;
+  void switchController(const std::string &start_controller, const std::string &stop_controller);
  private:
   //server client
   ros::ServiceClient switch_controller_client_;
+  //chassis
+  ChassisInterface *chassis_interface_;
+  std::thread *chassis_interface_thread_;
   //arm
   moveit::planning_interface::MoveGroupInterface *arm_group_;
   moveit::planning_interface::MoveGroupInterface *hand_group_;
