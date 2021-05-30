@@ -23,14 +23,18 @@ class StepQueue {
     for (int i = 0; i < steps.size(); ++i)
       queue_.emplace_back(steps[i], tf, arm_group, hand_group, card_pub, gimbal_pub);
   }
-  bool forward() {
+  bool run() {
+    for (auto &step:queue_) {
+      if (!step.move())
+        return false;
+      while (!step.isFinish())
+        ros::WallDuration(0.2).sleep();
+    }
   }
-  void reset() { itr_ = queue_.begin(); }
   const std::deque<Step> &getQueue() const { return queue_; }
   std::deque<Step>::size_type size() const { return queue_.size(); }
  private:
   std::deque<Step> queue_;
-  std::deque<Step>::iterator itr_;
 };
 }
 
