@@ -13,6 +13,7 @@
 #include <rm_msgs/EngineerAction.h>
 #include "engineer_middleware/step_queue.h"
 #include "engineer_middleware/chassis_interface.h"
+#include "rm_msgs/GimbalCmd.h"
 namespace engineer_middleware {
 class Middleware {
  public:
@@ -26,9 +27,6 @@ class Middleware {
  private:
   //server client
   ros::ServiceClient switch_controller_client_;
-  //chassis
-  ChassisInterface *chassis_interface_;
-  std::thread *chassis_interface_thread_;
   //arm
   moveit::planning_interface::MoveGroupInterface *arm_group_;
   moveit::planning_interface::MoveGroupInterface *hand_group_;
@@ -41,7 +39,9 @@ class Middleware {
     result_.finish = true;
     action_.setSucceeded(result_);
   }
-
+  ros::Publisher vel_cmd_pub_;
+  ros::Publisher gimbal_cmd_pub_;
+  tf2_ros::Buffer tf_;
 };
 
 }

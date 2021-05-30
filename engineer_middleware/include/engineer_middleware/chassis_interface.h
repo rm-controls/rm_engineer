@@ -19,7 +19,6 @@ class ChassisInterface {
   void update();
   double getPosError();
   double getYawError();
-  void chassisInterfaceThread();
  private:
   control_toolbox::Pid pid_x_, pid_y_, pid_w_;
 };
