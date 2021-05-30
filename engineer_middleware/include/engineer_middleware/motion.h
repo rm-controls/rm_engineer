@@ -11,6 +11,7 @@
 #include <std_msgs/Float64.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <rm_msgs/GimbalCmd.h>
+#include <engineer_middleware/chassis_interface.h>
 
 namespace engineer_middleware {
 template<class Interface>
@@ -178,7 +179,29 @@ class GimbalMotion : public PublishMotion<rm_msgs::GimbalCmd> {
     }
     msg_.mode = msg_.DIRECT;
   }
+};
 
+class ChassisMotion : public MotionBase<ChassisInterface> {
+  ChassisMotion(const XmlRpc::XmlRpcValue &motion, ChassisInterface &interface)
+      : MotionBase<ChassisInterface>(motion, interface) {
+    if (motion.hasMember("frame"))
+      target_.header.frame_id = std::string(motion["frame"]);
+    if (motion.hasMember("position")) {
+      target_.pose.position.x = xmlRpcGetDouble(motion["position"], 0, 0.0);
+      target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1, 0.0);
+    }
+    if (motion.hasMember("yaw")) {
+      tf2::Quaternion quat_tf;
+      quat_tf.setRPY(0, 0, motion["yaw"]);
+      geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+      target_.pose.orientation = quat_msg;
+    }
+  }
+  bool move() override { return interface_.setGoal(target_); }
+  bool isFinish() override {
+    return interface_.getPosError() < tolerance_linear_ && interface_.getYawError() < tolerance_angular_;
+  }
+  geometry_msgs::PoseStamped target_;
 };
 
 }
