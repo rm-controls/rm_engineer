@@ -119,13 +119,8 @@ class JointMotion : public MoveitMotionBase {
       MoveitMotionBase(motion, interface) {
     if (motion.hasMember("joints")) {
       ROS_ASSERT(motion["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      ROS_ASSERT(motion["joints"].size() == 5);
-      target_.push_back(xmlRpcGetDouble(motion["joints"], 0, 0.0));
-      target_.push_back(xmlRpcGetDouble(motion["joints"], 1, 0.0));
-      target_.push_back(xmlRpcGetDouble(motion["joints"], 2, 0.0));
-      target_.push_back(xmlRpcGetDouble(motion["joints"], 3, 0.0));
-      target_.push_back(xmlRpcGetDouble(motion["joints"], 4, 0.0));
-      ros::NodeHandle n;
+      for (int i = 0; i < motion["joints"].size(); ++i)
+        target_.push_back(xmlRpcGetDouble(motion["joints"], i, 0.0));
     }
   }
   bool move() override {
