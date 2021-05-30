@@ -12,6 +12,7 @@
 namespace engineer_middleware {
 class ChassisInterface {
  public:
+  ChassisInterface(ros::NodeHandle &nh);
   bool setGoal(const geometry_msgs::PoseStamped &pose);
   void update();
   double getPosError();

@@ -5,13 +5,13 @@
 #ifndef ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
 #define ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
 
+#include "engineer_middleware/step_queue.h"
+
 //ROS
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
 #include <controller_manager_msgs/SwitchController.h>
-
 #include <rm_msgs/EngineerAction.h>
-#include "engineer_middleware/step_queue.h"
 
 namespace engineer_middleware {
 class Middleware {
@@ -20,15 +20,18 @@ class Middleware {
   ros::NodeHandle nh_;
   //action
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> action_;
-  rm_msgs::EngineerFeedback feedback;
-  rm_msgs::EngineerResult result_;
+
  private:
   moveit::planning_interface::MoveGroupInterface arm_group_;
   moveit::planning_interface::MoveGroupInterface hand_group_;
   ChassisInterface chassis_interface_;
-  ros::Publisher card_pub, gimbal_pub;
+  ros::Publisher card_pub_, gimbal_pub_;
   std::unordered_map<std::string, StepQueue> step_queues_;
-  XmlRpc::XmlRpcValue *steps_params_;
+  tf2_ros::Buffer tf_;
+
+  rm_msgs::EngineerFeedback feedback_;
+  rm_msgs::EngineerResult result_;
+
   void executeCB(const actionlib::SimpleActionServer<rm_msgs::EngineerAction>::GoalConstPtr &goal) {
     std::string step_name;
     step_name = goal->step;

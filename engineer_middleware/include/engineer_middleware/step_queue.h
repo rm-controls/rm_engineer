@@ -6,11 +6,11 @@
 #define ENGINEER_MIDDLEWARE_STEP_QUEUE_H_
 #pragma once
 
+#include "engineer_middleware/step.h"
+
 // STL
 #include <deque>
 #include <string>
-
-#include "engineer_middleware/step.h"
 
 namespace engineer_middleware {
 class StepQueue {
