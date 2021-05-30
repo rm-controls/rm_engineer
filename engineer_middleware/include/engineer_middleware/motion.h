@@ -134,7 +134,7 @@ class JointMotion : public MoveitMotionBase {
   bool isFinish() override {
     std::vector<double> current = interface_.getCurrentJointValues();
     double error = 0.;
-    for (int i = 0; i < current.size(); ++i)
+    for (int i = 0; i < (int) current.size(); ++i)
       error += std::abs(target_[i] - current[i]);
     return error < tolerance_angular_;
   }
