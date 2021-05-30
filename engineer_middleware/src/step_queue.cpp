@@ -28,14 +28,4 @@ bool StepQueue::move() {
   return true;
 }
 
-const std::deque<Step> &StepQueue::getQueue() const {
-  return queue_;
-}
-void StepQueue::reload(const XmlRpc::XmlRpcValue &steps) {
-  queue_.clear();
-  for (int i = 0; i < steps.size(); ++i) {
-    queue_.emplace_back(steps[i], arm_group_, hand_group_, base_motion_);
-  }
-}
-
 }
