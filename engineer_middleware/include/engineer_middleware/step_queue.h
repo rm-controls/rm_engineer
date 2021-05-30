@@ -18,10 +18,10 @@ class StepQueue {
   StepQueue(const XmlRpc::XmlRpcValue &steps, tf2_ros::Buffer &tf,
             moveit::planning_interface::MoveGroupInterface &arm_group,
             moveit::planning_interface::MoveGroupInterface &hand_group,
-            ros::Publisher &card_pub, ros::Publisher &gimbal_pub) {
+            ChassisInterface &chassis_interface, ros::Publisher &card_pub, ros::Publisher &gimbal_pub) {
     ROS_ASSERT(steps.getType() == XmlRpc::XmlRpcValue::TypeArray);
     for (int i = 0; i < steps.size(); ++i)
-      queue_.emplace_back(steps[i], tf, arm_group, hand_group, card_pub, gimbal_pub);
+      queue_.emplace_back(steps[i], tf, arm_group, hand_group, chassis_interface, card_pub, gimbal_pub);
   }
   bool run() {
     for (auto &step:queue_) {

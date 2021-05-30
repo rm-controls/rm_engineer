@@ -182,6 +182,7 @@ class GimbalMotion : public PublishMotion<rm_msgs::GimbalCmd> {
 };
 
 class ChassisMotion : public MotionBase<ChassisInterface> {
+ public:
   ChassisMotion(const XmlRpc::XmlRpcValue &motion, ChassisInterface &interface)
       : MotionBase<ChassisInterface>(motion, interface) {
     if (motion.hasMember("frame"))

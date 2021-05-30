@@ -23,12 +23,11 @@ class Middleware {
   rm_msgs::EngineerFeedback feedback;
   rm_msgs::EngineerResult result_;
  private:
-  //server client
-  ros::ServiceClient switch_controller_client_;
-  //arm
-  moveit::planning_interface::MoveGroupInterface *arm_group_;
-  moveit::planning_interface::MoveGroupInterface *hand_group_;
-  engineer_middleware::StepQueue *step_queue_;
+  moveit::planning_interface::MoveGroupInterface arm_group_;
+  moveit::planning_interface::MoveGroupInterface hand_group_;
+  ChassisInterface chassis_interface_;
+  ros::Publisher card_pub, gimbal_pub;
+  std::unordered_map<std::string, StepQueue> step_queues_;
   XmlRpc::XmlRpcValue *steps_params_;
   void executeCB(const actionlib::SimpleActionServer<rm_msgs::EngineerAction>::GoalConstPtr &goal) {
     std::string step_name;
