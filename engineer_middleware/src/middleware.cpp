@@ -20,8 +20,10 @@ Middleware::Middleware(ros::NodeHandle &nh) :
     for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = xml_value.begin(); it != xml_value.end(); ++it) {
       step_queues_.insert(std::make_pair(it->first, StepQueue(
           it->second, tf_, arm_group_, hand_group_, chassis_interface_, card_pub_, gimbal_pub_)));
+      std::cout << it->second << std::endl;
     }
-  }
+  } else
+    ROS_ERROR("no steps list define in yaml");
 }
 
 }

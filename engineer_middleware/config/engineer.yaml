@@ -1,13 +1,7 @@
-base_motion:
+chassis:
   x:
     pid: { p: 10.0, i: 0.0, d: 16.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
   y:
     pid: { p: 10.0, i: 0.0, d: 16.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
-  w:
-    pid: { p: 9.0, i: 0.0, d: 16.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
   yaw:
-    pid: { p: 17.0, i: 0.0, d: 15.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
-  pitch:
-    pid: { p: 17.0, i: 0.0, d: 15.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
-  chassis_error: 0.2
-  gimbal_error: 0.2
+    pid: { p: 9.0, i: 0.0, d: 16.0, i_clamp_max: 0.1, i_clamp_min: -0.1, antiwindup: true, publish_state: true }
