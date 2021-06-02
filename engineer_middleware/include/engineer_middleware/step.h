@@ -19,7 +19,7 @@ class Step {
        moveit::planning_interface::MoveGroupInterface &hand_group,
        ChassisInterface &chassis_interface, ros::Publisher &card_pub, ros::Publisher &gimbal_pub) {
     if (step.hasMember("arm")) {
-      if (step.hasMember("joints"))
+      if (step["arm"].hasMember("joints"))
         arm_motion_ = new JointMotion(step["arm"], arm_group);
       else
         arm_motion_ = new EndEffectorMotion(step["arm"], arm_group, tf);

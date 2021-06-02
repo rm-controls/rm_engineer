@@ -24,12 +24,17 @@ class StepQueue {
       queue_.emplace_back(steps[i], tf, arm_group, hand_group, chassis_interface, card_pub, gimbal_pub);
   }
   bool run() {
+    if (queue_.empty()) {
+      ROS_WARN("step is empty");
+      return false;
+    }
     for (auto &step:queue_) {
       if (!step.move())
         return false;
       while (!step.isFinish())
         ros::WallDuration(0.2).sleep();
     }
+    return true;
   }
   const std::deque<Step> &getQueue() const { return queue_; }
   std::deque<Step>::size_type size() const { return queue_.size(); }

@@ -43,7 +43,8 @@ class ChassisInterface {
     quatToRPY(chassis_transformStamped.transform.rotation, roll, pitch, yaw_);
   }
   double getPosError() const {
-    return sqrt(x_ * x_ + y_ * y_);
+    return sqrt(goal_.pose.position.x - x_ * goal_.pose.position.x - x_ +
+        goal_.pose.position.y - y_ * goal_.pose.position.y - y_);
   }
   double getYawError() const {
     return goal_.pose.orientation.w - yaw_;

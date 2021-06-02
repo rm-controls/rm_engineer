@@ -20,7 +20,7 @@ class Middleware {
   ros::NodeHandle nh_;
   //action
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> action_;
-
+  void run();
  private:
   moveit::planning_interface::MoveGroupInterface arm_group_;
   moveit::planning_interface::MoveGroupInterface hand_group_;
@@ -28,15 +28,19 @@ class Middleware {
   ros::Publisher card_pub_, gimbal_pub_;
   std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
-
+  bool is_middleware_control{};
   rm_msgs::EngineerFeedback feedback_;
   rm_msgs::EngineerResult result_;
 
   void executeCB(const actionlib::SimpleActionServer<rm_msgs::EngineerAction>::GoalConstPtr &goal) {
     std::string step_name;
     step_name = goal->step;
-
+    is_middleware_control = true;
+    ROS_INFO("start step %s", step_name.c_str());
+    step_queues_.find(step_name)->second.run();
+    ROS_INFO("finish step %s", step_name.c_str());
     result_.finish = true;
+    is_middleware_control = false;
     action_.setSucceeded(result_);
   }
 
