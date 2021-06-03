@@ -23,6 +23,7 @@ class ChassisInterface {
     pid_x_.init(ros::NodeHandle(nh_pid_x, "pid"));
     pid_y_.init(ros::NodeHandle(nh_pid_y, "pid"));
     pid_yaw_.init(ros::NodeHandle(nh_pid_w, "pid"));
+    vel_pub_ = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
   }
   bool setGoal(const geometry_msgs::PoseStamped &pose) {
     goal_ = pose;
@@ -38,23 +39,34 @@ class ChassisInterface {
     catch (tf2::TransformException &ex) {
       //ROS_WARN("%s", ex.what());
     }
-    x_ = chassis_transformStamped.transform.translation.x;
-    y_ = chassis_transformStamped.transform.translation.y;
-    quatToRPY(chassis_transformStamped.transform.rotation, roll, pitch, yaw_);
+    current_.pose.position.x = chassis_transformStamped.transform.translation.x;
+    current_.pose.position.y = chassis_transformStamped.transform.translation.y;
+    quatToRPY(chassis_transformStamped.transform.rotation, roll, pitch, current_.pose.orientation.w);
   }
   double getPosError() const {
-    return sqrt(goal_.pose.position.x - x_ * goal_.pose.position.x - x_ +
-        goal_.pose.position.y - y_ * goal_.pose.position.y - y_);
+    return sqrt(
+        (goal_.pose.position.x - current_.pose.position.x) * (goal_.pose.position.x - current_.pose.position.x) +
+            (goal_.pose.position.y - current_.pose.position.y) * (goal_.pose.position.y - current_.pose.position.y));
   }
   double getYawError() const {
-    return goal_.pose.orientation.w - yaw_;
+    return goal_.pose.orientation.w - current_.pose.orientation.w;
+  }
+  void run(ros::Duration period) {
+    pid_x_.computeCommand(goal_.pose.position.x - current_.pose.position.x, period);
+    pid_y_.computeCommand(goal_.pose.position.y - current_.pose.position.y, period);
+    pid_yaw_.computeCommand(goal_.pose.orientation.w - current_.pose.orientation.w, period);
+    cmd_vel_.linear.x = pid_x_.getCurrentCmd();
+    cmd_vel_.linear.y = pid_y_.getCurrentCmd();
+    cmd_vel_.angular.z = pid_yaw_.getCurrentCmd();
+    vel_pub_.publish(cmd_vel_);
   }
  private:
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener *tf_listener_;
   control_toolbox::Pid pid_x_, pid_y_, pid_yaw_;
   geometry_msgs::PoseStamped goal_{}, current_{};
-  double x_{}, y_{}, yaw_{};
+  ros::Publisher vel_pub_;
+  geometry_msgs::Twist cmd_vel_{};
 };
 }
 #endif //ENGINEER_MIDDLEWARE_CHASSIS_INTERFACE_H_

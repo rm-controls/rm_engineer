@@ -17,21 +17,6 @@ namespace engineer_middleware {
 class Middleware {
  public:
   explicit Middleware(ros::NodeHandle &nh);
-  ros::NodeHandle nh_;
-  //action
-  actionlib::SimpleActionServer<rm_msgs::EngineerAction> action_;
-  void run();
- private:
-  moveit::planning_interface::MoveGroupInterface arm_group_;
-  moveit::planning_interface::MoveGroupInterface hand_group_;
-  ChassisInterface chassis_interface_;
-  ros::Publisher card_pub_, gimbal_pub_;
-  std::unordered_map<std::string, StepQueue> step_queues_;
-  tf2_ros::Buffer tf_;
-  bool is_middleware_control{};
-  rm_msgs::EngineerFeedback feedback_;
-  rm_msgs::EngineerResult result_;
-
   void executeCB(const actionlib::SimpleActionServer<rm_msgs::EngineerAction>::GoalConstPtr &goal) {
     std::string step_name;
     step_name = goal->step;
@@ -43,6 +28,23 @@ class Middleware {
     is_middleware_control = false;
     action_.setSucceeded(result_);
   }
+  void run(ros::Duration period) {
+    chassis_interface_.update();
+    if (is_middleware_control)
+      chassis_interface_.run(period);
+  }
+ private:
+  ros::NodeHandle nh_;
+  actionlib::SimpleActionServer<rm_msgs::EngineerAction> action_;
+  moveit::planning_interface::MoveGroupInterface arm_group_;
+  moveit::planning_interface::MoveGroupInterface hand_group_;
+  ChassisInterface chassis_interface_;
+  ros::Publisher card_pub_, gimbal_pub_;
+  std::unordered_map<std::string, StepQueue> step_queues_;
+  tf2_ros::Buffer tf_;
+  bool is_middleware_control{};
+  rm_msgs::EngineerFeedback feedback_;
+  rm_msgs::EngineerResult result_;
 
 };
 

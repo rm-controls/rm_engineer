@@ -11,6 +11,12 @@ int main(int argc, char **argv) {
   Middleware middleware(nh);
   ros::AsyncSpinner spinner(1);
   spinner.start();
-  while (ros::ok());
+  ros::Time last = ros::Time::now();
+  ros::Rate loop_rate(100);
+  while (ros::ok()) {
+    middleware.run(ros::Time::now() - last);
+    last = ros::Time::now();
+    loop_rate.sleep();
+  }
   return 0;
 }

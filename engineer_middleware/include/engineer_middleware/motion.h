@@ -192,10 +192,10 @@ class ChassisMotion : public MotionBase<ChassisInterface> {
       target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1, 0.0);
     }
     if (motion.hasMember("yaw")) {
-      tf2::Quaternion quat_tf;
+      /*tf2::Quaternion quat_tf;
       quat_tf.setRPY(0, 0, motion["yaw"]);
-      geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
-      target_.pose.orientation = quat_msg;
+      geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);*/
+      target_.pose.orientation.w = motion["yaw"];
     }
   }
   bool move() override { return interface_.setGoal(target_); }

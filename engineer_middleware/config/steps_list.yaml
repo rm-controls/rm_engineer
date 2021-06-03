@@ -1,5 +1,10 @@
 steps_list:
   place:
+    - step: chassis
+      chassis:
+        frame: base_link
+        position: [ 2.0,2.0 ]
+        yaw: 0.0
     - step: grasp
       hand:
         joints: [ 0., 0.0, 0.0, 0.0, 0. ]

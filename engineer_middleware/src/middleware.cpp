@@ -25,8 +25,5 @@ Middleware::Middleware(ros::NodeHandle &nh) :
     ROS_ERROR("no steps list define in yaml");
   action_.start();
 }
-void Middleware::run() {
-  
-}
 
 }
