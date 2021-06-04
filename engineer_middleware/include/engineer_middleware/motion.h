@@ -73,7 +73,6 @@ class EndEffectorMotion : public MoveitMotionBase {
   }
   bool move() override {
     MoveitMotionBase::move();
-    std::cout << interface_.getPlanningFrame() << std::endl;
     if (!target_.header.frame_id.empty() && target_.header.frame_id != interface_.getPlanningFrame()) {
       try {
         tf2::doTransform(target_.pose, target_.pose,
