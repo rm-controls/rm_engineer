@@ -5,16 +5,18 @@ steps_list:
         frame: base_link
         position: [ 2.0,2.0 ]
         yaw: 0.0
+        tolerance_linear: 999.
+        tolerance_angular: 999.
     - step: 4 # number is unnecessary
       arm:
         frame: base_link
         position: [ 0.4,0.02,0.32 ]
-        rpy: [ 0., -3.1415926, 0. ]
+        rpy: [ 0., -4.14, 0. ]
         speed: 1.
   grasp_small_resource:
     - step: poen_hand
       hand:
-        joints: [ 0. ]
+        joints: [ 0.5 ]
     - step: move
       arm:
         frame: base_link
