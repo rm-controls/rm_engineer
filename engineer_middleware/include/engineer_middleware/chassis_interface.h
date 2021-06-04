@@ -31,17 +31,16 @@ class ChassisInterface {
   };
   void update() {
     geometry_msgs::TransformStamped chassis_transformStamped;
-    geometry_msgs::TransformStamped gimbal_transformStamped;
     double roll{}, pitch{};
     try {
       chassis_transformStamped = tf_.lookupTransform("odom", "base_link", ros::Time(0));
     }
     catch (tf2::TransformException &ex) {
-      //ROS_WARN("%s", ex.what());
+      ROS_WARN("%s", ex.what());
     }
     current_.pose.position.x = chassis_transformStamped.transform.translation.x;
     current_.pose.position.y = chassis_transformStamped.transform.translation.y;
-    quatToRPY(chassis_transformStamped.transform.rotation, roll, pitch, current_.pose.orientation.w);
+    quatToRPY(chassis_transformStamped.transform.rotation, roll, pitch, current_yaw_);
   }
   double getPosError() const {
     return sqrt(
@@ -49,12 +48,15 @@ class ChassisInterface {
             (goal_.pose.position.y - current_.pose.position.y) * (goal_.pose.position.y - current_.pose.position.y));
   }
   double getYawError() const {
-    return goal_.pose.orientation.w - current_.pose.orientation.w;
+    return goal_yaw_ - current_yaw_;
   }
   void run(ros::Duration period) {
+    geometry_msgs::Twist cmd_vel_{};
+    double goal_roll, goal_pitch;
+    quatToRPY(goal_.pose.orientation, goal_roll, goal_pitch, goal_yaw_);
     pid_x_.computeCommand(goal_.pose.position.x - current_.pose.position.x, period);
     pid_y_.computeCommand(goal_.pose.position.y - current_.pose.position.y, period);
-    pid_yaw_.computeCommand(goal_.pose.orientation.w - current_.pose.orientation.w, period);
+    pid_yaw_.computeCommand(goal_yaw_ - current_yaw_, period);
     cmd_vel_.linear.x = pid_x_.getCurrentCmd();
     cmd_vel_.linear.y = pid_y_.getCurrentCmd();
     cmd_vel_.angular.z = pid_yaw_.getCurrentCmd();
@@ -65,8 +67,9 @@ class ChassisInterface {
   tf2_ros::TransformListener *tf_listener_;
   control_toolbox::Pid pid_x_, pid_y_, pid_yaw_;
   geometry_msgs::PoseStamped goal_{}, current_{};
+  double current_yaw_, goal_yaw_;
   ros::Publisher vel_pub_;
-  geometry_msgs::Twist cmd_vel_{};
+
 };
 }
 #endif //ENGINEER_MIDDLEWARE_CHASSIS_INTERFACE_H_

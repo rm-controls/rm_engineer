@@ -73,6 +73,7 @@ class EndEffectorMotion : public MoveitMotionBase {
   }
   bool move() override {
     MoveitMotionBase::move();
+    std::cout << interface_.getPlanningFrame() << std::endl;
     if (!target_.header.frame_id.empty() && target_.header.frame_id != interface_.getPlanningFrame()) {
       try {
         tf2::doTransform(target_.pose, target_.pose,
@@ -192,10 +193,10 @@ class ChassisMotion : public MotionBase<ChassisInterface> {
       target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1, 0.0);
     }
     if (motion.hasMember("yaw")) {
-      /*tf2::Quaternion quat_tf;
+      tf2::Quaternion quat_tf;
       quat_tf.setRPY(0, 0, motion["yaw"]);
-      geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);*/
-      target_.pose.orientation.w = motion["yaw"];
+      geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+      target_.pose.orientation = quat_msg;
     }
   }
   bool move() override { return interface_.setGoal(target_); }
