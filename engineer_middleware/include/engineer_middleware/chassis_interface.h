@@ -44,8 +44,8 @@ class ChassisInterface {
   }
   double getPosError() const {
     return sqrt(
-        (goal_.pose.position.x - current_.pose.position.x) * (goal_.pose.position.x - current_.pose.position.x) +
-            (goal_.pose.position.y - current_.pose.position.y) * (goal_.pose.position.y - current_.pose.position.y));
+        std::pow((goal_.pose.position.x - current_.pose.position.x), 2) +
+            std::pow((goal_.pose.position.y - current_.pose.position.y), 2));
   }
   double getYawError() const {
     return goal_yaw_ - current_yaw_;
