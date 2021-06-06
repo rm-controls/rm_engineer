@@ -52,6 +52,15 @@ class Step {
     if (gimbal_motion_) success &= gimbal_motion_->isFinish();
     return success;
   }
+  bool checkTimeout(ros::Duration period) {
+    bool success = true;
+    if (arm_motion_) success &= arm_motion_->checkTimeout(period);
+    if (hand_motion_) success &= hand_motion_->checkTimeout(period);
+    if (card_motion_) success &= card_motion_->checkTimeout(period);
+    if (chassis_motion_) success &= chassis_motion_->checkTimeout(period);
+    if (gimbal_motion_) success &= gimbal_motion_->checkTimeout(period);
+    return success;
+  }
  private:
   MoveitMotionBase *arm_motion_{}, *hand_motion_{};
   JointPositionMotion *card_motion_{};

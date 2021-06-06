@@ -17,6 +17,7 @@ steps_list:
     - step: poen_hand
       hand:
         joints: [ -0.00 ]
+        time_out: 2.
         #tolerance_angular: 0.01
     - step: get_resource
       arm:
@@ -24,15 +25,18 @@ steps_list:
         position: [ 0.337827,-0.0120128,0.514362 ]
         rpy: [ -2.79192,1.48283,-2.84672 ]
         speed: 1.5
+        time_out: 2.
     - step: poen_hand
       hand:
         joints: [ -0.013 ]
+        time_out: 2.
     - step: put_resource
       arm:
         frame: base_link
         position: [ 0.0436255,0.0480922,0.5318 ]
         rpy: [ 0.458569,1.51051,3.05585 ]
         speed: 1.5
+        time_out: 2.
   grasp_groud:
     - step: grasp
       hand:

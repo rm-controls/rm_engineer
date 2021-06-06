@@ -20,13 +20,21 @@ class MotionBase {
   MotionBase(const XmlRpc::XmlRpcValue &motion, Interface &interface) : interface_(interface) {
     tolerance_linear_ = xmlRpcGetDouble(motion, "tolerance_linear", 0.01);
     tolerance_angular_ = xmlRpcGetDouble(motion, "tolerance_angular", 0.02);
+    time_out_ = xmlRpcGetDouble(motion, "time_out", 3.);
   };
   ~MotionBase() = default;
   virtual bool move() = 0;
   virtual bool isFinish() = 0;
+  bool checkTimeout(ros::Duration period) {
+    if (period.toSec() > time_out_) {
+      ROS_ERROR("Step timeout,it should be finish in %f seconds", time_out_);
+      return false;
+    }
+    return true;
+  }
  protected:
   Interface &interface_;
-  double tolerance_linear_{}, tolerance_angular_{};
+  double tolerance_linear_{}, tolerance_angular_{}, time_out_{};
 };
 
 class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroupInterface> {

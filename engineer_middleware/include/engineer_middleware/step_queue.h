@@ -29,10 +29,15 @@ class StepQueue {
       return false;
     }
     for (auto &step:queue_) {
+      ros::Time start = ros::Time::now();
       if (!step.move())
         return false;
-      while (!step.isFinish())
+      while (!step.isFinish()) {
+        if (!step.checkTimeout(ros::Time::now() - start))
+          return false;
         ros::WallDuration(0.2).sleep();
+      }
+
       ros::WallDuration(0.5).sleep();
     }
     return true;
