@@ -33,6 +33,7 @@ class StepQueue {
         return false;
       while (!step.isFinish())
         ros::WallDuration(0.2).sleep();
+      ros::WallDuration(0.5).sleep();
     }
     return true;
   }

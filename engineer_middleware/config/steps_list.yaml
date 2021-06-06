@@ -7,25 +7,32 @@ steps_list:
         yaw: 0.0
         tolerance_linear: 999.
         tolerance_angular: 999.
-    - step: 4 # number is unnecessary
+    - step: put_resource
       arm:
         frame: base_link
-        position: [ 0.4,0.02,0.32 ]
-        rpy: [ 0., -4.14, 0. ]
+        position: [ 0.072817,0.054926,0.5318 ]
+        rpy: [ -1.5707963,1.57,0.506 ]
         speed: 1.
   grasp_small_resource:
     - step: poen_hand
       hand:
-        joints: [ 0.5 ]
-    - step: move
+        joints: [ -0.00 ]
+        #tolerance_angular: 0.01
+    - step: get_resource
       arm:
         frame: base_link
-        position: [ 0.4,0.02,0.32 ]
-        rpy: [ 0., -3.1415926, 0. ]
-        speed: 1.
+        position: [ 0.337827,-0.0120128,0.514362 ]
+        rpy: [ -2.79192,1.48283,-2.84672 ]
+        speed: 1.5
     - step: poen_hand
       hand:
-        joints: [ 1. ]
+        joints: [ -0.013 ]
+    - step: put_resource
+      arm:
+        frame: base_link
+        position: [ 0.0436255,0.0480922,0.5318 ]
+        rpy: [ 0.458569,1.51051,3.05585 ]
+        speed: 1.5
   grasp_groud:
     - step: grasp
       hand:
@@ -75,7 +82,7 @@ steps_list:
         speed: 0.8
     - step: top
       arm:
-        joints: [ 0., -0.50, 0., 0.68, 0. ]
+        joints: [ 1.7062894721260822, -1.1835309976998278, 1.5699959943970603, 0.7850075992853975, 0.39094755983769947 ]
 
     - step: grasp
       hand:
