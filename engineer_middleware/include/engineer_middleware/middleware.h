@@ -22,6 +22,8 @@ class Middleware {
     step_name = goal->step;
     is_middleware_control = true;
     ROS_INFO("start step %s", step_name.c_str());
+    chassis_interface_.update();
+    chassis_interface_.setCurrent2Gola();
     step_queues_.find(step_name)->second.run();
     ROS_INFO("finish step %s", step_name.c_str());
     result_.finish = true;

@@ -29,6 +29,10 @@ class ChassisInterface {
     goal_ = pose;
     return true;
   };
+  bool setCurrent2Gola() {
+    goal_ = current_;
+    return true;
+  }
   void update() {
     geometry_msgs::TransformStamped chassis_transformStamped;
     double roll{}, pitch{};
