@@ -42,6 +42,10 @@ class Step {
     if (gimbal_motion_) success &= gimbal_motion_->move();
     return success;
   }
+  void stop() {
+    if (arm_motion_) arm_motion_->stop();
+    if (hand_motion_) hand_motion_->stop();
+  }
   bool isFinish() {
     // TODO Add timeout
     bool success = true;

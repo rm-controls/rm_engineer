@@ -49,6 +49,10 @@ class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroup
     interface_.setMaxAccelerationScalingFactor(accel_);
     return true;
   }
+  void stop() {
+    interface_.setMaxVelocityScalingFactor(0.);
+    interface_.setMaxAccelerationScalingFactor(0.);
+  }
  protected:
   double speed_, accel_;
 };

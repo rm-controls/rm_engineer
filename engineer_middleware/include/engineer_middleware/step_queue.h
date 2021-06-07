@@ -33,8 +33,10 @@ class StepQueue {
       if (!step.move())
         return false;
       while (!step.isFinish()) {
-        if (!step.checkTimeout(ros::Time::now() - start))
+        if (!step.checkTimeout(ros::Time::now() - start)) {
+          step.stop();
           return false;
+        }
         ros::WallDuration(0.2).sleep();
       }
 
