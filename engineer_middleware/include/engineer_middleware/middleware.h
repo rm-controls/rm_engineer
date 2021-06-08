@@ -20,19 +20,21 @@ class Middleware {
   void executeCB(const actionlib::SimpleActionServer<rm_msgs::EngineerAction>::GoalConstPtr &goal) {
     std::string step_name;
     step_name = goal->step;
-    is_middleware_control = true;
+    is_middleware_control_ = true;
     ROS_INFO("start step %s", step_name.c_str());
-    chassis_interface_.update();
-    chassis_interface_.setCurrent2Gola();
+    chassis_interface_.setGoal2odom();
     step_queues_.find(step_name)->second.run();
     ROS_INFO("finish step %s", step_name.c_str());
     result_.finish = true;
-    is_middleware_control = false;
+    is_middleware_control_ = false;
     action_.setSucceeded(result_);
+  }
+  void raiseArm() {
+    step_queues_.find("raise_arm")->second.run();
   }
   void run(ros::Duration period) {
     chassis_interface_.update();
-    if (is_middleware_control)
+    if (is_middleware_control_)
       chassis_interface_.run(period);
   }
  private:
@@ -44,7 +46,7 @@ class Middleware {
   ros::Publisher card_pub_, gimbal_pub_;
   std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
-  bool is_middleware_control{};
+  bool is_middleware_control_{};
   rm_msgs::EngineerFeedback feedback_;
   rm_msgs::EngineerResult result_;
 

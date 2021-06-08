@@ -13,6 +13,7 @@ int main(int argc, char **argv) {
   spinner.start();
   ros::Time last = ros::Time::now();
   ros::Rate loop_rate(100);
+  middleware.raiseArm();
   while (ros::ok()) {
     middleware.run(ros::Time::now() - last);
     last = ros::Time::now();

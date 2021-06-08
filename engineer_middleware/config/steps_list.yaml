@@ -1,4 +1,12 @@
 steps_list:
+  raise_arm:
+    - step: get_resource
+      arm:
+        frame: base_link
+        position: [ 0.337827,-0.0120128,0.514362 ]
+        rpy: [ -2.79192,1.48283,-2.84672 ]
+        speed: 1.5
+        time_out: 2.
   place:
     - step: chassis
       chassis:
@@ -13,12 +21,13 @@ steps_list:
         position: [ 0.072817,0.054926,0.5318 ]
         rpy: [ -1.5707963,1.57,0.506 ]
         speed: 1.
-  grasp_small_resource:
-    - step: poen_hand
+  grasp_big_resource:
+    - step: open_hand
       hand:
-        joints: [ -0.00 ]
-        time_out: 2.
-        #tolerance_angular: 0.01
+        joints: [ -0. ]
+        time_out: 0.5
+        tolerance_linear: 0.01
+        tolerance_angular: 0.01
     - step: get_resource
       arm:
         frame: base_link
@@ -26,10 +35,12 @@ steps_list:
         rpy: [ -2.79192,1.48283,-2.84672 ]
         speed: 1.5
         time_out: 2.
-    - step: poen_hand
+    - step: close_hand
       hand:
-        joints: [ -0.013 ]
-        time_out: 2.
+        joints: [ -0.011 ]
+        time_out: 0.5
+        tolerance_linear: 0.01
+        tolerance_angular: 0.01
     - step: put_resource
       arm:
         frame: base_link
@@ -37,6 +48,12 @@ steps_list:
         rpy: [ 0.458569,1.51051,3.05585 ]
         speed: 1.5
         time_out: 2.
+    - step: open_hand
+      hand:
+        joints: [ -0. ]
+        time_out: 0.5
+        tolerance_linear: 0.01
+        tolerance_angular: 0.01
   grasp_groud:
     - step: grasp
       hand:
@@ -71,34 +88,6 @@ steps_list:
         position: [ 0.07, 0.0, 0.4 ]
         rpy: [ 0., -3.1415926, 0. ]
         speed: .2
-    - step: grasp
-      hand:
-        joints: [ 0. ]
-  grasp_big_resource:
-    - step: grasp
-      hand:
-        joints: [ 0. ]
-    - step: top
-      arm:
-        frame: base_link
-        position: [ 0.3, 0.0, 0.45 ]
-        rpy: [ 0., 0., 0. ]
-        speed: 0.8
-    - step: top
-      arm:
-        joints: [ 1.7062894721260822, -1.1835309976998278, 1.5699959943970603, 0.7850075992853975, 0.39094755983769947 ]
-
-    - step: grasp
-      hand:
-        joints: [ 0. ]
-
-    - step: 4 # number is unnecessary
-      arm:
-        frame: base_link
-        position: [ 0.07, 0.0, 0.4 ]
-        rpy: [ 0., -3.1415926, 0. ]
-        speed: .2
-
     - step: grasp
       hand:
         joints: [ 0. ]

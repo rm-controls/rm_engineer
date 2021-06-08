@@ -24,18 +24,14 @@ class ChassisInterface {
     pid_y_.init(ros::NodeHandle(nh_pid_y, "pid"));
     pid_yaw_.init(ros::NodeHandle(nh_pid_w, "pid"));
     vel_pub_ = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
+    goal_.header.frame_id = "base_link";
   }
   bool setGoal(const geometry_msgs::PoseStamped &pose) {
     goal_ = pose;
     return true;
   };
-  bool setCurrent2Gola() {
-    goal_ = current_;
-    return true;
-  }
   void update() {
     geometry_msgs::TransformStamped chassis_transformStamped;
-    double roll{}, pitch{};
     try {
       chassis_transformStamped = tf_.lookupTransform("odom", "base_link", ros::Time(0));
     }
@@ -44,7 +40,7 @@ class ChassisInterface {
     }
     current_.pose.position.x = chassis_transformStamped.transform.translation.x;
     current_.pose.position.y = chassis_transformStamped.transform.translation.y;
-    quatToRPY(chassis_transformStamped.transform.rotation, roll, pitch, current_yaw_);
+    chassis_transformStamped.transform.rotation = chassis_transformStamped.transform.rotation;
   }
   double getPosError() const {
     return sqrt(
@@ -53,6 +49,16 @@ class ChassisInterface {
   }
   double getYawError() const {
     return goal_yaw_ - current_yaw_;
+  }
+  void setGoal2odom() {
+    try {
+      tf2::doTransform(goal_,
+                       goal_,
+                       tf_.lookupTransform("odom", goal_.header.frame_id, ros::Time(0)));
+    }
+    catch (tf2::TransformException &ex) {
+      ROS_WARN("%s", ex.what());
+    }
   }
   void run(ros::Duration period) {
     geometry_msgs::Twist cmd_vel_{};

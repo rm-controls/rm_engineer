@@ -51,7 +51,7 @@ class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroup
   }
   void stop() {
     interface_.setMaxVelocityScalingFactor(0.);
-    interface_.setMaxAccelerationScalingFactor(0.);
+    interface_.setMaxAccelerationScalingFactor(accel_);
   }
  protected:
   double speed_, accel_;
@@ -140,14 +140,19 @@ class JointMotion : public MoveitMotionBase {
     if (target_.empty())
       return false;
     MoveitMotionBase::move();
-    interface_.setJointValueTarget(target_);
+    if (target_.size() == 1)
+      interface_.setJointValueTarget("right_finger_joint", target_[0]);
+    else
+      interface_.setJointValueTarget(target_);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
   bool isFinish() override {
     std::vector<double> current = interface_.getCurrentJointValues();
     double error = 0.;
-    for (int i = 0; i < (int) current.size(); ++i)
+    for (int i = 0; i < (int) target_.size(); ++i) {
       error += std::abs(target_[i] - current[i]);
+    }
+
     return error < tolerance_angular_;
   }
  private:
@@ -210,7 +215,11 @@ class ChassisMotion : public MotionBase<ChassisInterface> {
       target_.pose.orientation = quat_msg;
     }
   }
-  bool move() override { return interface_.setGoal(target_); }
+  bool move() override {
+    interface_.setGoal(target_);
+    interface_.setGoal2odom();
+    return true;
+  }
   bool isFinish() override {
     return interface_.getPosError() < tolerance_linear_ && interface_.getYawError() < tolerance_angular_;
   }
