@@ -3,13 +3,6 @@
               ns="engineer_middleware"/>
     <rosparam file="$(find engineer_middleware)/config/engineer.yaml" command="load"
               ns="engineer_middleware"/>
-    <node name="rm_dbus" pkg="rm_dbus" type="rm_dbus" respawn="false"/>
-    <include file="$(find rm_gazebo)/launch/big_resource.launch">
-    </include>
-    <include file="$(find engineer_arm_config)/launch/load.launch">
-    </include>
-    <include file="$(find rm_manual)/launch/load.launch">
-    </include>
     <node name="engineer_middleware" pkg="engineer_middleware" type="engineer_middleware" respawn="false"
           clear_params="true"/>
 </launch>
