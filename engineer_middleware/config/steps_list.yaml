@@ -3,8 +3,8 @@ steps_list:
     - step: get_resource
       arm:
         frame: base_link
-        position: [ 0.337827,-0.0120128,0.514362 ]
-        rpy: [ -2.79192,1.48283,-2.84672 ]
+        position: [ 0.399325,-0.0104102,0.482602 ]
+        rpy: [ -3.00991,1.34776,-3.04447 ]
         speed: 1.5
         time_out: 2.
   place:
@@ -31,29 +31,38 @@ steps_list:
     - step: get_resource
       arm:
         frame: base_link
-        position: [ 0.337827,-0.0120128,0.514362 ]
-        rpy: [ -2.79192,1.48283,-2.84672 ]
-        speed: 1.5
+        position: [ 0.400592,-0.0110176,0.473142 ]
+        rpy: [ -3.10097,1.08304,-3.13549 ]
+        speed: 1.
         time_out: 2.
+        tolerance_linear: 0.001
+        tolerance_angular: 0.001
     - step: close_hand
       hand:
-        joints: [ -0.011 ]
+        joints: [ -0.027 ]
         time_out: 0.5
-        tolerance_linear: 0.01
-        tolerance_angular: 0.01
-    - step: put_resource
+        tolerance_linear: 0.005
+        tolerance_angular: 0.005
+    - step: raise_up
       arm:
         frame: base_link
-        position: [ 0.0436255,0.0480922,0.5318 ]
-        rpy: [ 0.458569,1.51051,3.05585 ]
-        speed: 1.5
+        position: [ 0.341427,-0.00196306,0.555464 ]
+        rpy: [ -0.074285,1.18428,-0.0895619 ]
+        speed: 1.
         time_out: 2.
-    - step: open_hand
-      hand:
-        joints: [ -0. ]
-        time_out: 0.5
-        tolerance_linear: 0.01
-        tolerance_angular: 0.01
+  #    - step: put_resource
+  #      arm:
+  #        frame: base_link
+  #        position: [ 0.0436255,0.0480922,0.5318 ]
+  #        rpy: [ 0.458569,1.51051,3.05585 ]
+  #        speed: 1.
+  #        time_out: 2.
+  #    - step: open_hand
+  #      hand:
+  #        joints: [ -0. ]
+  #        time_out: 0.5
+  #        tolerance_linear: 0.01
+  #        tolerance_angular: 0.01
   grasp_groud:
     - step: grasp
       hand:
