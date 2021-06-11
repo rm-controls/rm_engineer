@@ -39,15 +39,15 @@ steps_list:
         tolerance_angular: 0.001
     - step: close_hand
       hand:
-        joints: [ -0.039 ]
+        joints: [ -0.029 ]
         time_out: 0.5
         tolerance_linear: 0.005
         tolerance_angular: 0.005
     - step: raise_up
       arm:
         frame: base_link
-        position: [ 0.341427,-0.00196306,0.555464 ]
-        rpy: [ -0.074285,1.18428,-0.0895619 ]
+        position: [ 0.354958,0.00659916,0.541259 ]
+        rpy: [ -0.0118981,1.39383,0.0157981 ]
         speed: 1.
         time_out: 2.
   #    - step: put_resource
