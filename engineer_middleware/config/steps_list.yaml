@@ -39,7 +39,7 @@ steps_list:
         tolerance_angular: 0.001
     - step: close_hand
       hand:
-        joints: [ -0.027 ]
+        joints: [ -0.039 ]
         time_out: 0.5
         tolerance_linear: 0.005
         tolerance_angular: 0.005
