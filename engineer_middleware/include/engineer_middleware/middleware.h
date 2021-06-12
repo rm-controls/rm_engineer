@@ -22,18 +22,13 @@ class Middleware {
     step_name = goal->step;
     is_middleware_control_ = true;
     ROS_INFO("start step %s", step_name.c_str());
-    chassis_interface_.setGoal2odom();
     step_queues_.find(step_name)->second.run();
     ROS_INFO("finish step %s", step_name.c_str());
     result_.finish = true;
     is_middleware_control_ = false;
     action_.setSucceeded(result_);
   }
-  void raiseArm() {
-    step_queues_.find("raise_arm")->second.run();
-  }
   void run(ros::Duration period) {
-    chassis_interface_.update();
     if (is_middleware_control_)
       chassis_interface_.run(period);
   }

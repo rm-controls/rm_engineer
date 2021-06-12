@@ -51,7 +51,7 @@ cartesian_command_in_topic: delta_twist_cmds  # Topic for incoming Cartesian twi
 joint_command_in_topic: delta_joint_cmds # Topic for incoming joint angle commands
 joint_topic: joint_states
 status_topic: status # Publish status to this topic
-command_out_topic: /controllers/engineer_arm_position_controller/command # Publish outgoing commands here
+command_out_topic: /controllers/arm_position_controller/command # Publish outgoing commands here
 
 ## Collision checking for the entire robot body
 check_collisions: false # Check collisions?

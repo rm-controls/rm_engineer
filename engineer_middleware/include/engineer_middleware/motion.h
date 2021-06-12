@@ -217,11 +217,10 @@ class ChassisMotion : public MotionBase<ChassisInterface> {
   }
   bool move() override {
     interface_.setGoal(target_);
-    interface_.setGoal2odom();
     return true;
   }
   bool isFinish() override {
-    return interface_.getPosError() < tolerance_linear_ && interface_.getYawError() < tolerance_angular_;
+    return interface_.getErrorPos() < tolerance_linear_ && interface_.getErrorYaw() < tolerance_angular_;
   }
   geometry_msgs::PoseStamped target_;
 };

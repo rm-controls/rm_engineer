@@ -1,12 +1,18 @@
 steps_list:
   raise_arm:
-    - step: get_resource
+    - step: raise_arm
       arm:
         frame: base_link
-        position: [ 0.399325,-0.0104102,0.482602 ]
-        rpy: [ -3.00991,1.34776,-3.04447 ]
+        position: [ 0.414024,0.00593919,0.451981 ]
+        rpy: [ 3.13253,1.27397,-3.13109 ]
         speed: 1.5
         time_out: 2.
+    - step: open_hand
+      hand:
+        joints: [ -0. ]
+        time_out: 0.5
+        tolerance_linear: 0.01
+        tolerance_angular: 0.01
   place:
     - step: chassis
       chassis:
@@ -22,44 +28,40 @@ steps_list:
         rpy: [ -1.5707963,1.57,0.506 ]
         speed: 1.
   grasp_big_resource:
-    - step: open_hand
-      hand:
-        joints: [ -0. ]
-        time_out: 0.5
-        tolerance_linear: 0.01
-        tolerance_angular: 0.01
-    - step: get_resource
-      arm:
-        frame: base_link
-        position: [ 0.400592,-0.0110176,0.473142 ]
-        rpy: [ -3.10097,1.08304,-3.13549 ]
-        speed: 1.
-        time_out: 2.
-        tolerance_linear: 0.001
-        tolerance_angular: 0.001
     - step: close_hand
       hand:
-        joints: [ -0.029 ]
+        joints: [ -0.033 ]
         time_out: 0.5
-        tolerance_linear: 0.005
-        tolerance_angular: 0.005
-    - step: raise_up
+        tolerance_linear: 0.02
+        tolerance_angular: 0.02
+    - step: raise_up_a_little
       arm:
         frame: base_link
-        position: [ 0.354958,0.00659916,0.541259 ]
-        rpy: [ -0.0118981,1.39383,0.0157981 ]
+        position: [ 0.374817,0.00436883,0.520184 ]
+        rpy: [ 0.0522205,1.43759,0.0695567 ]
         speed: 1.
-        time_out: 2.
-  #    - step: put_resource
-  #      arm:
-  #        frame: base_link
-  #        position: [ 0.0436255,0.0480922,0.5318 ]
-  #        rpy: [ 0.458569,1.51051,3.05585 ]
-  #        speed: 1.
-  #        time_out: 2.
+        time_out: 3.
+        tolerance_linear: 0.02
+        tolerance_angular: 0.02
+    - step: turn
+      arm:
+        frame: base_link
+        position: [ 0.1647,0.197167,0.560539 ]
+        rpy: [ 0.0968739,1.47117,1.45566 ]
+        speed: 1.
+        time_out: 5.
+        tolerance_linear: 0.02
+        tolerance_angular: 0.02
+    - step: put
+      arm:
+        frame: base_link
+        position: [ 0.0477881,0.0416539,0.569277 ]
+        rpy: [ -0.423415,1.4938,2.21214 ]
+        speed: 1.
+        time_out: 3.
   #    - step: open_hand
   #      hand:
-  #        joints: [ -0. ]
+  #        joints: [ -0.0 ]
   #        time_out: 0.5
   #        tolerance_linear: 0.01
   #        tolerance_angular: 0.01
