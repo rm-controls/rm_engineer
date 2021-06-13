@@ -19,6 +19,8 @@ find_package(catkin REQUIRED
         control_toolbox
         moveit_core
         moveit_ros_planning_interface
+        actionlib
+        angles
         )
 
 find_package(Eigen3 REQUIRED)
@@ -44,6 +46,8 @@ catkin_package(
         control_toolbox
         moveit_core
         moveit_ros_planning_interface
+        actionlib
+        angles
         DEPENDS
 )
 
