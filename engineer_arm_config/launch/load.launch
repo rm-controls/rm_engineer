@@ -14,6 +14,7 @@
     <arg name="gazebo_gui" default="true"/>
     <arg name="paused" default="false"/>
     <!-- By default, use the urdf location provided from the package -->
+
     <arg name="urdf_path" default="$(find rm_description)/urdf/engineer/engineer.urdf.xacro"/>
 
     <include file="$(find engineer_arm_config)/launch/ros_controllers.launch"/>
@@ -31,9 +32,9 @@
         <arg name="debug" value="$(arg debug)"/>
     </include>
 
-    <node name="servo_server" pkg="moveit_servo" type="servo_server" output="screen">
-        <param name="parameter_ns" type="string" value="optional_parameter_namespace"/>
-        <rosparam ns="optional_parameter_namespace" command="load"
-                  file="$(find engineer_arm_config)/config/ur_simulated_config.yaml"/>
-    </node>
+    <!--    <node name="servo_server" pkg="moveit_servo" type="servo_server" output="screen">
+            <param name="parameter_ns" type="string" value="optional_parameter_namespace"/>
+            <rosparam ns="optional_parameter_namespace" command="load"
+                      file="$(find engineer_arm_config)/config/ur_simulated_config.yaml"/>
+        </node>-->
 </launch>
