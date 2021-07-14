@@ -1,22 +1,5 @@
 <launch>
 
-    <!-- By default, we do not start a database (it can be large) -->
-    <arg name="db" default="false"/>
-    <!-- Allow user to specify database location -->
-    <arg name="db_path" default="$(find engineer_arm_config)/default_warehouse_mongo_db"/>
-
-    <!-- By default, we are not in debug mode -->
-    <arg name="debug" default="false"/>
-
-    <arg name="use_gui" default="false"/>
-
-    <!-- Gazebo specific options -->
-    <arg name="gazebo_gui" default="true"/>
-    <arg name="paused" default="false"/>
-    <!-- By default, use the urdf location provided from the package -->
-
-    <arg name="urdf_path" default="$(find rm_description)/urdf/engineer/engineer.urdf.xacro"/>
-
     <include file="$(find engineer_arm_config)/launch/ros_controllers.launch"/>
 
     <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
@@ -29,12 +12,7 @@
         <arg name="allow_trajectory_execution" value="true"/>
         <arg name="fake_execution" value="false"/>
         <arg name="info" value="true"/>
-        <arg name="debug" value="$(arg debug)"/>
+        <arg name="debug" value="false"/>
     </include>
 
-    <!--    <node name="servo_server" pkg="moveit_servo" type="servo_server" output="screen">
-            <param name="parameter_ns" type="string" value="optional_parameter_namespace"/>
-            <rosparam ns="optional_parameter_namespace" command="load"
-                      file="$(find engineer_arm_config)/config/ur_simulated_config.yaml"/>
-        </node>-->
 </launch>
