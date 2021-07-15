@@ -12,6 +12,9 @@
 #include <deque>
 #include <string>
 
+#include <actionlib/server/simple_action_server.h>
+#include <rm_msgs/EngineerAction.h>
+
 namespace engineer_middleware {
 class StepQueue {
  public:
@@ -24,7 +27,7 @@ class StepQueue {
     for (int i = 0; i < steps.size(); ++i)
       queue_.emplace_back(steps[i], tf, arm_group, hand_group, chassis_interface, card_pub, gimbal_pub);
   }
-  bool run() {
+  bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction> &as) {
     if (queue_.empty()) {
       ROS_WARN("step is empty");
       return false;
@@ -33,19 +36,28 @@ class StepQueue {
     current.header.frame_id = "base_link";
     current.pose.orientation.w = 1.;
     chassis_interface_.setGoal(current);
-    for (auto &step:queue_) {
+
+    rm_msgs::EngineerFeedback feedback;
+    feedback.total_steps = queue_.size();
+    for (size_t i = 0; i < queue_.size(); ++i) {
       ros::Time start = ros::Time::now();
-      if (!step.move())
+      if (!queue_[i].move())
         return false;
-      while (!step.isFinish()) {
-        if (!step.checkTimeout(ros::Time::now() - start)) {
-          step.stop();
+      ROS_INFO("Start step: %s", queue_[i].getName().c_str());
+      while (!queue_[i].isFinish()) {
+        if (!queue_[i].checkTimeout(ros::Time::now() - start)) {
+          queue_[i].stop();
           return false;
         }
+        feedback.finished_step = i;
+        feedback.current_step = queue_[i].getName();
+        as.publishFeedback(feedback);
         ros::WallDuration(0.2).sleep();
       }
-
-      ros::WallDuration(1.).sleep();
+      feedback.finished_step = queue_.size() + 1;
+      as.publishFeedback(feedback);
+      ROS_INFO("Finish step: %s", queue_[i].getName().c_str());
+//      ros::WallDuration(0.).sleep();
     }
     return true;
   }

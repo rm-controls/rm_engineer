@@ -24,11 +24,11 @@ class Middleware {
     ROS_INFO("Start step queue id %d", id);
     auto step = step_queues_.find(id);
     if (step != step_queues_.end())
-      step->second.run();
+      step->second.run(as_);
     ROS_INFO("Finish step queue id %d", id);
     result_.finish = true;
     is_middleware_control_ = false;
-    action_.setSucceeded(result_);
+    as_.setSucceeded(result_);
   }
   void run(ros::Duration period) {
     if (is_middleware_control_)
@@ -36,7 +36,7 @@ class Middleware {
   }
  private:
   ros::NodeHandle nh_;
-  actionlib::SimpleActionServer<rm_msgs::EngineerAction> action_;
+  actionlib::SimpleActionServer<rm_msgs::EngineerAction> as_;
   moveit::planning_interface::MoveGroupInterface arm_group_;
   moveit::planning_interface::MoveGroupInterface hand_group_;
   ChassisInterface chassis_interface_;

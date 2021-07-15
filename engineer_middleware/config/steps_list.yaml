@@ -4,7 +4,8 @@ steps_list:
       step: open_hand
       hand:
         joints: [ -0. ]
-        time_out: 99
+        speed: 1.0
+        time_out: 0.8
         tolerance_linear: 0.01
         tolerance_angular: 0.01
   1: # CLOSE_HAND
@@ -12,9 +13,10 @@ steps_list:
       step: close_hand
       hand:
         joints: [ -0.033 ]
-        time_out: 99
-        tolerance_linear: 0.01
-        tolerance_angular: 0.01
+        speed: 1.0
+        time_out: 0.5
+        tolerance_linear: 0.02
+        tolerance_angular: 0.02
   2: # TEST
     - *step_open_hand
     - *step_close_hand

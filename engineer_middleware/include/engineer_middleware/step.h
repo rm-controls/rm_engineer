@@ -18,6 +18,8 @@ class Step {
        moveit::planning_interface::MoveGroupInterface &arm_group,
        moveit::planning_interface::MoveGroupInterface &hand_group,
        ChassisInterface &chassis_interface, ros::Publisher &card_pub, ros::Publisher &gimbal_pub) {
+    ROS_ASSERT(step.hasMember("step"));
+    step_name_ = static_cast<std::string>(step["step"]);
     if (step.hasMember("arm")) {
       if (step["arm"].hasMember("joints"))
         arm_motion_ = new JointMotion(step["arm"], arm_group);
@@ -65,7 +67,9 @@ class Step {
     if (gimbal_motion_) success &= gimbal_motion_->checkTimeout(period);
     return success;
   }
+  std::string getName() { return step_name_; }
  private:
+  std::string step_name_;
   MoveitMotionBase *arm_motion_{}, *hand_motion_{};
   JointPositionMotion *card_motion_{};
   ChassisMotion *chassis_motion_{};

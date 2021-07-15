@@ -7,7 +7,7 @@
 namespace engineer_middleware {
 Middleware::Middleware(ros::NodeHandle &nh) :
     nh_(nh),
-    action_(nh_, "move_arm", [this](auto &&PH1) { executeCB(std::forward<decltype(PH1)>(PH1)); }, false),
+    as_(nh_, "move_arm", [this](auto &&PH1) { executeCB(std::forward<decltype(PH1)>(PH1)); }, false),
     arm_group_(moveit::planning_interface::MoveGroupInterface("engineer_arm")),
     hand_group_(moveit::planning_interface::MoveGroupInterface("engineer_hand")),
     chassis_interface_(nh),
@@ -23,7 +23,7 @@ Middleware::Middleware(ros::NodeHandle &nh) :
     }
   } else
     ROS_ERROR("no steps list define in yaml");
-  action_.start();
+  as_.start();
 }
 
 }
