@@ -22,7 +22,9 @@ class Middleware {
     id = goal->step_queue_id;
     is_middleware_control_ = true;
     ROS_INFO("Start step queue id %d", id);
-    step_queues_.find(id)->second.run();
+    auto step = step_queues_.find(id);
+    if (step != step_queues_.end())
+      step->second.run();
     ROS_INFO("Finish step queue id %d", id);
     result_.finish = true;
     is_middleware_control_ = false;
