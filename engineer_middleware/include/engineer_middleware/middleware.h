@@ -18,12 +18,12 @@ class Middleware {
  public:
   explicit Middleware(ros::NodeHandle &nh);
   void executeCB(const actionlib::SimpleActionServer<rm_msgs::EngineerAction>::GoalConstPtr &goal) {
-    std::string step_name;
-    step_name = goal->step;
+    uint8_t id;
+    id = goal->step_queue_id;
     is_middleware_control_ = true;
-    ROS_INFO("start step %s", step_name.c_str());
-    step_queues_.find(step_name)->second.run();
-    ROS_INFO("finish step %s", step_name.c_str());
+    ROS_INFO("Start step queue id %d", id);
+    step_queues_.find(id)->second.run();
+    ROS_INFO("Finish step queue id %d", id);
     result_.finish = true;
     is_middleware_control_ = false;
     action_.setSucceeded(result_);
@@ -39,7 +39,7 @@ class Middleware {
   moveit::planning_interface::MoveGroupInterface hand_group_;
   ChassisInterface chassis_interface_;
   ros::Publisher card_pub_, gimbal_pub_;
-  std::unordered_map<std::string, StepQueue> step_queues_;
+  std::unordered_map<uint8_t, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
   bool is_middleware_control_{};
   rm_msgs::EngineerFeedback feedback_;
