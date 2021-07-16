@@ -1,25 +1,44 @@
 steps_list:
-  0: # OPEN_HAND
-    - &step_open_hand
+  0: # HAND_OPEN
+    - &step_hand_open
       step: open_hand
       hand:
         joints: [ 0. ]
         speed: 1.0
         accel: 1.0
-        time_out: 0.8
+        time_out: 1.0
         tolerance_angular: 0.01
-  1: # CLOSE_HAND
-    - &step_close_hand
+  1: # HAND_CLOSE
+    - &step_hand_close
       step: close_hand
       hand:
         joints: [ -0.033 ]
         speed: 1.0
         accel: 1.0
-        time_out: 0.5
+        time_out: 1.0
         tolerance_angular: 0.02
-  2: # TEST
-    - *step_open_hand
-    - *step_close_hand
+  2: # ARM_FOLD
+    - &step_arm_fold
+      step: arm_fold
+      arm:
+        joints: [ -2.8, 0.034, 0.0, 0.0, 0.0 ]
+        speed: 1.0
+        accel: 1.0
+        time_out: 2.0
+        tolerance_angular: 0.5
+  3: # TEST
+    - step: raise_arm
+      arm:
+        frame: base_link
+        position: [ 0.414024, 0.00593919, 0.451981 ]
+        rpy: [ 3.13253, 1.27397, -3.13109 ]
+        speed: 1.0
+        accel: 1.0
+        time_out: 1.0
+        tolerance_angular: 0.05
+    - *step_hand_open
+    - *step_hand_close
+    - *step_arm_fold
     - step: forward
       chassis:
         frame: base_link

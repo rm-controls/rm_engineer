@@ -48,6 +48,7 @@ class StepQueue {
         }
         if (as.isPreemptRequested() || !ros::ok()) {
           ROS_INFO("Step %s Preempted", queue_[i].getName().c_str());
+          queue_[i].stop();
           as.setPreempted();
           return false;
         }
