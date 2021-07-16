@@ -20,7 +20,7 @@ class MotionBase {
   MotionBase(const XmlRpc::XmlRpcValue &motion, Interface &interface) : interface_(interface) {
     tolerance_linear_ = xmlRpcGetDouble(motion, "tolerance_linear", 0.01);
     tolerance_angular_ = xmlRpcGetDouble(motion, "tolerance_angular", 0.02);
-    time_out_ = xmlRpcGetDouble(motion, "time_out", 3.);
+    time_out_ = xmlRpcGetDouble(motion, "time_out", 1e10);
   };
   ~MotionBase() = default;
   virtual bool move() = 0;
@@ -32,6 +32,7 @@ class MotionBase {
     }
     return true;
   }
+  virtual void stop() = 0;
  protected:
   Interface &interface_;
   double tolerance_linear_{}, tolerance_angular_{}, time_out_{};
@@ -49,7 +50,7 @@ class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroup
     interface_.setMaxAccelerationScalingFactor(accel_);
     return true;
   }
-  virtual void stop() {
+  void stop() override {
     interface_.setMaxVelocityScalingFactor(0.);
     interface_.setMaxAccelerationScalingFactor(0.);
     interface_.stop();
@@ -170,6 +171,7 @@ class PublishMotion : public MotionBase<ros::Publisher> {
     return true;
   }
   bool isFinish() override { return true; } // TODO: Add feedback
+  void stop() override {}
  protected:
   MsgType msg_;
 };
@@ -223,6 +225,8 @@ class ChassisMotion : public MotionBase<ChassisInterface> {
   bool isFinish() override {
     return interface_.getErrorPos() < tolerance_linear_ && interface_.getErrorYaw() < tolerance_angular_;
   }
+  void stop() override { interface_.stop(); }
+ private:
   geometry_msgs::PoseStamped target_;
 };
 

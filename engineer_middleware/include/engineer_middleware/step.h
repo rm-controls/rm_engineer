@@ -47,9 +47,9 @@ class Step {
   void stop() {
     if (arm_motion_) arm_motion_->stop();
     if (hand_motion_) hand_motion_->stop();
+    if (chassis_motion_) chassis_motion_->stop();
   }
   bool isFinish() {
-    // TODO Add timeout
     bool success = true;
     if (arm_motion_) success &= arm_motion_->isFinish();
     if (hand_motion_) success &= hand_motion_->isFinish();

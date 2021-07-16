@@ -29,17 +29,12 @@ class StepQueue {
   }
   bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction> &as) {
     if (queue_.empty()) {
-      ROS_WARN("step is empty");
+      ROS_WARN("Step queue is empty");
       return false;
     }
-    geometry_msgs::PoseStamped current;
-    current.header.frame_id = "base_link";
-    current.pose.orientation.w = 1.;
-    chassis_interface_.setGoal(current);
-
+    chassis_interface_.setCurrentAsGoal();
     rm_msgs::EngineerFeedback feedback;
     rm_msgs::EngineerResult result;
-
     feedback.total_steps = queue_.size();
     for (size_t i = 0; i < queue_.size(); ++i) {
       ros::Time start = ros::Time::now();
@@ -52,7 +47,7 @@ class StepQueue {
           return false;
         }
         if (as.isPreemptRequested() || !ros::ok()) {
-          ROS_INFO("%s: Preempted", queue_[i].getName().c_str());
+          ROS_INFO("Step %s Preempted", queue_[i].getName().c_str());
           as.setPreempted();
           return false;
         }

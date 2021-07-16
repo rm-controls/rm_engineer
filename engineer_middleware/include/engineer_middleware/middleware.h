@@ -22,13 +22,11 @@ class Middleware {
     id = goal->step_queue_id;
     is_middleware_control_ = true;
     ROS_INFO("Start step queue id %d", id);
-    auto step = step_queues_.find(id);
-    if (step != step_queues_.end())
-      step->second.run(as_);
+    auto step_queue = step_queues_.find(id);
+    if (step_queue != step_queues_.end())
+      step_queue->second.run(as_);
     ROS_INFO("Finish step queue id %d", id);
-    result_.finish = true;
     is_middleware_control_ = false;
-    as_.setSucceeded(result_);
   }
   void run(ros::Duration period) {
     if (is_middleware_control_)
@@ -44,9 +42,6 @@ class Middleware {
   std::unordered_map<uint8_t, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
   bool is_middleware_control_{};
-  rm_msgs::EngineerFeedback feedback_;
-  rm_msgs::EngineerResult result_;
-
 };
 
 }

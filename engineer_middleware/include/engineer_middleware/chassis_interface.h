@@ -26,11 +26,22 @@ class ChassisInterface {
     pid_yaw_.init(ros::NodeHandle(nh_pid_w, "pid"));
     vel_pub_ = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
   }
+
   bool setGoal(const geometry_msgs::PoseStamped &pose) {
     goal_ = pose;
     setGoal2odom();
+    error_pos_ = 1e10;
+    error_yaw_ = 1e10;
     return true;
   };
+
+  void setCurrentAsGoal() {
+    geometry_msgs::PoseStamped current;
+    current.header.frame_id = "base_link";
+    current.pose.orientation.w = 1.;
+    setGoal(current);
+  }
+
   double getErrorPos() const { return error_pos_; }
   double getErrorYaw() const { return error_yaw_; }
 
@@ -43,6 +54,15 @@ class ChassisInterface {
       ROS_WARN("%s", ex.what());
     }
   }
+
+  void stop() {
+    geometry_msgs::Twist cmd_vel_{};
+    cmd_vel_.linear.x = 0.;
+    cmd_vel_.linear.y = 0.;
+    cmd_vel_.angular.z = 0.;
+    vel_pub_.publish(cmd_vel_);
+  }
+
   void run(ros::Duration period) {
     geometry_msgs::TransformStamped current;
     try {
