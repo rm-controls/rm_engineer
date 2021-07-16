@@ -47,8 +47,7 @@ class ChassisInterface {
 
   void setGoal2odom() {
     try {
-      tf2::doTransform(goal_, goal_,
-                       tf_.lookupTransform("map", goal_.header.frame_id, ros::Time(0)));
+      tf2::doTransform(goal_, goal_, tf_.lookupTransform("map", goal_.header.frame_id, ros::Time(0)));
     }
     catch (tf2::TransformException &ex) {
       ROS_WARN("%s", ex.what());

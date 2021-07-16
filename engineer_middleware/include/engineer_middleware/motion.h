@@ -17,7 +17,7 @@ namespace engineer_middleware {
 template<class Interface>
 class MotionBase {
  public:
-  MotionBase(const XmlRpc::XmlRpcValue &motion, Interface &interface) : interface_(interface) {
+  MotionBase(XmlRpc::XmlRpcValue &motion, Interface &interface) : interface_(interface) {
     tolerance_linear_ = xmlRpcGetDouble(motion, "tolerance_linear", 0.01);
     tolerance_angular_ = xmlRpcGetDouble(motion, "tolerance_angular", 0.02);
     time_out_ = xmlRpcGetDouble(motion, "time_out", 1e10);
@@ -40,7 +40,7 @@ class MotionBase {
 
 class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroupInterface> {
  public:
-  MoveitMotionBase(const XmlRpc::XmlRpcValue &motion, moveit::planning_interface::MoveGroupInterface &interface)
+  MoveitMotionBase(XmlRpc::XmlRpcValue &motion, moveit::planning_interface::MoveGroupInterface &interface)
       : MotionBase<moveit::planning_interface::MoveGroupInterface>(motion, interface) {
     speed_ = xmlRpcGetDouble(motion, "speed", 0.1);
     accel_ = xmlRpcGetDouble(motion, "accel", 0.1);
@@ -61,7 +61,7 @@ class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroup
 
 class EndEffectorMotion : public MoveitMotionBase {
  public:
-  EndEffectorMotion(const XmlRpc::XmlRpcValue &motion,
+  EndEffectorMotion(XmlRpc::XmlRpcValue &motion,
                     moveit::planning_interface::MoveGroupInterface &interface, tf2_ros::Buffer &tf) :
       MoveitMotionBase(motion, interface), tf_(tf), has_pos_(false), has_ori_(false), is_cartesian_(false) {
     target_.pose.orientation.w = 1.;
@@ -69,9 +69,9 @@ class EndEffectorMotion : public MoveitMotionBase {
       target_.header.frame_id = std::string(motion["frame"]);
     if (motion.hasMember("position")) {
       ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      target_.pose.position.x = xmlRpcGetDouble(motion["position"], 0, 0.0);
-      target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1, 0.0);
-      target_.pose.position.z = xmlRpcGetDouble(motion["position"], 2, 0.0);
+      target_.pose.position.x = xmlRpcGetDouble(motion["position"], 0);
+      target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1);
+      target_.pose.position.z = xmlRpcGetDouble(motion["position"], 2);
       has_pos_ = true;
     }
     if (motion.hasMember("rpy")) {
@@ -130,12 +130,12 @@ class EndEffectorMotion : public MoveitMotionBase {
 
 class JointMotion : public MoveitMotionBase {
  public:
-  JointMotion(const XmlRpc::XmlRpcValue &motion, moveit::planning_interface::MoveGroupInterface &interface) :
+  JointMotion(XmlRpc::XmlRpcValue &motion, moveit::planning_interface::MoveGroupInterface &interface) :
       MoveitMotionBase(motion, interface) {
     if (motion.hasMember("joints")) {
       ROS_ASSERT(motion["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
       for (int i = 0; i < motion["joints"].size(); ++i)
-        target_.push_back(xmlRpcGetDouble(motion["joints"], i, 0.0));
+        target_.push_back(xmlRpcGetDouble(motion["joints"], i));
     }
   }
   bool move() override {
@@ -164,7 +164,7 @@ class JointMotion : public MoveitMotionBase {
 template<class MsgType>
 class PublishMotion : public MotionBase<ros::Publisher> {
  public:
-  PublishMotion(const XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
+  PublishMotion(XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
       MotionBase<ros::Publisher>(motion, interface) {}
   bool move() override {
     interface_.publish(msg_);
@@ -178,7 +178,7 @@ class PublishMotion : public MotionBase<ros::Publisher> {
 
 class JointPositionMotion : public PublishMotion<std_msgs::Float64> {
  public:
-  JointPositionMotion(const XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
+  JointPositionMotion(XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
       PublishMotion<std_msgs::Float64>(motion, interface) {
     ROS_ASSERT(motion.hasMember("target"));
     msg_.data = xmlRpcGetDouble(motion, "target", 0.0);
@@ -187,15 +187,15 @@ class JointPositionMotion : public PublishMotion<std_msgs::Float64> {
 
 class GimbalMotion : public PublishMotion<rm_msgs::GimbalCmd> {
  public:
-  GimbalMotion(const XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
+  GimbalMotion(XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
       PublishMotion<rm_msgs::GimbalCmd>(motion, interface) {
     if (motion.hasMember("frame"))
       msg_.aim_point.header.frame_id = std::string(motion["frame"]);
     if (motion.hasMember("position")) {
       ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      msg_.aim_point.point.x = xmlRpcGetDouble(motion["position"], 0, 0.0);
-      msg_.aim_point.point.y = xmlRpcGetDouble(motion["position"], 1, 0.0);
-      msg_.aim_point.point.z = xmlRpcGetDouble(motion["position"], 2, 0.0);
+      msg_.aim_point.point.x = xmlRpcGetDouble(motion["position"], 0);
+      msg_.aim_point.point.y = xmlRpcGetDouble(motion["position"], 1);
+      msg_.aim_point.point.z = xmlRpcGetDouble(motion["position"], 2);
     }
     msg_.mode = msg_.DIRECT;
   }
@@ -203,13 +203,13 @@ class GimbalMotion : public PublishMotion<rm_msgs::GimbalCmd> {
 
 class ChassisMotion : public MotionBase<ChassisInterface> {
  public:
-  ChassisMotion(const XmlRpc::XmlRpcValue &motion, ChassisInterface &interface)
+  ChassisMotion(XmlRpc::XmlRpcValue &motion, ChassisInterface &interface)
       : MotionBase<ChassisInterface>(motion, interface) {
     if (motion.hasMember("frame"))
       target_.header.frame_id = std::string(motion["frame"]);
     if (motion.hasMember("position")) {
-      target_.pose.position.x = xmlRpcGetDouble(motion["position"], 0, 0.0);
-      target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1, 0.0);
+      target_.pose.position.x = xmlRpcGetDouble(motion["position"], 0);
+      target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1);
     }
     if (motion.hasMember("yaw")) {
       tf2::Quaternion quat_tf;
