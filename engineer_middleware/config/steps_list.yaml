@@ -21,10 +21,10 @@ steps_list:
     - &step_arm_fold
       step: arm_fold
       arm:
-        joints: [ -2.8, 0.034, 0.0, 0.0, 0.0 ]
-        speed: 1.0
-        accel: 1.0
-        time_out: 2.0
+        joints: [ 3.6, -0.2, 0.54, 0.0, 0.0 ]
+        speed: 0.5
+        accel: 0.5
+        time_out: 3.0
         tolerance_angular: 0.5
   3: # TEST
     - step: raise_arm
@@ -32,8 +32,8 @@ steps_list:
         frame: base_link
         position: [ 0.414024, 0.00593919, 0.451981 ]
         rpy: [ 3.13253, 1.27397, -3.13109 ]
-        speed: 1.0
-        accel: 1.0
+        speed: 0.1
+        accel: 0.1
         time_out: 1.0
         tolerance_angular: 0.05
     - *step_hand_open
