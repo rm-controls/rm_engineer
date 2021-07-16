@@ -38,6 +38,8 @@ class StepQueue {
     chassis_interface_.setGoal(current);
 
     rm_msgs::EngineerFeedback feedback;
+    rm_msgs::EngineerResult result;
+
     feedback.total_steps = queue_.size();
     for (size_t i = 0; i < queue_.size(); ++i) {
       ros::Time start = ros::Time::now();
@@ -49,16 +51,22 @@ class StepQueue {
           queue_[i].stop();
           return false;
         }
+        if (as.isPreemptRequested() || !ros::ok()) {
+          ROS_INFO("%s: Preempted", queue_[i].getName().c_str());
+          as.setPreempted();
+          return false;
+        }
         feedback.finished_step = i;
         feedback.current_step = queue_[i].getName();
         as.publishFeedback(feedback);
         ros::WallDuration(0.2).sleep();
       }
-      feedback.finished_step = queue_.size() + 1;
+      feedback.finished_step = queue_.size();
       as.publishFeedback(feedback);
       ROS_INFO("Finish step: %s", queue_[i].getName().c_str());
-//      ros::WallDuration(0.).sleep();
     }
+    result.finish = true;
+    as.setSucceeded(result);
     return true;
   }
   const std::deque<Step> &getQueue() const { return queue_; }

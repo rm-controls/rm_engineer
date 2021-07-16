@@ -5,7 +5,8 @@ steps_list:
       hand:
         joints: [ -0. ]
         speed: 1.0
-        time_out: 0.8
+        accel: 1.0
+        time_out: 0.5
         tolerance_linear: 0.01
         tolerance_angular: 0.01
   1: # CLOSE_HAND
@@ -14,6 +15,7 @@ steps_list:
       hand:
         joints: [ -0.033 ]
         speed: 1.0
+        accel: 1.0
         time_out: 0.5
         tolerance_linear: 0.02
         tolerance_angular: 0.02
