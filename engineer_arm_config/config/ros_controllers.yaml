@@ -86,4 +86,8 @@ controllers:
   mast_controller:
     type: effort_controllers/JointPositionController
     joint: mast_joint
-    pid: { p: 100000.0, i: 0.0, d: 200.0 }
+    pid: { p: 100000.0, i: 0.0, d: 1000.0 }
+  card_controller:
+    type: effort_controllers/JointPositionController
+    joint: card_joint
+    pid: { p: 10000.0, i: 0.0, d: 1000.0 }
