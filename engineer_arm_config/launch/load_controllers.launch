@@ -16,7 +16,8 @@
           controllers/joint_state_controller
           controllers/chassis_controller
           controllers/arm_trajectory_controller
-          controllers/hand_controller"
+          controllers/hand_controller
+          controllers/card_controller"
     />
 
 </launch>
