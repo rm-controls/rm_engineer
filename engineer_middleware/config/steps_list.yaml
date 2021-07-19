@@ -26,7 +26,7 @@ steps_list:
         accel: 1.0
         time_out: 3.0
         tolerance_angular: 0.5
-  3: # TEST
+  4: # TEST
     - *step_hand_open
     - step: raise_arm
       arm:
@@ -53,6 +53,22 @@ steps_list:
         yaw: 0.0
         tolerance_linear: 0.01
         tolerance_angular: 0.01
+
+  5: # RECOVER
+    - step: arm_home
+      arm:
+        joints: [ 0., -2.181, 2.164, 0.0, 0.0 ]
+        speed: 0.5
+        accel: 0.5
+        time_out: 3.0
+        tolerance_angular: 0.5
+    - step: push
+      arm:
+        joints: [ 0., -0.6108, 1.710, -0.1745, 0.0 ]
+        speed: 1.0
+        accel: 1.0
+        time_out: 2.0
+        tolerance_angular: 0.8
   #  1: # CLOSE_HAND
   #    - step: raise_arm
   #      arm:
