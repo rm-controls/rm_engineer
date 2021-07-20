@@ -1,8 +1,9 @@
 <launch>
+    <arg name="load_robot_description" default="false"/>
 
     <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
     <include file="$(find engineer_arm_config)/launch/planning_context.launch">
-        <arg name="load_robot_description" value="false"/>
+        <arg name="load_robot_description" value="$(arg load_robot_description)"/>
     </include>
 
     <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
@@ -11,6 +12,7 @@
         <arg name="fake_execution" value="false"/>
         <arg name="info" value="true"/>
         <arg name="debug" value="false"/>
+        <arg name="load_robot_description" value="$(arg load_robot_description)"/>
     </include>
 
 </launch>
