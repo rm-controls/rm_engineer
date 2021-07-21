@@ -8,11 +8,11 @@ steps_list:
         accel: 1.0
         time_out: 1.0
         tolerance_angular: 0.01
-  1: # HAND_CLOSE
-    - &step_hand_close
+  1: # HAND_CLOSE_STONE
+    - &step_hand_close_stone
       step: close_hand
       hand:
-        joints: [ -0.033 ]
+        joints: [ -0.025 ]
         speed: 1.0
         accel: 1.0
         time_out: 1.0
@@ -37,7 +37,7 @@ steps_list:
         accel: 1.0
         time_out: 2.0
         tolerance_angular: 0.05
-    - *step_hand_close
+    - *step_hand_close_stone
     - *step_arm_fold
     - step: forward
       chassis:
