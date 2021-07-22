@@ -4,14 +4,15 @@
 
 #ifndef ENGINEER_MIDDLEWARE_CHASSIS_INTERFACE_H_
 #define ENGINEER_MIDDLEWARE_CHASSIS_INTERFACE_H_
+#include <rm_common/ori_tool.h>
 
 #include <tf/transform_listener.h>
 #include <control_toolbox/pid.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/PoseStamped.h>
-
-#include <rm_common/ori_tool.h>
 #include <angles/angles.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+
 namespace engineer_middleware {
 class ChassisInterface {
  public:
@@ -29,14 +30,15 @@ class ChassisInterface {
 
   bool setGoal(const geometry_msgs::PoseStamped &pose) {
     goal_ = pose;
-    setGoal2odom();
+    try { tf2::doTransform(goal_, goal_, tf_.lookupTransform("map", goal_.header.frame_id, ros::Time(0))); }
+    catch (tf2::TransformException &ex) { ROS_WARN("%s", ex.what()); }
     error_pos_ = 1e10;
     error_yaw_ = 1e10;
     return true;
   };
 
   void setCurrentAsGoal() {
-    geometry_msgs::PoseStamped current;
+    geometry_msgs::PoseStamped current{};
     current.header.frame_id = "base_link";
     current.pose.orientation.w = 1.;
     setGoal(current);
@@ -44,15 +46,6 @@ class ChassisInterface {
 
   double getErrorPos() const { return error_pos_; }
   double getErrorYaw() const { return error_yaw_; }
-
-  void setGoal2odom() {
-    try {
-      tf2::doTransform(goal_, goal_, tf_.lookupTransform("map", goal_.header.frame_id, ros::Time(0)));
-    }
-    catch (tf2::TransformException &ex) {
-      ROS_WARN("%s", ex.what());
-    }
-  }
 
   void stop() {
     geometry_msgs::Twist cmd_vel_{};
@@ -71,25 +64,23 @@ class ChassisInterface {
       ROS_WARN("%s", ex.what());
       return;
     }
-    double error_x, error_y, error_yaw;
-    error_x = goal_.pose.position.x - current.transform.translation.x;
-    error_y = goal_.pose.position.y - current.transform.translation.y;
-    pid_x_.computeCommand(error_x, period);
-    pid_y_.computeCommand(error_y, period);
+    // Transform xy error under map frame to velocity under chassis
+    geometry_msgs::Vector3 error;
+    error.x = goal_.pose.position.x - current.transform.translation.x;
+    error.y = goal_.pose.position.y - current.transform.translation.y;
+    try { tf2::doTransform(error, error, tf_.lookupTransform("base_link", "map", ros::Time(0))); }
+    catch (tf2::TransformException &ex) { ROS_WARN("%s", ex.what()); }
     double roll, pitch, yaw_current, yaw_goal;
     quatToRPY(current.transform.rotation, roll, pitch, yaw_current);
     quatToRPY(goal_.pose.orientation, roll, pitch, yaw_goal);
-    error_yaw = angles::shortest_angular_distance(yaw_current, yaw_goal);
-    pid_yaw_.computeCommand(error_yaw, period);
-
+    error_yaw_ = angles::shortest_angular_distance(yaw_current, yaw_goal);
     geometry_msgs::Twist cmd_vel_{};
-    cmd_vel_.linear.x = pid_x_.getCurrentCmd();
-    cmd_vel_.linear.y = pid_y_.getCurrentCmd();
-    cmd_vel_.angular.z = pid_yaw_.getCurrentCmd();
+    cmd_vel_.linear.x = pid_x_.computeCommand(error.x, period);
+    cmd_vel_.linear.y = pid_y_.computeCommand(error.y, period);
+    cmd_vel_.angular.z = pid_yaw_.computeCommand(error_yaw_, period);;
     vel_pub_.publish(cmd_vel_);
-
-    error_pos_ = std::abs(error_x) + std::abs(error_y);
-    error_yaw_ = std::abs(error_yaw);
+    error_pos_ = std::abs(error.x) + std::abs(error.y);
+    error_yaw_ = std::abs(error_yaw_);
   }
  private:
   tf2_ros::Buffer tf_;

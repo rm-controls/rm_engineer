@@ -7,7 +7,7 @@ steps_list:
         speed: 1.0
         accel: 1.0
         time_out: 1.0
-        tolerance_angular: 0.01
+        tolerance_angular: 0.002
   1: # HAND_CLOSE_STONE
     - &step_hand_close_stone
       step: close_hand
@@ -16,7 +16,7 @@ steps_list:
         speed: 1.0
         accel: 1.0
         time_out: 1.0
-        tolerance_angular: 0.02
+        tolerance_angular: 0.005
   2: # ARM_FOLD
     - &step_arm_fold
       step: arm_fold
@@ -26,33 +26,6 @@ steps_list:
         accel: 1.0
         time_out: 3.0
         tolerance_angular: 0.5
-  4: # TEST
-    - *step_hand_open
-    - step: raise_arm
-      arm:
-        frame: base_link
-        position: [ 0.414024, 0.00593919, 0.451981 ]
-        rpy: [ 3.13253, 1.27397, -3.13109 ]
-        speed: 1.0
-        accel: 1.0
-        time_out: 2.0
-        tolerance_angular: 0.05
-    - *step_hand_close_stone
-    - *step_arm_fold
-    - step: forward
-      chassis:
-        frame: base_link
-        position: [ 0.5, 0. ]
-        yaw: 0.0
-        tolerance_linear: 0.01
-        tolerance_angular: 0.01
-    - step: backward
-      chassis:
-        frame: base_link
-        position: [ -0.5, 0.0 ]
-        yaw: 0.0
-        tolerance_linear: 0.01
-        tolerance_angular: 0.01
 
   5: # RECOVER
     - step: arm_home
@@ -62,6 +35,7 @@ steps_list:
         accel: 0.5
         time_out: 3.0
         tolerance_angular: 0.5
+    - *step_hand_open
     - step: push
       arm:
         joints: [ 0., -0.6108, 1.710, -0.1745, 0.0 ]
@@ -69,6 +43,24 @@ steps_list:
         accel: 1.0
         time_out: 2.0
         tolerance_angular: 0.8
+    - step: forward
+      chassis:
+        frame: base_link
+        position: [ 0.5, 0. ]
+        yaw: 0.0
+        tolerance_linear: 0.05
+        tolerance_angular: 0.1
+        time_out: 5.0
+    - *step_hand_close_stone
+    - *step_arm_fold
+    - step: backward
+      chassis:
+        frame: base_link
+        position: [ -0.5, 0. ]
+        yaw: 0.0
+        tolerance_linear: 0.05
+        tolerance_angular: 0.1
+        time_out: 5.0
   #  1: # CLOSE_HAND
   #    - step: raise_arm
   #      arm:
