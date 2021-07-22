@@ -41,7 +41,8 @@ class Middleware {
   ros::Publisher card_pub_, gimbal_pub_;
   std::unordered_map<uint8_t, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
-  bool is_middleware_control_{};
+  tf2_ros::TransformListener tf_listener_;
+  bool is_middleware_control_;
 };
 
 }
