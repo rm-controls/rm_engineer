@@ -12,7 +12,6 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <rm_msgs/GimbalCmd.h>
 #include <engineer_middleware/chassis_interface.h>
-#include <rm_common/ori_tool.h>
 
 namespace engineer_middleware {
 template<class Interface>
@@ -77,9 +76,10 @@ class EndEffectorMotion : public MoveitMotionBase {
     }
     if (motion.hasMember("rpy")) {
       ROS_ASSERT(motion["rpy"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      tf2::Quaternion quat;
-      quat.setRPY(motion["rpy"][0], motion["rpy"][1], motion["rpy"][2]);
-      target_.pose.orientation = tf2::toMsg(quat);
+      tf2::Quaternion quat_tf;
+      quat_tf.setRPY(motion["rpy"][0], motion["rpy"][1], motion["rpy"][2]);
+      geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+      target_.pose.orientation = quat_msg;
       has_ori_ = true;
     }
     ROS_ASSERT(has_pos_ || has_ori_);
@@ -98,24 +98,6 @@ class EndEffectorMotion : public MoveitMotionBase {
         return false;
       }
     }
-    // Set Yaw angle to angle between target position and link1 position in xy plane for base_link (we got a 5 axis arm)
-    geometry_msgs::TransformStamped base_link2link1;
-    try { base_link2link1 = tf_.lookupTransform(interface_.getPlanningFrame(), "link1", ros::Time(0)); }
-    catch (tf2::TransformException &ex) {
-      ROS_WARN("%s", ex.what());
-      return false;
-    }
-    tf2::Vector3 target_pos, link1_pos, delta;
-    fromMsg(target_.pose.position, target_pos);
-    fromMsg(base_link2link1.transform.translation, link1_pos);
-    delta = target_pos - link1_pos;
-    double yaw_fix = atan2(delta.y(), delta.x());
-    double roll, pitch, yaw;
-    quatToRPY(target_.pose.orientation, roll, pitch, yaw);
-    tf2::Quaternion quat;
-    fromMsg(target_.pose.orientation, quat);
-    quat.setRPY(roll, pitch, yaw_fix);
-    target_.pose.orientation = tf2::toMsg(quat);
     if (is_cartesian_) {
       moveit_msgs::RobotTrajectory trajectory;
       std::vector<geometry_msgs::Pose> waypoints;
