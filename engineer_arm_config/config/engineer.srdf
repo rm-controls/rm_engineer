@@ -15,7 +15,7 @@
         <joint name="joint3"/>
         <joint name="joint4"/>
         <joint name="joint5"/>
-        <joint name="palm_joint"/>
+
     </group>
     <group name="engineer_hand">
         <link name="palm"/>
