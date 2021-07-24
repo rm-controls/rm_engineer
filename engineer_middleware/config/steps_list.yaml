@@ -1,69 +1,74 @@
 common:
-  slowly: &slowly
-    speed: 0.2
-    accel: 0.2
+  slowly: &SLOWLY
+    speed: 0.1
+    accel: 0.1
     timeout: 5.
-  quickly: &quickly
+  quickly: &QUICKLY
     speed: 1.0
-    accel: 0.5
+    accel: 0.7
     timeout: 2.
-  hand_open: &hand_open
-    force: 300
+  hand_open: &HAND_OPEN
+    force: 250
     delay: 0.1
     duration: 0.5
-  hand_close: &hand_close
+  hand_close: &HAND_CLOSE
     force: -400
-    delay: 0.5
-    duration: 1.0
-  arm_home: &arm_home
+    delay: 0.4
+    duration: 2.0
+  arm_home: &ARM_HOME
     joints: [ 0., -2.181, 2.164, 0.0, 0.0 ]
-    <<: *quickly
+    <<: *QUICKLY
     tolerance_angular: 0.1
-  arm_fold: &arm_fold
+  arm_fold_lower: &ARM_FOLD_LOWER
     joints: [ -2.65, -0.22, 0.62, 0.26, 0.0 ]
-    <<: *quickly
+    <<: *QUICKLY
     tolerance_angular: 0.5
-  arm_rais: &arm_rais
+  arm_fold_upper: &ARM_FOLD_UPPER
     joints: [ -2.65, -1.239, 1.01, 0.26, 0.0 ]
-    <<: *quickly
+    <<: *QUICKLY
     tolerance_angular: 0.5
+
 steps_list:
   ARM_TEST: # ARM_TEST
-    #    - step: hand_open
-    #      hand: *hand_open
-    - step: home
+    - step: "open_hand"
+      hand: *HAND_OPEN
+    - step: "home"
       arm:
-        <<: *arm_home
-        <<: *slowly
-    - step: fold
-      arm: *arm_fold
-    - step: close_hand
-      hand: *hand_close
-  ARM_RAIS:
-    - step: arm_rais
-      arm: *arm_rais
+        <<: *ARM_HOME
+        <<: *SLOWLY
+    - step: "fold_lower"
+      arm: *ARM_FOLD_LOWER
+    - step: "close_hand"
+      hand: *HAND_CLOSE
+  ARM_FOLD_UPPER:
+    - step: "fold_upper"
+      arm: *ARM_FOLD_UPPER
   GRASP_BIG:
-    - step: arm_rais
-      arm: *arm_rais
-    - step: hand_open
-      hand: *hand_open
-    - step: home
-      arm: *arm_home
-    - step: approach
+    - step: "fold_upper"
+      arm: *ARM_FOLD_UPPER
+    - step: "hand_open"
+      hand: *HAND_OPEN
+    - step: "home"
+      arm: *ARM_HOME
+    - step: "approach"
       arm:
         frame: base_link
-        position: [ 0.5, 0., 0.49 ]
+        position: [ 0.5, 0., 0.48 ]
         rpy: [ 0.,0.124, 0. ]
-        <<: *quickly
-        tolerance_linear: 0.0005
+        <<: *QUICKLY
+        tolerance_linear: 0.001
         tolerance_angular: 0.0001
-    - step: close_hand
-      hand: *hand_close
-    - step: chassis_back
-      chassis:
+    - step: "close_hand"
+      hand: *HAND_CLOSE
+    - step: "pull_up"
+      arm:
         frame: base_link
-        position: [ -0.5, 0. ]
-        yaw: 0.0
-        tolerance_linear: 0.05
-        tolerance_angular: 0.1
-        time_out: 3.0
+        position: [ 0.3, 0., 0.65 ]
+        rpy: [ 0., -0.7866, 0. ]
+        <<: *QUICKLY
+        tolerance_linear: 0.001
+        tolerance_angular: 0.0001
+    - step: "fold_upper"
+      arm: *ARM_FOLD_UPPER
+    - step: "fold_lower"
+      arm: *ARM_FOLD_LOWER
