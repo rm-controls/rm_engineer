@@ -18,14 +18,14 @@ class Middleware {
  public:
   explicit Middleware(ros::NodeHandle &nh);
   void executeCB(const actionlib::SimpleActionServer<rm_msgs::EngineerAction>::GoalConstPtr &goal) {
-    uint8_t id;
-    id = goal->step_queue_id;
+    std::string name;
+    name = goal->step_queue_name;
     is_middleware_control_ = true;
-    ROS_INFO("Start step queue id %d", id);
-    auto step_queue = step_queues_.find(id);
+    ROS_INFO("Start step queue id %s", name.c_str());
+    auto step_queue = step_queues_.find(name);
     if (step_queue != step_queues_.end())
       step_queue->second.run(as_);
-    ROS_INFO("Finish step queue id %d", id);
+    ROS_INFO("Finish step queue id %s", name.c_str());
     is_middleware_control_ = false;
   }
   void run(ros::Duration period) {
@@ -36,12 +36,12 @@ class Middleware {
   ros::NodeHandle nh_;
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> as_;
   moveit::planning_interface::MoveGroupInterface arm_group_;
-  moveit::planning_interface::MoveGroupInterface hand_group_;
   ChassisInterface chassis_interface_;
-  ros::Publisher card_pub_, gimbal_pub_;
-  std::unordered_map<uint8_t, StepQueue> step_queues_;
+  ros::Publisher hand_pub_, card_pub_, gimbal_pub_;
+  std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
-  bool is_middleware_control_{};
+  tf2_ros::TransformListener tf_listener_;
+  bool is_middleware_control_;
 };
 
 }

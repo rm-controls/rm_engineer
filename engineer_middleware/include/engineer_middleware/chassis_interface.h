@@ -16,8 +16,7 @@
 namespace engineer_middleware {
 class ChassisInterface {
  public:
-  explicit ChassisInterface(ros::NodeHandle &nh) {
-    tf_listener_ = new tf2_ros::TransformListener(this->tf_);
+  explicit ChassisInterface(ros::NodeHandle &nh, tf2_ros::Buffer &tf) : tf_(tf) {
     ros::NodeHandle nh_base_motion = ros::NodeHandle(nh, "chassis");
     ros::NodeHandle nh_pid_x = ros::NodeHandle(nh_base_motion, "x");
     ros::NodeHandle nh_pid_y = ros::NodeHandle(nh_base_motion, "y");
@@ -83,8 +82,7 @@ class ChassisInterface {
     error_yaw_ = std::abs(error_yaw_);
   }
  private:
-  tf2_ros::Buffer tf_;
-  tf2_ros::TransformListener *tf_listener_;
+  tf2_ros::Buffer &tf_;
   control_toolbox::Pid pid_x_, pid_y_, pid_yaw_;
   geometry_msgs::PoseStamped goal_{};
   ros::Publisher vel_pub_;

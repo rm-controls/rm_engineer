@@ -15,9 +15,8 @@ namespace engineer_middleware {
 class Step {
  public:
   Step(const XmlRpc::XmlRpcValue &step, tf2_ros::Buffer &tf,
-       moveit::planning_interface::MoveGroupInterface &arm_group,
-       moveit::planning_interface::MoveGroupInterface &hand_group,
-       ChassisInterface &chassis_interface, ros::Publisher &card_pub, ros::Publisher &gimbal_pub) {
+       moveit::planning_interface::MoveGroupInterface &arm_group, ChassisInterface &chassis_interface,
+       ros::Publisher &hand_pub, ros::Publisher &card_pub, ros::Publisher &gimbal_pub) {
     ROS_ASSERT(step.hasMember("step"));
     step_name_ = static_cast<std::string>(step["step"]);
     if (step.hasMember("arm")) {
@@ -26,12 +25,12 @@ class Step {
       else
         arm_motion_ = new EndEffectorMotion(step["arm"], arm_group, tf);
     }
-    if (step.hasMember("hand"))
-      hand_motion_ = new JointMotion(step["hand"], hand_group);
-    if (step.hasMember("card"))
-      card_motion_ = new JointPositionMotion(step["card"], card_pub);
     if (step.hasMember("chassis"))
       chassis_motion_ = new ChassisMotion(step["chassis"], chassis_interface);
+    if (step.hasMember("hand"))
+      hand_motion_ = new HandMotion(step["hand"], hand_pub);
+    if (step.hasMember("card"))
+      card_motion_ = new JointPositionMotion(step["card"], card_pub);
     if (step.hasMember("gimbal"))
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
   }
@@ -70,7 +69,8 @@ class Step {
   std::string getName() { return step_name_; }
  private:
   std::string step_name_;
-  MoveitMotionBase *arm_motion_{}, *hand_motion_{};
+  MoveitMotionBase *arm_motion_{};
+  HandMotion *hand_motion_{};
   JointPositionMotion *card_motion_{};
   ChassisMotion *chassis_motion_{};
   GimbalMotion *gimbal_motion_{};

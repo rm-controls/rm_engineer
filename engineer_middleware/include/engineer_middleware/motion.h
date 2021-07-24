@@ -142,10 +142,7 @@ class JointMotion : public MoveitMotionBase {
     if (target_.empty())
       return false;
     MoveitMotionBase::move();
-    if (target_.size() == 1)
-      interface_.setJointValueTarget("right_finger_joint", target_[0]);
-    else
-      interface_.setJointValueTarget(target_);
+    interface_.setJointValueTarget(target_);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
   bool isFinish() override {
@@ -154,7 +151,6 @@ class JointMotion : public MoveitMotionBase {
     for (int i = 0; i < (int) target_.size(); ++i) {
       error += std::abs(target_[i] - current[i]);
     }
-
     return error < tolerance_angular_;
   }
  private:
@@ -174,6 +170,34 @@ class PublishMotion : public MotionBase<ros::Publisher> {
   void stop() override {}
  protected:
   MsgType msg_;
+};
+
+class HandMotion : public PublishMotion<std_msgs::Float64> {
+ public:
+  HandMotion(XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
+      PublishMotion<std_msgs::Float64>(motion, interface) {
+    ROS_ASSERT(motion.hasMember("force"));
+    ROS_ASSERT(motion.hasMember("duration"));
+    ROS_ASSERT(motion.hasMember("delay"));
+    msg_.data = xmlRpcGetDouble(motion, "force", 0.0);
+    duration_ = xmlRpcGetDouble(motion, "duration", 0.0);
+    delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
+  }
+  bool move() override {
+    ros::NodeHandle n;
+    start_time_ = ros::Time::now();
+    timer_ = n.createTimer(ros::Duration(duration_), boost::bind(&HandMotion::stopCallback, this, _1));
+    return PublishMotion::move();
+  }
+  bool isFinish() override { return ((ros::Time::now() - start_time_).toSec() > delay_); }
+ private:
+  void stopCallback(const ros::TimerEvent &) {
+    msg_.data = 0.;
+    interface_.publish(msg_);;
+  };
+  double duration_, delay_;
+  ros::Time start_time_;
+  ros::Timer timer_;
 };
 
 class JointPositionMotion : public PublishMotion<std_msgs::Float64> {
