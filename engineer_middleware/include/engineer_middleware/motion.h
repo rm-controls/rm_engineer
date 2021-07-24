@@ -179,23 +179,27 @@ class HandMotion : public PublishMotion<std_msgs::Float64> {
     ROS_ASSERT(motion.hasMember("force"));
     ROS_ASSERT(motion.hasMember("duration"));
     ROS_ASSERT(motion.hasMember("delay"));
-    msg_.data = xmlRpcGetDouble(motion, "force", 0.0);
-    duration_ = xmlRpcGetDouble(motion, "duration", 0.0);
+    force_ = xmlRpcGetDouble(motion, "force", 0.0);
     delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
+    ros::NodeHandle n;
+    timer_ = n.createTimer(ros::Duration(xmlRpcGetDouble(motion, "duration", 0.0)),
+                           boost::bind(&HandMotion::stopCallback, this, _1));
+    timer_.stop();
   }
   bool move() override {
-    ros::NodeHandle n;
+    timer_.start();
     start_time_ = ros::Time::now();
-    timer_ = n.createTimer(ros::Duration(duration_), boost::bind(&HandMotion::stopCallback, this, _1));
+    msg_.data = force_;
     return PublishMotion::move();
   }
   bool isFinish() override { return ((ros::Time::now() - start_time_).toSec() > delay_); }
  private:
   void stopCallback(const ros::TimerEvent &) {
+    timer_.stop();
     msg_.data = 0.;
     interface_.publish(msg_);;
   };
-  double duration_, delay_;
+  double force_, delay_;
   ros::Time start_time_;
   ros::Timer timer_;
 };
