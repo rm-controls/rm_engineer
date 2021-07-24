@@ -2,11 +2,11 @@ common:
   slowly: &slowly
     speed: 0.2
     accel: 0.2
-    timeout: 5
+    timeout: 5.
   quickly: &quickly
     speed: 1.0
     accel: 0.5
-    timeout: 2
+    timeout: 2.
   hand_open: &hand_open
     force: 300
     delay: 0.1
@@ -14,7 +14,7 @@ common:
   hand_close: &hand_close
     force: -400
     delay: 0.5
-    duration: 0.5
+    duration: 1.0
   arm_home: &arm_home
     joints: [ 0., -2.181, 2.164, 0.0, 0.0 ]
     <<: *quickly
@@ -26,10 +26,11 @@ common:
   arm_rais: &arm_rais
     joints: [ -2.65, -1.239, 1.01, 0.26, 0.0 ]
     <<: *quickly
+    tolerance_angular: 0.5
 steps_list:
   ARM_TEST: # ARM_TEST
-    - step: hand_open
-      hand: *hand_open
+    #    - step: hand_open
+    #      hand: *hand_open
     - step: home
       arm:
         <<: *arm_home
