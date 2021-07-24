@@ -32,11 +32,6 @@ controller_list:
       - joint3
       - joint4
       - joint5
-  - name: controllers/hand_controller
-    action_ns: follow_joint_trajectory
-    type: FollowJointTrajectory
-    joints:
-      - right_finger_joint
 
 controllers:
   robot_state_controller:
@@ -78,11 +73,8 @@ controllers:
     joint5:
       pid: { p: 200, i: 0.0, d: 3.5 }
   hand_controller:
-    type: effort_controllers/JointTrajectoryController
-    joints:
-      - right_finger_joint
-    gains:
-      right_finger_joint: { p: 100000.0, i: 0.0, d: 200, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: true }
+    type: effort_controllers/JointEffortController
+    joint: right_finger_joint
   mast_controller:
     type: effort_controllers/JointPositionController
     joint: mast_joint

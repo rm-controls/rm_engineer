@@ -19,13 +19,12 @@ namespace engineer_middleware {
 class StepQueue {
  public:
   StepQueue(const XmlRpc::XmlRpcValue &steps, tf2_ros::Buffer &tf,
-            moveit::planning_interface::MoveGroupInterface &arm_group,
-            moveit::planning_interface::MoveGroupInterface &hand_group,
-            ChassisInterface &chassis_interface, ros::Publisher &card_pub, ros::Publisher &gimbal_pub) :
+            moveit::planning_interface::MoveGroupInterface &arm_group, ChassisInterface &chassis_interface,
+            ros::Publisher &hand_pub, ros::Publisher &card_pub, ros::Publisher &gimbal_pub) :
       chassis_interface_(chassis_interface) {
     ROS_ASSERT(steps.getType() == XmlRpc::XmlRpcValue::TypeArray);
     for (int i = 0; i < steps.size(); ++i)
-      queue_.emplace_back(steps[i], tf, arm_group, hand_group, chassis_interface, card_pub, gimbal_pub);
+      queue_.emplace_back(steps[i], tf, arm_group, chassis_interface, hand_pub, card_pub, gimbal_pub);
   }
   bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction> &as) {
     if (queue_.empty()) {

@@ -36,9 +36,8 @@ class Middleware {
   ros::NodeHandle nh_;
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> as_;
   moveit::planning_interface::MoveGroupInterface arm_group_;
-  moveit::planning_interface::MoveGroupInterface hand_group_;
   ChassisInterface chassis_interface_;
-  ros::Publisher card_pub_, gimbal_pub_;
+  ros::Publisher hand_pub_, card_pub_, gimbal_pub_;
   std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener tf_listener_;

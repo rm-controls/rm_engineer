@@ -8,13 +8,13 @@ common:
     accel: 0.5
     timeout: 2
   hand_open: &hand_open
-    joints: [ 0. ]
-    <<: *quickly
-    tolerance_angular: 0.01
+    force: 300
+    delay: 0.1
+    duration: 0.5
   hand_close: &hand_close
-    joints: [ -0.028 ]
-    <<: *quickly
-    tolerance_angular: 0.05
+    force: -400
+    delay: 0.5
+    duration: 0.5
   arm_home: &arm_home
     joints: [ 0., -2.181, 2.164, 0.0, 0.0 ]
     <<: *quickly
