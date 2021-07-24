@@ -5,7 +5,7 @@ common:
     timeout: 5
   quickly: &quickly
     speed: 1.0
-    accel: 1.0
+    accel: 0.5
     timeout: 2
   hand_open: &hand_open
     joints: [ 0. ]
@@ -18,22 +18,51 @@ common:
   arm_home: &arm_home
     joints: [ 0., -2.181, 2.164, 0.0, 0.0 ]
     <<: *quickly
+    tolerance_angular: 0.1
   arm_fold: &arm_fold
-    joints: [ -2.87, -0.22, 0.62, 0.26, 0.0 ]
+    joints: [ -2.65, -0.22, 0.62, 0.26, 0.0 ]
     <<: *quickly
-
+    tolerance_angular: 0.5
+  arm_rais: &arm_rais
+    joints: [ -2.65, -1.239, 1.01, 0.26, 0.0 ]
+    <<: *quickly
 steps_list:
   ARM_TEST: # ARM_TEST
     - step: hand_open
-      hand:
-        <<: *hand_open
+      hand: *hand_open
     - step: home
       arm:
         <<: *arm_home
-        <<: *quickly
-        tolerance_angular: 0.2
+        <<: *slowly
     - step: fold
       arm: *arm_fold
-      tolerance_angular: 0.1
     - step: close_hand
       hand: *hand_close
+  ARM_RAIS:
+    - step: arm_rais
+      arm: *arm_rais
+  GRASP_BIG:
+    - step: arm_rais
+      arm: *arm_rais
+    - step: hand_open
+      hand: *hand_open
+    - step: home
+      arm: *arm_home
+    - step: approach
+      arm:
+        frame: base_link
+        position: [ 0.5, 0., 0.49 ]
+        rpy: [ 0.,0.124, 0. ]
+        <<: *quickly
+        tolerance_linear: 0.0005
+        tolerance_angular: 0.0001
+    - step: close_hand
+      hand: *hand_close
+    - step: chassis_back
+      chassis:
+        frame: base_link
+        position: [ -0.5, 0. ]
+        yaw: 0.0
+        tolerance_linear: 0.05
+        tolerance_angular: 0.1
+        time_out: 3.0
