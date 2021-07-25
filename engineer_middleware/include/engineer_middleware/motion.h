@@ -20,7 +20,7 @@ class MotionBase {
   MotionBase(XmlRpc::XmlRpcValue &motion, Interface &interface) : interface_(interface) {
     tolerance_linear_ = xmlRpcGetDouble(motion, "tolerance_linear", 0.01);
     tolerance_angular_ = xmlRpcGetDouble(motion, "tolerance_angular", 0.02);
-    time_out_ = xmlRpcGetDouble(motion, "time_out", 1e10);
+    time_out_ = xmlRpcGetDouble(motion, "timeout", 1e10);
   };
   ~MotionBase() = default;
   virtual bool move() = 0;
