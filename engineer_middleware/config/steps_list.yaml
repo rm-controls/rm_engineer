@@ -1,20 +1,18 @@
 common:
   slowly: &SLOWLY
-    speed: 0.1
-    accel: 0.1
+    speed: 0.2
+    accel: 0.2
     timeout: 5.
   quickly: &QUICKLY
     speed: 1.0
     accel: 0.7
     timeout: 2.
   hand_open: &HAND_OPEN
-    force: 250
+    position: 0.
     delay: 0.1
-    duration: 0.5
   hand_close: &HAND_CLOSE
-    force: -400
+    position: -0.026
     delay: 0.4
-    duration: 2.0
   arm_home: &ARM_HOME
     joints: [ 0., -2.181, 2.164, 0.0, 0.0 ]
     <<: *QUICKLY
@@ -44,10 +42,10 @@ steps_list:
     - step: "fold_lower"
       arm: *ARM_FOLD_LOWER
   GRASP_BIG:
-    - step: "fold_upper"
-      arm: *ARM_FOLD_UPPER
     - step: "hand_open"
       hand: *HAND_OPEN
+    - step: "fold_upper"
+      arm: *ARM_FOLD_UPPER
     - step: "home"
       arm: *ARM_HOME
     - step: "approach"
@@ -72,6 +70,53 @@ steps_list:
       arm: *ARM_FOLD_UPPER
     - step: "fold_lower"
       arm: *ARM_FOLD_LOWER
+  GRASP_SMALL:
+    - step: "hand_open"
+      hand: *HAND_OPEN
+    - step: "turn"
+      arm:
+        joints: [ -2.735, -1.452, -0.133, 1.06, 0.0125 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.1
+    - step: "turn"
+      arm:
+        frame: base_link
+        position: [ 0.226, 0., 0.65 ]
+        rpy: [ 0., -0.5259, 0. ]
+        <<: *QUICKLY
+        tolerance_linear: 0.001
+        tolerance_angular: 0.001
+    - step: "forward"
+      chassis:
+        frame: base_link
+        position: [ 0.3, 0. ]
+        yaw: 0.0
+        tolerance_linear: 0.1
+        tolerance_angular: 0.01
+    - step: "approach"
+      arm:
+        frame: base_link
+        position: [ 0.262, 0., 0.62 ]
+        rpy: [ 0., 0., 0. ]
+        <<: *QUICKLY
+        tolerance_linear: 0.001
+        tolerance_angular: 0.001
+    - step: "close_hand"
+      hand: *HAND_CLOSE
+    - step: "rise"
+      arm:
+        frame: base_link
+        position: [ 0.226, 0., 0.65 ]
+        rpy: [ 0., -0.5259, 0. ]
+        <<: *QUICKLY
+        tolerance_linear: 0.01
+        tolerance_angular: 0.001
+    - step: "turn"
+      arm:
+        joints: [ -2.735, -1.452, -0.133, 1.06, 0.0125 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.1
+
   PLACE:
     - step: "backward"
       chassis:

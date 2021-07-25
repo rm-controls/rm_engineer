@@ -54,27 +54,10 @@ controllers:
       joint3: { p: 700, i: 2, d: 6, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
       joint4: { p: 105.0, i: 5.0, d: 6.5, i_clamp_max: 5, i_clamp_min: -5, antiwindup: true, publish_state: true }
       joint5: { p: 100, i: 0.0, d: 5, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: true }
-  arm_position_controller:
-    type: effort_controllers/JointGroupPositionController
-    joints:
-      - joint1
-      - joint2
-      - joint3
-      - joint4
-      - joint5
-    joint1:
-      pid: { p: 300, i: 0.0, d: 10 }
-    joint2:
-      pid: { p: 3000, i: 10, d: 10 }
-    joint3:
-      pid: { p: 2000, i: 2, d: 6 }
-    joint4:
-      pid: { p: 10, i: 0.0, d: 3.5 }
-    joint5:
-      pid: { p: 200, i: 0.0, d: 3.5 }
   hand_controller:
-    type: effort_controllers/JointEffortController
+    type: effort_controllers/JointPositionController
     joint: right_finger_joint
+    pid: { p: 50000.0, i: 0.0, d: 1000, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: true }
   mast_controller:
     type: effort_controllers/JointPositionController
     joint: mast_joint

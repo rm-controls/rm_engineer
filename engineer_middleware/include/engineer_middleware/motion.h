@@ -176,32 +176,20 @@ class HandMotion : public PublishMotion<std_msgs::Float64> {
  public:
   HandMotion(XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
       PublishMotion<std_msgs::Float64>(motion, interface) {
-    ROS_ASSERT(motion.hasMember("force"));
-    ROS_ASSERT(motion.hasMember("duration"));
+    ROS_ASSERT(motion.hasMember("position"));
     ROS_ASSERT(motion.hasMember("delay"));
-    force_ = xmlRpcGetDouble(motion, "force", 0.0);
+    position_ = xmlRpcGetDouble(motion, "position", 0.0);
     delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
-    ros::NodeHandle n;
-    timer_ = n.createTimer(ros::Duration(xmlRpcGetDouble(motion, "duration", 0.0)),
-                           boost::bind(&HandMotion::stopCallback, this, _1));
-    timer_.stop();
   }
   bool move() override {
-    timer_.start();
     start_time_ = ros::Time::now();
-    msg_.data = force_;
+    msg_.data = position_;
     return PublishMotion::move();
   }
   bool isFinish() override { return ((ros::Time::now() - start_time_).toSec() > delay_); }
  private:
-  void stopCallback(const ros::TimerEvent &) {
-    timer_.stop();
-    msg_.data = 0.;
-    interface_.publish(msg_);;
-  };
-  double force_, delay_;
+  double position_, delay_;
   ros::Time start_time_;
-  ros::Timer timer_;
 };
 
 class JointPositionMotion : public PublishMotion<std_msgs::Float64> {
