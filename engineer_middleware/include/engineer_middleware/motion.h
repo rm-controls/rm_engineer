@@ -48,7 +48,15 @@ class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroup
   bool move() override {
     interface_.setMaxVelocityScalingFactor(speed_);
     interface_.setMaxAccelerationScalingFactor(accel_);
+    countdown_ = 5;
     return true;
+  }
+  bool isFinish() {
+    if (isReachGoal())
+      countdown_--;
+    else
+      countdown_ = 5;
+    return countdown_ < 0;
   }
   void stop() override {
     interface_.setMaxVelocityScalingFactor(0.);
@@ -56,7 +64,9 @@ class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroup
     interface_.stop();
   }
  protected:
+  virtual bool isReachGoal() = 0;
   double speed_, accel_;
+  int countdown_{};
 };
 
 class EndEffectorMotion : public MoveitMotionBase {
@@ -115,14 +125,14 @@ class EndEffectorMotion : public MoveitMotionBase {
       return interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     }
   }
-  bool isFinish() override {
+ private:
+  bool isReachGoal() override {
     geometry_msgs::Pose pose = interface_.getCurrentPose().pose;
     // TODO: Add orientation error check
     return (std::abs(std::pow(pose.position.x - target_.pose.position.x, 2)
                          + std::pow(pose.position.y - target_.pose.position.y, 2)
                          + std::pow(pose.position.z - target_.pose.position.z, 2)) < tolerance_linear_);
   }
- private:
   tf2_ros::Buffer &tf_;
   bool has_pos_, has_ori_, is_cartesian_;
   geometry_msgs::PoseStamped target_;
@@ -145,7 +155,8 @@ class JointMotion : public MoveitMotionBase {
     interface_.setJointValueTarget(target_);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
-  bool isFinish() override {
+ private:
+  bool isReachGoal() override {
     std::vector<double> current = interface_.getCurrentJointValues();
     double error = 0.;
     for (int i = 0; i < (int) target_.size(); ++i) {
@@ -153,7 +164,6 @@ class JointMotion : public MoveitMotionBase {
     }
     return error < tolerance_angular_;
   }
- private:
   std::vector<double> target_;
 };
 
