@@ -11,10 +11,10 @@ common:
     position: -0.002
     delay: 0.1
   hand_close: &HAND_CLOSE
-    position: -0.028
+    position: -0.030
     delay: 0.4
   hand_loosen: &HAND_LOOSEN
-    position: -0.025
+    position: -0.024
     delay: 0.3
   arm_home: &ARM_HOME
     joints: [ 0., -2.181, 2.164, 0.0, 0.0 ]
@@ -72,12 +72,11 @@ steps_list:
         rpy: [ 0., -0.7866, 0. ]
         <<: *QUICKLY
         tolerance_linear: 0.001
-        tolerance_angular: 0.001
     - step: "fold_upper"
       arm: *ARM_FOLD_UPPER
   #    - step: "fold_lower"
   #      arm: *ARM_FOLD_LOWER
-  SAVE:
+  STORAGE:
     - step: "top"
       <<: *ARM_TOP
     - step: "approach"
@@ -85,36 +84,34 @@ steps_list:
         frame: base_link
         position: [ 0.1217, 0.0269, 0.61 ]
         rpy: [ 0., 0., 2.672 ]
-        <<: *SLOWLY
+        <<: *QUICKLY
         tolerance_linear: 0.0005
     - step: "push"
       arm:
         frame: base_link
-        position: [ 0.0624, 0.0567, 0.58 ]
+        position: [ 0.0624, 0.0567, 0.55 ]
         rpy: [ 0., 0.4838, 2.6748 ]
         <<: *SLOWLY
         tolerance_linear: 0.0005
     - step: "down"
+      arm:
+        frame: base_link
+        position: [ -0.007, 0.09122, 0.54 ]
+        rpy: [ 0., 0.48385, 2.67702 ]
+        <<: *QUICKLY
+        tolerance_linear: 0.001
       hand:
         <<: *HAND_LOOSEN
-  #    - step: "down"
-  #      arm:
-  #        frame: base_link
-  #        position: [ 0.0488, 0.0634, 0.5127 ]
-  #        rpy: [ 0., 0.2, 2.6751 ]
-  #        <<: *QUICKLY
-  #        tolerance_linear: 0.001
-  #        tolerance_angular: 0.001
-  #    - step: "hand_open"
-  #      hand: *HAND_OPEN
-  #    - step: "back"
-  #      arm:
-  #        frame: base_link
-  #        position: [ 0.1164, 0.0294, 0.5674 ]
-  #        rpy: [ 0., 0.2, 2.67528 ]
-  #        <<: *QUICKLY
-  #        tolerance_linear: 0.001
-  #        tolerance_angular: 0.001
+    - step: "hand_open"
+      hand: *HAND_OPEN
+    - step: "back"
+      arm:
+        frame: base_link
+        position: [ 0.1164, 0.0294, 0.5674 ]
+        rpy: [ 0., 0.2, 2.67528 ]
+        <<: *QUICKLY
+        tolerance_linear: 0.001
+        tolerance_angular: 0.001
 
   GRASP_SMALL:
     - step: "hand_open"

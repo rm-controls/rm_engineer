@@ -51,7 +51,7 @@ class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroup
     countdown_ = 5;
     return true;
   }
-  bool isFinish() {
+  bool isFinish() override {
     if (isReachGoal())
       countdown_--;
     else
