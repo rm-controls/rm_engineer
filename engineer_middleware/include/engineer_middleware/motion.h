@@ -20,7 +20,7 @@ class MotionBase {
   MotionBase(XmlRpc::XmlRpcValue &motion, Interface &interface) : interface_(interface) {
     tolerance_linear_ = xmlRpcGetDouble(motion, "tolerance_linear", 0.01);
     tolerance_angular_ = xmlRpcGetDouble(motion, "tolerance_angular", 0.02);
-    time_out_ = xmlRpcGetDouble(motion, "time_out", 1e10);
+    time_out_ = xmlRpcGetDouble(motion, "timeout", 1e10);
   };
   ~MotionBase() = default;
   virtual bool move() = 0;
@@ -48,7 +48,15 @@ class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroup
   bool move() override {
     interface_.setMaxVelocityScalingFactor(speed_);
     interface_.setMaxAccelerationScalingFactor(accel_);
+    countdown_ = 5;
     return true;
+  }
+  bool isFinish() override {
+    if (isReachGoal())
+      countdown_--;
+    else
+      countdown_ = 5;
+    return countdown_ < 0;
   }
   void stop() override {
     interface_.setMaxVelocityScalingFactor(0.);
@@ -56,7 +64,9 @@ class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroup
     interface_.stop();
   }
  protected:
+  virtual bool isReachGoal() = 0;
   double speed_, accel_;
+  int countdown_{};
 };
 
 class EndEffectorMotion : public MoveitMotionBase {
@@ -115,14 +125,14 @@ class EndEffectorMotion : public MoveitMotionBase {
       return interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     }
   }
-  bool isFinish() override {
+ private:
+  bool isReachGoal() override {
     geometry_msgs::Pose pose = interface_.getCurrentPose().pose;
     // TODO: Add orientation error check
     return (std::abs(std::pow(pose.position.x - target_.pose.position.x, 2)
                          + std::pow(pose.position.y - target_.pose.position.y, 2)
                          + std::pow(pose.position.z - target_.pose.position.z, 2)) < tolerance_linear_);
   }
- private:
   tf2_ros::Buffer &tf_;
   bool has_pos_, has_ori_, is_cartesian_;
   geometry_msgs::PoseStamped target_;
@@ -145,7 +155,8 @@ class JointMotion : public MoveitMotionBase {
     interface_.setJointValueTarget(target_);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
-  bool isFinish() override {
+ private:
+  bool isReachGoal() override {
     std::vector<double> current = interface_.getCurrentJointValues();
     double error = 0.;
     for (int i = 0; i < (int) target_.size(); ++i) {
@@ -153,7 +164,6 @@ class JointMotion : public MoveitMotionBase {
     }
     return error < tolerance_angular_;
   }
- private:
   std::vector<double> target_;
 };
 
@@ -176,32 +186,20 @@ class HandMotion : public PublishMotion<std_msgs::Float64> {
  public:
   HandMotion(XmlRpc::XmlRpcValue &motion, ros::Publisher &interface) :
       PublishMotion<std_msgs::Float64>(motion, interface) {
-    ROS_ASSERT(motion.hasMember("force"));
-    ROS_ASSERT(motion.hasMember("duration"));
+    ROS_ASSERT(motion.hasMember("position"));
     ROS_ASSERT(motion.hasMember("delay"));
-    force_ = xmlRpcGetDouble(motion, "force", 0.0);
+    position_ = xmlRpcGetDouble(motion, "position", 0.0);
     delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
-    ros::NodeHandle n;
-    timer_ = n.createTimer(ros::Duration(xmlRpcGetDouble(motion, "duration", 0.0)),
-                           boost::bind(&HandMotion::stopCallback, this, _1));
-    timer_.stop();
   }
   bool move() override {
-    timer_.start();
     start_time_ = ros::Time::now();
-    msg_.data = force_;
+    msg_.data = position_;
     return PublishMotion::move();
   }
   bool isFinish() override { return ((ros::Time::now() - start_time_).toSec() > delay_); }
  private:
-  void stopCallback(const ros::TimerEvent &) {
-    timer_.stop();
-    msg_.data = 0.;
-    interface_.publish(msg_);;
-  };
-  double force_, delay_;
+  double position_, delay_;
   ros::Time start_time_;
-  ros::Timer timer_;
 };
 
 class JointPositionMotion : public PublishMotion<std_msgs::Float64> {

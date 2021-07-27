@@ -54,7 +54,7 @@ class StepQueue {
         feedback.finished_step = i;
         feedback.current_step = queue_[i].getName();
         as.publishFeedback(feedback);
-        ros::Duration(0.02).sleep();
+        ros::Duration(0.01).sleep();
       }
       feedback.finished_step = queue_.size();
       as.publishFeedback(feedback);
