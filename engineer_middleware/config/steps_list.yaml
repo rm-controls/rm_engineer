@@ -38,6 +38,9 @@ steps_list:
   ARM_TEST: # ARM_TEST
     - step: "open_hand"
       hand: *HAND_OPEN
+      gimbal:
+        frame: link5
+        position: [ 0., 0., 0.1 ]
     - step: "home"
       arm:
         <<: *ARM_HOME
@@ -49,6 +52,15 @@ steps_list:
   ARM_FOLD_LOWER:
     - step: "fold_lower"
       arm: *ARM_FOLD_LOWER
+      gimbal:
+        frame: base_link
+        position: [ 0.5, 0., 0.48 ]
+  ARM_FOLD_UPPER:
+    - step: "fold_upper"
+      arm: *ARM_FOLD_UPPER
+      gimbal:
+        frame: base_link
+        position: [ 0.5, 0., 0.48 ]
   GRASP_BIG:
     - step: "hand_open"
       hand: *HAND_OPEN
@@ -63,6 +75,9 @@ steps_list:
         rpy: [ 0., 0.124, 0. ]
         <<: *QUICKLY
         tolerance_linear: 0.001
+      gimbal:
+        frame: base_link
+        position: [ 0.5, 0., 0.48 ]
     - step: "close_hand"
       hand: *HAND_CLOSE
     - step: "pull_up"
@@ -72,6 +87,9 @@ steps_list:
         rpy: [ 0., -0.7866, 0. ]
         <<: *QUICKLY
         tolerance_linear: 0.001
+      gimbal:
+        frame: link5
+        position: [ 0., 0., 0. ]
     - step: "fold_upper"
       arm: *ARM_FOLD_UPPER
   #    - step: "fold_lower"
