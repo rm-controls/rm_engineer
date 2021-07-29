@@ -28,48 +28,63 @@ common:
         <<: *QUICKLY
         tolerance_angular: 0.1
     fold_lower: &ARM_FOLD_LOWER
-      joints: [ -2.65, -0.22, 0.62, 0.26, 0.0 ]
+      joints: [ 0.426, -2.286, -0.785, -0.191, -1.57 ]
       <<: *QUICKLY
       tolerance_angular: 0.5
     fold_upper: &ARM_FOLD_UPPER
-      joints: [ -2.65, -1.239, 1.01, 0.26, 0.0 ]
+      joints: [ 0.32, -2.286, 1.3439, -0.191, -1.57 ]
       <<: *QUICKLY
       tolerance_angular: 0.5
   gimbal:
     forward_lower: &GIMBAL_FORWARD_LOWER
-      frame: mast
-      position: [ 0.5, 0., 0.5 ]
+      frame: base_link
+      position: [ 0.5, -0.15, 0.4 ]
     forward_upper: &GIMBAL_FORWARD_UPPER
-      frame: mast
-      position: [ 0.5, 0., 1.5 ]
-
+      frame: base_link
+      position: [ 0.5, -0.15, 0.9 ]
+    stone_big: &GIMBAL_STONE_BIG
+      frame: base_link
+      position: [ 0.5, 0., 0.48 ]
 steps_list:
+  GIMBAL_FORWARD_LOWER:
+    - step: "forward_lower"
+      gimbal: *GIMBAL_FORWARD_LOWER
+  GIMBAL_FORWARD_UPPER:
+    - step: "forward_upper"
+      gimbal: *GIMBAL_FORWARD_UPPER
+  GIMBAL_STONE_BIG:
+    - step: "stone_big"
+      gimbal: *GIMBAL_STONE_BIG
   ARM_TEST: # ARM_TEST
     - step: "open_hand"
       hand: *HAND_OPEN
       gimbal:
         frame: link5
         position: [ 0., 0., 0.1 ]
+    - step: "fold_upper"
+      arm: *ARM_FOLD_UPPER
     - step: "home"
       arm:
         <<: *ARM_HOME
         <<: *SLOWLY
+    - step: "fold_upper"
+      arm: *ARM_FOLD_UPPER
     - step: "fold_lower"
       arm: *ARM_FOLD_LOWER
     - step: "close_hand"
       hand: *HAND_CLOSE
   ARM_FOLD_LOWER:
-    - step: "fold_lower"
+    - step: "base_link"
       arm: *ARM_FOLD_LOWER
       gimbal:
         frame: base_link
-        position: [ 0.5, 0., 0.48 ]
+        position: [ 1.0, -0.18, 0.1 ]
   ARM_FOLD_UPPER:
     - step: "fold_upper"
       arm: *ARM_FOLD_UPPER
       gimbal:
         frame: base_link
-        position: [ 0.5, 0., 0.48 ]
+        position: [ 1.0, -0.18, 0.8 ]
   GRASP_BIG:
     - step: "hand_open"
       hand: *HAND_OPEN
@@ -79,11 +94,9 @@ steps_list:
       arm: *ARM_HOME
     - step: "approach"
       arm:
-        frame: base_link
-        position: [ 0.5, 0., 0.48 ]
-        rpy: [ 0., 0.124, 0. ]
+        joints: [ 0., -0.851251, 0.638845, 0.56, 0. ]
         <<: *QUICKLY
-        tolerance_linear: 0.001
+        tolerance_angular: 0.2
       gimbal:
         frame: base_link
         position: [ 0.5, 0., 0.48 ]
@@ -91,18 +104,19 @@ steps_list:
       hand: *HAND_CLOSE
     - step: "pull_up"
       arm:
-        frame: base_link
-        position: [ 0.3, 0., 0.65 ]
-        rpy: [ 0., -0.7866, 0. ]
+        joints: [ 0., -0.901, 0.538845, -0.1, 0. ]
         <<: *QUICKLY
-        tolerance_linear: 0.001
+        tolerance_angular: 0.2
       gimbal:
         frame: link5
         position: [ 0., 0., 0. ]
-    - step: "fold_upper"
-      arm: *ARM_FOLD_UPPER
+    - step: "fold"
+      arm:
+        joints: [ -2.65, -1.239, 1.01, 0.26, 0.0 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.5
 
-  STORAGE:
+  STORAGE_BIG:
     - step: "top"
       <<: *ARM_TOP
     - step: "approach"
@@ -115,14 +129,14 @@ steps_list:
     - step: "push"
       arm:
         frame: base_link
-        position: [ 0.0624, 0.0567, 0.55 ]
+        position: [ 0.0624, 0.0567, 0.56 ]
         rpy: [ 0., 0.4838, 2.6748 ]
         <<: *SLOWLY
         tolerance_linear: 0.0005
     - step: "down"
       arm:
         frame: base_link
-        position: [ -0.007, 0.09122, 0.54 ]
+        position: [ -0.007, 0.09122, 0.55 ]
         rpy: [ 0., 0.48385, 2.67702 ]
         <<: *QUICKLY
         tolerance_linear: 0.001
@@ -133,7 +147,7 @@ steps_list:
     - step: "back"
       arm:
         frame: base_link
-        position: [ 0.1164, 0.0294, 0.5674 ]
+        position: [ 0.1164, 0.0294, 0.5774 ]
         rpy: [ 0., 0.2, 2.67528 ]
         <<: *QUICKLY
         tolerance_linear: 0.001
