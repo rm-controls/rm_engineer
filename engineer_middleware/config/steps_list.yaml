@@ -103,6 +103,7 @@ steps_list:
   GRASP_BIG_PROC:
     - step: "home"
       arm: *ARM_HOME
+      hand: *HAND_OPEN
     - step: "approach"
       arm:
         frame: base_link
@@ -249,14 +250,14 @@ steps_list:
     - step: "rise_up"
       arm:
         frame: base_link
-        position: [ 0.24, 0., 0.65 ]
+        position: [ 0.24, 0., 0.66 ]
         rpy: [ 0., -0.474, 0. ]
         <<: *QUICKLY
         tolerance_linear: 0.01
     - step: "forward"
       chassis:
         frame: base_link
-        position: [ 0.4, 0. ]
+        position: [ 0.32, 0. ]
         yaw: 0.0
         tolerance_linear: 0.10
         tolerance_angular: 0.01
@@ -273,23 +274,16 @@ steps_list:
         timeout: 2.0
       arm:
         frame: base_link
-        position: [ 0.188, 0., 0.60 ]
+        position: [ 0.188, 0., 0.61 ]
         rpy: [ 0., -0.170, 0. ]
         <<: *QUICKLY
         tolerance_linear: 0.01
     - step: "close_hand"
       hand: *HAND_CLOSE
     - step: "push"
-      chassis:
-        frame: base_link
-        position: [ 0.4, 0. ]
-        yaw: 0.0
-        tolerance_linear: 0.2
-        tolerance_angular: 0.1
-        timeout: 2.0
       arm:
         frame: base_link
-        position: [ 0.35, 0., 0.62 ]
+        position: [ 0.35, 0., 0.63 ]
         rpy: [ 0., -0.127, 0. ]
         <<: *QUICKLY
         tolerance_linear: 0.1
