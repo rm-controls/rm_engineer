@@ -158,7 +158,6 @@ steps_list:
       gimbal:
         frame: base_link
         position: [ 0.57, -0.02, 0.1 ]
-        position: [ 0.57, -0.02, 0.1 ]
   GRASP_GROUND_PROC:
     - step: "approach"
       arm:
