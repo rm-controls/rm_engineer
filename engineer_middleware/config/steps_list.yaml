@@ -144,6 +144,42 @@ steps_list:
       gimbal:
         frame: base_link
         position: [ 0.5, 0.10, 0.4 ]
+
+  #################### GRASP_GROUND ####################
+  GRASP_GROUND_PRE:
+    - step: "above"
+      arm:
+        frame: base_link
+        position: [ 0.4, 0., 0.28 ]
+        rpy: [ 0., 1.17, 0. ]
+        <<: *QUICKLY
+        tolerance_linear: 0.001
+      hand: *HAND_OPEN
+      gimbal:
+        frame: base_link
+        position: [ 0.57, -0.02, 0.1 ]
+        position: [ 0.57, -0.02, 0.1 ]
+  GRASP_GROUND_PROC:
+    - step: "approach"
+      arm:
+        frame: base_link
+        position: [ 0.48, 0., 0.17 ]
+        rpy: [ 0., 1.183, 0. ]
+        <<: *QUICKLY
+        tolerance_linear: 0.001
+    - step: "hand_close"
+      hand: *HAND_STONE
+  GRASP_GROUND_AFTER:
+    - step: "fold_lower"
+      arm:
+        joints: [ -2.65, -0.22, 0.62, 0.26, 0.0 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.5
+    - step: "look_ahead"
+      gimbal:
+        frame: base_link
+        position: [ 0.5, 0.10, 0.4 ]
+
   #################### STORAGE ####################
   STORAGE_BIG_PROC:
     - step: "top"
