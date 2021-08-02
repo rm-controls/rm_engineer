@@ -145,7 +145,7 @@ steps_list:
         frame: base_link
         position: [ 0.5, 0.18, 0.4 ]
 
-  #################### GRASP_GROUND ####################
+  #################### GRASP_FLOOR ####################
   GRASP_FLOOR_PRE:
     - step: "above"
       arm:
@@ -312,6 +312,47 @@ steps_list:
     - step: "base_link"
       arm: *ARM_FOLD_LOWER
       gimbal: *GIMBAL_FORWARD_LOWER
+
+  #################### GRASP_BARRIER ####################
+  GRASP_BARRIER_PRE:
+    - step: "above"
+      arm:
+        frame: base_link
+        position: [ 0.42, 0., 0.20 ]
+        rpy: [ 0., 1.5707, 0. ]
+        <<: *SLOWLY
+        tolerance_linear: 0.001
+      hand: *HAND_OPEN
+      gimbal:
+        frame: base_link
+        position: [ 0.42, 0., 0.13 ]
+  GRASP_BARRIER_PROC:
+    - step: "approach"
+      arm:
+        frame: base_link
+        position: [ 0.42, 0., 0.135 ]
+        rpy: [ 0., 1.5707, 0. ]
+        <<: *SLOWLY
+        tolerance_linear: 0.001
+    - step: "hand_close"
+      hand: *HAND_STONE
+    - step: "lift"
+      arm:
+        joints: [ 0., -1.735, 0.475, 1.173, 0.0 ]
+        <<: *SLOWLY
+        tolerance_angular: 0.1
+    - step: "turn"
+      arm:
+        joints: [ -1.638, -1.72, 0.503, 1.1965, 0.80 ]
+        <<: *SLOWLY
+        tolerance_angular: 0.1
+  GRASP_BARRIER_AFTER:
+    - step: "lift"
+      arm:
+        joints: [ -1.638, -1.72, 0.503, 1.1965, -1.57 ]
+        <<: *SLOWLY
+        tolerance_angular: 0.1
+  #################### GRASP_SMALL ####################
   GRASP_SMALL:
     - step: "hand_open"
       hand: *HAND_OPEN
