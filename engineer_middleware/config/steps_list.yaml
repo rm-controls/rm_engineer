@@ -88,6 +88,7 @@ steps_list:
         position: [ 1.0, -0.22, 0.8 ]
   RECOVER:
     - step: "fold"
+      hand: *HAND_OPEN
       arm:
         joints: [ 0., -2.2601, 1.4121, 0.9596, 0.0 ]
         <<: *SLOWLY
@@ -336,6 +337,13 @@ steps_list:
         tolerance_linear: 0.001
     - step: "hand_close"
       hand: *HAND_STONE
+    - step: "backward"
+      chassis:
+        frame: base_link
+        position: [ -0.3, 0. ]
+        yaw: 0.0
+        tolerance_linear: 0.1
+        tolerance_angular: 0.01
     - step: "lift"
       arm:
         joints: [ 0., -1.735, 0.475, 1.173, 0.0 ]
@@ -349,8 +357,10 @@ steps_list:
   GRASP_BARRIER_AFTER:
     - step: "lift"
       arm:
-        joints: [ -1.638, -1.72, 0.503, 1.1965, -1.57 ]
-        <<: *SLOWLY
+        joints: [ -1.638, -1.72, 0.503, 1.1965, -1.5 ]
+        speed: 0.1
+        accel: 0.1
+        timeout: 3.
         tolerance_angular: 0.1
   #################### GRASP_SMALL ####################
   GRASP_SMALL:
