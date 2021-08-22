@@ -13,6 +13,7 @@
     <build_depend>roslint</build_depend>
     <!-- depend: build, export, and execution dependency -->
     <depend>roscpp</depend>
+    <depend>rm_msgs</depend>
     <depend>rm_common</depend>
     <depend>std_msgs</depend>
     <depend>actionlib</depend>

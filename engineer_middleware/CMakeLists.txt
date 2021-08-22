@@ -14,6 +14,7 @@ find_package(catkin REQUIRED
         COMPONENTS
         roscpp
         roslint
+        rm_msgs
         rm_common
         std_msgs
         control_toolbox
@@ -41,6 +42,7 @@ catkin_package(
         LIBRARIES
         CATKIN_DEPENDS
         roscpp
+        rm_msgs
         rm_common
         std_msgs
         control_toolbox
