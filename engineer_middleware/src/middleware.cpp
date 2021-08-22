@@ -7,7 +7,7 @@
 namespace engineer_middleware {
 Middleware::Middleware(ros::NodeHandle &nh) :
     nh_(nh),
-    as_(nh_, "move_arm", [this](auto &&PH1) { executeCB(std::forward<decltype(PH1)>(PH1)); }, false),
+    as_(nh_, "move_steps", [this](auto &&PH1) { executeCB(std::forward<decltype(PH1)>(PH1)); }, false),
     arm_group_(moveit::planning_interface::MoveGroupInterface("engineer_arm")),
     chassis_interface_(nh, tf_),
     hand_pub_(nh.advertise<std_msgs::Float64>("/controllers/hand_controller/command", 10)),
