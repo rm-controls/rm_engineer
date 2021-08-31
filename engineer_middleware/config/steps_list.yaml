@@ -69,6 +69,7 @@ steps_list:
     - step: "home"
       arm:
         <<: *ARM_HOME
+
         <<: *SLOWLY
     - step: "fold_upper"
       arm: *ARM_FOLD_UPPER
