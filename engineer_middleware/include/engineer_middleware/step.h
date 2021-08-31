@@ -10,16 +10,19 @@
 #include <memory>
 #include <string>
 
-namespace engineer_middleware {
-
-class Step {
- public:
-  Step(const XmlRpc::XmlRpcValue &step, tf2_ros::Buffer &tf,
-       moveit::planning_interface::MoveGroupInterface &arm_group, ChassisInterface &chassis_interface,
-       ros::Publisher &hand_pub, ros::Publisher &card_pub, ros::Publisher &gimbal_pub) {
+namespace engineer_middleware
+{
+class Step
+{
+public:
+  Step(const XmlRpc::XmlRpcValue& step, tf2_ros::Buffer& tf, moveit::planning_interface::MoveGroupInterface& arm_group,
+       ChassisInterface& chassis_interface, ros::Publisher& hand_pub, ros::Publisher& card_pub,
+       ros::Publisher& gimbal_pub)
+  {
     ROS_ASSERT(step.hasMember("step"));
     step_name_ = static_cast<std::string>(step["step"]);
-    if (step.hasMember("arm")) {
+    if (step.hasMember("arm"))
+    {
       if (step["arm"].hasMember("joints"))
         arm_motion_ = new JointMotion(step["arm"], arm_group);
       else
@@ -34,47 +37,73 @@ class Step {
     if (step.hasMember("gimbal"))
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
   }
-  bool move() {
+  bool move()
+  {
     bool success = true;
-    if (arm_motion_) success &= arm_motion_->move();
-    if (hand_motion_) success &= hand_motion_->move();
-    if (card_motion_) success &= card_motion_->move();
-    if (chassis_motion_) success &= chassis_motion_->move();
-    if (gimbal_motion_) success &= gimbal_motion_->move();
+    if (arm_motion_)
+      success &= arm_motion_->move();
+    if (hand_motion_)
+      success &= hand_motion_->move();
+    if (card_motion_)
+      success &= card_motion_->move();
+    if (chassis_motion_)
+      success &= chassis_motion_->move();
+    if (gimbal_motion_)
+      success &= gimbal_motion_->move();
     return success;
   }
-  void stop() {
-    if (arm_motion_) arm_motion_->stop();
-    if (hand_motion_) hand_motion_->stop();
-    if (chassis_motion_) chassis_motion_->stop();
+  void stop()
+  {
+    if (arm_motion_)
+      arm_motion_->stop();
+    if (hand_motion_)
+      hand_motion_->stop();
+    if (chassis_motion_)
+      chassis_motion_->stop();
   }
-  bool isFinish() {
+  bool isFinish()
+  {
     bool success = true;
-    if (arm_motion_) success &= arm_motion_->isFinish();
-    if (hand_motion_) success &= hand_motion_->isFinish();
-    if (card_motion_) success &= card_motion_->isFinish();
-    if (chassis_motion_) success &= chassis_motion_->isFinish();
-    if (gimbal_motion_) success &= gimbal_motion_->isFinish();
+    if (arm_motion_)
+      success &= arm_motion_->isFinish();
+    if (hand_motion_)
+      success &= hand_motion_->isFinish();
+    if (card_motion_)
+      success &= card_motion_->isFinish();
+    if (chassis_motion_)
+      success &= chassis_motion_->isFinish();
+    if (gimbal_motion_)
+      success &= gimbal_motion_->isFinish();
     return success;
   }
-  bool checkTimeout(ros::Duration period) {
+  bool checkTimeout(ros::Duration period)
+  {
     bool success = true;
-    if (arm_motion_) success &= arm_motion_->checkTimeout(period);
-    if (hand_motion_) success &= hand_motion_->checkTimeout(period);
-    if (card_motion_) success &= card_motion_->checkTimeout(period);
-    if (chassis_motion_) success &= chassis_motion_->checkTimeout(period);
-    if (gimbal_motion_) success &= gimbal_motion_->checkTimeout(period);
+    if (arm_motion_)
+      success &= arm_motion_->checkTimeout(period);
+    if (hand_motion_)
+      success &= hand_motion_->checkTimeout(period);
+    if (card_motion_)
+      success &= card_motion_->checkTimeout(period);
+    if (chassis_motion_)
+      success &= chassis_motion_->checkTimeout(period);
+    if (gimbal_motion_)
+      success &= gimbal_motion_->checkTimeout(period);
     return success;
   }
-  std::string getName() { return step_name_; }
- private:
+  std::string getName()
+  {
+    return step_name_;
+  }
+
+private:
   std::string step_name_;
-  MoveitMotionBase *arm_motion_{};
-  HandMotion *hand_motion_{};
-  JointPositionMotion *card_motion_{};
-  ChassisMotion *chassis_motion_{};
-  GimbalMotion *gimbal_motion_{};
+  MoveitMotionBase* arm_motion_{};
+  HandMotion* hand_motion_{};
+  JointPositionMotion* card_motion_{};
+  ChassisMotion* chassis_motion_{};
+  GimbalMotion* gimbal_motion_{};
 };
 
-} /* namespace */
-#endif // ENGINEER_MIDDLEWARE_STEP_H_
+}  // namespace engineer_middleware
+#endif  // ENGINEER_MIDDLEWARE_STEP_H_

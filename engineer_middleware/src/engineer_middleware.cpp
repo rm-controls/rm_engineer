@@ -5,7 +5,8 @@
 
 #include "engineer_middleware/middleware.h"
 using namespace engineer_middleware;
-int main(int argc, char **argv) {
+int main(int argc, char** argv)
+{
   ros::init(argc, argv, "engineer_middleware");
   ros::NodeHandle nh("~");
   Middleware middleware(nh);
@@ -13,7 +14,8 @@ int main(int argc, char **argv) {
   spinner.start();
   ros::Time last = ros::Time::now();
   ros::Rate loop_rate(100);
-  while (ros::ok()) {
+  while (ros::ok())
+  {
     middleware.run(ros::Time::now() - last);
     last = ros::Time::now();
     loop_rate.sleep();

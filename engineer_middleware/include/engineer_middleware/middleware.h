@@ -7,17 +7,20 @@
 
 #include "engineer_middleware/step_queue.h"
 
-//ROS
+// ROS
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
 #include <controller_manager_msgs/SwitchController.h>
 #include <rm_msgs/EngineerAction.h>
 
-namespace engineer_middleware {
-class Middleware {
- public:
-  explicit Middleware(ros::NodeHandle &nh);
-  void executeCB(const actionlib::SimpleActionServer<rm_msgs::EngineerAction>::GoalConstPtr &goal) {
+namespace engineer_middleware
+{
+class Middleware
+{
+public:
+  explicit Middleware(ros::NodeHandle& nh);
+  void executeCB(const actionlib::SimpleActionServer<rm_msgs::EngineerAction>::GoalConstPtr& goal)
+  {
     std::string name;
     name = goal->step_queue_name;
     is_middleware_control_ = true;
@@ -28,11 +31,13 @@ class Middleware {
     ROS_INFO("Finish step queue id %s", name.c_str());
     is_middleware_control_ = false;
   }
-  void run(ros::Duration period) {
+  void run(ros::Duration period)
+  {
     if (is_middleware_control_)
       chassis_interface_.run(period);
   }
- private:
+
+private:
   ros::NodeHandle nh_;
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> as_;
   moveit::planning_interface::MoveGroupInterface arm_group_;
@@ -44,6 +49,6 @@ class Middleware {
   bool is_middleware_control_;
 };
 
-}
+}  // namespace engineer_middleware
 
-#endif //SRC_RM_SOFTWARE_RM_ENGINEER_ENGINEER_MIDDLEWARE_INCLUDE_ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
+#endif  // SRC_RM_SOFTWARE_RM_ENGINEER_ENGINEER_MIDDLEWARE_INCLUDE_ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
