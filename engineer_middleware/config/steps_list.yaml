@@ -2,7 +2,7 @@ steps_list:
   TEST_JOINT:
     - step: "lift"
       arm:
-        joints: [ 4.002, -0.069, 0.253, 0.106, -3.9672 ,-0.348 ,1.7748]
+        joints: [1.36,-0.091,-0.244,-0.066,-0.3132,-1.5486]
         speed: 1.1
         accel: 1.1
         timeout: 30.
