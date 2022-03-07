@@ -6,8 +6,8 @@ robot_name=engineer
 planning_group_name=arm
 ikfast_plugin_pkg=engineer_arm_ikfast_plugin
 base_link_name=base_link
-eef_link_name=link5
-ikfast_output_path=/home/ljq/rm_ws/src/rm_software/rm_engineer/engineer_arm_ikfast_plugin/src/engineer_arm_ikfast_solver.cpp
+eef_link_name=link6
+ikfast_output_path=/home/ljq/123/rm_ws/src/rm_software/rm_engineer/engineer_arm_ikfast_plugin/src/engineer_arm_ikfast_solver.cpp
 
 rosrun moveit_kinematics create_ikfast_moveit_plugin.py\
   --search_mode=$search_mode\
