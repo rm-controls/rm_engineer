@@ -1,0 +1,59 @@
+# Simulation settings for using moveit_sim_controllers
+moveit_sim_hw_interface:
+  joint_model_group: engineer_arm
+  joint_model_group_pose: home
+# Settings for ros_control_boilerplate control loop
+generic_hw_control_loop:
+  loop_hz: 300
+  cycle_time_error_threshold: 0.01
+# Settings for ros_control hardware interface
+hardware_interface:
+  joints:
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
+    - joint6
+    - joint7
+  sim_control_mode: 1  # 0: position, 1: velocity
+
+controller_list:
+  - name: controllers/arm_trajectory_controller
+    action_ns: follow_joint_trajectory
+    default: True
+    type: FollowJointTrajectory
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+      - joint7
+
+controllers:
+  robot_state_controller:
+    type: robot_state_controller/RobotStateController
+    publish_rate: 50
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+  arm_trajectory_controller:
+    type: effort_controllers/JointTrajectoryController
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+      - joint7
+    gains:
+      joint1: { p: 300, i: 0.0, d: 10, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: true }
+      joint2: { p: 1000.0, i: 10, d: 10.0, i_clamp_max: 15, i_clamp_min: -15, antiwindup: true, publish_state: true }
+      joint3: { p: 700, i: 2, d: 6, i_clamp_max: 0.2, i_clamp_min: -0.2, antiwindup: true, publish_state: true }
+      joint4: { p: 105.0, i: 5.0, d: 6.5, i_clamp_max: 5, i_clamp_min: -5, antiwindup: true, publish_state: true }
+      joint5: { p: 100, i: 0.0, d: 5, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: true }
+      joint6: { p: 100, i: 0.0, d: 5, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: true }
+      joint7: { p: 100, i: 0.0, d: 5, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: true }
