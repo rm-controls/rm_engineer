@@ -303,13 +303,9 @@ public:
     : PublishMotion<rm_msgs::GimbalCmd>(motion, interface)
   {
     if (motion.hasMember("frame"))
-      msg_.aim_point.header.frame_id = std::string(motion["frame"]);
     if (motion.hasMember("position"))
     {
       ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      msg_.aim_point.point.x = xmlRpcGetDouble(motion["position"], 0);
-      msg_.aim_point.point.y = xmlRpcGetDouble(motion["position"], 1);
-      msg_.aim_point.point.z = xmlRpcGetDouble(motion["position"], 2);
     }
     msg_.mode = msg_.DIRECT;
   }
