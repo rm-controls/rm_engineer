@@ -162,7 +162,7 @@ class IKFastKinematicsPlugin : public kinematics::KinematicsBase
 
   // The ikfast and base frame are the start and end of the kinematic chain for which the
   // IKFast analytic solution was generated.
-  const std::string IKFAST_TIP_FRAME_ = "link5";
+  const std::string IKFAST_TIP_FRAME_ = "link6";
   const std::string IKFAST_BASE_FRAME_ = "base_link";
 
   // prefix added to tip- and baseframe to allow different namespaces or multi-robot setups
@@ -376,7 +376,7 @@ bool IKFastKinematicsPlugin::computeRelativeTransform(const std::string& from, c
                                                       Eigen::Isometry3d& transform, bool& differs_from_identity)
 {
   RobotStatePtr robot_state;
-  robot_state.reset(new RobotState(robot_model_));
+  robot_state = std::make_shared<RobotState>(robot_model_);
   robot_state->setToDefaultValues();
 
   bool has_link;  // to suppress ROS_ERRORs for non-existent frames
