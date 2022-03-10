@@ -6,9 +6,8 @@ controller_list:
       - joint3
       - joint4
       - joint5
-  - name: fake_hand_controller
-    joints:
-      - right_finger_joint
+      - joint6
+      - joint7
 initial: # Define initial robot poses.
   - group: engineer_arm
     pose: home
