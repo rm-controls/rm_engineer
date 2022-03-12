@@ -30,7 +30,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
- 
+
 //
 // Created by qiayuan on 5/29/21.
 //
@@ -303,10 +303,10 @@ public:
     : PublishMotion<rm_msgs::GimbalCmd>(motion, interface)
   {
     if (motion.hasMember("frame"))
-    if (motion.hasMember("position"))
-    {
-      ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-    }
+      if (motion.hasMember("position"))
+      {
+        ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      }
     msg_.mode = msg_.DIRECT;
   }
 };
