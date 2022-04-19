@@ -3,8 +3,7 @@
     <!-- By default, we are not load controllers -->
     <arg name="spawn_controllers" default="true"/>
 
-    <rosparam file="$(find rm_chassis_controllers)/config/engineer.yaml" command="load"/>
-    <rosparam file="$(find rm_gimbal_controllers)/config/engineer.yaml" command="load"/>
+    <rosparam file="$(find rm_config)/config/rm_controllers/engineer.yaml" command="load"/>
 
     <!-- Load joint controller configurations from YAML file to parameter server -->
     <rosparam file="$(find engineer_arm_config)/config/ros_controllers.yaml" command="load"/>
