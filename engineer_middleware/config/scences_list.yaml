@@ -1,1 +1,18 @@
 scences_list:
+  Island:
+    - id: "big"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.5, 0.1, 0.48 ]
+      pose:
+        position: [0, 0, 0]
+        orientation: [0., 0., 0., 0.]
+    - id: "another big"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.5, 0.1, 0.48 ]
+      pose:
+        position: [0, 0, 0]
+        orientation: [0., 0., 0., 0.]
