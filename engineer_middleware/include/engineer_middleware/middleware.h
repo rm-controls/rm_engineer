@@ -39,6 +39,7 @@
 #define ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
 
 #include "engineer_middleware/step_queue.h"
+#include "engineer_middleware/planning_scence.h"
 
 // ROS
 #include <ros/ros.h>
