@@ -93,6 +93,7 @@ public:
           as.setPreempted();
           return false;
         }
+				queue_[i].deleteScence();
         feedback.finished_step = i;
         feedback.current_step = queue_[i].getName();
         as.publishFeedback(feedback);

@@ -65,7 +65,7 @@ public:
 
 		void Add()
 		{
-			for(int i = 0; i < collision_objects.size();i++)
+			for(long unsigned int i = 0; i < collision_objects.size();i++)
 			{
 				collision_objects[i].operation = collision_objects[i].ADD;
 			}
