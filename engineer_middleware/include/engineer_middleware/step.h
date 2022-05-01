@@ -37,6 +37,7 @@
 #pragma once
 
 #include "engineer_middleware/motion.h"
+#include "engineer_middleware/planning_scence.h"
 #include <string>
 #include <unordered_map>
 #include <iostream>
@@ -73,7 +74,10 @@ public:
 		{
 			for(int i = 0;i < scences.size();i++)
 			{
-				if(step["scence"]["namse"] == scen)
+				if(step["scence"]["names"] == scences[i]["name"])
+				{
+					planning_scence_ = new PlanningScence(scences[i]);
+				}
 			}
 		}
 	}
@@ -90,6 +94,8 @@ public:
       success &= chassis_motion_->move();
     if (gimbal_motion_)
       success &= gimbal_motion_->move();
+		if(planning_scence_)
+			planning_scence_->Add();
     return success;
   }
   void stop()
@@ -100,7 +106,14 @@ public:
       hand_motion_->stop();
     if (chassis_motion_)
       chassis_motion_->stop();
+		if(planning_scence_)
+			planning_scence_->Delete();
   }
+	void deleteScence()
+	{
+		if(planning_scence_)
+			planning_scence_->Delete();
+	}
   bool isFinish()
   {
     bool success = true;
@@ -143,6 +156,7 @@ private:
   JointPositionMotion* card_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
+	PlanningScence* planning_scence_{};
 };
 
 }  // namespace engineer_middleware
