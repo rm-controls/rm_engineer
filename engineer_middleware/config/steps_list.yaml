@@ -3,10 +3,6 @@ steps_list:
     - step: "add_island"
       scence:
         name: "Island"
-        operation: "add"
-    - step: "add_island"
-      scence:
-        name: "Island"
-        operation: "add"
+
 
 
