@@ -15,13 +15,20 @@
                 controllers/robot_state_controller
                 controllers/joint_state_controller
                 controllers/arm_trajectory_controller
+                controllers/joint1_mime_controller
+                controllers/joint2_mime_controller
+                controllers/joint3_mime_controller
                 controllers/joint1_calibration_controller
+                controllers/joint1_mime_calibration_controller
                 controllers/joint2_calibration_controller
+                controllers/joint2_mime_calibration_controller
                 controllers/joint3_calibration_controller
+                controllers/joint3_mime_calibration_controller
                 controllers/joint4_calibration_controller
                 controllers/joint5_calibration_controller
                 controllers/joint6_calibration_controller
-                controllers/joint7_calibration_controller"
+                controllers/joint7_calibration_controller
+                "
     />
 
 </launch>
