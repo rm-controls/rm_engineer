@@ -4,15 +4,7 @@ scences_list:
       frame_id: "base_link"
       primitive:
         type: box
-        dimension: [ 1.5, 1.1, 1.48 ]
+        dimension: [ 0.1, 0.3, 0.1 ]
       pose:
-        position: [0., 0., 0.]
-        orientation: [0., 0., 0., 0.]
-    - id: "big1"
-      frame_id: "base_link"
-      primitive:
-        type: box
-        dimension: [ 1.5, 1.1, 1.48 ]
-      pose:
-        position: [2.4, 0.4, 0.4]
+        position: [ 0., 0., 0.5 ]
         orientation: [0., 0., 0., 0.]

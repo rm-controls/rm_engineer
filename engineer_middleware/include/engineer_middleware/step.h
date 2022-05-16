@@ -72,10 +72,10 @@ public:
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
     if (step.hasMember("scence"))
     {
-      for (int i = 0; i < scences.size(); i++)
+      for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scences.begin(); it != scences.end(); ++it)
       {
-        if (step["scence"]["names"] == scences[i]["name"])
-          planning_scence_ = new PlanningScence(scences[i]);
+        if (step["scence"]["name"] == it->first)
+          planning_scence_ = new PlanningScence(it->second);
       }
     }
   }
@@ -109,8 +109,13 @@ public:
   }
   void deleteScence()
   {
+    std::cout << "1" << std::endl;
+
     if (planning_scence_)
+    {
       planning_scence_->Delete();
+      std::cout << "1" << std::endl;
+    }
   }
   bool isFinish()
   {
