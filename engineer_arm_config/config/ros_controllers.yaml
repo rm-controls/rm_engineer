@@ -60,7 +60,7 @@ controllers:
   card_controller:
     type: effort_controllers/JointPositionController
     joint: card_joint
-    pid: { p: 50000.0, i: 0.0, d: 1000.0 }
+    pid: { p: 1000.0, i: 0.0, d: 20.0 }
   drag_controller:
     type: effort_controllers/JointPositionController
     joint: drag_joint
