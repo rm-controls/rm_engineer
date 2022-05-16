@@ -78,3 +78,11 @@ steps_list:
         joints: [ 0., -0.2, -0.12, 0., 0.,0.,0. ]
         <<: *SLOWLY
         tolerance_angular: 0.5
+  TEST3:
+    - step: "test card"
+      card:
+        target: 6.28
+  TEST4:
+    - step: "test drag"
+      drag:
+        target: 6.28
