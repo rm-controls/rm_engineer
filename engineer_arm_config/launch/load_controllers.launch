@@ -2,7 +2,7 @@
 <launch>
     <!-- By default, we are not load controllers -->
     <arg name="spawn_controllers" default="true"/>
-    <arg name="simulation" default="true"/>
+    <arg name="simulation" default="false"/>
 
     <rosparam file="$(find rm_config)/config/rm_controllers/engineer.yaml" command="load"/>
 
@@ -44,6 +44,8 @@
                 controllers/joint5_calibration_controller
                 controllers/joint6_calibration_controller
                 controllers/joint7_calibration_controller
+                controllers/card_calibration_controller
+                controllers/drag_calibration_controller
                 "
     />
 </launch>
