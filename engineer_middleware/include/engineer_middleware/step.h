@@ -51,7 +51,7 @@ class Step
 public:
   Step(const XmlRpc::XmlRpcValue& step, tf2_ros::Buffer& tf, moveit::planning_interface::MoveGroupInterface& arm_group,
        ChassisInterface& chassis_interface, ros::Publisher& hand_pub, ros::Publisher& card_pub,
-       ros::Publisher& gimbal_pub, const XmlRpc::XmlRpcValue& scences)
+       ros::Publisher& drag_pub, ros::Publisher& gimbal_pub, const XmlRpc::XmlRpcValue& scences)
   {
     ROS_ASSERT(step.hasMember("step"));
     step_name_ = static_cast<std::string>(step["step"]);
@@ -68,6 +68,8 @@ public:
       hand_motion_ = new HandMotion(step["hand"], hand_pub);
     if (step.hasMember("card"))
       card_motion_ = new JointPositionMotion(step["card"], card_pub);
+    if (step.hasMember("drag"))
+      card_motion_ = new JointPositionMotion(step["drag"], drag_pub);
     if (step.hasMember("gimbal"))
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
     if (step.hasMember("scence"))
@@ -88,6 +90,8 @@ public:
       success &= hand_motion_->move();
     if (card_motion_)
       success &= card_motion_->move();
+    if (drag_motion_)
+      success &= drag_motion_->move();
     if (chassis_motion_)
       success &= chassis_motion_->move();
     if (gimbal_motion_)
@@ -121,6 +125,8 @@ public:
       success &= hand_motion_->isFinish();
     if (card_motion_)
       success &= card_motion_->isFinish();
+    if (drag_motion_)
+      success &= drag_motion_->isFinish();
     if (chassis_motion_)
       success &= chassis_motion_->isFinish();
     if (gimbal_motion_)
@@ -136,6 +142,8 @@ public:
       success &= hand_motion_->checkTimeout(period);
     if (card_motion_)
       success &= card_motion_->checkTimeout(period);
+    if (drag_motion_)
+      success &= drag_motion_->checkTimeout(period);
     if (chassis_motion_)
       success &= chassis_motion_->checkTimeout(period);
     if (gimbal_motion_)
@@ -153,6 +161,7 @@ private:
   MoveitMotionBase* arm_motion_{};
   HandMotion* hand_motion_{};
   JointPositionMotion* card_motion_{};
+  JointPositionMotion* drag_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
   PlanningScence* planning_scence_{};
