@@ -10,11 +10,30 @@
     <rosparam file="$(find engineer_arm_config)/config/ros_controllers.yaml" command="load"/>
 
     <!-- Load the controllers -->
-    <node name="controller_loader" pkg="controller_manager" type="controller_manager" output="screen"
+    <node if="$(arg simulation)" name="controller_loader" pkg="controller_manager" type="controller_manager"
+          output="screen"
           args="load
                 controllers/robot_state_controller
                 controllers/joint_state_controller
                 controllers/arm_trajectory_controller
+                controllers/chassis_controller
+                controllers/card_controller
+                controllers/drag_controller
+                controllers/joint1_mime_controller
+                controllers/joint2_mime_controller
+                controllers/joint3_mime_controller
+                "
+    />
+
+    <node unless="$(arg simulation)" name="controller_loader" pkg="controller_manager" type="controller_manager"
+          output="screen"
+          args="load
+                controllers/robot_state_controller
+                controllers/joint_state_controller
+                controllers/arm_trajectory_controller
+                controllers/chassis_controller
+                controllers/card_controller
+                controllers/drag_controller
                 controllers/joint1_mime_controller
                 controllers/joint2_mime_controller
                 controllers/joint3_mime_controller
@@ -30,5 +49,5 @@
                 controllers/joint7_calibration_controller
                 "
     />
-
 </launch>
+
