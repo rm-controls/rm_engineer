@@ -109,13 +109,8 @@ public:
   }
   void deleteScence()
   {
-    std::cout << "1" << std::endl;
-
     if (planning_scence_)
-    {
       planning_scence_->Delete();
-      std::cout << "1" << std::endl;
-    }
   }
   bool isFinish()
   {

@@ -111,7 +111,7 @@ public:
   }
   void deleteScence()
   {
-    queue_[0].deleteScence();
+    queue_.begin()->deleteScence();
   }
   const std::deque<Step>& getQueue() const
   {
