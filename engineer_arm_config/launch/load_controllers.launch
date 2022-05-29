@@ -3,7 +3,6 @@
     <!-- By default, we are not load controllers -->
     <arg name="spawn_controllers" default="true"/>
 
-    <rosparam file="$(find rm_chassis_controllers)/config/engineer.yaml" command="load"/>
     <rosparam file="$(find rm_gimbal_controllers)/config/engineer.yaml" command="load"/>
 
     <!-- Load joint controller configurations from YAML file to parameter server -->
@@ -14,10 +13,7 @@
           respawn="false" output="screen" args="
           controllers/robot_state_controller
           controllers/joint_state_controller
-          controllers/chassis_controller
-          controllers/arm_trajectory_controller
-          controllers/hand_controller
-          controllers/card_controller"
+          controllers/arm_trajectory_controller"
     />
 
 </launch>
