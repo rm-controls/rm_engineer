@@ -20,7 +20,7 @@ public:
       collision_object.id = std::string(scence[i]["id"]);
       collision_object.primitives.push_back(Primitive(scence[i]["primitive"]));
       collision_object.primitive_poses.push_back(Pose(scence[i]["pose"]));
-      collision_objects.push_back(collision_object);
+      collision_objects_.push_back(collision_object);
     }
   };
 
@@ -74,13 +74,13 @@ public:
 
   void Add()
   {
-    for (long unsigned int i = 0; i < collision_objects.size(); i++)
-      collision_objects[i].operation = collision_objects[i].ADD;
-    planning_scene_interface.addCollisionObjects(collision_objects);
+    for (long unsigned int i = 0; i < collision_objects_.size(); i++)
+      collision_objects_[i].operation = collision_objects_[i].ADD;
+    planning_scene_interface_.addCollisionObjects(collision_objects_);
   }
 
-  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
-  std::vector<moveit_msgs::CollisionObject> collision_objects;
+  moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
+  std::vector<moveit_msgs::CollisionObject> collision_objects_;
 };
 
 }  // namespace engineer_middleware
