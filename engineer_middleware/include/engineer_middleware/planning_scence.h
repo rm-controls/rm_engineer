@@ -18,10 +18,9 @@ public:
       moveit_msgs::CollisionObject collision_object;
       collision_object.header.frame_id = std::string(scence[i]["frame_id"]);
       collision_object.id = std::string(scence[i]["id"]);
-      collision_object.primitives.push_back(Primitive(scence[i]["primitive"]);
+      collision_object.primitives.push_back(Primitive(scence[i]["primitive"]));
       collision_object.primitive_poses.push_back(Pose(scence[i]["pose"]));
       collision_objects.push_back(collision_object);
-      object_ids.push_back(collision_object.id);
     }
   };
 
@@ -39,21 +38,21 @@ public:
     if (std::string(xmlRpc["type"]) == "cone")
     {
       primitive.type = primitive.CONE;
-      primitive.dimensions.resize(3);
+      primitive.dimensions.resize(2);
       primitive.dimensions[primitive.CONE_HEIGHT] = xmlRpc["dimension"][0];
       primitive.dimensions[primitive.CONE_RADIUS] = xmlRpc["dimension"][1];
     }
     if (std::string(xmlRpc["type"]) == "cylinder")
     {
       primitive.type = primitive.CYLINDER;
-      primitive.dimensions.resize(3);
+      primitive.dimensions.resize(2);
       primitive.dimensions[primitive.CYLINDER_HEIGHT] = xmlRpc["dimension"][0];
       primitive.dimensions[primitive.CYLINDER_RADIUS] = xmlRpc["dimension"][1];
     }
     if (std::string(xmlRpc["type"]) == "sphere")
     {
       primitive.type = primitive.SPHERE;
-      primitive.dimensions.resize(3);
+      primitive.dimensions.resize(1);
       primitive.dimensions[primitive.SPHERE_RADIUS] = xmlRpc["dimension"][0];
     }
     return primitive;
@@ -80,12 +79,6 @@ public:
     planning_scene_interface.addCollisionObjects(collision_objects);
   }
 
-  void Delete()
-  {
-    planning_scene_interface.removeCollisionObjects(object_ids);
-  }
-
-  std::vector<std::string> object_ids;
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
   std::vector<moveit_msgs::CollisionObject> collision_objects;
 };

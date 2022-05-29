@@ -64,6 +64,9 @@ public:
     {
       queue_.emplace_back(steps[i], tf, arm_group, chassis_interface, hand_pub, card_pub, drag_pub, gimbal_pub, scences);
     }
+    for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scences.begin(); it != scences.end(); ++it)
+      for (int i = 0; i < it->second.size(); i++)
+        object_ids_.push_back(it->second[i]["id"]);
   }
   bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as)
   {
@@ -106,12 +109,13 @@ public:
       ROS_INFO("Finish step: %s", queue_[i].getName().c_str());
     }
     result.finish = true;
+    deleteScence();
     as.setSucceeded(result);
     return true;
   }
   void deleteScence()
   {
-    queue_.begin()->deleteScence();
+    queue_.begin()->deleteScence(object_ids_);
   }
   const std::deque<Step>& getQueue() const
   {
@@ -124,6 +128,7 @@ public:
 
 private:
   std::deque<Step> queue_;
+  std::vector<std::string> object_ids_;
   ChassisInterface& chassis_interface_;
 };
 }  // namespace engineer_middleware
