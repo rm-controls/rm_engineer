@@ -1,8 +1,8 @@
 common:
   slowly: &SLOWLY
-    speed: 0.2
-    accel: 0.2
-    timeout: 5.
+    speed: 0.0005
+    accel: 0.0005
+    timeout: 0.1
   quickly: &QUICKLY
     speed: 1.0
     accel: 1.0
@@ -50,14 +50,61 @@ common:
       position: [ 0.64, 0., 0.5 ]
 
 steps_list:
-  TEST:
+  TEST_BOX:
     - step: "add_island"
       scence:
-        name: "Island"
-  TEST_JOINT:
-    - step: "add_island1"
+        name: "TEST_BOX"
+    - step: "pull_up1"
+      arm:
+        joints: [ 0., 0.2, 0.155, 0., 0.,0.,0. ]
+        <<: *SLOWLY
+        tolerance_angular: 0.5
+  TEST_CONE:
+    - step: "pull_up"
+      arm:
+        joints: [ 0., 0., 0., 0., 0.,0.,0. ]
+        <<: *SLOWLY
+        tolerance_angular: 0.5
+    - step: "add_island"
       scence:
-        name: "Island"
+        name: "TEST_CONE"
+    - step: "pull_up1"
+      arm:
+        joints: [ 0., 0.2, 0.155, 0., 0.,0.,0. ]
+        <<: *SLOWLY
+        tolerance_angular: 0.5
+  TEST_CYLINDER:
+    - step: "pull_up"
+      arm:
+        joints: [ 0., 0., 0., 0., 0.,0.,0. ]
+        <<: *SLOWLY
+        tolerance_angular: 0.5
+    - step: "add_island"
+      scence:
+        name: "TEST_CYLINDER"
+    - step: "pull_up1"
+      arm:
+        joints: [ 0., 0.2, 0.155, 0., 0.,0.,0. ]
+        <<: *SLOWLY
+        tolerance_angular: 0.5
+  TEST_SPHERE:
+    - step: "pull_up"
+      arm:
+        joints: [ 0., 0., 0., 0., 0.,0.,0. ]
+        <<: *SLOWLY
+        tolerance_angular: 0.5
+    - step: "add_island"
+      scence:
+        name: "TEST_SPHERE"
+    - step: "pull_up1"
+      arm:
+        joints: [ 0., 0.2, 0.155, 0., 0.,0.,0. ]
+        <<: *SLOWLY
+        tolerance_angular: 0.5
+  TEST_JOINT:
+    - step: "TEST_JOINT"
+      scence:
+        name: "TEST_JOINT"
     - step: "pull_up"
       arm:
         joints: [ 0., 0., 0., 0., 0.,0.,0. ]
@@ -86,3 +133,39 @@ steps_list:
     - step: "test drag"
       drag:
         target: 6.28
+  TEST5:
+    - step: "add_island1"
+      scence:
+        name: "Island"
+  ARM_TEST1:
+    - step: "home"
+      arm:
+        joints: [ 0.0, 0.0 ,0.0 ,0.0 ,0.0 ,0.0, 0.0 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.5
+    - step: "grasp1"
+      arm:
+        joints: [ 0.276, -0.190 ,0.10 ,0.0 ,-90 ,0.0, 0.0 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.5
+    - step: "grasp2"
+      arm:
+        joints: [ 0.276, -0.190 ,0.10 ,0.0 ,-90 ,0.0, 0.0 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.5
+    - step: "grasp1"
+      arm:
+        joints: [ 0.276, -0.26 ,-0.222 ,0.0 ,-90 ,0.0, -3.14 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.5
+  ARM_TEST2:
+    - step: "grasp1"
+      arm:
+        joints: [ 0.276, -0.26 ,-0.222 ,0.0 ,-30 ,0.0, -3.14 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.5
+    - step: "home"
+      arm:
+        joints: [ 0.0, 0.0 ,0.0 ,0.0 ,0.0 ,0.0, 0.0 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.5
