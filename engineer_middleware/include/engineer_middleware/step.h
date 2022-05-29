@@ -111,7 +111,7 @@ public:
   void deleteScence(std::vector<std::string> object_id)
   {
     if (object_id.size() > 0)
-      planning_scene_interface.removeCollisionObjects(object_id);
+      planning_scene_interface_.removeCollisionObjects(object_id);
   }
   bool isFinish()
   {
@@ -162,7 +162,7 @@ private:
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
   PlanningScence* planning_scence_{};
-  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+  moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
 };
 
 }  // namespace engineer_middleware
