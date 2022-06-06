@@ -30,7 +30,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
- 
+
 //
 // Created by astro on 2021/4/25.
 //
@@ -39,6 +39,7 @@
 #define ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
 
 #include "engineer_middleware/step_queue.h"
+#include "engineer_middleware/planning_scene.h"
 
 // ROS
 #include <ros/ros.h>

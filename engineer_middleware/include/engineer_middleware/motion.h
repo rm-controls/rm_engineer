@@ -30,7 +30,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
- 
+
 //
 // Created by qiayuan on 5/29/21.
 //
@@ -303,13 +303,13 @@ public:
     : PublishMotion<rm_msgs::GimbalCmd>(motion, interface)
   {
     if (motion.hasMember("frame"))
-      msg_.aim_point.header.frame_id = std::string(motion["frame"]);
+      msg_.target_pos.header.frame_id = std::string(motion["frame"]);
     if (motion.hasMember("position"))
     {
       ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      msg_.aim_point.point.x = xmlRpcGetDouble(motion["position"], 0);
-      msg_.aim_point.point.y = xmlRpcGetDouble(motion["position"], 1);
-      msg_.aim_point.point.z = xmlRpcGetDouble(motion["position"], 2);
+      msg_.target_pos.point.x = xmlRpcGetDouble(motion["position"], 0);
+      msg_.target_pos.point.y = xmlRpcGetDouble(motion["position"], 1);
+      msg_.target_pos.point.z = xmlRpcGetDouble(motion["position"], 2);
     }
     msg_.mode = msg_.DIRECT;
   }

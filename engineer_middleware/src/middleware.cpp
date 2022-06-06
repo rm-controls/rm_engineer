@@ -30,7 +30,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
- 
+
 //
 // Created by astro on 2021/4/25.
 //
@@ -51,15 +51,18 @@ Middleware::Middleware(ros::NodeHandle& nh)
   , tf_listener_(tf_)
   , is_middleware_control_(false)
 {
-  if (nh.hasParam("steps_list"))
+  if (nh.hasParam("steps_list") && nh.hasParam("scenes_list"))
   {
-    XmlRpc::XmlRpcValue xml_value;
-    nh.getParam("steps_list", xml_value);
-    ROS_ASSERT(xml_value.getType() == XmlRpc::XmlRpcValue::Type::TypeStruct);
-    for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = xml_value.begin(); it != xml_value.end(); ++it)
+    XmlRpc::XmlRpcValue steps_list;
+    XmlRpc::XmlRpcValue scenes_list;
+    nh.getParam("steps_list", steps_list);
+    nh.getParam("scenes_list", scenes_list);
+    ROS_ASSERT(steps_list.getType() == XmlRpc::XmlRpcValue::Type::TypeStruct);
+    ROS_ASSERT(scenes_list.getType() == XmlRpc::XmlRpcValue::Type::TypeStruct);
+    for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = steps_list.begin(); it != steps_list.end(); ++it)
     {
-      step_queues_.insert(std::make_pair(it->first, StepQueue(it->second, tf_, arm_group_, chassis_interface_,
-                                                              hand_pub_, card_pub_, gimbal_pub_)));
+      step_queues_.insert(std::make_pair(it->first, StepQueue(it->second, scenes_list, tf_, arm_group_,
+                                                              chassis_interface_, hand_pub_, card_pub_, gimbal_pub_)));
     }
   }
   else
