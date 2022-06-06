@@ -43,6 +43,12 @@
                 controllers/mimic_joint3_controller
                 controllers/yaw_calibration_controller
                 controllers/pitch_calibration_controller
+                controllers/card_calibration_controller
+                controllers/drag_calibration_controller
+                controllers/card_controller
+                controllers/drag_controller
+                controllers/gimbal_controller
+                controllers/chassis_controller
                 "
     />
 </launch>

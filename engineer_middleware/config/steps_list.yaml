@@ -4,9 +4,9 @@ common:
     accel: 0.4
     timeout: 5.
   quickly: &QUICKLY
-    speed: 1.0
-    accel: 1.0
-    timeout: 2.
+    speed: 1
+    accel: 1
+    timeout: 8
 
   gripper:
 arm:
@@ -46,35 +46,40 @@ steps_list:
       arm:
         joints: [ 0.245, 0.285, 0.177, 0, 1.75, 0, 0 ]
         <<: *QUICKLY
-        tolerance_angular: 0.08
+        tolerance_angular: 0.03
   GRASP_BIG_MID_PROC:
     - step: "open gripper"
     - step: "move to mid repeat"
       arm:
         joints: [ 0.245, 0.285, 0.177, 0, 1.75, 0, 0 ]
         <<: *QUICKLY
-        tolerance_angular: 0.08
+        tolerance_angular: 0.01
     - step: "forward to catch stone"
       arm:
         joints: [ 0.245, 0.285, 0.31, 0, 1.75, 0, 0 ]
         <<: *QUICKLY
-        tolerance_angular: 0.05
+        tolerance_angular: 0.01
     - step: "hold stone "
       arm:
         joints: [ 0.245, 0.285, 0.31, 0, 0.9, 0, 0 ]
         <<: *QUICKLY
-        tolerance_angular: 0.05
+        tolerance_angular: 0.01
     - step: "hold stone and back"
       arm:
         joints: [ 0.245, 0.285, 0.177, 0, 0.9, 0, 0 ]
         <<: *QUICKLY
-        tolerance_angular: 0.05
+        tolerance_angular: 0.01
   GRASP_BIG_MID_AFTER:
+    - step: "back home"
+      arm:
+        joints: [ 0.125, 0.085, 0.167, 0, 0.8352, 0, 0 ]
+        <<: *QUICKLY
+        tolerance_angular: 0.01
     - step: "back home"
       arm:
         joints: [ 0.02, 0.03, 0.112, 0, 0.8352, 0, 0 ]
         <<: *QUICKLY
-        tolerance_angular: 0.05
+        tolerance_angular: 0.01
   ###################    LF    ####################
   GRASP_BIG_LF_PRE:
     - step: "add scene"
@@ -114,11 +119,6 @@ steps_list:
     - step: "scence"
       scence:
         name: "BIG_STONE_ISLAND"
-    - step: "back home"
-      arm:
-        joints: [ 0.245, 0.285, 0.177, 0, 0.9, 0, 0 ]
-        <<: *SLOWLY
-        tolerance_angular: 0.05
     - step: "back home"
       arm:
         joints: [ 0.02, 0.03, 0.112, 0, 0.8352, 0, 0 ]
@@ -163,11 +163,6 @@ steps_list:
     - step: "scence"
       scence:
         name: "BIG_STONE_ISLAND"
-    - step: "hold stone and back"
-      arm:
-        joints: [ 0.245, 0.285, 0.177, 0, 0.9, 0, 0 ]
-        <<: *SLOWLY
-        tolerance_angular: 0.05
     - step: "back home"
       arm:
         joints: [ 0.02, 0.03, 0.112, 0, 0.8352, 0, 0 ]
@@ -181,7 +176,7 @@ steps_list:
         name: "EXCHANGE"
     - step: "back mid"
       arm:
-        joints: [ 0.245, 0.092, 0.177, 0, 1.044, 0, 3.14 ]
+        joints: [ 0.23, 0.092, 0.177, 0, 1.2876, 0, 0 ]
         <<: *SLOWLY
         tolerance_angular: 0.08
   EXCHANGE_PROC:
@@ -190,15 +185,30 @@ steps_list:
         name: "EXCHANGE"
     - step: "down stone"
       arm:
-        joints: [ 0.25, 0.092, 0.23, 0, 1.61, 0, 3.14 ]
+        joints: [ 0.23, 0.092, 0.18, 0, 1.2876, 0, 0 ]
         <<: *SLOWLY
-        tolerance_angular: 0.08
+        tolerance_angular: 0.04
     - step: "off gripper"
     - step: "push stone"
       arm:
-        joints: [ 0.25, 0.092, 0.31, 0, 1.61, 0, 3.14 ]
+        joints: [ 0.23, -0.03, 0.05, 0, 1.1, 0, 0 ]
         <<: *SLOWLY
-        tolerance_angular: 0.08
+        tolerance_angular: 0.02
+    - step: "push stone"
+      arm:
+        joints: [ 0.23, 0.092, 0.31, 0, 1.1, 0, 0 ]
+        <<: *SLOWLY
+        tolerance_angular: 0.02
+    - step: "push stone"
+      arm:
+        joints: [ 0.23, 0.092, 0.31, 0, 1.15, 0, 0 ]
+        <<: *SLOWLY
+        tolerance_angular: 0.025
+    - step: "down stone"
+      arm:
+        joints: [ 0.23, 0.092, 0.18, 0, 1.12, 0, 0 ]
+        <<: *SLOWLY
+        tolerance_angular: 0.04
   EXCHANGE_AFTER:
     - step: "scence"
       scence:
