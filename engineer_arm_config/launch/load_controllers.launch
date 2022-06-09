@@ -47,8 +47,8 @@
                 controllers/drag_calibration_controller
                 controllers/card_controller
                 controllers/drag_controller
-                controllers/gimbal_controller
                 controllers/chassis_controller
+                controllers/gpio_controller
                 "
     />
 </launch>
