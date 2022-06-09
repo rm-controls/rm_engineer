@@ -1,4 +1,4 @@
-scences_list:
+scenes_list:
   TEST_BOX:
     - id: "big"
       frame_id: "base_link"
