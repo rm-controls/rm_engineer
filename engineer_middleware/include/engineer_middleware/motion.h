@@ -44,6 +44,7 @@
 #include <std_msgs/Float64.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <rm_msgs/GimbalCmd.h>
+#include <rm_msgs/GpioData.h>
 #include <engineer_middleware/chassis_interface.h>
 
 namespace engineer_middleware
@@ -55,7 +56,7 @@ public:
   MotionBase(XmlRpc::XmlRpcValue& motion, Interface& interface) : interface_(interface)
   {
     tolerance_linear_ = xmlRpcGetDouble(motion, "tolerance_linear", 0.01);
-    tolerance_angular_ = xmlRpcGetDouble(motion, "tolerance_angular", 0.02);
+    tolerance_angular_ = xmlRpcGetDouble(motion, "tolerance_angular", 0.2);
     time_out_ = xmlRpcGetDouble(motion, "timeout", 1e10);
   };
   ~MotionBase() = default;
@@ -283,6 +284,40 @@ public:
 private:
   double position_, delay_;
   ros::Time start_time_;
+};
+
+class GpioMotion : public PublishMotion<rm_msgs::GpioData>
+{
+public:
+  GpioMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
+    : PublishMotion<rm_msgs::GpioData>(motion, interface)
+  {
+    state_ = std::string(motion["state"]);
+    msg_.gpio_name.push_back("gripper");
+  }
+  bool move() override
+  {
+    if (state_ == "open")
+    {
+      if (msg_.gpio_state.size() == 0)
+        msg_.gpio_state.push_back(1);
+      else
+        msg_.gpio_state[0] = 0;
+    }
+    else if (state_ == "close")
+    {
+      if (msg_.gpio_state.size() == 0)
+        msg_.gpio_state.push_back(0);
+      else
+        msg_.gpio_state[0] = 1;
+    }
+    else
+      ROS_ERROR("???");
+    return PublishMotion::move();
+  }
+
+private:
+  std::string state_;
 };
 
 class JointPositionMotion : public PublishMotion<std_msgs::Float64>

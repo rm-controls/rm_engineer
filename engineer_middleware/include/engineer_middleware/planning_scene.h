@@ -8,18 +8,18 @@
 
 namespace engineer_middleware
 {
-class PlanningScence
+class PlanningScene
 {
 public:
-  PlanningScence(const XmlRpc::XmlRpcValue& scence)
+  PlanningScene(const XmlRpc::XmlRpcValue& scene)
   {
-    for (int i = 0; i < scence.size(); i++)
+    for (int i = 0; i < scene.size(); i++)
     {
       moveit_msgs::CollisionObject collision_object;
-      collision_object.header.frame_id = std::string(scence[i]["frame_id"]);
-      collision_object.id = std::string(scence[i]["id"]);
-      collision_object.primitives.push_back(Primitive(scence[i]["primitive"]));
-      collision_object.primitive_poses.push_back(Pose(scence[i]["pose"]));
+      collision_object.header.frame_id = std::string(scene[i]["frame_id"]);
+      collision_object.id = std::string(scene[i]["id"]);
+      collision_object.primitives.push_back(Primitive(scene[i]["primitive"]));
+      collision_object.primitive_poses.push_back(Pose(scene[i]["pose"]));
       collision_objects_.push_back(collision_object);
     }
   };
