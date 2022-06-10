@@ -11,12 +11,14 @@ common:
     speed: 1.
     accel: 1.
     timeout: 3.
+  normal_tolerance: &NORMAL_TOLERANCE
+    tolerance_joints: [ 0.005, 0.005, 0.005, 0.002, 0.3, 0.3, 0.3 ]
   gripper:
 arm:
   home: &ARM_HOME
     joints: [ 0.005, 0., 0.218, 0., 0.1, 0., 0. ]
     <<: *QUICKLY
-    tolerance_joints: [ 0.245, 0.285, 0.177, 0.3, 1.7, 0., 0. ]
+    <<: *NORMAL_TOLERANCE
 gimbal:
   stone_big: &GIMBAL_STONE_BIG
     frame: base_link
@@ -39,7 +41,7 @@ steps_list:
     - step: "first"
       arm:
         joints: [ 0.024, -0.205, -0.088, -0.251, 0., 0., 3.14 ]
-        tolerance_joints: [ 0.245, 0.285, 0.177, 0.3, 1.7, 0., 0. ]
+        <<: *NORMAL_TOLERANCE
         <<: *QUICKLY
     - step: "back home"
       arm:
@@ -48,17 +50,17 @@ steps_list:
       arm:
         joints: [ 0.175, -0.205, -0.088, 0.266, 0., 0., 3.14 ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.031, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "second"
       arm:
         joints: [ 0., -0.017, 0.241, 0., 0., 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.041, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "second"
       arm:
         joints: [ 0., 0.25, 0.27, 0., 2.5, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.015, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "back home"
       arm:
         <<: *ARM_HOME
@@ -72,7 +74,7 @@ steps_list:
       arm:
         joints: [ 0.243, 0.282, 0.177, 0., 81.74, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.016, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
   GRASP_BIG_MID_PROC:
     - step: "add scene"
       scene:
@@ -84,22 +86,22 @@ steps_list:
       arm:
         joints: [ 0.243, 0.285, 0.177, 0., 1.74, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.071, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "forward to catch stone"
       arm:
         joints: [ 0.243, 0.292, 0.296, 0, 1.78, 0, 0 ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.081, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "hold stone "
       arm:
         joints: [ 0.238, 0.292, 0.296, 0, 0.5, 0, 0 ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.091, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "hold stone and back"
       arm:
         joints: [ 0.245, 0.285, 0.177, 0., 0.5, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.0101, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
   ###################    LF    ####################
   GRASP_BIG_LF_PRE:
     - step: "add scene"
@@ -109,7 +111,7 @@ steps_list:
       arm:
         joints: [ 0.243, 0.285, 0.177, 0.3, 1.74, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
   GRASP_BIG_LF_PROC:
     - step: "add scene"
       scene:
@@ -121,22 +123,22 @@ steps_list:
       arm:
         joints: [ 0.245, 0.285, 0.177, 0.3, 1.7, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.245, 0.285, 0.177, 0.3, 1.7, 0., 0. ]
+        <<: *NORMAL_TOLERANCE
     - step: "forward to catch stone"
       arm:
         joints: [ 0.245, 0.285, 0.31, 0.3, 1.7, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "hold stone "
       arm:
         joints: [ 0.245, 0.285, 0.31, 0.3, 0.9, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "hold stone and back"
       arm:
         joints: [ 0.245, 0.285, 0.177, 0.3, 0.9, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
   ###################    RT    ####################
   GRASP_BIG_RT_PRE:
     - step: "add scene"
@@ -146,7 +148,7 @@ steps_list:
       arm:
         joints: [ 0.245, 0.285, 0.177, -0.3, 1.7, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
   GRASP_BIG_RT_PROC:
     - step: "scence"
       scene:
@@ -158,22 +160,22 @@ steps_list:
       arm:
         joints: [ 0.245, 0.285, 0.177, -0.3, 1.7, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "forward to catch stone"
       arm:
         joints: [ 0.245, 0.285, 0.31, -0.3, 1.7, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "hold stone "
       arm:
         joints: [ 0.245, 0.285, 0.31, -0.3, 0.9, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "hold stone and back"
       arm:
         joints: [ 0.245, 0.285, 0.177, -0.3, 0.9, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
   ################### EXCHANGE(finish simulation) ####################(important)
   EXCHANGE_PRE:
     - step: "scence"
@@ -183,29 +185,29 @@ steps_list:
       arm:
         joints: [ 0.23, 0.092, 0.18, 0., 1.2876, 0., 0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "off gripper"
   EXCHANGE_PROC:
     - step: "push stone"
       arm:
         joints: [ 0.23, -0.03, 0.05, 0., 1.1, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "push stone"
       arm:
         joints: [ 0.23, 0.092, 0.31, 0., 1.1, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "push stone"
       arm:
         joints: [ 0.23, 0.092, 0.31, 0., 1.15, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "down stone"
       arm:
         joints: [ 0.23, 0.092, 0.18, 0., 1.12, 0., 0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
 
   ################### GROUND_STONE(finish simulation) ####################
   GROUND_STONE:
@@ -216,27 +218,27 @@ steps_list:
       arm:
         joints: [ 0.24, 0.270, 0.284, 0.298, 3.14, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "down stone"
       arm:
         joints: [ 0., 0.270, 0.284, 0.298, 3.14, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "up stone"
       arm:
         joints: [ 0.24, 0.270, 0.284, 0.298, 3.14, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "up stone"
       arm:
         joints: [ 0.24, 0.270, 0.284, 0.298, 3.14, -0.7482, 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "up stone"
       arm:
         joints: [ 0.24, 0.270, 0.284, 0.298, 1.12, -0.7482, 0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
 
   ################### SKY(finish simulation) ####################
   ###################    MID    ####################
@@ -248,7 +250,7 @@ steps_list:
       arm:
         joints: [ 0.23, -0.2, 0., 0., 0., 0, 3.14 ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
   SKY_MID_PROC:
     - step: "scene"
       scence:
@@ -260,7 +262,7 @@ steps_list:
       arm:
         joints: [ 0.23, -0.36, -0.1, 0., 0., 0., 3.14 ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
 
   ###################    LF    ####################
   SKY_LF_PRE:
@@ -271,7 +273,7 @@ steps_list:
       arm:
         joints: [ 0.23, -0.2, 0., 0.3, 0., 0., 3.14 ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
   SKY_LF_PROC:
     - step: "scene"
       scence:
@@ -280,7 +282,7 @@ steps_list:
       arm:
         joints: [ 0.23, -0.2, 0., 0.3, 0., 0., 3.14 ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "open gripper"
       gripper:
         state: "open"
@@ -288,7 +290,7 @@ steps_list:
       arm:
         joints: [ 0.23, -0.36, -0.1, 0.3, 0., 0., 3.14 ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
 
   ###################    RT    ####################
   SKY_RT_PRE:
@@ -299,7 +301,7 @@ steps_list:
       arm:
         joints: [ 0.23, -0.2, 0., -0.3, 0., 0., 3.14 ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
   SKY_RT_PROC:
     - step: "scene"
       scence:
@@ -308,7 +310,7 @@ steps_list:
       arm:
         joints: [ 0.23, -0.2, 0., -0.3, 0., 0., 3.14 ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "open gripper"
       gripper:
         state: "open"
@@ -316,7 +318,7 @@ steps_list:
       arm:
         joints: [ 0.23, -0.36, -0.1, -0.3, 0., 0., 3.14 ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
 
   ################### SMALL STONE(finish simulation) ####################
   SMALL_STONE:
@@ -330,23 +332,22 @@ steps_list:
       arm:
         joints: [ 0.24, -0.02, 0.2, 0., 1.05, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "forward"
       arm:
         joints: [ 0.24, -0.02, 0.31, 0., 1.05, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "hold stone"
       arm:
         joints: [ 0.24, -0.02, 0.31, 0., 0.5, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "back"
       arm:
         joints: [ 0.24, -0.02, 0.2, 0., 0.5, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
-
+        <<: *NORMAL_TOLERANCE
 
   ################### STORE STONE(finish simulation) ####################
   STORE:
@@ -354,12 +355,12 @@ steps_list:
       arm:
         joints: [ 0., -0.2, -0.016, 0., 0.696, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "down stone"
       arm:
         joints: [ 0., -0.2, -0.016, 0., 1.7226, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "close gripper"
       gripper:
         state: "close"
@@ -367,17 +368,17 @@ steps_list:
       arm:
         joints: [ 0., -0.15, -0.016, 0., 1.7226, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "hold gripper"
       arm:
         joints: [ 0., -0.2, -0.016, 0., 0.3132, 0., 0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "hold gripper"
       arm:
         joints: [ 0., -0.2, -0.016, 0., 0.3132, 0.,0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "back home"
       arm:
         <<: *ARM_HOME
@@ -388,49 +389,49 @@ steps_list:
       arm:
         joints: [ 0., -0.28, -0.08, 0, 1.7574, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "home"
       arm:
         joints: [ 0., -0.13, 0.04, 0., 1.7574, 0., 0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "home"
       arm:
         joints: [ 0., -0.26, -0.04, 0., 1.7574, 0., 0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "home"
       arm:
         joints: [ 0., -0.26, -0.04, 0., 0.783, 0., 0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "home"
       arm:
         joints: [ 0., -0.175, 0.13, 0., 0.783, 0., 0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
 
   GET_STONE_SKY:
     - step: "home"
       arm:
         joints: [ 0.23, -0.34, 0.2, 0., 3.12, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "home"
       arm:
         joints: [ 0.23, -0.055, 0.198, 0., 3.12, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "home"
       arm:
         joints: [ 0.15, -0.055, 0.198, 0., 3.12, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "home"
       arm:
         joints: [ 0.23, -0.34, 0.2, 0., 3.12, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "back home"
       arm:
         <<: *ARM_HOME
@@ -444,17 +445,17 @@ steps_list:
       arm:
         joints: [ 0., 0.28, 0.15, 0., 2.3838, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "ready"
       arm:
         joints: [ 0., 0.28, 0.287, 0, 2.3838, 0., 0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
     - step: "ready"
       arm:
         joints: [ 0., 0.28, 0.287, 0., 1.9314, 0., 0. ]
         <<: *SLOWLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        <<: *NORMAL_TOLERANCE
   RELEASE_BARRIER:
     - step: "close gripper"
       gripper:
