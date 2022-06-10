@@ -10,12 +10,11 @@ common:
   quickly: &QUICKLY
     speed: 1.
     accel: 1.
-    timeout: 3.
+    timeout: 5.
   open_gripper: &OPEN_GRIPPER
     state: true
   close_gripper: &CLOSE_GRIPPER
     state: false
-    timeout: 3.
   normal_tolerance: &NORMAL_TOLERANCE
     tolerance_joints: [ 0.005, 0.005, 0.005, 0.002, 0.3, 0.3, 0.3 ]
 arm:
@@ -76,16 +75,16 @@ steps_list:
         name: "BIG_STONE_ISLAND"
     - step: "move to mid ready"
       arm:
-        joints: [ 0.243, 0.282, 0.177, 0., 81.74, 0., 0. ]
+        joints: [ 0.243, 0.282, 0.177, 0., 1.74, 0., 0. ]
         <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
   GRASP_BIG_MID_PROC:
     - step: "add scene"
       scene:
         name: "BIG_STONE_ISLAND"
-    #    - step: "open gripper"
-    #      gripper:
-    #        state: "close"
+    - step: " gripper"
+      gripper:
+        <<: *CLOSE_GRIPPER
     - step: "move to mid repeat"
       arm:
         joints: [ 0.243, 0.285, 0.177, 0., 1.74, 0., 0. ]
@@ -120,9 +119,9 @@ steps_list:
     - step: "add scene"
       scene:
         name: "BIG_STONE_ISLAND"
-    #    - step: "open gripper"
-    #      gripper:
-    #        state: "open"
+    - step: "open gripper"
+      gripper:
+        state: "open"
     - step: "move to left repeat"
       arm:
         joints: [ 0.245, 0.285, 0.177, 0.3, 1.7, 0., 0. ]
@@ -157,9 +156,9 @@ steps_list:
     - step: "scence"
       scene:
         name: "BIG_STONE_ISLAND"
-    #    - step: "open gripper"
-    #      gripper:
-    #        state: "open"
+    - step: "open gripper"
+      gripper:
+        <<: *OPEN_GRIPPER
     - step: "move to mid repeat"
       arm:
         joints: [ 0.245, 0.285, 0.177, -0.3, 1.7, 0., 0. ]
@@ -243,6 +242,10 @@ steps_list:
         joints: [ 0.24, 0.270, 0.284, 0.298, 1.12, -0.7482, 0. ]
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
+  BACK_HOME:
+    - step: "approach"
+      arm:
+        <<: *ARM_HOME
 
   ################### SKY(finish simulation) ####################
   ###################    MID    ####################
@@ -259,9 +262,9 @@ steps_list:
     - step: "scene"
       scence:
         name: "BIG_STONE_ISLAND"
-    #    - step: "open gripper"
-    #      gripper:
-    #        state: "open"
+    - step: "open gripper"
+      gripper:
+        <<: *OPEN_GRIPPER
     - step: "down stone"
       arm:
         joints: [ 0.23, -0.36, -0.1, 0., 0., 0., 3.14 ]
@@ -271,7 +274,7 @@ steps_list:
   ###################    LF    ####################
   SKY_LF_PRE:
     - step: "scene"
-      scence:
+      scene:
         name: "BIG_STONE_ISLAND"
     - step: "move left"
       arm:
@@ -280,16 +283,16 @@ steps_list:
         <<: *NORMAL_TOLERANCE
   SKY_LF_PROC:
     - step: "scene"
-      scence:
+      scene:
         name: "BIG_STONE_ISLAND"
     - step: "move left"
       arm:
         joints: [ 0.23, -0.2, 0., 0.3, 0., 0., 3.14 ]
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
-    #    - step: "open gripper"
-    #      gripper:
-    #        state: "open"
+    - step: "open gripper"
+      gripper:
+        <<: *OPEN_GRIPPER
     - step: "down stone"
       arm:
         joints: [ 0.23, -0.36, -0.1, 0.3, 0., 0., 3.14 ]
@@ -299,7 +302,7 @@ steps_list:
   ###################    RT    ####################
   SKY_RT_PRE:
     - step: "scene"
-      scence:
+      scene:
         name: "BIG_STONE_ISLAND"
     - step: "move left"
       arm:
@@ -315,23 +318,22 @@ steps_list:
         joints: [ 0.23, -0.2, 0., -0.3, 0., 0., 3.14 ]
         <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
-    #    - step: "open gripper"
-    #      gripper:
-    #        state: "open"
+    - step: "open gripper"
+      gripper:
+        <<: *OPEN_GRIPPER
     - step: "down stone"
       arm:
         joints: [ 0.23, -0.36, -0.1, -0.3, 0., 0., 3.14 ]
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
-
   ################### SMALL STONE(finish simulation) ####################
   SMALL_STONE:
     - step: "add scenee"
       scene:
         name: "SMALL_STONE_ISLAND"
-    #    - step: "open gripper"
-    #      gripper:
-    #        state: "open"
+    - step: "open gripper"
+      gripper:
+        <<: *OPEN_GRIPPER
     - step: "down gripper"
       arm:
         joints: [ 0.24, -0.02, 0.2, 0., 1.05, 0., 0. ]
@@ -353,7 +355,7 @@ steps_list:
         <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
 
-  ################### STORE STONE(finish simulation) ####################
+    #  ################### STORE STONE(finish simulation) ####################
   STORE:
     - step: "set space to stone"
       arm:
@@ -365,9 +367,9 @@ steps_list:
         joints: [ 0., -0.2, -0.016, 0., 1.7226, 0., 0. ]
         <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
-    - step: "close gripper"
+    - step: "open gripper"
       gripper:
-        state: "close"
+        <<: *OPEN_GRIPPER
     - step: "push stone deep"
       arm:
         joints: [ 0., -0.15, -0.016, 0., 1.7226, 0., 0. ]
@@ -387,7 +389,7 @@ steps_list:
       arm:
         <<: *ARM_HOME
 
-  ################### GET STORE (finish simulation) ####################
+    ################### GET STORE (finish simulation) ####################
   GET_STONE:
     - step: "home"
       arm:
@@ -442,9 +444,9 @@ steps_list:
 
     ################### GRIPPER BARRIER (finish simulation) ####################
   GET_BARRIER:
-    #    - step: "open gripper"
-    #      gripper:
-    #        state: "open"
+    - step: "open gripper"
+      gripper:
+        <<: *OPEN_GRIPPER
     - step: "ready"
       arm:
         joints: [ 0., 0.28, 0.15, 0., 2.3838, 0., 0. ]
@@ -461,14 +463,10 @@ steps_list:
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
   RELEASE_BARRIER:
-    #    - step: "close gripper"
-    #      gripper:
-    #        state: "close"
+    - step: "close gripper"
+      gripper:
+        <<: *CLOSE_GRIPPER
     - step: "back home"
-      arm:
-        <<: *ARM_HOME
-  BACK_HOME:
-    - step: "approach"
       arm:
         <<: *ARM_HOME
   BACK_HOME2:
