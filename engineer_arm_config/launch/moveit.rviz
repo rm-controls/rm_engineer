@@ -146,21 +146,6 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mimic_link1:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          mimic_link2_1:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          mimic_link2_2:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
           pitch:
             Alpha: 1
             Show Axes: false
@@ -214,7 +199,7 @@ Visualization Manager:
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: ""
+        Planning Group: engineer_arm
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
@@ -312,21 +297,6 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mimic_link1:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          mimic_link2_1:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          mimic_link2_2:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
           pitch:
             Alpha: 1
             Show Axes: false
@@ -378,7 +348,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 0.4770970940589905
+      Distance: 2.3316266536712646
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -394,9 +364,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.019799720495939255
+      Pitch: 0.13479965925216675
       Target Frame: base_link
-      Yaw: 1.5174082517623901
+      Yaw: 4.495528221130371
     Saved: ~
 Window Geometry:
   Displays:
@@ -414,5 +384,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1386
-  X: 72
-  Y: 119
+  X: -391
+  Y: 47

@@ -51,7 +51,7 @@ scenes_list:
         dimension: [ 0.001, 1.058, 0.532 ]
       pose:
         position: [ 0.350941, 0., 0.284473 ]
-        orientation: [ 0, -0.995, 0.,   0.102 ]
+        orientation: [ 0, -0.995, 0., 0.102 ]
     - id: "down3"
       frame_id: "base_link"
       primitive:
@@ -59,7 +59,7 @@ scenes_list:
         dimension: [ 0.3, 1.058, 0.001 ]
       pose:
         position: [ 0.552883, 0., 0.544547 ]
-        orientation: [ 0, 0, 0., 0 ]
+        orientation: [ 0., 0., 0., 0. ]
   BIG_STONE_ISLAND:
     - id: "down"
       frame_id: "base_link"
@@ -68,7 +68,7 @@ scenes_list:
         dimension: [ 0.001, 1.058, 0.2 ]
       pose:
         position: [ 0.295, 0., 0.0436 ]
-        orientation: [ 0., 0, 0., 0 ]
+        orientation: [ 0., 0., 0., 0. ]
     - id: "down2"
       frame_id: "base_link"
       primitive:
@@ -76,7 +76,7 @@ scenes_list:
         dimension: [ 0.001, 1.058001, 0.374256 ]
       pose:
         position: [ 0.406878, 0., 0.2936 ]
-        orientation: [ 0, -0.949, 0.,    0.315 ]
+        orientation: [ 0, -0.949, 0., 0.315 ]
     - id: "down3"
       frame_id: "base_link"
       primitive:
@@ -84,7 +84,7 @@ scenes_list:
         dimension: [ 0.151243, 1.058001, 0.001 ]
       pose:
         position: [ 0.594873, 0., 0.4436 ]
-        orientation: [ 0, 0, 0.,   0 ]
+        orientation: [ 0., 0., 0., 0. ]
   SMALL_STONE_ISLAND:
     - id: "down"
       frame_id: "base_link"
@@ -93,7 +93,7 @@ scenes_list:
         dimension: [ 0.001, 0.767634, 0.7 ]
       pose:
         position: [ 0.295, 0., 0.2736 ]
-        orientation: [ 0., 0, 0., 0 ]
+        orientation: [ 0., 0., 0., 0. ]
     - id: "down2"
       frame_id: "base_link"
       primitive:
@@ -101,6 +101,4 @@ scenes_list:
         dimension: [ 0.265, 0.767634, 0.001 ]
       pose:
         position: [ 0.4275, 0., 0.6236 ]
-        orientation: [ 0., 0, 0., 0 ]
-
-
+        orientation: [ 0., 0., 0., 0. ]

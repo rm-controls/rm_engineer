@@ -55,11 +55,6 @@ class MotionBase
 public:
   MotionBase(XmlRpc::XmlRpcValue& motion, Interface& interface) : interface_(interface)
   {
-    tolerance_linear_ = xmlRpcGetDouble(motion, "tolerance_linear", 0.01);
-    chassis_tolerance_angular_ = xmlRpcGetDouble(motion, "chassis_tolerance_angular_", 0.01);
-    ROS_ASSERT(motion["tolerance_angular"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-    for (int i = 0; i < motion["tolerance_angular"].size(); ++i)
-      tolerance_angular_.push_back(motion["tolerance_angular"][i]);
     time_out_ = xmlRpcGetDouble(motion, "timeout", 1e10);
   };
   ~MotionBase() = default;
@@ -78,8 +73,7 @@ public:
 
 protected:
   Interface& interface_;
-  double tolerance_linear_{}, chassis_tolerance_angular_, time_out_{};
-  std::vector<double> tolerance_angular_{};
+  double time_out_{};
 };
 
 class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroupInterface>
@@ -127,6 +121,7 @@ public:
     : MoveitMotionBase(motion, interface), tf_(tf), has_pos_(false), has_ori_(false), is_cartesian_(false)
   {
     target_.pose.orientation.w = 1.;
+    tolerance_position_ = xmlRpcGetDouble(motion, "tolerance_position", 0.01);
     if (motion.hasMember("frame"))
       target_.header.frame_id = std::string(motion["frame"]);
     if (motion.hasMember("position"))
@@ -196,11 +191,12 @@ private:
     // TODO: Add orientation error check
     return (std::abs(std::pow(pose.position.x - target_.pose.position.x, 2) +
                      std::pow(pose.position.y - target_.pose.position.y, 2) +
-                     std::pow(pose.position.z - target_.pose.position.z, 2)) < tolerance_linear_);
+                     std::pow(pose.position.z - target_.pose.position.z, 2)) < tolerance_position_);
   }
   tf2_ros::Buffer& tf_;
   bool has_pos_, has_ori_, is_cartesian_;
   geometry_msgs::PoseStamped target_;
+  double tolerance_position_;
 };
 
 class JointMotion : public MoveitMotionBase
@@ -214,6 +210,12 @@ public:
       ROS_ASSERT(motion["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
       for (int i = 0; i < motion["joints"].size(); ++i)
         target_.push_back(xmlRpcGetDouble(motion["joints"], i));
+    }
+    if (motion.hasMember("tolerance_joints"))
+    {
+      ROS_ASSERT(motion["tolerance_joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      for (int i = 0; i < motion["tolerance_joints"].size(); ++i)
+        tolerance_joints_.push_back(xmlRpcGetDouble(motion["tolerance_joints"], i));
     }
   }
   bool move() override
@@ -234,11 +236,11 @@ private:
     for (int i = 0; i < (int)target_.size(); ++i)
     {
       error = std::abs(target_[i] - current[i]);
-      flag &= (error < tolerance_angular_[i]);
+      flag &= (error < tolerance_joints_[i]);
     }
     return flag;
   }
-  std::vector<double> target_;
+  std::vector<double> target_, tolerance_joints_;
 };
 
 template <class MsgType>
@@ -362,6 +364,8 @@ public:
   ChassisMotion(XmlRpc::XmlRpcValue& motion, ChassisInterface& interface)
     : MotionBase<ChassisInterface>(motion, interface)
   {
+    chassis_tolerance_position_ = xmlRpcGetDouble(motion, "tolerance_linear", 0.01);
+    chassis_tolerance_angular_ = xmlRpcGetDouble(motion, "chassis_tolerance_angular_", 0.01);
     if (motion.hasMember("frame"))
       target_.header.frame_id = std::string(motion["frame"]);
     if (motion.hasMember("position"))
@@ -384,7 +388,8 @@ public:
   }
   bool isFinish() override
   {
-    return interface_.getErrorPos() < tolerance_linear_ && interface_.getErrorYaw() < chassis_tolerance_angular_;
+    return interface_.getErrorPos() < chassis_tolerance_position_ &&
+           interface_.getErrorYaw() < chassis_tolerance_angular_;
   }
   void stop() override
   {
@@ -393,6 +398,7 @@ public:
 
 private:
   geometry_msgs::PoseStamped target_;
+  double chassis_tolerance_position_, chassis_tolerance_angular_;
 };
 
 }  // namespace engineer_middleware

@@ -49,6 +49,7 @@
                 controllers/drag_controller
                 controllers/chassis_controller
                 controllers/gpio_controller
+                controllers/gimbal_controller
                 "
     />
 </launch>
