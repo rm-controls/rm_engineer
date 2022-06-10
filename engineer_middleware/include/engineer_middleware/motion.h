@@ -56,7 +56,10 @@ public:
   MotionBase(XmlRpc::XmlRpcValue& motion, Interface& interface) : interface_(interface)
   {
     tolerance_linear_ = xmlRpcGetDouble(motion, "tolerance_linear", 0.01);
-    tolerance_angular_ = xmlRpcGetDouble(motion, "tolerance_angular", 0.2);
+    chassis_tolerance_angular_ = xmlRpcGetDouble(motion, "chassis_tolerance_angular_", 0.01);
+    ROS_ASSERT(motion["tolerance_angular"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+    for (int i = 0; i < motion["tolerance_angular"].size(); ++i)
+      tolerance_angular_.push_back(motion["tolerance_angular"][i]);
     time_out_ = xmlRpcGetDouble(motion, "timeout", 1e10);
   };
   ~MotionBase() = default;
@@ -75,7 +78,8 @@ public:
 
 protected:
   Interface& interface_;
-  double tolerance_linear_{}, tolerance_angular_{}, time_out_{};
+  double tolerance_linear_{}, chassis_tolerance_angular_, time_out_{};
+  std::vector<double> tolerance_angular_{};
 };
 
 class MoveitMotionBase : public MotionBase<moveit::planning_interface::MoveGroupInterface>
@@ -226,11 +230,13 @@ private:
   {
     std::vector<double> current = interface_.getCurrentJointValues();
     double error = 0.;
+    bool flag = 1;
     for (int i = 0; i < (int)target_.size(); ++i)
     {
-      error += std::abs(target_[i] - current[i]);
+      error = std::abs(target_[i] - current[i]);
+      flag &= (error < tolerance_angular_[i]);
     }
-    return error < tolerance_angular_;
+    return flag;
   }
   std::vector<double> target_;
 };
@@ -378,7 +384,7 @@ public:
   }
   bool isFinish() override
   {
-    return interface_.getErrorPos() < tolerance_linear_ && interface_.getErrorYaw() < tolerance_angular_;
+    return interface_.getErrorPos() < tolerance_linear_ && interface_.getErrorYaw() < chassis_tolerance_angular_;
   }
   void stop() override
   {
