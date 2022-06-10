@@ -48,7 +48,7 @@ Middleware::Middleware(ros::NodeHandle& nh)
   , hand_pub_(nh.advertise<std_msgs::Float64>("/controllers/hand_controller/command", 10))
   , card_pub_(nh.advertise<std_msgs::Float64>("/controllers/card_controller/command", 10))
   , gimbal_pub_(nh.advertise<rm_msgs::GimbalCmd>("/controllers/gimbal_controller/command", 10))
-  , gpio_pub_(nh.advertise<rm_msgs::GpioData>("/controllers/gpio_controller/gpio_command", 10))
+  , gpio_pub_(nh.advertise<rm_msgs::GpioData>("/controllers/gpio_controller/command", 10))
   , tf_listener_(tf_)
   , is_middleware_control_(false)
 {

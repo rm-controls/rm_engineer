@@ -300,13 +300,13 @@ public:
   GpioMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
     : PublishMotion<rm_msgs::GpioData>(motion, interface)
   {
-    state_ = motion["gripper"];
+    state_ = motion["state"];
     msg_.gpio_state.push_back(0);
     msg_.gpio_name.push_back("gripper");
   }
   bool move() override
   {
-    msg_.gpio_state[0] = state_;
+    msg_.gpio_state[0] = true;
     return PublishMotion::move();
   }
 
