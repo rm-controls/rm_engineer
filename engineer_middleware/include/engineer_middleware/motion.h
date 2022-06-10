@@ -300,32 +300,18 @@ public:
   GpioMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
     : PublishMotion<rm_msgs::GpioData>(motion, interface)
   {
-    state_ = std::string(motion["state"]);
+    state_ = motion["gripper"];
+    msg_.gpio_state.push_back(0);
     msg_.gpio_name.push_back("gripper");
   }
   bool move() override
   {
-    if (state_ == "open")
-    {
-      if (msg_.gpio_state.size() == 0)
-        msg_.gpio_state.push_back(1);
-      else
-        msg_.gpio_state[0] = 0;
-    }
-    else if (state_ == "close")
-    {
-      if (msg_.gpio_state.size() == 0)
-        msg_.gpio_state.push_back(0);
-      else
-        msg_.gpio_state[0] = 1;
-    }
-    else
-      ROS_ERROR("???");
+    msg_.gpio_state[0] = state_;
     return PublishMotion::move();
   }
 
 private:
-  std::string state_;
+  bool state_;
 };
 
 class JointPositionMotion : public PublishMotion<std_msgs::Float64>

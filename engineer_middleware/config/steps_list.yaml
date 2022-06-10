@@ -26,12 +26,10 @@ steps_list:
   ################### common ####################
   OPEN_GRIPPER:
     - step: "open gripper"
-      gripper:
-        state: "open"
+      gripper: 1
   CLOSE_GRIPPER:
     - step: "close gripper"
-      gripper:
-        state: "close"
+      gripper: 0
   DYNAMICX:
     - step: "back home"
       arm:
@@ -72,7 +70,7 @@ steps_list:
       arm:
         joints: [ 0.243, 0.282, 0.177, 0., 81.74, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.016, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        tolerance_joints: [ 0.016, 0.02, 0.02, 0.02, 0.2, 0.2, 0.2 ]
   GRASP_BIG_MID_PROC:
     - step: "add scene"
       scene:
@@ -330,7 +328,7 @@ steps_list:
       arm:
         joints: [ 0.24, -0.02, 0.2, 0., 1.05, 0., 0. ]
         <<: *QUICKLY
-        tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        tolerance_joints: [ 0.03, 0.03, 0.03, 0.05, 0.3, 0.3, 0.1 ]
     - step: "forward"
       arm:
         joints: [ 0.24, -0.02, 0.31, 0., 1.05, 0., 0. ]
