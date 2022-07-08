@@ -72,10 +72,10 @@ public:
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
     if (step.hasMember("gripper"))
       gpio_motion_ = new GpioMotion(step["gripper"], gpio_pub);
-    if (step.hasMember("scene"))
+    if (step.hasMember("scene_name"))
     {
       for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
-        if (step["scene"]["name"] == it->first)
+        if (step["scene_name"] == it->first)
           planning_scene_ = new PlanningScene(it->second);
     }
   }
