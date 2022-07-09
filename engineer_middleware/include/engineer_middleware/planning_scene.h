@@ -5,13 +5,15 @@
 #pragma once
 
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
+#include <moveit/move_group_interface/move_group_interface.h>
 
 namespace engineer_middleware
 {
 class PlanningScene
 {
 public:
-  PlanningScene(const XmlRpc::XmlRpcValue& scene)
+  PlanningScene(const XmlRpc::XmlRpcValue& scene, moveit::planning_interface::MoveGroupInterface& arm_group)
+    : arm_group_(arm_group)
   {
     for (int i = 0; i < scene.size(); i++)
     {
@@ -21,6 +23,8 @@ public:
       collision_object.primitives.push_back(Primitive(scene[i]["primitive"]));
       collision_object.primitive_poses.push_back(Pose(scene[i]["pose"]));
       collision_objects_.push_back(collision_object);
+      if (scene[i].hasMember("attach"))
+        is_attached_ = scene[i]["attach"];
     }
   };
 
@@ -77,10 +81,14 @@ public:
     for (long unsigned int i = 0; i < collision_objects_.size(); i++)
       collision_objects_[i].operation = collision_objects_[i].ADD;
     planning_scene_interface_.addCollisionObjects(collision_objects_);
+    if (is_attached_)
+      arm_group_.attachObject(collision_objects_[0].id, collision_objects_[0].header.frame_id);
   }
 
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
+  moveit::planning_interface::MoveGroupInterface& arm_group_;
   std::vector<moveit_msgs::CollisionObject> collision_objects_;
+  bool is_attached_;
 };
 
 }  // namespace engineer_middleware

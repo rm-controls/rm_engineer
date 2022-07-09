@@ -1,6 +1,6 @@
 scenes_list:
   TEST_BOX:
-    - id: "big"
+    - id: "box"
       frame_id: "base_link"
       primitive:
         type: box
@@ -9,7 +9,7 @@ scenes_list:
         position: [ 0., 0., 1.5 ]
         orientation: [ 0., 0., 0., 0. ]
   TEST_CONE:
-    - id: "big1"
+    - id: "cone"
       frame_id: "base_link"
       primitive:
         type: cone
@@ -18,7 +18,7 @@ scenes_list:
         position: [ 0., 0., 1.5 ]
         orientation: [ 0., 0., 0., 0. ]
   TEST_CYLINDER:
-    - id: "big2"
+    - id: "cylinder"
       frame_id: "base_link"
       primitive:
         type: cylinder
@@ -27,7 +27,7 @@ scenes_list:
         position: [ 0., 0., 1.5 ]
         orientation: [ 0., 0., 0., 0. ]
   TEST_SPHERE:
-    - id: "big3"
+    - id: "sphere"
       frame_id: "base_link"
       primitive:
         type: sphere
@@ -35,8 +35,8 @@ scenes_list:
       pose:
         position: [ 0., 0., 1.5 ]
         orientation: [ 0., 0., 0., 0. ]
-  EXCHANGE:
-    - id: "down"
+  EXCHANGE_ISLAND:
+    - id: "EXCHANGE_ISLAND1"
       frame_id: "base_link"
       primitive:
         type: box
@@ -44,7 +44,7 @@ scenes_list:
       pose:
         position: [ 0.297, 0., -0.016 ]
         orientation: [ 0., 0, 0., 0 ]
-    - id: "down2"
+    - id: "EXCHANGE_ISLAND2"
       frame_id: "base_link"
       primitive:
         type: box
@@ -52,7 +52,7 @@ scenes_list:
       pose:
         position: [ 0.350941, 0., 0.284473 ]
         orientation: [ 0, -0.995, 0., 0.102 ]
-    - id: "down3"
+    - id: "EXCHANGE_ISLAND3"
       frame_id: "base_link"
       primitive:
         type: box
@@ -61,7 +61,7 @@ scenes_list:
         position: [ 0.552883, 0., 0.544547 ]
         orientation: [ 0., 0., 0., 0. ]
   BIG_STONE_ISLAND:
-    - id: "down"
+    - id: "BIG_STONE_ISLAND1"
       frame_id: "base_link"
       primitive:
         type: box
@@ -69,7 +69,8 @@ scenes_list:
       pose:
         position: [ 0.295, 0., 0.0436 ]
         orientation: [ 0., 0., 0., 0. ]
-    - id: "down2"
+      attach: false
+    - id: "BIG_STONE_ISLAND2"
       frame_id: "base_link"
       primitive:
         type: box
@@ -77,7 +78,8 @@ scenes_list:
       pose:
         position: [ 0.406878, 0., 0.2936 ]
         orientation: [ 0, -0.949, 0., 0.315 ]
-    - id: "down3"
+        attach: false
+    - id: "BIG_STONE_ISLAND3"
       frame_id: "base_link"
       primitive:
         type: box
@@ -85,8 +87,9 @@ scenes_list:
       pose:
         position: [ 0.594873, 0., 0.4436 ]
         orientation: [ 0., 0., 0., 0. ]
+        attach: false
   SMALL_STONE_ISLAND:
-    - id: "down"
+    - id: "SMALL_STONE_ISLAND"
       frame_id: "base_link"
       primitive:
         type: box
@@ -94,7 +97,7 @@ scenes_list:
       pose:
         position: [ 0.295, 0., 0.2736 ]
         orientation: [ 0., 0., 0., 0. ]
-    - id: "down2"
+    - id: "SMALL_STONE_ISLAND2"
       frame_id: "base_link"
       primitive:
         type: box
@@ -102,3 +105,33 @@ scenes_list:
       pose:
         position: [ 0.4275, 0., 0.6236 ]
         orientation: [ 0., 0., 0., 0. ]
+  NORMAL_STONE:
+    - id: "normal_stone"
+      frame_id: "link6"
+      primitive:
+        type: box
+        dimension: [ 0.18, 0.18, 0.18 ]
+      pose:
+        position: [ 0.152, 0., 0.13 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: true
+  SKY_STONE:
+    - id: "sky_stone"
+      frame_id: "link6"
+      primitive:
+        type: box
+        dimension: [ 0.18, 0.18, 0.18 ]
+      pose:
+        position: [ 0.062, 0., 0.13 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: true
+  STORE_STONE:
+    - id: "sky_stone"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.18, 0.18, 0.18 ]
+      pose:
+        position: [ 0.2, 0., 0.1325 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false

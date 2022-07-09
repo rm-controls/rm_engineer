@@ -76,7 +76,7 @@ public:
     {
       for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
         if (step["scene_name"] == it->first)
-          planning_scene_ = new PlanningScene(it->second);
+          planning_scene_ = new PlanningScene(it->second, arm_group);
     }
   }
   bool move()
