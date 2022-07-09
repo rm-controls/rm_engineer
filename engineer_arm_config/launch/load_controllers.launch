@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <launch>
     <!-- By default, we are not load controllers -->
-    <arg name="spawn_controllers" default="true"/>
     <arg name="simulation" default="false"/>
 
     <rosparam file="$(find rm_config)/config/rm_controllers/engineer.yaml" command="load"/>

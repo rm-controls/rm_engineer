@@ -7,7 +7,7 @@ planning_group_name=arm
 ikfast_plugin_pkg=engineer_arm_ikfast_plugin
 base_link_name=base_link
 eef_link_name=link6
-ikfast_output_path=/home/bc/project/src/rm_engineer/engineer_arm_ikfast_plugin/src/engineer_arm_ikfast_solver.cpp
+ikfast_output_path=/home/dynamicx/rm_ws/src/rm_software/rm_engineer/engineer_arm_ikfast_plugin/src/engineer_arm_ikfast_solver.cpp
 
 rosrun moveit_kinematics create_ikfast_moveit_plugin.py\
   --search_mode=$search_mode\
