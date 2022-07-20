@@ -632,4 +632,3 @@ steps_list:
         <<: *QUICKLY
         tolerance_linear: 0.6
         tolerance_angular: 0.6
-
