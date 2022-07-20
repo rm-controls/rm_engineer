@@ -19,4 +19,6 @@
   <export>
     <moveit_core plugin="${prefix}/engineer_arm_moveit_ikfast_plugin_description.xml"/>
   </export>
+  <build_depend>liblapack-dev</build_depend>
+  <exec_depend>liblapack-dev</exec_depend>
 </package>
