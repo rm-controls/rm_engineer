@@ -14,7 +14,7 @@ scale:
 low_pass_filter_coeff: 2.  # Larger --> trust the filtered data more, trust the measurements less.
 
 ## Properties of outgoing commands
-publish_period: 0.008  # 1/Nominal publish rate [seconds]
+publish_period: 0.5  # 1/Nominal publish rate [seconds]
 low_latency_mode: true  # Set this to true to publish as soon as an incoming Twist command is received (publish_period is ignored)
 
 # What type of topic does your robot driver expect?
@@ -54,7 +54,7 @@ status_topic: status # Publish status to this topic
 command_out_topic: /controllers/arm_trajectory_controller/command # Publish outgoing commands here
 
 ## Collision checking for the entire robot body
-check_collisions: true # Check collisions?
+check_collisions: false # Check collisions?
 collision_check_rate: 50 # [Hz] Collision-checking can easily bog down a CPU if done too often.
 # Two collision check algorithms are available:
 # "threshold_distance" begins slowing dos when nearer than a specified distance. Good if you want to tune collision thresholds manually.
