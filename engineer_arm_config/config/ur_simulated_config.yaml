@@ -54,7 +54,7 @@ status_topic: status # Publish status to this topic
 command_out_topic: /controllers/arm_trajectory_controller/command # Publish outgoing commands here
 
 ## Collision checking for the entire robot body
-check_collisions: false # Check collisions?
+check_collisions: true # Check collisions?
 collision_check_rate: 50 # [Hz] Collision-checking can easily bog down a CPU if done too often.
 # Two collision check algorithms are available:
 # "threshold_distance" begins slowing dos when nearer than a specified distance. Good if you want to tune collision thresholds manually.
