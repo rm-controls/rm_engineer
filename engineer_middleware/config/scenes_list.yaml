@@ -35,6 +35,7 @@ scenes_list:
       pose:
         position: [ 0., 0., 1.5 ]
         orientation: [ 0., 0., 0., 0. ]
+###############################################
   EXCHANGE_ISLAND:
     - id: "EXCHANGE_ISLAND1"
       frame_id: "base_link"
@@ -88,6 +89,34 @@ scenes_list:
         position: [ 0.594873, 0., 0.4436 ]
         orientation: [ 0., 0., 0., 0. ]
         attach: false
+  SKY_STONE_ISLAND:
+    - id: "SKY_STONE_ISLAND1"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.001, 1.058, 0.2 ]
+      pose:
+        position: [ -0.295, 0., 0.0436 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false
+    - id: "SKY_STONE_ISLAND2"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.001, 1.058001, 0.374256 ]
+      pose:
+        position: [ -0.406878, 0., 0.2936 ]
+        orientation: [ 0, -0.949, 0., 0.315 ]
+        attach: false
+    - id: "SKY_STONE_ISLAND3"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.151243, 1.058001, 0.001 ]
+      pose:
+        position: [ -0.594873, 0., 0.4436 ]
+        orientation: [ 0., 0., 0., 0. ]
+        attach: false
   SMALL_STONE_ISLAND:
     - id: "SMALL_STONE_ISLAND"
       frame_id: "base_link"
@@ -105,6 +134,8 @@ scenes_list:
       pose:
         position: [ 0.4275, 0., 0.6236 ]
         orientation: [ 0., 0., 0., 0. ]
+
+  ##############################################
   NORMAL_STONE:
     - id: "normal_stone"
       frame_id: "link6"
