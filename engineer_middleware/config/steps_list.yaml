@@ -1,7 +1,7 @@
 common:
   slowly: &SLOWLY
-    speed: 0.1
-    accel: 0.1
+    speed: 0.2
+    accel: 0.2
     timeout: 10
   normally: &NORMALLY
     speed: 0.5
@@ -26,7 +26,7 @@ arm:
   home: &ARM_HOME
     joints: [ 0.012, 0., 0.218, 0., 0.87, 0., 0. ]
     <<: *NORMALLY
-    <<: *BIGGER_TOLERANCE
+    <<: *NORMAL_TOLERANCE
   home_store: &ARM_HOME_STORE
     joints: [ 0.17, -0.063, 0.213, 0., 1.0266, 0., 0. ]
     <<: *NORMALLY
@@ -308,41 +308,43 @@ steps_list:
     - step: "move to mid ready"
       arm:
         <<: *ARM_HOME
-          
+
   ################### SKY(finish simulation) ####################
   ###################    MID    ####################
   MID_SKY_ISLAND0:
     - step: "add scene of sky island"
-      scene:
-        name: "SKY_STONE_ISLAND"
+      scene_name: "SKY_STONE_ISLAND"
     - step: "move gimbal toward to island"
       gimbal:
         <<: *BACK_POS
     - step: "move to ready sky"
       arm:
         frame: base_link
-        position: [ -0.2659, -0.0006, 0.9216 ]
-        rpy: [ -0.0024, -0.2210, 3.1392 ]
+        position: [ -0.29, -0.001, 0.9232 ]
+        rpy: [ -0.0035, -0.0997, 3.1357968 ]
         <<: *NORMALLY
         tolerance_linear: 0.001
   MID_SKY_ISLAND00:
     - step: "add scene of sky island"
-      scene:
-        name: "SKY_STONE_ISLAND"
+      scene_name: "SKY_STONE_ISLAND"
     - step: "open gripper to grasp stone"
       gripper:
         <<: *OPEN_GRIPPER
-    - step: "move to final position"
+    - step: "move to ready sky"
       arm:
         frame: base_link
-        position: [ -0.5297, -0.0006, 0.9216 ]
-        rpy: [ -0.0032, -0.2251, 3.1392 ]
+        position: [ -0.29, -0.001, 0.9232 ]
+        rpy: [ -0.0035, -0.0997, 3.1357968 ]
         <<: *NORMALLY
         tolerance_linear: 0.001
+    - step: "forward to catch stone"
+      arm:
+        joints: [ 0.2313, -0.33, -0.11, 0,0.2189, 0.002, 3.13 ]
+        <<: *NORMALLY
+        <<: *NORMAL_TOLERANCE
   MID_SKY_ISLAND000:
-    - step: "scene"
-      scene:
-        name: "SKY_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "SKY_STONE_ISLAND"
     - step: "move gimbal to toward"
       gimbal:
         <<: *WALKING_POS
@@ -351,85 +353,91 @@ steps_list:
         <<: *ARM_HOME
   # ###################    LF    ####################
   LF_SKY_ISLAND0:
-    - step: "scene"
-      scene:
-        name: "SKY_STONE_ISLAND"
-    - step: "gimbal"
+    - step: "add scene of sky island"
+      scene_name: "SKY_STONE_ISLAND"
+    - step: "move gimbal toward to island"
       gimbal:
         <<: *BACK_POS
     - step: "move to ready sky"
       arm:
         frame: base_link
-        position: [ -0.2659, -0.2883, 0.9216 ]
-        rpy: [ -0.0024, -0.2210, 3.1392 ]
+        position: [ -0.29, -0.2988, 0.9232 ]
+        rpy: [ -0.0035, -0.0997, 3.1357968 ]
         <<: *NORMALLY
         tolerance_linear: 0.001
   LF_SKY_ISLAND00:
-    - step: "scene"
-      scene:
-        name: "SKY_STONE_ISLAND"
-    - step: "open gripper"
+    - step: "add scene of sky island"
+      scene_name: "SKY_STONE_ISLAND"
+    - step: "open gripper to grasp stone"
       gripper:
         <<: *OPEN_GRIPPER
-    - step: "move to final position"
+    - step: "move to ready sky"
       arm:
         frame: base_link
-        position: [ -0.5297, -0.2883, 0.9216 ]
-        rpy: [ -0.0032, -0.2251, 3.1392 ]
+        position: [ -0.29, -0.2988, 0.9232 ]
+        rpy: [ -0.0035, -0.0997, 3.1357968 ]
         <<: *NORMALLY
         tolerance_linear: 0.001
+    - step: "forward to catch stone"
+      arm:
+        joints: [ 0.2313, -0.33, -0.11, -0.3,0.2189, 0.002, 3.13 ]
+        <<: *NORMALLY
+        <<: *NORMAL_TOLERANCE
   LF_SKY_ISLAND000:
-    - step: "gimbal"
+    - step: "add scene of sky island"
+      scene_name: "SKY_STONE_ISLAND"
+    - step: "move gimbal to toward"
       gimbal:
         <<: *WALKING_POS
-    - step: "scene"
-      scene:
-        name: "SKY_STONE_ISLAND"
     - step: "move to mid ready"
       arm:
         <<: *ARM_HOME
   ###################    RT    ####################
   RT_SKY_ISLAND0:
-    - step: "scene"
-      scene:
-        name: "SKY_STONE_ISLAND"
-    - step: "gimbal"
+    - step: "add scene of sky island"
+      scene_name: "SKY_STONE_ISLAND"
+    - step: "move gimbal toward to island"
       gimbal:
         <<: *BACK_POS
-    - step: "move mid"
+    - step: "move to ready sky"
       arm:
         frame: base_link
-        position: [ -0.2659, 0.2883, 0.9216 ]
-        rpy: [ -0.0024, -0.2210, 3.1392 ]
+        position: [ -0.29, 0.2988, 0.9232 ]
+        rpy: [ -0.0035, -0.0997, 3.1357968 ]
         <<: *NORMALLY
         tolerance_linear: 0.001
   RT_SKY_ISLAND00:
-    - step: "scene"
-      scene:
-        name: "SKY_STONE_ISLAND"
-    - step: "open gripper"
+    - step: "add scene of sky island"
+      scene_name: "SKY_STONE_ISLAND"
+    - step: "open gripper to grasp stone"
       gripper:
         <<: *OPEN_GRIPPER
-    - step: "down stone"
+    - step: "move to ready sky"
       arm:
         frame: base_link
-        position: [ -0.5297, 0.2883, 0.9216 ]
-        rpy: [ -0.0032, -0.2251, 3.1392 ]
+        position: [ -0.29, 0.2988, 0.9232 ]
+        rpy: [ -0.0035, -0.0997, 3.1357968 ]
         <<: *NORMALLY
         tolerance_linear: 0.001
+    - step: "forward to catch stone"
+      arm:
+        joints: [ 0.2313, -0.33, -0.11, -0.3,0.2189, 0.002, 3.13 ]
+        <<: *NORMALLY
+        <<: *NORMAL_TOLERANCE
   RT_SKY_ISLAND000:
-    - step: "gimbal"
+    - step: "add scene of sky island"
+      scene_name: "SKY_STONE_ISLAND"
+    - step: "move gimbal to toward"
       gimbal:
         <<: *WALKING_POS
-    - step: "scene"
-      scene:
-        name: "SKY_STONE_ISLAND"
     - step: "move to mid ready"
       arm:
         <<: *ARM_HOME
 
   #################### EXCHANGE(finish simulation) ####################(important)
   EXCHANGE0:
+    - step: "add scene of sky island"
+      scene_name: "EXCHANGE_ISLAND"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -439,6 +447,8 @@ steps_list:
         <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
   EXCHANGE00:
+    - step: "add scene of sky island"
+      scene_name: "EXCHANGE_ISLAND"
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -459,6 +469,8 @@ steps_list:
         <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
   EXCHANGE000:
+    - step: "add scene of sky island"
+      scene_name: "EXCHANGE_ISLAND"
     - step: "gimbal"
       gimbal:
         <<: *WALKING_POS
@@ -612,9 +624,8 @@ steps_list:
 
   #  ################### SMALL STONE(finish simulation) ####################
   SMALL_STONE0:
-    #    - step: "add scenee"
-    #      scene:
-    #        name: "SMALL_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "SMALL_STONE_ISLAND"
     - step: "open gripper"
       gripper:
         <<: *OPEN_GRIPPER
