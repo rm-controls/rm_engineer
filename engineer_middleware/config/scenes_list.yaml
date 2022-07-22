@@ -1,4 +1,5 @@
 scenes_list:
+  ###################    TEST    ####################
   TEST_BOX:
     - id: "box"
       frame_id: "base_link"
@@ -8,6 +9,7 @@ scenes_list:
       pose:
         position: [ 0., 0., 1.5 ]
         orientation: [ 0., 0., 0., 0. ]
+
   TEST_CONE:
     - id: "cone"
       frame_id: "base_link"
@@ -17,6 +19,7 @@ scenes_list:
       pose:
         position: [ 0., 0., 1.5 ]
         orientation: [ 0., 0., 0., 0. ]
+
   TEST_CYLINDER:
     - id: "cylinder"
       frame_id: "base_link"
@@ -26,6 +29,7 @@ scenes_list:
       pose:
         position: [ 0., 0., 1.5 ]
         orientation: [ 0., 0., 0., 0. ]
+
   TEST_SPHERE:
     - id: "sphere"
       frame_id: "base_link"
@@ -35,7 +39,8 @@ scenes_list:
       pose:
         position: [ 0., 0., 1.5 ]
         orientation: [ 0., 0., 0., 0. ]
-###############################################
+
+  ###################    SCENE    ####################
   EXCHANGE_ISLAND:
     - id: "EXCHANGE_ISLAND1"
       frame_id: "base_link"
@@ -61,6 +66,7 @@ scenes_list:
       pose:
         position: [ 0.552883, 0., 0.544547 ]
         orientation: [ 0., 0., 0., 0. ]
+
   BIG_STONE_ISLAND:
     - id: "BIG_STONE_ISLAND1"
       frame_id: "base_link"
@@ -89,6 +95,7 @@ scenes_list:
         position: [ 0.594873, 0., 0.4436 ]
         orientation: [ 0., 0., 0., 0. ]
         attach: false
+
   SKY_STONE_ISLAND:
     - id: "SKY_STONE_ISLAND1"
       frame_id: "base_link"
@@ -117,6 +124,7 @@ scenes_list:
         position: [ -0.594873, 0., 0.4436 ]
         orientation: [ 0., 0., 0., 0. ]
         attach: false
+
   SMALL_STONE_ISLAND:
     - id: "SMALL_STONE_ISLAND"
       frame_id: "base_link"
@@ -135,7 +143,7 @@ scenes_list:
         position: [ 0.4275, 0., 0.6236 ]
         orientation: [ 0., 0., 0., 0. ]
 
-  ##############################################
+  ###################    OBJECT_IN_CAR    ####################
   NORMAL_STONE:
     - id: "normal_stone"
       frame_id: "link6"
@@ -146,6 +154,7 @@ scenes_list:
         position: [ 0.152, 0., 0.13 ]
         orientation: [ 0., 0., 0., 0. ]
       attach: true
+
   SKY_STONE:
     - id: "sky_stone"
       frame_id: "link6"
@@ -156,6 +165,7 @@ scenes_list:
         position: [ 0.062, 0., 0.13 ]
         orientation: [ 0., 0., 0., 0. ]
       attach: true
+
   STORE_STONE:
     - id: "sky_stone"
       frame_id: "base_link"
