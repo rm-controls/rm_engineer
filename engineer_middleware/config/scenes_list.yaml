@@ -48,7 +48,7 @@ scenes_list:
         type: box
         dimension: [ 0.001, 1.058, 0.08 ]
       pose:
-        position: [ 0.297, 0., -0.016 ]
+        position: [ 0.31, 0., -0.016 ]
         orientation: [ 0., 0, 0., 0 ]
     - id: "EXCHANGE_ISLAND2"
       frame_id: "base_link"
@@ -113,7 +113,7 @@ scenes_list:
         dimension: [ 0.001, 1.058001, 0.374256 ]
       pose:
         position: [ -0.406878, 0., 0.2936 ]
-        orientation: [ 0, -0.949, 0., 0.315 ]
+        orientation: [ 0, -0.949, 0., -0.315 ]
         attach: false
     - id: "SKY_STONE_ISLAND3"
       frame_id: "base_link"
