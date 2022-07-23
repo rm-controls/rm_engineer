@@ -1,36 +1,35 @@
 common:
-  slowly: &SLOWLY
-    speed: 0.2
-    accel: 0.2
-    timeout: 10
-  normally: &NORMALLY
-    speed: 0.5
-    accel: 0.5
-    timeout: 6.
-  quickly: &QUICKLY
-    speed: 1.
-    accel: 1.
-    timeout: 4.
+  speed:
+    slowly: &SLOWLY
+      speed: 0.2
+      accel: 0.2
+      timeout: 10
+    normally: &NORMALLY
+      speed: 0.5
+      accel: 0.5
+      timeout: 6.
+    quickly: &QUICKLY
+      speed: 1.
+      accel: 1.
+      timeout: 4.
 
-  open_gripper: &OPEN_GRIPPER
-    state: false
-  close_gripper: &CLOSE_GRIPPER
-    state: true
+  gripper:
+    open_gripper: &OPEN_GRIPPER
+      state: false
+    close_gripper: &CLOSE_GRIPPER
+      state: true
 
-  normal_tolerance: &NORMAL_TOLERANCE
-    tolerance_joints: [ 0.009, 0.009, 0.009, 0.006, 0.1, 0.1, 0.1 ]
-  bigger_tolerance: &BIGGER_TOLERANCE
-    tolerance_joints: [ 0.014, 0.02, 0.02, 0.009, 0.2, 0.2, 0.2 ]
+  tolerance:
+    normal_tolerance: &NORMAL_TOLERANCE
+      tolerance_joints: [ 0.009, 0.009, 0.009, 0.006, 0.1, 0.1, 0.1 ]
+    bigger_tolerance: &BIGGER_TOLERANCE
+      tolerance_joints: [ 0.014, 0.02, 0.02, 0.009, 0.2, 0.2, 0.2 ]
 
   arm:
     home: &ARM_HOME
       joints: [ 0.012, 0., 0.218, 0., 0.87, 0., 0. ]
       <<: *NORMALLY
       <<: *NORMAL_TOLERANCE
-    home_store: &ARM_HOME_STORE
-      joints: [ 0.17, -0.063, 0.213, 0., 1.0266, 0., 0. ]
-      <<: *NORMALLY
-      <<: *BIGGER_TOLERANCE
 
   gimbal:
     grasp_stone: &SKY_POS
@@ -47,7 +46,7 @@ common:
       position: [ -2 ,-0.1, -15 ]
 
 steps_list:
-  ################### COMMON ####################
+  ################### COMMON STEP####################
   SKY_GIMBAL:
     - step: "open gripper"
       gimbal:
@@ -77,10 +76,6 @@ steps_list:
     - step: "approach"
       arm:
         <<: *ARM_HOME
-  BACK_HOME_STORE:
-    - step: "back home"
-      arm:
-        <<: *ARM_HOME_STORE
 
   DELETE_SCENE:
     - step: "delete_scene"
@@ -116,6 +111,10 @@ steps_list:
         <<: *BACK_POS
 
   ################### BIG_ISLAND ####################
+  ###################    READY    ####################
+  READY_BIG_ISLAND0:
+    - step: ""
+
   ###################    MID    ####################
   MID_BIG_ISLAND0:
     - step: "add scene of sky island"
@@ -263,11 +262,12 @@ steps_list:
       arm:
         <<: *ARM_HOME
 
-  ###################    READY    ####################
-  READY_BIG_ISLAND0:
-    - step: ""
-
   ###################    SKY_ISLAND    ####################
+  ###################    READY    ####################
+  READY_SKY_ISLAND0:
+    - step: "ready"
+
+
   ###################    MID    ####################
   MID_SKY_ISLAND0:
     - step: "add scene of sky island"
@@ -399,10 +399,6 @@ steps_list:
     - step: "move to mid ready"
       arm:
         <<: *ARM_HOME
-
-  ###################    READY    ####################
-  READY_SKY_ISLAND0:
-    - step: "ready"
 
   ###################    GAIN_STORE_STONE    ####################
   ###################    NORMAL    ####################
