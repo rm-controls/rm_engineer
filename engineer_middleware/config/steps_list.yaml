@@ -47,6 +47,8 @@ common:
 
 steps_list:
   ################### COMMON STEP####################
+  EMPTY_HOME:
+  STORED_HOME:
   SKY_GIMBAL:
     - step: "open gripper"
       gimbal:
@@ -130,7 +132,7 @@ steps_list:
     - step: "ready"
       arm:
         joints: [ 0.238, 0.185, 0.219, 0,1.6878, 0, 0 ]
-        <<: *QUICKLY
+        <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
 
   MID_BIG_ISLAND00:
@@ -142,12 +144,12 @@ steps_list:
     - step: "ready"
       arm:
         joints: [ 0.238, 0.185, 0.219, 0,1.6878, 0, 0 ]
-        <<: *QUICKLY
+        <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
     - step: "ready"
       arm:
         joints: [ 0.238, 0.32, 0.3, 0,1.6878, 0, 0 ]
-        <<: *QUICKLY
+        <<: *NORMALLY
         <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
@@ -180,7 +182,7 @@ steps_list:
     - step: "ready"
       arm:
         joints: [ 0.238, 0.185, 0.219, 0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
+        <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
 
   LF_BIG_ISLAND00:
@@ -192,12 +194,12 @@ steps_list:
     - step: "ready"
       arm:
         joints: [ 0.238, 0.185, 0.219, 0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
+        <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
     - step: "ready"
       arm:
         joints: [ 0.238, 0.32, 0.3, 0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
+        <<: *NORMALLY
         <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
@@ -230,7 +232,7 @@ steps_list:
     - step: "ready"
       arm:
         joints: [ 0.238, 0.185, 0.219, -0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
+        <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
 
   RT_BIG_ISLAND00:
@@ -242,12 +244,12 @@ steps_list:
     - step: "ready"
       arm:
         joints: [ 0.238, 0.185, 0.219, -0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
+        <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
     - step: "ready"
       arm:
         joints: [ 0.238, 0.32, 0.3, -0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
+        <<: *NORMALLY
         <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
