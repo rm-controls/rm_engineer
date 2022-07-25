@@ -27,7 +27,7 @@ common:
 
   arm:
     normal_home: &NORMAL_HOME
-      joints: [ 0.012, 0., 0., 0., 0.87, 0., 0. ]
+      joints: [ 0.012, 0., 0.15, 0., 0.87, 0., 0. ]
       <<: *NORMALLY
       <<: *NORMAL_TOLERANCE
     sky_home: &SKY_HOME
