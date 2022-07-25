@@ -33,7 +33,7 @@ planning_frame: base_link  # The MoveIt planning frame. Often 'base_link' or 'wo
 
 ## Other frames
 ee_frame_name: link6  # The name of the end effector link, used to return the EE pose
-robot_link_command_frame: base_link  # commands must be given in the frame of a robot link. Usually either the base or end effector
+robot_link_command_frame: tools_link  # commands must be given in the frame of a robot link. Usually either the base or end effector
 
 ## Stopping behaviour
 incoming_command_timeout: 0.1  # Stop servoing if X seconds elapse without a new command
@@ -61,8 +61,8 @@ collision_check_rate: 50 # [Hz] Collision-checking can easily bog down a CPU if 
 # "stop_distance" stops if a collision is nearer than the worst-case stopping distance and the distance is decreasing. Requires joint acceleration limits
 collision_check_type: threshold_distance
 # Parameters for "threshold_distance"-type collision checking
-self_collision_proximity_threshold: 0.01 # Start decelerating when a self-collision is this far [m]
-scene_collision_proximity_threshold: 0.05 # Start decelerating when a scene collision is this far [m]
+self_collision_proximity_threshold: 0.0002 # Start decelerating when a self-collision is this far [m]
+scene_collision_proximity_threshold: 0.0005 # Start decelerating when a scene collision is this far [m]
 # Parameters for "stop_distance"-type collision checking
 collision_distance_safety_factor: 1000 # Must be >= 1. A large safety factor is recommended to account for latency
 min_allowable_collision_distance: 0.001 # Stop if a collision is closer than this [m]
