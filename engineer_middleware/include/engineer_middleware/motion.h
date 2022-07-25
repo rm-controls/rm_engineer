@@ -306,7 +306,7 @@ public:
   }
   bool move() override
   {
-    msg_.gpio_state[0] = true;
+    msg_.gpio_state[0] = state_;
     return PublishMotion::move();
   }
 
