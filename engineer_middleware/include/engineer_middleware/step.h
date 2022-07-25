@@ -30,13 +30,14 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
- 
+
 #ifndef ENGINEER_MIDDLEWARE_STEP_H_
 #define ENGINEER_MIDDLEWARE_STEP_H_
 
 #pragma once
 
 #include "engineer_middleware/motion.h"
+#include "engineer_middleware/planning_scene.h"
 #include <string>
 #include <unordered_map>
 #include <iostream>
@@ -48,9 +49,9 @@ namespace engineer_middleware
 class Step
 {
 public:
-  Step(const XmlRpc::XmlRpcValue& step, tf2_ros::Buffer& tf, moveit::planning_interface::MoveGroupInterface& arm_group,
-       ChassisInterface& chassis_interface, ros::Publisher& hand_pub, ros::Publisher& card_pub,
-       ros::Publisher& gimbal_pub)
+  Step(const XmlRpc::XmlRpcValue& step, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
+       moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
+       ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub)
   {
     ROS_ASSERT(step.hasMember("step"));
     step_name_ = static_cast<std::string>(step["step"]);
@@ -69,6 +70,14 @@ public:
       card_motion_ = new JointPositionMotion(step["card"], card_pub);
     if (step.hasMember("gimbal"))
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
+    if (step.hasMember("gripper"))
+      gpio_motion_ = new GpioMotion(step["gripper"], gpio_pub);
+    if (step.hasMember("scene_name"))
+    {
+      for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
+        if (step["scene_name"] == it->first)
+          planning_scene_ = new PlanningScene(it->second, arm_group);
+    }
   }
   bool move()
   {
@@ -83,6 +92,10 @@ public:
       success &= chassis_motion_->move();
     if (gimbal_motion_)
       success &= gimbal_motion_->move();
+    if (gpio_motion_)
+      success &= gpio_motion_->move();
+    if (planning_scene_)
+      planning_scene_->Add();
     return success;
   }
   void stop()
@@ -93,6 +106,12 @@ public:
       hand_motion_->stop();
     if (chassis_motion_)
       chassis_motion_->stop();
+  }
+
+  void deleteScene(std::vector<std::string> object_id)
+  {
+    if (object_id.size() > 0)
+      planning_scene_interface_.removeCollisionObjects(object_id);
   }
   bool isFinish()
   {
@@ -124,6 +143,7 @@ public:
       success &= gimbal_motion_->checkTimeout(period);
     return success;
   }
+
   std::string getName()
   {
     return step_name_;
@@ -136,6 +156,9 @@ private:
   JointPositionMotion* card_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
+  GpioMotion* gpio_motion_{};
+  PlanningScene* planning_scene_{};
+  moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
 };
 
 }  // namespace engineer_middleware

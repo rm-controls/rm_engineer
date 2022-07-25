@@ -30,7 +30,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
- 
+
 //
 // Created by qiayuan on 4/3/21.
 //
@@ -53,14 +53,19 @@ namespace engineer_middleware
 class StepQueue
 {
 public:
-  StepQueue(const XmlRpc::XmlRpcValue& steps, tf2_ros::Buffer& tf,
+  StepQueue(const XmlRpc::XmlRpcValue& steps, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
             moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
-            ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub)
+            ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub)
     : chassis_interface_(chassis_interface)
   {
     ROS_ASSERT(steps.getType() == XmlRpc::XmlRpcValue::TypeArray);
     for (int i = 0; i < steps.size(); ++i)
-      queue_.emplace_back(steps[i], tf, arm_group, chassis_interface, hand_pub, card_pub, gimbal_pub);
+    {
+      queue_.emplace_back(steps[i], scenes, tf, arm_group, chassis_interface, hand_pub, card_pub, gimbal_pub, gpio_pub);
+    }
+    for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
+      for (int i = 0; i < it->second.size(); i++)
+        object_ids_.push_back(it->second[i]["id"]);
   }
   bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as)
   {
@@ -103,8 +108,13 @@ public:
       ROS_INFO("Finish step: %s", queue_[i].getName().c_str());
     }
     result.finish = true;
+    deleteScene();
     as.setSucceeded(result);
     return true;
+  }
+  void deleteScene()
+  {
+    queue_.begin()->deleteScene(object_ids_);
   }
   const std::deque<Step>& getQueue() const
   {
@@ -117,6 +127,7 @@ public:
 
 private:
   std::deque<Step> queue_;
+  std::vector<std::string> object_ids_;
   ChassisInterface& chassis_interface_;
 };
 }  // namespace engineer_middleware

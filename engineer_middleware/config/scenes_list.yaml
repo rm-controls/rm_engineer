@@ -1,0 +1,178 @@
+scenes_list:
+  ###################    TEST    ####################
+  TEST_BOX:
+    - id: "box"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.1, 0.3, 0.1 ]
+      pose:
+        position: [ 0., 0., 1.5 ]
+        orientation: [ 0., 0., 0., 0. ]
+
+  TEST_CONE:
+    - id: "cone"
+      frame_id: "base_link"
+      primitive:
+        type: cone
+        dimension: [ 0.1, 0.3 ]
+      pose:
+        position: [ 0., 0., 1.5 ]
+        orientation: [ 0., 0., 0., 0. ]
+
+  TEST_CYLINDER:
+    - id: "cylinder"
+      frame_id: "base_link"
+      primitive:
+        type: cylinder
+        dimension: [ 0.1, 0.3 ]
+      pose:
+        position: [ 0., 0., 1.5 ]
+        orientation: [ 0., 0., 0., 0. ]
+
+  TEST_SPHERE:
+    - id: "sphere"
+      frame_id: "base_link"
+      primitive:
+        type: sphere
+        dimension: [ 0.1 ]
+      pose:
+        position: [ 0., 0., 1.5 ]
+        orientation: [ 0., 0., 0., 0. ]
+
+  ###################    SCENE    ####################
+  EXCHANGE_ISLAND:
+    - id: "EXCHANGE_ISLAND1"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.001, 1.058, 0.08 ]
+      pose:
+        position: [ 0.31, 0., -0.016 ]
+        orientation: [ 0., 0, 0., 0 ]
+    - id: "EXCHANGE_ISLAND2"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.001, 1.058, 0.532 ]
+      pose:
+        position: [ 0.350941, 0., 0.284473 ]
+        orientation: [ 0, -0.995, 0., 0.102 ]
+    - id: "EXCHANGE_ISLAND3"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.3, 1.058, 0.001 ]
+      pose:
+        position: [ 0.552883, 0., 0.544547 ]
+        orientation: [ 0., 0., 0., 0. ]
+
+  BIG_STONE_ISLAND:
+    - id: "BIG_STONE_ISLAND1"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.001, 1.058, 0.2 ]
+      pose:
+        position: [ 0.295, 0., 0.0436 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false
+    - id: "BIG_STONE_ISLAND2"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.001, 1.058001, 0.374256 ]
+      pose:
+        position: [ 0.406878, 0., 0.2936 ]
+        orientation: [ 0, -0.949, 0., 0.315 ]
+        attach: false
+    - id: "BIG_STONE_ISLAND3"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.151243, 1.058001, 0.001 ]
+      pose:
+        position: [ 0.594873, 0., 0.4436 ]
+        orientation: [ 0., 0., 0., 0. ]
+        attach: false
+
+  SKY_STONE_ISLAND:
+    - id: "SKY_STONE_ISLAND1"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.001, 1.058, 0.2 ]
+      pose:
+        position: [ -0.295, 0., 0.0436 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false
+    - id: "SKY_STONE_ISLAND2"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.001, 1.058001, 0.374256 ]
+      pose:
+        position: [ -0.406878, 0., 0.2936 ]
+        orientation: [ 0, -0.949, 0., -0.315 ]
+        attach: false
+    - id: "SKY_STONE_ISLAND3"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.151243, 1.058001, 0.001 ]
+      pose:
+        position: [ -0.594873, 0., 0.4436 ]
+        orientation: [ 0., 0., 0., 0. ]
+        attach: false
+
+  SMALL_STONE_ISLAND:
+    - id: "SMALL_STONE_ISLAND"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.001, 0.767634, 0.7 ]
+      pose:
+        position: [ 0.295, 0., 0.2736 ]
+        orientation: [ 0., 0., 0., 0. ]
+    - id: "SMALL_STONE_ISLAND2"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.265, 0.767634, 0.001 ]
+      pose:
+        position: [ 0.4275, 0., 0.6236 ]
+        orientation: [ 0., 0., 0., 0. ]
+
+  ###################    OBJECT_IN_CAR    ####################
+  NORMAL_STONE:
+    - id: "normal_stone"
+      frame_id: "link6"
+      primitive:
+        type: box
+        dimension: [ 0.18, 0.18, 0.18 ]
+      pose:
+        position: [ 0.152, 0., 0.13 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: true
+
+  SKY_STONE:
+    - id: "sky_stone"
+      frame_id: "link6"
+      primitive:
+        type: box
+        dimension: [ 0.18, 0.18, 0.18 ]
+      pose:
+        position: [ 0.062, 0., 0.13 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: true
+
+  STORE_STONE:
+    - id: "sky_stone"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.18, 0.18, 0.18 ]
+      pose:
+        position: [ 0.2, 0., 0.1325 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false
