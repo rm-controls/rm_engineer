@@ -30,7 +30,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
- 
+
 #ifndef ENGINEER_MIDDLEWARE_STEP_H_
 #define ENGINEER_MIDDLEWARE_STEP_H_
 
@@ -70,17 +70,17 @@ public:
       card_motion_ = new JointPositionMotion(step["card"], card_pub);
     if (step.hasMember("gimbal"))
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
-		if (step.hasMember("scence"))
-		{
-			for (int i = 0; i < scences.size(); i++)
-			{
-				if (step["scence"]["names"] == scences[i]["name"])
-					planning_scence_ = new PlanningScence(scences[i]);
-			}
-		}
-	}
+    if (step.hasMember("scence"))
+    {
+      for (int i = 0; i < scences.size(); i++)
+      {
+        if (step["scence"]["names"] == scences[i]["name"])
+          planning_scence_ = new PlanningScence(scences[i]);
+      }
+    }
+  }
   bool move()
-	  {
+  {
     bool success = true;
     if (arm_motion_)
       success &= arm_motion_->move();
@@ -92,8 +92,8 @@ public:
       success &= chassis_motion_->move();
     if (gimbal_motion_)
       success &= gimbal_motion_->move();
-		if(planning_scence_)
-			planning_scence_->Add();
+    if (planning_scence_)
+      planning_scence_->Add();
     return success;
   }
   void stop()
@@ -104,14 +104,14 @@ public:
       hand_motion_->stop();
     if (chassis_motion_)
       chassis_motion_->stop();
-		if(planning_scence_)
-			planning_scence_->Delete();
+    if (planning_scence_)
+      planning_scence_->Delete();
   }
-	void deleteScence()
-	{
-		if (planning_scence_)
-			planning_scence_->Delete();
-	}
+  void deleteScence()
+  {
+    if (planning_scence_)
+      planning_scence_->Delete();
+  }
   bool isFinish()
   {
     bool success = true;
@@ -129,34 +129,34 @@ public:
   }
   bool checkTimeout(ros::Duration period)
   {
-	  bool success = true;
-	  if (arm_motion_)
-		  success &= arm_motion_->checkTimeout(period);
-	  if (hand_motion_)
-		  success &= hand_motion_->checkTimeout(period);
-	  if (card_motion_)
-		  success &= card_motion_->checkTimeout(period);
-	  if (chassis_motion_)
-		  success &= chassis_motion_->checkTimeout(period);
-	  if (gimbal_motion_)
-		  success &= gimbal_motion_->checkTimeout(period);
-	  return success;
+    bool success = true;
+    if (arm_motion_)
+      success &= arm_motion_->checkTimeout(period);
+    if (hand_motion_)
+      success &= hand_motion_->checkTimeout(period);
+    if (card_motion_)
+      success &= card_motion_->checkTimeout(period);
+    if (chassis_motion_)
+      success &= chassis_motion_->checkTimeout(period);
+    if (gimbal_motion_)
+      success &= gimbal_motion_->checkTimeout(period);
+    return success;
   }
 
-	std::string getName()
-	{
-		return step_name_;
-	}
+  std::string getName()
+  {
+    return step_name_;
+  }
 
 private:
-	std::string step_name_;
-	MoveitMotionBase* arm_motion_{};
-	HandMotion* hand_motion_{};
-	JointPositionMotion* card_motion_{};
-	ChassisMotion* chassis_motion_{};
-	GimbalMotion* gimbal_motion_{};
-	PlanningScence* planning_scence_{};
-	};
+  std::string step_name_;
+  MoveitMotionBase* arm_motion_{};
+  HandMotion* hand_motion_{};
+  JointPositionMotion* card_motion_{};
+  ChassisMotion* chassis_motion_{};
+  GimbalMotion* gimbal_motion_{};
+  PlanningScence* planning_scence_{};
+};
 
 }  // namespace engineer_middleware
 #endif  // ENGINEER_MIDDLEWARE_STEP_H_
