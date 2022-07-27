@@ -105,10 +105,13 @@ public:
       as.publishFeedback(feedback);
       ROS_INFO("Finish step: %s", queue_[i].getName().c_str());
     }
-    queue_[0].deleteScence();
     result.finish = true;
     as.setSucceeded(result);
     return true;
+  }
+  void deleteScence()
+  {
+    queue_.begin()->deleteScence();
   }
   const std::deque<Step>& getQueue() const
   {
