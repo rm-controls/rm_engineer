@@ -71,13 +71,13 @@ steps_list:
   ###################    MID    ####################
   TEST_SCENCE:
     - step: "test"
-      scene_name: "BIG_STONE_ISLAND"
+      scene_name: "NORMAL_STONE"
     - step: "back home"
       arm:
         <<: *ARM_HOME
   GRASP_BIG_MID_PRE:
     - step: "add scene"
-      scene_name: "BIG_STONE_ISLAND"
+      scene_name: "NORMAL_STONE"
     - step: "move to mid ready"
       arm:
         joints: [ 0.243, 0.282, 0.177, 0., 1.74, 0., 0. ]
@@ -250,7 +250,13 @@ steps_list:
   ###################    MID    ####################
   SKY_MID_PRE:
     - step: "scene"
-      scene_name: "BIG_STONE_ISLAND"
+      scene:
+        name: "BIG_STONE_ISLAND"
+        operation: "remove"
+    - step: "scene"
+      scene:
+        name: "BIG_STONE_ISLAND"
+        operation: "add"
     - step: "move mid"
       arm:
         joints: [ 0.23, -0.2, 0., 0., 0., 0, 3.14 ]

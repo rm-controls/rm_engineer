@@ -146,6 +146,21 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          mimic_link1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mimic_link2_1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mimic_link2_2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           pitch:
             Alpha: 1
             Show Axes: false
@@ -297,6 +312,21 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          mimic_link1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mimic_link2_1:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mimic_link2_2:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           pitch:
             Alpha: 1
             Show Axes: false
@@ -348,7 +378,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 2.3316266536712646
+      Distance: 2.1942455768585205
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -364,9 +394,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.13479965925216675
+      Pitch: 0.019799698144197464
       Target Frame: base_link
-      Yaw: 4.495528221130371
+      Yaw: 4.810473442077637
     Saved: ~
 Window Geometry:
   Displays:
@@ -384,5 +414,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1386
-  X: -391
-  Y: 47
+  X: 72
+  Y: 27
