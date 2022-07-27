@@ -74,11 +74,9 @@ public:
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
     if (step.hasMember("scence"))
     {
-      for (int i = 0; i < scences.size(); i++)
-      {
-        if (step["scence"]["names"] == scences[i]["name"])
-          planning_scence_ = new PlanningScence(scences[i]);
-      }
+      for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scences.begin(); it != scences.end(); ++it)
+        if (step["scence"]["name"] == it->first)
+          planning_scence_ = new PlanningScence(it->second);
     }
   }
   bool move()
@@ -108,13 +106,12 @@ public:
       hand_motion_->stop();
     if (chassis_motion_)
       chassis_motion_->stop();
-    if (planning_scence_)
-      planning_scence_->Delete();
   }
-  void deleteScence()
+
+  void deleteScence(std::vector<std::string> object_id)
   {
-    if (planning_scence_)
-      planning_scence_->Delete();
+    if (object_id.size() > 0)
+      planning_scene_interface.removeCollisionObjects(object_id);
   }
   bool isFinish()
   {
@@ -165,6 +162,7 @@ private:
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
   PlanningScence* planning_scence_{};
+  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 };
 
 }  // namespace engineer_middleware
