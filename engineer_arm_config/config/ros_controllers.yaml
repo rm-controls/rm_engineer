@@ -50,10 +50,18 @@ controllers:
       - joint6
       - joint7
     gains:
-      joint1: { p: 1.4, i: 0, d: 0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint2: { p: 1.0, i: 0, d: 0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint3: { p: 1.0, i: 0, d: 0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint4: { p: 1.0, i: 0, d: 0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint5: { p: 1.0, i: 0, d: 0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint6: { p: 1.0, i: 0, d: 0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint7: { p: 1.0, i: 0, d: 0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint1: { p: 5000.0, i: 0, d: 400, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint2: { p: 3000.0, i: 0, d: 300, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint3: { p: 3000.0, i: 0, d: 300, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint4: { p: 2000.0, i: 0, d: 500, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint5: { p: 200.0, i: 0, d: 13, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint6: { p: 50.0, i: 0, d: 5, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint7: { p: 8.0, i: 0, d: 0.8, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+  card_controller:
+    type: effort_controllers/JointPositionController
+    joint: card_joint
+    pid: { p: 50000.0, i: 0.0, d: 1000.0 }
+  drag_controller:
+    type: effort_controllers/JointPositionController
+    joint: drag_joint
+    pid: { p: 5.0, i: 0.0, d: 0.0 }
