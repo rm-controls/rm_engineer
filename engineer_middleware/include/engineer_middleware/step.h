@@ -49,9 +49,9 @@ namespace engineer_middleware
 class Step
 {
 public:
-  Step(const XmlRpc::XmlRpcValue& step, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
-       moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
-       ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub)
+  Step(const XmlRpc::XmlRpcValue& step, tf2_ros::Buffer& tf, moveit::planning_interface::MoveGroupInterface& arm_group,
+       ChassisInterface& chassis_interface, ros::Publisher& hand_pub, ros::Publisher& card_pub,
+       ros::Publisher& gimbal_pub, const XmlRpc::XmlRpcValue& scenes)
   {
     ROS_ASSERT(step.hasMember("step"));
     step_name_ = static_cast<std::string>(step["step"]);
@@ -70,8 +70,6 @@ public:
       card_motion_ = new JointPositionMotion(step["card"], card_pub);
     if (step.hasMember("gimbal"))
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
-    if (step.hasMember("gripper"))
-      gpio_motion_ = new GpioMotion(step["gripper"], gpio_pub);
     if (step.hasMember("scene"))
     {
       for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
@@ -92,8 +90,6 @@ public:
       success &= chassis_motion_->move();
     if (gimbal_motion_)
       success &= gimbal_motion_->move();
-    if (gpio_motion_)
-      success &= gpio_motion_->move();
     if (planning_scene_)
       planning_scene_->Add();
     return success;
@@ -156,7 +152,6 @@ private:
   JointPositionMotion* card_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
-  GpioMotion* gpio_motion_{};
   PlanningScene* planning_scene_{};
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
 };
