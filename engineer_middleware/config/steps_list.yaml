@@ -1,61 +1,475 @@
 common:
   slowly: &SLOWLY
-    speed: 0.0005
-    accel: 0.0005
-    timeout: 0.1
+    speed: 0.1
+    accel: 0.1
+    timeout: 6.
+  normally: &NORMALLY
+    speed: 0.5
+    accel: 0.5
+    timeout: 4.
   quickly: &QUICKLY
-    speed: 1.0
-    accel: 1.0
-    timeout: 2.
-  hand:
-    open: &HAND_OPEN
-      position: -0.005
-      delay: 0.1
-    stone: &HAND_STONE
-      position: -0.025
-      delay: 0.4
-    loosen: &HAND_LOOSEN
-      position: -0.023
-      delay: 0.3
-    close: &HAND_CLOSE
-      position: -0.028
-      delay: 0.3
-  arm:
-    home: &ARM_HOME
-      joints: [ 0., -2.181, 2.164, 0.0, 0.0 ]
-      <<: *QUICKLY
-      tolerance_angular: 0.1
-    top: &ARM_TOP
-      arm:
-        joints: [ -2.735, -1.452, -0.133, 1.06, 0.0125 ]
-        <<: *QUICKLY
-        tolerance_angular: 0.1
-    fold_lower: &ARM_FOLD_LOWER
-      joints: [ 0.426, -2.286, -0.785, -0.191, -1.57 ]
-      <<: *QUICKLY
-      tolerance_angular: 0.5
-    fold_upper: &ARM_FOLD_UPPER
-      joints: [ 0., -2.286, 1.3439, -0.191, -1.57 ]
-      <<: *QUICKLY
-      tolerance_angular: 0.5
-  gimbal:
-    forward_lower: &GIMBAL_FORWARD_LOWER
-      frame: base_link
-      position: [ 0.5, -0.215, 0.4 ]
-    forward_upper: &GIMBAL_FORWARD_UPPER
-      frame: base_link
-      position: [ 0.5, -0.215, 1.0 ]
-    stone_big: &GIMBAL_STONE_BIG
-      frame: base_link
-      position: [ 0.64, 0., 0.5 ]
+    speed: 1.
+    accel: 1.
+    timeout: 3.
+  normal_tolerance: &NORMAL_TOLERANCE
+    tolerance_joints: [ 0.005, 0.005, 0.005, 0.002, 0.3, 0.3, 0.3 ]
+  gripper:
+arm:
+  home: &ARM_HOME
+    joints: [ 0.005, 0., 0.218, 0., 0.1, 0., 0. ]
+    <<: *QUICKLY
+    <<: *NORMAL_TOLERANCE
+gimbal:
+  stone_big: &GIMBAL_STONE_BIG
+    frame: base_link
+    position: [ 0.64, 0., 0.5 ]
 
 steps_list:
-  TEST_BOX:
-    - step: "add_island"
-      scene:
-        name: "TEST_BOX"
-    - step: "pull_up1"
+  ################### common ####################
+  OPEN_GRIPPER:
+    - step: "open gripper"
+      gripper:
+        state: "open"
+  CLOSE_GRIPPER:
+    - step: "close gripper"
+      gripper:
+        state: "close"
+  DYNAMICX:
+    - step: "back home"
       arm:
-        joints: [ 0., 0.2, 0.155, 0., 0.,0.,0. ]
+        <<: *ARM_HOME
+    - step: "first"
+      arm:
+        joints: [ 0.024, -0.205, -0.088, -0.251, 0., 0., 3.14 ]
+        <<: *NORMAL_TOLERANCE
+        <<: *QUICKLY
+    - step: "back home"
+      arm:
+        <<: *ARM_HOME
+    - step: "second"
+      arm:
+        joints: [ 0.175, -0.205, -0.088, 0.266, 0., 0., 3.14 ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "second"
+      arm:
+        joints: [ 0., -0.017, 0.241, 0., 0., 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "second"
+      arm:
+        joints: [ 0., 0.25, 0.27, 0., 2.5, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "back home"
+      arm:
+        <<: *ARM_HOME
+  ################### GRASP_BIG ####################
+  ###################    MID    ####################
+  GRASP_BIG_MID_PRE:
+    - step: "add scene"
+      scene:
+        name: "BIG_STONE_ISLAND"
+    - step: "move to mid ready"
+      arm:
+        joints: [ 0.243, 0.282, 0.177, 0., 81.74, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+  GRASP_BIG_MID_PROC:
+    - step: "add scene"
+      scene:
+        name: "BIG_STONE_ISLAND"
+    - step: "open gripper"
+      gripper:
+        state: "close"
+    - step: "move to mid repeat"
+      arm:
+        joints: [ 0.243, 0.285, 0.177, 0., 1.74, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "forward to catch stone"
+      arm:
+        joints: [ 0.243, 0.292, 0.296, 0, 1.78, 0, 0 ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "hold stone "
+      arm:
+        joints: [ 0.238, 0.292, 0.296, 0, 0.5, 0, 0 ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "hold stone and back"
+      arm:
+        joints: [ 0.245, 0.285, 0.177, 0., 0.5, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+  ###################    LF    ####################
+  GRASP_BIG_LF_PRE:
+    - step: "add scene"
+      scene:
+        name: "BIG_STONE_ISLAND"
+    - step: "move to left ready"
+      arm:
+        joints: [ 0.243, 0.285, 0.177, 0.3, 1.74, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+  GRASP_BIG_LF_PROC:
+    - step: "add scene"
+      scene:
+        name: "BIG_STONE_ISLAND"
+    - step: "open gripper"
+      gripper:
+        state: "open"
+    - step: "move to left repeat"
+      arm:
+        joints: [ 0.245, 0.285, 0.177, 0.3, 1.7, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "forward to catch stone"
+      arm:
+        joints: [ 0.245, 0.285, 0.31, 0.3, 1.7, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "hold stone "
+      arm:
+        joints: [ 0.245, 0.285, 0.31, 0.3, 0.9, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "hold stone and back"
+      arm:
+        joints: [ 0.245, 0.285, 0.177, 0.3, 0.9, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+  ###################    RT    ####################
+  GRASP_BIG_RT_PRE:
+    - step: "add scene"
+      scene:
+        name: "BIG_STONE_ISLAND"
+    - step: "move to mid ready"
+      arm:
+        joints: [ 0.245, 0.285, 0.177, -0.3, 1.7, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+  GRASP_BIG_RT_PROC:
+    - step: "scence"
+      scene:
+        name: "BIG_STONE_ISLAND"
+    - step: "open gripper"
+      gripper:
+        state: "open"
+    - step: "move to mid repeat"
+      arm:
+        joints: [ 0.245, 0.285, 0.177, -0.3, 1.7, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "forward to catch stone"
+      arm:
+        joints: [ 0.245, 0.285, 0.31, -0.3, 1.7, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "hold stone "
+      arm:
+        joints: [ 0.245, 0.285, 0.31, -0.3, 0.9, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "hold stone and back"
+      arm:
+        joints: [ 0.245, 0.285, 0.177, -0.3, 0.9, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+  ################### EXCHANGE(finish simulation) ####################(important)
+  EXCHANGE_PRE:
+    - step: "scence"
+      scene:
+        name: "EXCHANGE"
+    - step: "down stone"
+      arm:
+        joints: [ 0.23, 0.092, 0.18, 0., 1.2876, 0., 0. ]
         <<: *SLOWLY
-        tolerance_angular: 0.5
+        <<: *NORMAL_TOLERANCE
+    - step: "off gripper"
+  EXCHANGE_PROC:
+    - step: "push stone"
+      arm:
+        joints: [ 0.23, -0.03, 0.05, 0., 1.1, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "push stone"
+      arm:
+        joints: [ 0.23, 0.092, 0.31, 0., 1.1, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "push stone"
+      arm:
+        joints: [ 0.23, 0.092, 0.31, 0., 1.15, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "down stone"
+      arm:
+        joints: [ 0.23, 0.092, 0.18, 0., 1.12, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+
+  ################### GROUND_STONE(finish simulation) ####################
+  GROUND_STONE:
+    - step: "open gripper"
+      gripper:
+        state: "open"
+    - step: "repeat pre"
+      arm:
+        joints: [ 0.24, 0.270, 0.284, 0.298, 3.14, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "down stone"
+      arm:
+        joints: [ 0., 0.270, 0.284, 0.298, 3.14, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "up stone"
+      arm:
+        joints: [ 0.24, 0.270, 0.284, 0.298, 3.14, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "up stone"
+      arm:
+        joints: [ 0.24, 0.270, 0.284, 0.298, 3.14, -0.7482, 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "up stone"
+      arm:
+        joints: [ 0.24, 0.270, 0.284, 0.298, 1.12, -0.7482, 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+
+  ################### SKY(finish simulation) ####################
+  ###################    MID    ####################
+  SKY_MID_PRE:
+    - step: "scene"
+      scence:
+        name: "BIG_STONE_ISLAND"
+    - step: "move mid"
+      arm:
+        joints: [ 0.23, -0.2, 0., 0., 0., 0, 3.14 ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+  SKY_MID_PROC:
+    - step: "scene"
+      scence:
+        name: "BIG_STONE_ISLAND"
+    - step: "open gripper"
+      gripper:
+        state: "open"
+    - step: "down stone"
+      arm:
+        joints: [ 0.23, -0.36, -0.1, 0., 0., 0., 3.14 ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+
+  ###################    LF    ####################
+  SKY_LF_PRE:
+    - step: "scene"
+      scence:
+        name: "BIG_STONE_ISLAND"
+    - step: "move left"
+      arm:
+        joints: [ 0.23, -0.2, 0., 0.3, 0., 0., 3.14 ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+  SKY_LF_PROC:
+    - step: "scene"
+      scence:
+        name: "BIG_STONE_ISLAND"
+    - step: "move left"
+      arm:
+        joints: [ 0.23, -0.2, 0., 0.3, 0., 0., 3.14 ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "open gripper"
+      gripper:
+        state: "open"
+    - step: "down stone"
+      arm:
+        joints: [ 0.23, -0.36, -0.1, 0.3, 0., 0., 3.14 ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+
+  ###################    RT    ####################
+  SKY_RT_PRE:
+    - step: "scene"
+      scence:
+        name: "BIG_STONE_ISLAND"
+    - step: "move left"
+      arm:
+        joints: [ 0.23, -0.2, 0., -0.3, 0., 0., 3.14 ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+  SKY_RT_PROC:
+    - step: "scene"
+      scence:
+        name: "BIG_STONE_ISLAND"
+    - step: "move left"
+      arm:
+        joints: [ 0.23, -0.2, 0., -0.3, 0., 0., 3.14 ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "open gripper"
+      gripper:
+        state: "open"
+    - step: "down stone"
+      arm:
+        joints: [ 0.23, -0.36, -0.1, -0.3, 0., 0., 3.14 ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+
+  ################### SMALL STONE(finish simulation) ####################
+  SMALL_STONE:
+    - step: "add scenee"
+      scene:
+        name: "SMALL_STONE_ISLAND"
+    - step: "open gripper"
+      gripper:
+        state: "open"
+    - step: "down gripper"
+      arm:
+        joints: [ 0.24, -0.02, 0.2, 0., 1.05, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "forward"
+      arm:
+        joints: [ 0.24, -0.02, 0.31, 0., 1.05, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "hold stone"
+      arm:
+        joints: [ 0.24, -0.02, 0.31, 0., 0.5, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "back"
+      arm:
+        joints: [ 0.24, -0.02, 0.2, 0., 0.5, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+
+  ################### STORE STONE(finish simulation) ####################
+  STORE:
+    - step: "set space to stone"
+      arm:
+        joints: [ 0., -0.2, -0.016, 0., 0.696, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "down stone"
+      arm:
+        joints: [ 0., -0.2, -0.016, 0., 1.7226, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "close gripper"
+      gripper:
+        state: "close"
+    - step: "push stone deep"
+      arm:
+        joints: [ 0., -0.15, -0.016, 0., 1.7226, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "hold gripper"
+      arm:
+        joints: [ 0., -0.2, -0.016, 0., 0.3132, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "hold gripper"
+      arm:
+        joints: [ 0., -0.2, -0.016, 0., 0.3132, 0.,0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "back home"
+      arm:
+        <<: *ARM_HOME
+
+  ################### GET STORE (finish simulation) ####################
+  GET_STONE:
+    - step: "home"
+      arm:
+        joints: [ 0., -0.28, -0.08, 0, 1.7574, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0., -0.13, 0.04, 0., 1.7574, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0., -0.26, -0.04, 0., 1.7574, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0., -0.26, -0.04, 0., 0.783, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0., -0.175, 0.13, 0., 0.783, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+
+  GET_STONE_SKY:
+    - step: "home"
+      arm:
+        joints: [ 0.23, -0.34, 0.2, 0., 3.12, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0.23, -0.055, 0.198, 0., 3.12, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0.15, -0.055, 0.198, 0., 3.12, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0.23, -0.34, 0.2, 0., 3.12, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "back home"
+      arm:
+        <<: *ARM_HOME
+
+    ################### GRIPPER BARRIER (finish simulation) ####################
+  GET_BARRIER:
+    - step: "open gripper"
+      gripper:
+        state: "open"
+    - step: "ready"
+      arm:
+        joints: [ 0., 0.28, 0.15, 0., 2.3838, 0., 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "ready"
+      arm:
+        joints: [ 0., 0.28, 0.287, 0, 2.3838, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "ready"
+      arm:
+        joints: [ 0., 0.28, 0.287, 0., 1.9314, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+  RELEASE_BARRIER:
+    - step: "close gripper"
+      gripper:
+        state: "close"
+    - step: "back home"
+      arm:
+        <<: *ARM_HOME
+  BACK_HOME:
+    - step: "approach"
+      arm:
+        <<: *ARM_HOME
+  BACK_HOME2:
+    - step: "back home"
+      arm:
+        <<: *ARM_HOME
+  DELETE_SCENE:
+    - step: "delete_scene"
