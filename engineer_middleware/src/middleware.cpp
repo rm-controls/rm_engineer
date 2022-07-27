@@ -47,6 +47,7 @@ Middleware::Middleware(ros::NodeHandle& nh)
   , chassis_interface_(nh, tf_)
   , hand_pub_(nh.advertise<std_msgs::Float64>("/controllers/hand_controller/command", 10))
   , card_pub_(nh.advertise<std_msgs::Float64>("/controllers/card_controller/command", 10))
+  , drag_pub_(nh.advertise<std_msgs::Float64>("/controllers/drag_controller/command", 10))
   , gimbal_pub_(nh.advertise<rm_msgs::GimbalCmd>("/controllers/gimbal_controller/command", 10))
   , tf_listener_(tf_)
   , is_middleware_control_(false)
@@ -61,8 +62,8 @@ Middleware::Middleware(ros::NodeHandle& nh)
     ROS_ASSERT(xml_value1.getType() == XmlRpc::XmlRpcValue::Type::TypeStruct);
     for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = xml_value.begin(); it != xml_value.end(); ++it)
     {
-      step_queues_.insert(std::make_pair(it->first, StepQueue(it->second, tf_, arm_group_, chassis_interface_,
-                                                              hand_pub_, card_pub_, gimbal_pub_, xml_value1)));
+      step_queues_.insert(std::make_pair(it->first, StepQueue(it->second, tf_, arm_group_, chassis_interface_, hand_pub_,
+                                                              card_pub_, drag_pub_, gimbal_pub_, xml_value1)));
     }
   }
   else

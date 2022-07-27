@@ -55,15 +55,18 @@ class StepQueue
 public:
   StepQueue(const XmlRpc::XmlRpcValue& steps, tf2_ros::Buffer& tf,
             moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
-            ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub,
+            ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& drag_pub, ros::Publisher& gimbal_pub,
             const XmlRpc::XmlRpcValue& scences)
     : chassis_interface_(chassis_interface)
   {
     ROS_ASSERT(steps.getType() == XmlRpc::XmlRpcValue::TypeArray);
     for (int i = 0; i < steps.size(); ++i)
     {
-      queue_.emplace_back(steps[i], tf, arm_group, chassis_interface, hand_pub, card_pub, gimbal_pub, scences);
+      queue_.emplace_back(steps[i], tf, arm_group, chassis_interface, hand_pub, card_pub, drag_pub, gimbal_pub, scences);
     }
+    for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scences.begin(); it != scences.end(); ++it)
+      for (int i = 0; i < it->second.size(); i++)
+        object_ids_.push_back(it->second[i]["id"]);
   }
   bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as)
   {
@@ -105,10 +108,14 @@ public:
       as.publishFeedback(feedback);
       ROS_INFO("Finish step: %s", queue_[i].getName().c_str());
     }
-    queue_[0].deleteScence();
     result.finish = true;
+    deleteScence();
     as.setSucceeded(result);
     return true;
+  }
+  void deleteScence()
+  {
+    queue_.begin()->deleteScence(object_ids_);
   }
   const std::deque<Step>& getQueue() const
   {
@@ -121,6 +128,7 @@ public:
 
 private:
   std::deque<Step> queue_;
+  std::vector<std::string> object_ids_;
   ChassisInterface& chassis_interface_;
 };
 }  // namespace engineer_middleware
