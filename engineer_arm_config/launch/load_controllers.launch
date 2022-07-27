@@ -19,9 +19,6 @@
                 controllers/chassis_controller
                 controllers/card_controller
                 controllers/drag_controller
-                controllers/joint1_mime_controller
-                controllers/joint2_mime_controller
-                controllers/joint3_mime_controller
                 "
     />
 
@@ -50,4 +47,3 @@
                 "
     />
 </launch>
-
