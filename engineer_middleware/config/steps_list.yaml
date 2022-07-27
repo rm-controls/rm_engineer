@@ -69,10 +69,15 @@ steps_list:
         <<: *ARM_HOME
   ################### GRASP_BIG ####################
   ###################    MID    ####################
+  TEST_SCENCE:
+    - step: "test"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "back home"
+      arm:
+        <<: *ARM_HOME
   GRASP_BIG_MID_PRE:
     - step: "add scene"
-      scene:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "move to mid ready"
       arm:
         joints: [ 0.243, 0.282, 0.177, 0., 1.74, 0., 0. ]
@@ -80,8 +85,7 @@ steps_list:
         <<: *NORMAL_TOLERANCE
   GRASP_BIG_MID_PROC:
     - step: "add scene"
-      scene:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: " gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -108,8 +112,7 @@ steps_list:
   ###################    LF    ####################
   GRASP_BIG_LF_PRE:
     - step: "add scene"
-      scene:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "move to left ready"
       arm:
         joints: [ 0.243, 0.285, 0.177, 0.3, 1.74, 0., 0. ]
@@ -117,11 +120,10 @@ steps_list:
         <<: *NORMAL_TOLERANCE
   GRASP_BIG_LF_PROC:
     - step: "add scene"
-      scene:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "open gripper"
       gripper:
-        state: "open"
+        <<: *OPEN_GRIPPER
     - step: "move to left repeat"
       arm:
         joints: [ 0.245, 0.285, 0.177, 0.3, 1.7, 0., 0. ]
@@ -145,8 +147,7 @@ steps_list:
   ###################    RT    ####################
   GRASP_BIG_RT_PRE:
     - step: "add scene"
-      scene:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "move to mid ready"
       arm:
         joints: [ 0.245, 0.285, 0.177, -0.3, 1.7, 0., 0. ]
@@ -154,8 +155,7 @@ steps_list:
         <<: *NORMAL_TOLERANCE
   GRASP_BIG_RT_PROC:
     - step: "scence"
-      scene:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "open gripper"
       gripper:
         <<: *OPEN_GRIPPER
@@ -182,8 +182,7 @@ steps_list:
   ################### EXCHANGE(finish simulation) ####################(important)
   EXCHANGE_PRE:
     - step: "scence"
-      scene:
-        name: "EXCHANGE"
+      scene_name: "EXCHANGE"
     - step: "down stone"
       arm:
         joints: [ 0.23, 0.092, 0.18, 0., 1.2876, 0., 0. ]
@@ -251,8 +250,7 @@ steps_list:
   ###################    MID    ####################
   SKY_MID_PRE:
     - step: "scene"
-      scence:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "move mid"
       arm:
         joints: [ 0.23, -0.2, 0., 0., 0., 0, 3.14 ]
@@ -260,8 +258,7 @@ steps_list:
         <<: *NORMAL_TOLERANCE
   SKY_MID_PROC:
     - step: "scene"
-      scence:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "open gripper"
       gripper:
         <<: *OPEN_GRIPPER
@@ -274,8 +271,7 @@ steps_list:
   ###################    LF    ####################
   SKY_LF_PRE:
     - step: "scene"
-      scene:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "move left"
       arm:
         joints: [ 0.23, -0.2, 0., 0.3, 0., 0., 3.14 ]
@@ -283,8 +279,7 @@ steps_list:
         <<: *NORMAL_TOLERANCE
   SKY_LF_PROC:
     - step: "scene"
-      scene:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "move left"
       arm:
         joints: [ 0.23, -0.2, 0., 0.3, 0., 0., 3.14 ]
@@ -302,8 +297,7 @@ steps_list:
   ###################    RT    ####################
   SKY_RT_PRE:
     - step: "scene"
-      scene:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "move left"
       arm:
         joints: [ 0.23, -0.2, 0., -0.3, 0., 0., 3.14 ]
@@ -311,8 +305,7 @@ steps_list:
         <<: *NORMAL_TOLERANCE
   SKY_RT_PROC:
     - step: "scene"
-      scence:
-        name: "BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
     - step: "move left"
       arm:
         joints: [ 0.23, -0.2, 0., -0.3, 0., 0., 3.14 ]
@@ -329,8 +322,7 @@ steps_list:
   ################### SMALL STONE(finish simulation) ####################
   SMALL_STONE:
     - step: "add scenee"
-      scene:
-        name: "SMALL_STONE_ISLAND"
+      scene_name: "SMALL_STONE_ISLAND"
     - step: "open gripper"
       gripper:
         <<: *OPEN_GRIPPER
