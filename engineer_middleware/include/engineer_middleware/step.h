@@ -49,9 +49,9 @@ namespace engineer_middleware
 class Step
 {
 public:
-  Step(const XmlRpc::XmlRpcValue& step, tf2_ros::Buffer& tf, moveit::planning_interface::MoveGroupInterface& arm_group,
-       ChassisInterface& chassis_interface, ros::Publisher& hand_pub, ros::Publisher& card_pub,
-       ros::Publisher& gimbal_pub, const XmlRpc::XmlRpcValue& scenes)
+  Step(const XmlRpc::XmlRpcValue& step, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
+       moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
+       ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub)
   {
     ROS_ASSERT(step.hasMember("step"));
     step_name_ = static_cast<std::string>(step["step"]);

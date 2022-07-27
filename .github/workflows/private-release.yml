@@ -12,7 +12,7 @@ jobs:
     env:
       CCACHE_DIR: /github/home/.ccache # Directory for ccache (and how we enable ccache in industrial_ci)
       SCRIPT_URL: https://raw.githubusercontent.com/gdut-dynamic-x/ci_scripts/master/
-      UPSTREAM_WORKSPACE: github:rm-controls/rm_control#master -rm_control/rm_control -rm_control/rm_hw -rm_control/rm_description -rm_control/rm_gazebo -rm_control/rm_dbus
+      UPSTREAM_WORKSPACE: github:rm-controls/rm_control#master -rm_control/rm_control -rm_control/rm_hw -rm_control/rm_gazebo -rm_control/rm_dbus github:rm-controls/rm_description#master
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
