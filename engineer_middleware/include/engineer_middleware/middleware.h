@@ -39,13 +39,14 @@
 #define ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
 
 #include "engineer_middleware/step_queue.h"
-#include "engineer_middleware/planning_scence.h"
+#include "engineer_middleware/planning_scene.h"
 
 // ROS
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
 #include <controller_manager_msgs/SwitchController.h>
 #include <rm_msgs/EngineerAction.h>
+#include <rm_msgs/GpioData.h>
 
 namespace engineer_middleware
 {
@@ -76,7 +77,7 @@ private:
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> as_;
   moveit::planning_interface::MoveGroupInterface arm_group_;
   ChassisInterface chassis_interface_;
-  ros::Publisher hand_pub_, card_pub_, drag_pub_, gimbal_pub_;
+  ros::Publisher hand_pub_, card_pub_, gimbal_pub_, gpio_pub_;
   std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener tf_listener_;
