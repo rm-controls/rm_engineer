@@ -114,6 +114,52 @@ steps_list:
   DELETE_SCENE:
     - step: "delete_scene"
 
+  ################### CHASSIS ####################
+  CHASSIS_FORWARD:
+    - step: "forward"
+      chassis:
+        frame: base_link
+        position: [ 0.3, 0. ]
+        yaw: 0.0
+        chassis_tolerance_position_: 0.1
+        chassis_tolerance_angular_: 0.01
+
+  CHASSIS_BACKWARD:
+    - step: "backward"
+      chassis:
+        frame: base_link
+        position: [ -0.3, 0. ]
+        yaw: 0.0
+        chassis_tolerance_position_: 0.1
+        chassis_tolerance_angular_: 0.01
+
+  CHASSIS_LEFT:
+    - step: "left"
+      chassis:
+        frame: base_link
+        position: [ 0., 0.5 ]
+        yaw: 0.0
+        chassis_tolerance_position_: 0.1
+        chassis_tolerance_angular_: 0.01
+
+  CHASSIS_RIGHT:
+    - step: "right"
+      chassis:
+        frame: base_link
+        position: [ 0., -0.5 ]
+        yaw: 0.0
+        chassis_tolerance_position_: 0.1
+        chassis_tolerance_angular_: 0.01
+
+  CHASSIS_ROTATE:
+    - step: "rotate"
+      chassis:
+        frame: base_link
+        position: [ 0., 0. ]
+        yaw: 3.14
+        chassis_tolerance_position_: 0.1
+        chassis_tolerance_angular_: 0.01
+
   ################### BIG_ISLAND ####################
   ###################    READY    ####################
   READY_BIG_ISLAND0:
