@@ -5,13 +5,19 @@ common:
       accel: 0.2
       timeout: 10
     normally: &NORMALLY
-      speed: 0.5
-      accel: 0.5
+      speed: 0.4
+      accel: 0.4
       timeout: 6.
     quickly: &QUICKLY
       speed: 1.
       accel: 1.
       timeout: 4.
+
+  tolerance:
+    normal_tolerance: &NORMAL_TOLERANCE
+      tolerance_joints: [ 0.06, 0.006, 0.006, 0.006, 0.1, 0.1, 0.1 ]
+    bigger_tolerance: &BIGGER_TOLERANCE
+      tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.2, 0.2, 0.2 ]
 
   gripper:
     open_gripper: &OPEN_GRIPPER
@@ -19,27 +25,17 @@ common:
     close_gripper: &CLOSE_GRIPPER
       state: true
 
-  tolerance:
-    normal_tolerance: &NORMAL_TOLERANCE
-      tolerance_joints: [ 0.009, 0.009, 0.009, 0.006, 0.1, 0.1, 0.1 ]
-    bigger_tolerance: &BIGGER_TOLERANCE
-      tolerance_joints: [ 0.014, 0.02, 0.02, 0.009, 0.2, 0.2, 0.2 ]
-
   arm:
     normal_home: &NORMAL_HOME
-      joints: [ 0.012, 0., 0.15, 0., 0.87, 0., 0. ]
+      joints: [ 0.012, -0.119, 0.074, 0., 0.522, 0., 0. ]
       <<: *NORMALLY
       <<: *NORMAL_TOLERANCE
-    sky_home: &SKY_HOME
-      joints: [ 0.155, 0., 0.195, 0., 0.87, 0., 0. ]
+    stored_home: &STORED_HOME
+      joints: [ 0.051, -0.069, 0.012, 0., 0.522, 0., 0. ]
       <<: *NORMALLY
       <<: *NORMAL_TOLERANCE
-    walking_home: &WALKING_HOME
-      joints: [ 0.012, 0., 0., 0., 0.87, 0., 0. ]
-      <<: *NORMALLY
-      <<: *NORMAL_TOLERANCE
-    store_and_walk_home: &STORE_AND_WALKING_HOME
-      joints: [ 0.012, 0., 0., 0., 0.87, 0., 0. ]
+    exchange_home: &EXCHANGE_HOME
+      joints: [ 0.216, 0.231, 0.249, 0., 1.1658, 0., 0. ]
       <<: *NORMALLY
       <<: *NORMAL_TOLERANCE
 
@@ -59,32 +55,38 @@ common:
 
 steps_list:
   ################### COMMON STEP####################
+  DELETE_SCENE:
+    - step: "delete_scene"
+
+  TEST:
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
+    - step: "ready"
+      arm:
+        joints: [ 0.238, 0.170, 0.3, 0,1.6878, 0, 0 ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
   ################### HOME ####################
-  EMPTY_HOME:
+  NORMAL_HOME0:
     - step: "approach"
       arm:
         <<: *NORMAL_HOME
 
-  STORED_HOME:
+  STORED_HOME0:
     - step: "approach"
       arm:
-        <<: *SKY_HOME
+        <<: *STORED_HOME
 
-  WALKING_HOME:
+  EXCHANGE_HOME0:
     - step: "approach"
       arm:
-        <<: *WALKING_HOME
+        <<: *EXCHANGE_HOME
 
-  STORE_AND_WALKING_HOME:
-    - step: "approach"
-      arm:
-        <<: *STORE_AND_WALKING_HOME
   ################### GIMBAL ####################
   SKY_GIMBAL:
     - step: "open gripper"
       gimbal:
         <<: *SKY_POS
-
   WALK_GIMBAL:
     - step: "open gripper"
       gimbal:
@@ -110,10 +112,6 @@ steps_list:
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
-
-  DELETE_SCENE:
-    - step: "delete_scene"
-
   ################### CHASSIS ####################
   CHASSIS_FORWARD:
     - step: "forward"
@@ -163,20 +161,6 @@ steps_list:
   ################### BIG_ISLAND ####################
   ###################    READY    ####################
   READY_BIG_ISLAND0:
-    - step: "add scene of sky island"
-      scene_name: "BIG_STONE_ISLAND"
-    - step: "gimbal"
-      gimbal:
-        <<: *BIG_STONE_POS
-    - step: "ready"
-      arm:
-        joints: [ 0.238, 0.170, 0.3, 0,1.6878, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
-  ###################    MID    ####################
-  MID_BIG_ISLAND0:
-    - step: "add scene of sky island"
-      scene_name: "BIG_STONE_ISLAND"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -185,10 +169,18 @@ steps_list:
         joints: [ 0.238, 0.170, 0.3, 0,1.6878, 0, 0 ]
         <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
+  ###################    MID    ####################
+  MID_BIG_ISLAND0:
+    - step: "gimbal"
+      gimbal:
+        <<: *BIG_STONE_POS
+    - step: "ready"
+      arm:
+        joints: [ 0.238, 0.170, 0.3, 0,1.6878, 0, 0 ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
 
   MID_BIG_ISLAND00:
-    - step: "add scene of sky island"
-      scene_name: "BIG_STONE_ISLAND"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -197,72 +189,56 @@ steps_list:
         <<: *OPEN_GRIPPER
     - step: "ready"
       arm:
-        joints: [ 0.238, 0.185, 0.219, 0,1.6878, 0, 0 ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
-    - step: "ready"
-      arm:
-        joints: [ 0.238, 0.32, 0.3, 0,1.6878, 0, 0 ]
-        <<: *NORMALLY
+        joints: [ 0.238, 0.170, 0.3, 0,1.6878, 0, 0 ]
+        <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
-        joints: [ 0.238, 0.28, 0.27, 0,1.6878, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        joints: [ 0.238, 0.31, 0.3, 0,1.6878, 0, 0 ]
+        <<: *QUICKLY
+        <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
-        joints: [ 0.238, 0.28, 0.27, 0,0.696, 0, 0 ]
+        joints: [ 0.238, 0.25, 0.22, 0,0.696, 0, 0 ]
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
 
   MID_BIG_ISLAND000:
-    - step: "add scene of sky island"
-      scene_name: "BIG_STONE_ISLAND"
     - step: "gimbal"
       gimbal:
         <<: *WALKING_POS
     - step: "move to mid ready"
       arm:
-        <<: *NORMAL_HOME
+        <<: *STORED_HOME
 
   ###################    LF    ####################
   LF_BIG_ISLAND0:
-    - step: "add scene of sky island"
-      scene_name: "BIG_STONE_ISLAND"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
     - step: "ready"
       arm:
         joints: [ 0.238, 0.170, 0.3, 0.3,1.6878, 0, 0 ]
-        <<: *NORMALLY
+        <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
 
   LF_BIG_ISLAND00:
-    - step: "add scene of sky island"
-      scene_name: "BIG_STONE_ISLAND"
-    - step: " gripper"
-      gripper:
-        <<: *OPEN_GRIPPER
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
+    - step: " gripper"
+      gripper:
+        <<: *OPEN_GRIPPER
     - step: "ready"
       arm:
         joints: [ 0.238, 0.170, 0.3, 0.3,1.6878, 0, 0 ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
-    - step: "ready"
-      arm:
-        joints: [ 0.238, 0.32, 0.3, 0.3,1.6878, 0, 0 ]
-        <<: *NORMALLY
+        <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
-        joints: [ 0.238, 0.28, 0.27, 0.3,1.6878, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        joints: [ 0.238, 0.31, 0.3, 0.3,1.6878, 0, 0 ]
+        <<: *QUICKLY
+        <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
         joints: [ 0.238, 0.28, 0.27, 0.3,0.696, 0, 0 ]
@@ -270,52 +246,41 @@ steps_list:
         <<: *NORMAL_TOLERANCE
 
   LF_BIG_ISLAND000:
-    - step: "add scene of sky island"
-      scene_name: "BIG_STONE_ISLAND"
     - step: "gimbal"
       gimbal:
         <<: *WALKING_POS
     - step: "move to mid ready"
       arm:
-        <<: *NORMAL_HOME
+        <<: *STORED_HOME
 
   ###################    RT    ####################
   RT_BIG_ISLAND0:
-    - step: "add scene of sky island"
-      scene_name: "BIG_STONE_ISLAND"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
     - step: "ready"
       arm:
         joints: [ 0.238, 0.170, 0.3, -0.3,1.6878, 0, 0 ]
-        <<: *NORMALLY
+        <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
 
   RT_BIG_ISLAND00:
-    - step: "add scene of sky island"
-      scene_name: "BIG_STONE_ISLAND"
-    - step: " gripper"
-      gripper:
-        <<: *OPEN_GRIPPER
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
+    - step: " gripper"
+      gripper:
+        <<: *OPEN_GRIPPER
     - step: "ready"
       arm:
         joints: [ 0.238, 0.170, 0.3, -0.3,1.6878, 0, 0 ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
-    - step: "ready"
-      arm:
-        joints: [ 0.238, 0.32, 0.3, -0.3,1.6878, 0, 0 ]
-        <<: *NORMALLY
+        <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
-        joints: [ 0.238, 0.28, 0.27, -0.3,1.6878, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        joints: [ 0.238, 0.31, 0.3, -0.3,1.6878, 0, 0 ]
+        <<: *QUICKLY
+        <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
         joints: [ 0.238, 0.28, 0.27, -0.3,0.696, 0, 0 ]
@@ -323,14 +288,12 @@ steps_list:
         <<: *NORMAL_TOLERANCE
 
   RT_BIG_ISLAND000:
-    - step: "add scene of sky island"
-      scene_name: "BIG_STONE_ISLAND"
     - step: "gimbal"
       gimbal:
         <<: *WALKING_POS
     - step: "move to mid ready"
       arm:
-        <<: *NORMAL_HOME
+        <<: *STORED_HOME
 
   ###################    SKY_ISLAND    ####################
   ###################    READY    ####################
@@ -342,42 +305,24 @@ steps_list:
         <<: *SKY_POS
     - step: "ready"
       arm:
-        joints: [ 0.238, -0.34, -0.11, 0,0.15, 0, 3.14 ]
-        <<: *SLOWLY
+        joints: [ 0.240, -0.345, -0.11, 0. ,-0.087, 0.0696, 3.1842 ]
+        <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
 
   ###################    MID    ####################
   MID_SKY_ISLAND0:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
-    - step: "open gripper to grasp stone"
-      gripper:
-        <<: *OPEN_GRIPPER
     - step: "gimbal"
       gimbal:
         <<: *SKY_POS
     - step: "ready"
       arm:
-        joints: [ 0.238, -0.34, -0.11, 0,0.15, 0, 3.14 ]
-        <<: *SLOWLY
+        joints: [ 0.240, -0.345, -0.11, 0. ,-0.087, 0.0696, 3.1842 ]
+        <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
 
   MID_SKY_ISLAND00:
-    - step: "add scene of sky island"
-      scene_name: "SKY_STONE_ISLAND"
-    - step: "open gripper to grasp stone"
-      gripper:
-        <<: *OPEN_GRIPPER
-    - step: "gimbal"
-      gimbal:
-        <<: *SKY_POS
-    - step: "ready"
-      arm:
-        joints: [ 0.238, -0.34, -0.11, 0,0.15, 0, 3.14 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
-
-  MID_SKY_ISLAND000:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
     - step: "move gimbal to toward"
@@ -385,7 +330,7 @@ steps_list:
         <<: *WALKING_POS
     - step: "move to mid ready"
       arm:
-        <<: *NORMAL_HOME
+        <<: *STORED_HOME
 
   ###################    LF    ####################
   LF_SKY_ISLAND0:
@@ -399,25 +344,11 @@ steps_list:
         <<: *SKY_POS
     - step: "ready"
       arm:
-        joints: [ 0.238, -0.34, -0.11, -0.3,0.15, 0, 3.14 ]
-        <<: *SLOWLY
+        joints: [ 0.240, -0.345, -0.11, -0.3 ,-0.087, 0.0348, 3.1842 ]
+        <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
 
   LF_SKY_ISLAND00:
-    - step: "add scene of sky island"
-      scene_name: "SKY_STONE_ISLAND"
-    - step: "open gripper to grasp stone"
-      gripper:
-        <<: *OPEN_GRIPPER
-    - step: "gimbal"
-      gimbal:
-        <<: *SKY_POS
-    - step: "ready"
-      arm:
-        joints: [ 0.238, -0.34, -0.11, -0.3,0.15, 0, 3.14 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
-  LF_SKY_ISLAND000:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
     - step: "move gimbal to toward"
@@ -425,7 +356,7 @@ steps_list:
         <<: *WALKING_POS
     - step: "move to mid ready"
       arm:
-        <<: *NORMAL_HOME
+        <<: *STORED_HOME
 
   ###################    RT    ####################
   RT_SKY_ISLAND0:
@@ -439,26 +370,11 @@ steps_list:
         <<: *SKY_POS
     - step: "ready"
       arm:
-        joints: [ 0.238, -0.34, -0.11, 0.3,0.15, 0, 3.14 ]
-        <<: *SLOWLY
+        joints: [ 0.240, -0.345, -0.11, 0.3 ,-0.087, 0.087, 3.14 ]
+        <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
 
   RT_SKY_ISLAND00:
-    - step: "add scene of sky island"
-      scene_name: "SKY_STONE_ISLAND"
-    - step: "open gripper to grasp stone"
-      gripper:
-        <<: *OPEN_GRIPPER
-    - step: "move gimbal toward to island"
-      gimbal:
-        <<: *SKY_POS
-    - step: "ready"
-      arm:
-        joints: [ 0.238, -0.34, -0.11, 0.3,0.15, 0, 3.14 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
-
-  RT_SKY_ISLAND000:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
     - step: "move gimbal to toward"
@@ -466,7 +382,8 @@ steps_list:
         <<: *WALKING_POS
     - step: "move to mid ready"
       arm:
-        <<: *NORMAL_HOME
+        <<: *STORED_HOME
+
 
   ###################    GAIN_STORE_STONE    ####################
   ###################    NORMAL    ####################
@@ -476,7 +393,7 @@ steps_list:
         <<: *BIG_STONE_POS
     - step: "home"
       arm:
-        joints: [ 0., -0.28, -0.08, 0, 1.7748, 0., 0. ]
+        joints: [ 0., -0.28, -0.08, 0, 1.566, 0., 0. ]
         <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
     - step: " gripper"
@@ -484,12 +401,12 @@ steps_list:
         <<: *OPEN_GRIPPER
     - step: "home"
       arm:
-        joints: [ 0., -0.22, 0.085, 0., 1.7748, 0., 0. ]
+        joints: [ 0., -0.22, 0.085, 0., 1.566, 0., 0. ]
         <<: *NORMALLY
         <<: *BIGGER_TOLERANCE
     - step: "home"
       arm:
-        joints: [ 0., -0.26, -0.04, 0., 1.7748, 0., 0. ]
+        joints: [ 0., -0.26, -0.04, 0., 1.566, 0., 0. ]
         <<: *NORMALLY
         <<: *BIGGER_TOLERANCE
 
@@ -504,9 +421,15 @@ steps_list:
         joints: [ 0., -0.175, 0.13, 0., 0.783, 0., 0. ]
         <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
+  NORMAL_GAIN_STORE_STONE000:
+    - step: "move to mid ready"
+      arm:
+        <<: *NORMAL_HOME
 
   ###################    SKY    ####################
   SKY_GAIN_STORE_STONE0:
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -517,30 +440,32 @@ steps_list:
         <<: *NORMAL_TOLERANCE
     - step: "home"
       arm:
-        joints: [ 0.238, -0.34, 0.198, 0., 3.0276, 0., 0. ]
+        joints: [ 0.238, -0.34, 0.198, 0., 2.784, 0., 0. ]
         <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
     - step: "home"
       arm:
-        joints: [ 0.238, -0.044, 0.198, 0., 3.0276, 0., 0. ]
+        joints: [ 0.238, -0.044, 0.198, 0., 2.784, 0., 0. ]
         <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
     - step: "home"
       gripper:
         <<: *OPEN_GRIPPER
+  SKY_GAIN_STORE_STONE00:
     - step: "home"
       arm:
-        joints: [ 0.18, -0.044, 0.198, 0., 3.0276, 0., 0. ]
+        joints: [ 0.17, -0.044, 0.198, 0., 2.784, 0., 0. ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0.238, -0.044, 0.1898, 0., 2.784, 0., 0. ]
         <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
+  SKY_GAIN_STORE_STONE000:
     - step: "home"
       arm:
-        joints: [ 0.238, -0.28, 0.198, 0., 2.436, 0., 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
-    - step: "home"
-      arm:
-        joints: [ 0.238, -0.34, 0.16, 0., 2.436, 0., 0. ]
+        joints: [ 0.238, -0.34, 0.08, 0., 2.436, 0., 0. ]
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
     - step: "home"
@@ -548,6 +473,9 @@ steps_list:
         joints: [ 0.238, -0.34, 0.198, 0., 0.87, 0., 0. ]
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
+    - step: "move to mid ready"
+      arm:
+        <<: *NORMAL_HOME
 
   ###################    EXCHANGE    ####################
   EXCHANGE0:
@@ -557,7 +485,7 @@ steps_list:
     - step: "down stone"
       arm:
         joints: [ 0.22, 0.092, 0.18, 0., 1.2876, 0., 0. ]
-        <<: *QUICKLY
+        <<: *NORMALLY
         <<: *BIGGER_TOLERANCE
 
   EXCHANGE00:
@@ -568,18 +496,18 @@ steps_list:
     - step: "push stone"
       arm:
         joints: [ 0.22, -0.1, 0.05, 0., 1.4616, 0., 0. ]
-        <<: *BIGGER_TOLERANCE
-        tolerance_joints: [ 0.08, 0.08, 0.08, 0.004, 0.6, 0.6, 0.6 ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
     - step: "push stone"
       arm:
         joints: [ 0.22, 0.095, 0.305, 0., 1.4616, 0., 0. ]
         <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        <<: *NORMAL_TOLERANCE
     - step: "push stone"
       arm:
         joints: [ 0.22, 0.095, 0.305, 0., 1.15, 0., 0. ]
         <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        <<: *NORMAL_TOLERANCE
 
   EXCHANGE000:
     - step: "gimbal"
@@ -587,7 +515,7 @@ steps_list:
         <<: *WALKING_POS
     - step: "move to mid ready"
       arm:
-        <<: *NORMAL_HOME
+        <<: *STORED_HOME
 
   ###################    GROUND_STONE    ####################
   ###################    LF    ####################
@@ -600,29 +528,34 @@ steps_list:
         <<: *OPEN_GRIPPER
     - step: "repeat pre"
       arm:
-        joints: [ 0.221, 0.3, 0.3, 0.3, 3.14, 0., 0. ]
-        <<: *NORMALLY
+        joints: [ 0.221, 0.3, 0.3, 0.3,  3.14, 0.0348, 0. ]
+        <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
   LF_GROUND_STONE00:
     - step: "repeat pre"
       arm:
-        joints: [ 0., 0.3, 0.3, 0.3, 3.14, 0., 0. ]
-        <<: *NORMALLY
+        joints: [ 0.221, 0.3, 0.3, 0.3, 3.14, 0.0348, 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "repeat pre"
+      arm:
+        joints: [ 0., 0.3, 0.3, 0.3, 3.14, 0.0348, 0. ]
+        <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
     - step: "up stone"
       arm:
-        joints: [ 0.2, 0.3, 0.3, 0.3, 3.14, 0., 0. ]
+        joints: [ 0.2, 0.3, 0.3, 0.3, 3.14, 0.0348, 0. ]
         <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
     - step: "up stone"
       arm:
         joints: [ 0.2, 0.3, 0.3, 0.3, 0.522, 0., 0. ]
-        <<: *NORMALLY
+        <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
   LF_GROUND_STONE000:
     - step: "move to mid ready"
       arm:
-        <<: *NORMAL_HOME
+        <<: *STORED_HOME
 
   ###################    RT    ####################
   RT_GROUND_STONE0:
@@ -634,29 +567,35 @@ steps_list:
         <<: *OPEN_GRIPPER
     - step: "repeat pre"
       arm:
-        joints: [ 0.221, 0.3, 0.3, -0.3, 3.14, 0., 0. ]
-        <<: *NORMALLY
+        joints: [ 0.221, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
+        <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
   RT_GROUND_STONE00:
     - step: "repeat pre"
       arm:
-        joints: [ 0., 0.3, 0.3, -0.3, 3.14, 0., 0. ]
-        <<: *NORMALLY
+        joints: [ 0.221, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
+        <<: *QUICKLY
+        <<: *NORMAL_TOLERANCE
+    - step: "repeat pre"
+      arm:
+        joints: [ 0., 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
+        <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
     - step: "up stone"
       arm:
-        joints: [ 0.2, 0.3, 0.3, -0.3, 3.14, 0., 0. ]
+        joints: [ 0.2, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
         <<: *NORMALLY
         <<: *NORMAL_TOLERANCE
     - step: "up stone"
       arm:
         joints: [ 0.2, 0.3, 0.3, -0.3, 0.522, 0., 0. ]
-        <<: *NORMALLY
+        <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
   RT_GROUND_STONE000:
     - step: "move to mid ready"
       arm:
-        <<: *NORMAL_HOME
+        <<: *STORED_HOME
+
   ###################    STORE_STONE    ####################
   STORE_STONE0:
     - step: "gimbal"
@@ -678,27 +617,28 @@ steps_list:
     - step: "open gripper"
       gripper:
         <<: *CLOSE_GRIPPER
+  STORE_STONE00:
     - step: "push stone deep"
       arm:
         joints: [ 0., -0.15, -0.016, 0., 1.7226, 0., 0. ]
-        <<: *NORMALLY
+        <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
     - step: "push stone deep"
       arm:
         joints: [ 0., -0.2, -0.077, 0., 1.7226, 0., 0. ]
         <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
-  STORE_STONE00:
+  STORE_STONE000:
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "hold gripper"
       arm:
         joints: [ 0., -0.2, -0.016, 0., 0.3132, 0., 0. ]
         <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
-    - step: "hold gripper"
+    - step: "move to mid ready"
       arm:
-        joints: [ 0.127, -0.12, 0.241, 0., 0.6438, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        <<: *STORED_HOME
 
   ###################    SMALL_ISLAND    ####################
   SMALL_STONE0:
@@ -732,3 +672,7 @@ steps_list:
         joints: [ 0.235, -0.02, 0.2, 0., 0.5, 0., 0. ]
         <<: *QUICKLY
         <<: *BIGGER_TOLERANCE
+  SMALL_STONE00:
+    - step: "move to mid ready"
+      arm:
+        <<: *STORED_HOME
