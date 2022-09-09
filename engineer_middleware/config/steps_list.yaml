@@ -31,7 +31,7 @@ common:
       <<: *NORMALLY
       <<: *NORMAL_TOLERANCE
     stored_home: &STORED_HOME
-      joints: [ 0.051, -0.069, 0.012, 0., 0.522, 0., 0. ]
+      joints: [ 0.13, -0.064, 0.057, 0., 0.522, 0., 0. ]
       <<: *NORMALLY
       <<: *NORMAL_TOLERANCE
     exchange_home: &EXCHANGE_HOME
@@ -161,6 +161,10 @@ steps_list:
   ################### BIG_ISLAND ####################
   ###################    READY    ####################
   READY_BIG_ISLAND0:
+    - step: "add scene of sky island"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -171,6 +175,10 @@ steps_list:
         <<: *NORMAL_TOLERANCE
   ###################    MID    ####################
   MID_BIG_ISLAND0:
+    - step: "add scene of sky island"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -181,6 +189,10 @@ steps_list:
         <<: *NORMAL_TOLERANCE
 
   MID_BIG_ISLAND00:
+    - step: "add scene of sky island"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -199,11 +211,20 @@ steps_list:
         <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
+        joints: [ 0.238, 0.25, 0.22, 0,1.3878, 0, 0 ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "ready"
+      arm:
         joints: [ 0.238, 0.25, 0.22, 0,0.696, 0, 0 ]
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
 
   MID_BIG_ISLAND000:
+    - step: "add scene of sky island"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *WALKING_POS
@@ -213,6 +234,10 @@ steps_list:
 
   ###################    LF    ####################
   LF_BIG_ISLAND0:
+    - step: "add scene of sky island"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -223,6 +248,10 @@ steps_list:
         <<: *NORMAL_TOLERANCE
 
   LF_BIG_ISLAND00:
+    - step: "add scene of sky island"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -241,11 +270,20 @@ steps_list:
         <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
+        joints: [ 0.238, 0.25, 0.22, 0.3,1.3878, 0, 0 ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "ready"
+      arm:
         joints: [ 0.238, 0.28, 0.27, 0.3,0.696, 0, 0 ]
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
 
   LF_BIG_ISLAND000:
+    - step: "add scene of sky island"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *WALKING_POS
@@ -255,6 +293,10 @@ steps_list:
 
   ###################    RT    ####################
   RT_BIG_ISLAND0:
+    - step: "add scene of sky island"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -265,6 +307,10 @@ steps_list:
         <<: *NORMAL_TOLERANCE
 
   RT_BIG_ISLAND00:
+    - step: "add scene of sky island"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -283,11 +329,20 @@ steps_list:
         <<: *BIGGER_TOLERANCE
     - step: "ready"
       arm:
+        joints: [ 0.238, 0.25, 0.22, -0.3,1.3878, 0, 0 ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "ready"
+      arm:
         joints: [ 0.238, 0.28, 0.27, -0.3,0.696, 0, 0 ]
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
 
   RT_BIG_ISLAND000:
+    - step: "add scene of sky island"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *WALKING_POS
@@ -300,6 +355,8 @@ steps_list:
   READY_SKY_ISLAND0:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *SKY_POS
@@ -313,6 +370,8 @@ steps_list:
   MID_SKY_ISLAND0:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *SKY_POS
@@ -325,6 +384,8 @@ steps_list:
   MID_SKY_ISLAND00:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "move gimbal to toward"
       gimbal:
         <<: *WALKING_POS
@@ -336,6 +397,8 @@ steps_list:
   LF_SKY_ISLAND0:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "open gripper to grasp stone"
       gripper:
         <<: *OPEN_GRIPPER
@@ -351,6 +414,8 @@ steps_list:
   LF_SKY_ISLAND00:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "move gimbal to toward"
       gimbal:
         <<: *WALKING_POS
@@ -362,6 +427,8 @@ steps_list:
   RT_SKY_ISLAND0:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "open gripper to grasp stone"
       gripper:
         <<: *OPEN_GRIPPER
@@ -377,6 +444,8 @@ steps_list:
   RT_SKY_ISLAND00:
     - step: "add scene of sky island"
       scene_name: "SKY_STONE_ISLAND"
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "move gimbal to toward"
       gimbal:
         <<: *WALKING_POS
@@ -388,6 +457,8 @@ steps_list:
   ###################    GAIN_STORE_STONE    ####################
   ###################    NORMAL    ####################
   NORMAL_GAIN_STORE_STONE0:
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -396,6 +467,7 @@ steps_list:
         joints: [ 0., -0.28, -0.08, 0, 1.566, 0., 0. ]
         <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
+  NORMAL_GAIN_STORE_STONE00:
     - step: " gripper"
       gripper:
         <<: *OPEN_GRIPPER
@@ -409,27 +481,18 @@ steps_list:
         joints: [ 0., -0.26, -0.04, 0., 1.566, 0., 0. ]
         <<: *NORMALLY
         <<: *BIGGER_TOLERANCE
-
-  NORMAL_GAIN_STORE_STONE00:
+  NORMAL_GAIN_STORE_STONE000:
     - step: "home"
       arm:
         joints: [ 0., -0.26, -0.04, 0., 0.783, 0., 0. ]
         <<: *SLOWLY
         <<: *BIGGER_TOLERANCE
-    - step: "home"
-      arm:
-        joints: [ 0., -0.175, 0.13, 0., 0.783, 0., 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
-  NORMAL_GAIN_STORE_STONE000:
     - step: "move to mid ready"
       arm:
         <<: *NORMAL_HOME
 
   ###################    SKY    ####################
   SKY_GAIN_STORE_STONE0:
-    - step: "add scene of sky island"
-      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *BIG_STONE_POS
@@ -520,6 +583,8 @@ steps_list:
   ###################    GROUND_STONE    ####################
   ###################    LF    ####################
   LF_GROUND_STONE0:
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *WALKING_POS
@@ -532,6 +597,8 @@ steps_list:
         <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
   LF_GROUND_STONE00:
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "repeat pre"
       arm:
         joints: [ 0.221, 0.3, 0.3, 0.3, 3.14, 0.0348, 0. ]
@@ -553,12 +620,16 @@ steps_list:
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
   LF_GROUND_STONE000:
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "move to mid ready"
       arm:
         <<: *STORED_HOME
 
   ###################    RT    ####################
   RT_GROUND_STONE0:
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "gimbal"
       gimbal:
         <<: *WALKING_POS
@@ -571,6 +642,8 @@ steps_list:
         <<: *QUICKLY
         <<: *NORMAL_TOLERANCE
   RT_GROUND_STONE00:
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "repeat pre"
       arm:
         joints: [ 0.221, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
@@ -592,6 +665,8 @@ steps_list:
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
   RT_GROUND_STONE000:
+    - step: "add scene of sky island"
+      scene_name: "STORE_STONE"
     - step: "move to mid ready"
       arm:
         <<: *STORED_HOME
@@ -676,3 +751,31 @@ steps_list:
     - step: "move to mid ready"
       arm:
         <<: *STORED_HOME
+
+  LONG_GAIN_BARRIER0:
+    - step: "move to mid ready"
+      arm:
+        joints: [ 0.005, 0.11, 0.305, 0., 2.088, 0., 0. ]
+        <<: *QUICKLY
+        <<: *BIGGER_TOLERANCE
+
+  LONG_GAIN_BARRIER00:
+    - step: "move to mid ready"
+      arm:
+        joints: [ 0.005, 0.11, 0.305, 0., 1.4, 0., 0. ]
+        <<: *SLOWLY
+        <<: *BIGGER_TOLERANCE
+
+  SHORT_GAIN_BARRIER0:
+    - step: "move to mid ready"
+      arm:
+        joints: [ 0.005, 0.11, 0.305, 0., 1.914, 0., 0. ]
+        <<: *QUICKLY
+        <<: *BIGGER_TOLERANCE
+
+  SHORT_GAIN_BARRIER00:
+    - step: "move to mid ready"
+      arm:
+        joints: [ 0.005, 0.11, 0.305, 0., 1.5, 0., 0. ]
+        <<: *QUICKLY
+        <<: *BIGGER_TOLERANCE

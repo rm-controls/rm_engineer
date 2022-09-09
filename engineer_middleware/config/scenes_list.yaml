@@ -74,7 +74,7 @@ scenes_list:
         type: box
         dimension: [ 0.001, 1.058, 0.2 ]
       pose:
-        position: [ 0.295, 0., 0.0436 ]
+        position: [ 0.295, 0., 0.0426 ]
         orientation: [ 0., 0., 0., 0. ]
       attach: false
     - id: "BIG_STONE_ISLAND2"
@@ -83,7 +83,7 @@ scenes_list:
         type: box
         dimension: [ 0.001, 1.058001, 0.374256 ]
       pose:
-        position: [ 0.406878, 0., 0.2936 ]
+        position: [ 0.406878, 0., 0.2836 ]
         orientation: [ 0, -0.949, 0., 0.315 ]
         attach: false
     - id: "BIG_STONE_ISLAND3"
@@ -92,7 +92,7 @@ scenes_list:
         type: box
         dimension: [ 0.151243, 1.058001, 0.001 ]
       pose:
-        position: [ 0.594873, 0., 0.4436 ]
+        position: [ 0.594873, 0., 0.4336 ]
         orientation: [ 0., 0., 0., 0. ]
         attach: false
 
@@ -167,12 +167,12 @@ scenes_list:
       attach: true
 
   STORE_STONE:
-    - id: "sky_stone"
+    - id: "golden_stone"
       frame_id: "base_link"
       primitive:
         type: box
-        dimension: [ 0.18, 0.18, 0.18 ]
+        dimension: [ 0.241, 0.2, 0.20 ]
       pose:
-        position: [ 0.2, 0., 0.1325 ]
+        position: [ 0.031, 0., 0.3 ]
         orientation: [ 0., 0., 0., 0. ]
       attach: false
