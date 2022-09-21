@@ -59,13 +59,147 @@ steps_list:
     - step: "delete_scene"
 
   TEST:
-    - step: "add scene of sky island"
-      scene_name: "STORE_STONE"
+    - step: "XRC"
+      arm:
+        joints: [ 0.131, 0.31, 0.298, -0.107 ,0.24, 0.15, 1.1 ]
+        <<: *NORMALLY
+        <<: *NORMAL_TOLERANCE
+    - step: "move to mid ready"
+      arm:
+        <<: *STORED_HOME
     - step: "ready"
       arm:
         joints: [ 0.238, 0.170, 0.3, 0,1.6878, 0, 0 ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "ready"
+      arm:
+        joints: [ 0.238, 0.31, 0.3, 0,1.6878, 0, 0 ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "ready"
+      arm:
+        joints: [ 0.238, 0.25, 0.22, 0,1.3878, 0, 0 ]
         <<: *SLOWLY
         <<: *NORMAL_TOLERANCE
+    - step: "ready"
+      arm:
+        joints: [ 0.238, 0.25, 0.22, 0,0.696, 0, 0 ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "ready"
+      arm:
+        joints: [ 0.240, -0.33, -0.11, -0.3 ,-0.087, 0.0696, 3.1842 ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "ready"
+      arm:
+        joints: [ 0.240, -0.33, -0.11, 0.3 ,-0.087, 0.0696, 3.1842 ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "ready"
+      arm:
+        joints: [ 0.240, -0.33, -0.11, -0.3 ,-0.087, 0.0696, 3.1842 ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "repeat pre"
+      arm:
+        joints: [ 0.221, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
+        <<: *NORMALLY
+        <<: *NORMAL_TOLERANCE
+    - step: "repeat pre"
+      arm:
+        joints: [ 0., 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "up stone"
+      arm:
+        joints: [ 0.2, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
+        <<: *NORMALLY
+        <<: *NORMAL_TOLERANCE
+    - step: "up stone"
+      arm:
+        joints: [ 0.2, 0.3, 0.3, -0.3, 0.522, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "open gripper"
+      gripper:
+        <<: *OPEN_GRIPPER
+    - step: "set space to stone"
+      arm:
+        joints: [ 0., -0.2, -0.016, 0., 0.696, 0., 0. ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "down stone"
+      arm:
+        joints: [ 0., -0.2, -0.07, 0., 1.7226, 0., 0. ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "open gripper"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "push stone deep"
+      arm:
+        joints: [ 0., -0.15, -0.016, 0., 1.7226, 0., 0. ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "push stone deep"
+      arm:
+        joints: [ 0., -0.2, -0.077, 0., 1.7226, 0., 0. ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "hold gripper"
+      arm:
+        joints: [ 0., -0.2, -0.016, 0., 0.3132, 0., 0. ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "move to mid ready"
+      arm:
+        <<: *STORED_HOME
+    - step: "gimbal"
+      gimbal:
+        <<: *BIG_STONE_POS
+    - step: "home"
+      arm:
+        joints: [ 0, -0.3, -0.1, 0., 0.4698, 0., 0. ]
+        <<: *NORMALLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0.238, -0.34, 0.198, 0., 2.784, 0., 0. ]
+        <<: *NORMALLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0.238, -0.044, 0.198, 0., 2.784, 0., 0. ]
+        <<: *NORMALLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      gripper:
+        <<: *OPEN_GRIPPER
+    - step: "home"
+      arm:
+        joints: [ 0.17, -0.044, 0.198, 0., 2.784, 0., 0. ]
+        <<: *NORMALLY
+        <<: *BIGGER_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0.238, -0.044, 0.1898, 0., 2.784, 0., 0. ]
+        <<: *NORMALLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0.238, -0.34, 0.08, 0., 2.436, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ 0.238, -0.34, 0.198, 0., 0.87, 0., 0. ]
+        <<: *SLOWLY
+        <<: *NORMAL_TOLERANCE
+    - step: "move to mid ready"
+      arm:
+        <<: *STORED_HOME
   ################### HOME ####################
   NORMAL_HOME0:
     - step: "approach"
