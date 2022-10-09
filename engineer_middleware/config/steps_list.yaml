@@ -15,9 +15,9 @@ common:
 
   tolerance:
     normal_tolerance: &NORMAL_TOLERANCE
-      [ 0.06, 0.006, 0.006, 0.006, 0.1, 0.1, 0.1 ]
+      tolerance_joints: [ 0.06, 0.006, 0.006, 0.006, 0.1, 0.1, 0.1 ]
     bigger_tolerance: &BIGGER_TOLERANCE
-      [ 0.01, 0.01, 0.01, 0.01, 0.2, 0.2, 0.2 ]
+      tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.2, 0.2, 0.2 ]
 
   gripper:
     open_gripper: &OPEN_GRIPPER
@@ -29,8 +29,7 @@ common:
     normal_home: &NORMAL_HOME
       joints: [ 0.012, -0.119, 0.074, 0., 0.522, 0., 0. ]
       <<: *NORMALLY
-      tolerance_joints:
-        <<: *NORMAL_TOLERANCE
+      <<: *NORMAL_TOLERANCE
     stored_home: &STORED_HOME
       joints: [ 0.13, -0.064, 0.057, 0., 0.522, 0., 0. ]
       <<: *NORMALLY
