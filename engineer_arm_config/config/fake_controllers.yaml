@@ -1,5 +1,6 @@
 controller_list:
   - name: fake_engineer_arm_controller
+    type: $(arg fake_execution_type)
     joints:
       - joint1
       - joint2
@@ -7,7 +8,6 @@ controller_list:
       - joint4
       - joint5
       - joint6
-      - joint7
-initial: # Define initial robot poses.
+initial:  # Define initial robot poses per group
   - group: engineer_arm
     pose: home
