@@ -1,23 +1,21 @@
 common:
-  speed:
-    slowly: &SLOWLY
-      speed: 0.2
-      accel: 0.2
-      timeout: 10
-    normally: &NORMALLY
-      speed: 0.4
-      accel: 0.4
-      timeout: 6.
-    quickly: &QUICKLY
-      speed: 1.
-      accel: 1.
-      timeout: 4.
+  slowly: &SLOWLY
+    speed: 0.2
+    accel: 0.2
+    timeout: 10
+  normally: &NORMALLY
+    speed: 0.4
+    accel: 0.4
+    timeout: 6.
+  quickly: &QUICKLY
+    speed: 1.
+    accel: 1.
+    timeout: 4.
 
-  tolerance:
-    normal_tolerance: &NORMAL_TOLERANCE
-      tolerance_joints: [ 0.06, 0.006, 0.006, 0.006, 0.1, 0.1, 0.1 ]
-    bigger_tolerance: &BIGGER_TOLERANCE
-      tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.2, 0.2, 0.2 ]
+  normal_tolerance: &NORMAL_TOLERANCE
+    tolerance_joints: [ 0.06, 0.006, 0.006, 0.006, 0.1, 0.1, 0.1 ]
+  bigger_tolerance: &BIGGER_TOLERANCE
+    tolerance_joints: [ 0.01, 0.01, 0.01, 0.01, 0.2, 0.2, 0.2 ]
 
   gripper:
     open_gripper: &OPEN_GRIPPER
@@ -28,19 +26,19 @@ common:
   arm:
     normal_home: &NORMAL_HOME
       joints: [ 0.012, -0.119, 0.074, 0., 0.522, 0., 0. ]
-      speed:
+      common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
     stored_home: &STORED_HOME
       joints: [ 0.13, -0.064, 0.057, 0., 0.522, 0., 0. ]
-      speed:
+      common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
     exchange_home: &EXCHANGE_HOME
       joints: [ 0.216, 0.231, 0.249, 0., 1.1658, 0., 0. ]
-      speed:
+      common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
@@ -68,97 +66,131 @@ steps_list:
     - step: "random"
       arm:
         joints: [ 0.131, 0.31, 0.298, -0.107 ,0.24, 0.15, 1.1 ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         <<: *STORED_HOME
     - step: "random"
       arm:
         joints: [ 0.238, 0.170, 0.3, 0,1.6878, 0, 0 ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.238, 0.31, 0.3, 0,1.6878, 0, 0 ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.238, 0.25, 0.22, 0,1.3878, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.238, 0.25, 0.22, 0,0.696, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.240, -0.33, -0.11, -0.3 ,-0.087, 0.0696, 3.1842 ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.240, -0.33, -0.11, 0.3 ,-0.087, 0.0696, 3.1842 ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.240, -0.33, -0.11, -0.3 ,-0.087, 0.0696, 3.1842 ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.221, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0., 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.2, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.2, 0.3, 0.3, -0.3, 0.522, 0., 0. ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       gripper:
         <<: *OPEN_GRIPPER
     - step: "random"
       arm:
         joints: [ 0., -0.2, -0.016, 0., 0.696, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0., -0.2, -0.07, 0., 1.7226, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       gripper:
         <<: *CLOSE_GRIPPER
     - step: "random"
       arm:
         joints: [ 0., -0.15, -0.016, 0., 1.7226, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0., -0.2, -0.077, 0., 1.7226, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0., -0.2, -0.016, 0., 0.3132, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         <<: *STORED_HOME
@@ -168,41 +200,55 @@ steps_list:
     - step: "random"
       arm:
         joints: [ 0, -0.3, -0.1, 0., 0.4698, 0., 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.238, -0.34, 0.198, 0., 2.784, 0., 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.238, -0.044, 0.198, 0., 2.784, 0., 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       gripper:
         <<: *OPEN_GRIPPER
     - step: "random"
       arm:
         joints: [ 0.17, -0.044, 0.198, 0., 2.784, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.238, -0.044, 0.1898, 0., 2.784, 0., 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.238, -0.34, 0.08, 0., 2.436, 0., 0. ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         joints: [ 0.238, -0.34, 0.198, 0., 0.87, 0., 0. ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "random"
       arm:
         <<: *STORED_HOME
@@ -311,8 +357,10 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0.238, 0.170, 0.3, 0,1.6878, 0, 0 ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   ###################    MID    ####################
   MID_BIG_ISLAND0:
     - step: "add the planning scene of BIG_STONE_ISLAND"
@@ -325,8 +373,10 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0.238, 0.170, 0.3, 0,1.6878, 0, 0 ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   MID_BIG_ISLAND00:
     - step: "add the planning scene of BIG_STONE_ISLAND"
@@ -342,23 +392,31 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0.238, 0.170, 0.3, 0,1.6878, 0, 0 ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move forward"
       arm:
         joints: [ 0.238, 0.31, 0.3, 0,1.6878, 0, 0 ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "end effort lift up"
       arm:
         joints: [ 0.238, 0.25, 0.22, 0,1.3878, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move backward"
       arm:
         joints: [ 0.238, 0.25, 0.22, 0,0.696, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   MID_BIG_ISLAND000:
     - step: "add the planning scene of BIG_STONE_ISLAND"
@@ -384,8 +442,10 @@ steps_list:
     - step: "ready"
       arm:
         joints: [ 0.238, 0.170, 0.3, 0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   LF_BIG_ISLAND00:
     - step: "add the planning scene of BIG_STONE_ISLAND"
@@ -401,23 +461,31 @@ steps_list:
     - step: "arm move ready state"
       arm:
         joints: [ 0.238, 0.170, 0.3, 0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move forward"
       arm:
         joints: [ 0.238, 0.31, 0.3, 0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "end effort lift up"
       arm:
         joints: [ 0.238, 0.25, 0.22, 0.3,1.3878, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move backward"
       arm:
         joints: [ 0.238, 0.28, 0.27, 0.3,0.696, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   LF_BIG_ISLAND000:
     - step: "add the planning scene of BIG_STONE_ISLAND"
@@ -443,8 +511,10 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0.238, 0.170, 0.3, -0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   RT_BIG_ISLAND00:
     - step: "add the planning scene of BIG_STONE_ISLAND"
@@ -460,23 +530,31 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0.238, 0.170, 0.3, -0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move forward"
       arm:
         joints: [ 0.238, 0.31, 0.3, -0.3,1.6878, 0, 0 ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "end effort lift up"
       arm:
         joints: [ 0.238, 0.25, 0.22, -0.3,1.3878, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move backward"
       arm:
         joints: [ 0.238, 0.28, 0.27, -0.3,0.696, 0, 0 ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   RT_BIG_ISLAND000:
     - step: "add the planning scene of BIG_STONE_ISLAND"
@@ -503,8 +581,10 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0.240, -0.345, -0.11, 0. ,-0.087, 0.0696, 3.1842 ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   ###################    MID    ####################
   MID_SKY_ISLAND0:
@@ -518,8 +598,10 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0.240, -0.345, -0.11, 0. ,-0.087, 0.0696, 3.1842 ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   MID_SKY_ISLAND00:
     - step: "add the planning scene of SKY_STONE_ISLAND"
@@ -548,8 +630,10 @@ steps_list:
     - step: "arm move forward"
       arm:
         joints: [ 0.240, -0.345, -0.11, -0.3 ,-0.087, 0.0348, 3.1842 ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   LF_SKY_ISLAND00:
     - step: "add the planning scene of SKY_STONE_ISLAND"
@@ -578,8 +662,10 @@ steps_list:
     - step: "arm move forward"
       arm:
         joints: [ 0.240, -0.345, -0.11, 0.3 ,-0.087, 0.087, 3.14 ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   RT_SKY_ISLAND00:
     - step: "add the planning scene of SKY_STONE_ISLAND"
@@ -605,8 +691,10 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0., -0.28, -0.08, 0, 1.566, 0., 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   NORMAL_GAIN_STORE_STONE00:
     - step: "change gripper state"
       gripper:
@@ -614,19 +702,25 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0., -0.22, 0.085, 0., 1.566, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move backward"
       arm:
         joints: [ 0., -0.26, -0.04, 0., 1.566, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   NORMAL_GAIN_STORE_STONE000:
     - step: "back home"
       arm:
         joints: [ 0., -0.26, -0.04, 0., 0.783, 0., 0. ]
-        <<: *SLOWLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "back home"
       arm:
         <<: *NORMAL_HOME
@@ -639,18 +733,24 @@ steps_list:
     - step: "arm move backward"
       arm:
         joints: [ 0, -0.3, -0.1, 0., 0.4698, 0., 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move up"
       arm:
         joints: [ 0.238, -0.34, 0.198, 0., 2.784, 0., 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move forward to catch stone"
       arm:
         joints: [ 0.238, -0.044, 0.198, 0., 2.784, 0., 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "change gripper state"
       gripper:
         <<: *OPEN_GRIPPER
@@ -658,24 +758,32 @@ steps_list:
     - step: "arm move down to touch stone"
       arm:
         joints: [ 0.17, -0.044, 0.198, 0., 2.784, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move up"
       arm:
         joints: [ 0.238, -0.044, 0.1898, 0., 2.784, 0., 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   SKY_GAIN_STORE_STONE000:
     - step: "arm lift up stone"
       arm:
         joints: [ 0.238, -0.34, 0.08, 0., 2.436, 0., 0. ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "back home"
       arm:
         joints: [ 0.238, -0.34, 0.198, 0., 0.87, 0., 0. ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "back home"
       arm:
         <<: *NORMAL_HOME
@@ -688,8 +796,10 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0.22, 0.092, 0.18, 0., 1.2876, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   EXCHANGE00:
     - step: "change gripper state"
@@ -698,18 +808,24 @@ steps_list:
     - step: "arm move backward"
       arm:
         joints: [ 0.22, -0.1, 0.05, 0., 1.4616, 0., 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "push stone"
       arm:
         joints: [ 0.22, 0.095, 0.305, 0., 1.4616, 0., 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move backward"
       arm:
         joints: [ 0.22, 0.095, 0.305, 0., 1.15, 0., 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   EXCHANGE000:
     - step: "change gimbal's towards"
@@ -733,31 +849,41 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0.221, 0.3, 0.3, 0.3,  3.14, 0.0348, 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   LF_GROUND_STONE00:
     - step: "add the planning scene of STORE_STONE"
       scene_name: "STORE_STONE"
     - step: "arm move up"
       arm:
         joints: [ 0.221, 0.3, 0.3, 0.3, 3.14, 0.0348, 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move down to touch stone"
       arm:
         joints: [ 0., 0.3, 0.3, 0.3, 3.14, 0.0348, 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move up with stone"
       arm:
         joints: [ 0.2, 0.3, 0.3, 0.3, 3.14, 0.0348, 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move back"
       arm:
         joints: [ 0.2, 0.3, 0.3, 0.3, 0.522, 0., 0. ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   LF_GROUND_STONE000:
     - step: "add the planning scene of STORE_STONE"
       scene_name: "STORE_STONE"
@@ -778,31 +904,41 @@ steps_list:
     - step: "ready state"
       arm:
         joints: [ 0.221, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   RT_GROUND_STONE00:
     - step: "add the planning scene of STORE_STONE"
       scene_name: "STORE_STONE"
     - step: "arm move up"
       arm:
         joints: [ 0.221, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
-        <<: *QUICKLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move down to touch stone"
       arm:
         joints: [ 0., 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move up with stone"
       arm:
         joints: [ 0.2, 0.3, 0.3, -0.3, 3.0276, 0.1218, 0. ]
-        <<: *NORMALLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move back"
       arm:
         joints: [ 0.2, 0.3, 0.3, -0.3, 0.522, 0., 0. ]
-        <<: *SLOWLY
-        <<: *NORMAL_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   RT_GROUND_STONE000:
     - step: "add the planning scene of STORE_STONE"
       scene_name: "STORE_STONE"
@@ -821,13 +957,17 @@ steps_list:
     - step: "ready"
       arm:
         joints: [ 0., -0.2, -0.016, 0., 0.696, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "down stone"
       arm:
         joints: [ 0., -0.2, -0.07, 0., 1.7226, 0., 0. ]
-        <<: *NORMALLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "change gripper state"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -835,21 +975,27 @@ steps_list:
     - step: "push stone deep"
       arm:
         joints: [ 0., -0.15, -0.016, 0., 1.7226, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "push stone deep1"
       arm:
         joints: [ 0., -0.2, -0.077, 0., 1.7226, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   STORE_STONE000:
     - step: "add the planning scene of STORE_STONE"
       scene_name: "STORE_STONE"
     - step: "back home"
       arm:
         joints: [ 0., -0.2, -0.016, 0., 0.3132, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "back home"
       arm:
         <<: *STORED_HOME
@@ -864,23 +1010,31 @@ steps_list:
     - step: "arm move up"
       arm:
         joints: [ 0.235, -0.02, 0.2, 0., 1.05, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move forward"
       arm:
         joints: [ 0.235, -0.02, 0.2, 0., 1.1658, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm lift up"
       arm:
         joints: [ 0.24, -0.02, 0.29, 0., 0.5046, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
     - step: "arm move back"
       arm:
         joints: [ 0.235, -0.02, 0.2, 0., 0.5, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   SMALL_STONE00:
     - step: "back home"
       arm:
@@ -890,26 +1044,33 @@ steps_list:
     - step: "arm move forward in ready state"
       arm:
         joints: [ 0.005, 0.11, 0.305, 0., 2.088, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   LONG_GAIN_BARRIER00:
     - step: "end effort lift up"
       arm:
         joints: [ 0.005, 0.11, 0.305, 0., 1.4, 0., 0. ]
-        <<: *SLOWLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   SHORT_GAIN_BARRIER0:
     - step: "arm move forward in ready state"
       arm:
         joints: [ 0.005, 0.11, 0.305, 0., 1.914, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
-
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
   SHORT_GAIN_BARRIER00:
     - step: "end effort lift up"
       arm:
         joints: [ 0.005, 0.11, 0.305, 0., 1.5, 0., 0. ]
-        <<: *QUICKLY
-        <<: *BIGGER_TOLERANCE
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
