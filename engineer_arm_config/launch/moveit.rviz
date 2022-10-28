@@ -75,6 +75,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          gimbal_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           left_back_pivot:
             Alpha: 1
             Show Axes: false
@@ -135,6 +140,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          pitch:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           right_back_pivot:
             Alpha: 1
             Show Axes: false
@@ -151,6 +161,11 @@ Visualization Manager:
             Show Trail: false
             Value: true
           right_front_wheel:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          yaw:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -206,6 +221,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          gimbal_base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           left_back_pivot:
             Alpha: 1
             Show Axes: false
@@ -266,6 +286,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          pitch:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           right_back_pivot:
             Alpha: 1
             Show Axes: false
@@ -282,6 +307,11 @@ Visualization Manager:
             Show Trail: false
             Value: true
           right_front_wheel:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          yaw:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -307,7 +337,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2
+      Distance: 2.8098559379577637
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -323,9 +353,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4649999737739563
+      Pitch: 0.10500020533800125
       Target Frame: base_link
-      Yaw: 5.014949321746826
+      Yaw: 6.124975681304932
     Saved: ~
 Window Geometry:
   Displays:
@@ -343,5 +373,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1291
-  X: 454
-  Y: 27
+  X: 629
+  Y: 108

@@ -24,6 +24,10 @@
                 controllers/mimic_joint1_controller
                 controllers/mimic_joint2_controller
                 controllers/chassis_controller
+                controllers/yaw_calibration_controller
+                controllers/pitch_calibration_controller
+                controllers/gimbal_controller
+                controllers/gpio_controller
                 "
     />
 </launch>
