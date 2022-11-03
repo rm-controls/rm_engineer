@@ -27,9 +27,17 @@ common:
 
   arm:
     normal_home: &NORMAL_HOME
-      joints: [ 0.008, 0.025, 0.024, -0.6264, 0., 0. ]
-      <<: *NORMALLY
-      <<: *NORMAL_TOLERANCE
+      joints: [ 0., 0.02, -0.022, -0.1566, 0., 0.314 ]
+      common:
+        <<: *NORMALLY
+      tolerance:
+        <<: *NORMAL_TOLERANCE
+    stored_home: &STORE_HOME
+      joints: [ 0.26, 0.01, 0., -0.348, 0., 0.314 ]
+      common:
+        <<: *NORMALLY
+      tolerance:
+        <<: *NORMAL_TOLERANCE
 
   gimbal:
     sky_gimbal: &SKY_POS
@@ -49,12 +57,6 @@ steps_list:
   ################### COMMON STEP####################
   DELETE_SCENE:
     - step: "delete_scene"
-  ################### HOME ####################
-  NORMAL_HOME0:
-    - step: "approach"
-      arm:
-        <<: *NORMAL_HOME
-
   ################### GIMBAL ####################
   SKY_GIMBAL:
     - step: "open gripper"
@@ -130,3 +132,75 @@ steps_list:
         yaw: 3.14
         chassis_tolerance_position_: 0.1
         chassis_tolerance_angular_: 0.01
+  ################### HOME ####################
+  NORMAL_HOME0:
+    - step: "approach"
+      arm:
+        <<: *NORMAL_HOME
+  STORE_HOME0:
+    - step: "approach"
+      arm:
+        <<: *STORE_HOME
+  ################### HOME ####################
+  READY_BIG_ISLAND0:
+    - step: "add the planning scene of BIG_STONE_ISLAND"
+    - step: "add the planning scene of STORE_STONE"
+    - step: "change gimbal's towards"
+    - step: "ready state"
+      arm:
+        joints: [ 0.458, 0.31, 0,1.46, 0, 3.14 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+  ###################    MID    ####################
+  MID_BIG_ISLAND0:
+    - step: "add the planning scene of BIG_STONE_ISLAND"
+    - step: "add the planning scene of STORE_STONE"
+    - step: "change gimbal's towards"
+    - step: "ready state"
+      arm:
+        joints: [ 0.458, 0.31, 0,1.46, 0, 3.14 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+  MID_BIG_ISLAND00:
+    - step: "add the planning scene of BIG_STONE_ISLAND"
+    - step: "add the planning scene of STORE_STONE"
+    - step: "change gimbal's towards"
+    - step: "change gripper state"
+      gripper:
+        <<: *OPEN_GRIPPER
+    - step: "repeat ready state"
+      arm:
+        joints: [ 0.458, 0.263, 0,1.46, 0, 3.14 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "move arm down to gain stone"
+      arm:
+        joints: [ 0.305, 0.263, 0,1.46, 0, 3.14 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "move arm up with stone"
+      arm:
+        joints: [ 0.458, 0.263, 0,1.46, 0, 3.14 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+  MID_BIG_ISLAND000:
+    - step: "add the planning scene of BIG_STONE_ISLAND"
+      scene_name: "BIG_STONE_ISLAND"
+    - step: "add the planning scene of STORE_STONE"
+      scene_name: "STORE_STONE"
+    - step: "change gimbal's towards"
+      gimbal:
+        <<: *WALKING_POS
+    - step: "back home"
+      arm:
+        <<: *STORE_HOME

@@ -55,7 +55,7 @@ class MotionBase
 public:
   MotionBase(XmlRpc::XmlRpcValue& motion, Interface& interface) : interface_(interface)
   {
-    time_out_ = xmlRpcGetDouble(motion, "timeout", 1e10);
+    time_out_ = xmlRpcGetDouble(motion["common"], "timeout", 1e10);
   };
   ~MotionBase() = default;
   virtual bool move() = 0;
@@ -82,8 +82,8 @@ public:
   MoveitMotionBase(XmlRpc::XmlRpcValue& motion, moveit::planning_interface::MoveGroupInterface& interface)
     : MotionBase<moveit::planning_interface::MoveGroupInterface>(motion, interface)
   {
-    speed_ = xmlRpcGetDouble(motion, "speed", 0.1);
-    accel_ = xmlRpcGetDouble(motion, "accel", 0.1);
+    speed_ = xmlRpcGetDouble(motion["common"], "speed", 0.1);
+    accel_ = xmlRpcGetDouble(motion["common"], "accel", 0.1);
   }
   bool move() override
   {
@@ -211,11 +211,13 @@ public:
       for (int i = 0; i < motion["joints"].size(); ++i)
         target_.push_back(xmlRpcGetDouble(motion["joints"], i));
     }
-    if (motion.hasMember("tolerance_joints"))
+    if (motion.hasMember("tolerance"))
     {
-      ROS_ASSERT(motion["tolerance_joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      for (int i = 0; i < motion["tolerance_joints"].size(); ++i)
-        tolerance_joints_.push_back(xmlRpcGetDouble(motion["tolerance_joints"], i));
+      ROS_ASSERT(motion["tolerance"]["tolerance_joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      for (int i = 0; i < motion["tolerance"]["tolerance_joints"].size(); ++i)
+      {
+        tolerance_joints_.push_back(xmlRpcGetDouble(motion["tolerance"]["tolerance_joints"], i));
+      }
     }
   }
   bool move() override
