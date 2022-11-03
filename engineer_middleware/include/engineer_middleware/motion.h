@@ -216,7 +216,6 @@ public:
       ROS_ASSERT(motion["tolerance"]["tolerance_joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
       for (int i = 0; i < motion["tolerance"]["tolerance_joints"].size(); ++i)
       {
-        std::cout << motion["tolerance"]["tolerance_joints"][i] << std::endl;
         tolerance_joints_.push_back(xmlRpcGetDouble(motion["tolerance"]["tolerance_joints"], i));
       }
     }
