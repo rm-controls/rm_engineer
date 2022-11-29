@@ -137,7 +137,6 @@ public:
     cmd_vel_.linear.x = pid_x_.computeCommand(error.x, period);
     cmd_vel_.linear.y = pid_y_.computeCommand(error.y, period);
     cmd_vel_.angular.z = pid_yaw_.computeCommand(error_yaw_, period);
-    ;
     vel_pub_.publish(cmd_vel_);
     error_pos_ = std::abs(error.x) + std::abs(error.y);
     error_yaw_ = std::abs(error_yaw_);
