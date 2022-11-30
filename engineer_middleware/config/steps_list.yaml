@@ -3,19 +3,19 @@ common:
     slowly: &SLOWLY
       speed: 0.1
       accel: 0.1
-      timeout: 10
+      timeout: 10.
     normally: &NORMALLY
       speed: 0.4
       accel: 0.4
       timeout: 6.
     quickly: &QUICKLY
-      speed: 1.
-      accel: 1.
+      speed: 0.7
+      accel: 0.7
       timeout: 4.
 
   tolerance:
     normal_tolerance: &NORMAL_TOLERANCE
-      tolerance_joints: [ 0.06, 0.006, 0.006, 0.1, 0.1, 0.1 ]
+      tolerance_joints: [ 0.06, 0.006, 0.006, 0.01, 0.01, 0.01 ]
     bigger_tolerance: &BIGGER_TOLERANCE
       tolerance_joints: [ 0.01, 0.01, 0.01, 0.2, 0.2, 0.2 ]
 
@@ -27,7 +27,7 @@ common:
 
   arm:
     normal_home: &NORMAL_HOME
-      joints: [ 0., 0.02, -0.022, -0.1566, 0., 3.14 ]
+      joints: [ 0., 0.02,  0.007, -0.1566, 0., 3.14 ]
       common:
         <<: *NORMALLY
       tolerance:
@@ -38,6 +38,12 @@ common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
+    pick_wait: &PICK_WAIT
+      frame: base_link
+      position: [ 0.283, 0.225, 0.836 ]
+      rpy: [ -2.15,-1.560,-2.538 ]
+      common:
+        <<: *NORMALLY
 
   gimbal:
     sky_gimbal: &SKY_POS
@@ -94,17 +100,17 @@ steps_list:
         frame: base_link
         position: [ 0.3, 0. ]
         yaw: 0.0
-        chassis_tolerance_position_: 0.1
-        chassis_tolerance_angular_: 0.01
+        chassis_tolerance_position_: 0.025
+        chassis_tolerance_angular_: 0.1
 
   CHASSIS_BACKWARD:
     - step: "backward"
       chassis:
         frame: base_link
-        position: [ -0.3, 0. ]
+        position: [ -0.1, 0. ]
         yaw: 0.0
-        chassis_tolerance_position_: 0.1
-        chassis_tolerance_angular_: 0.01
+        chassis_tolerance_position_: 0.025
+        chassis_tolerance_angular_: 0.1
 
   CHASSIS_LEFT:
     - step: "left"
@@ -132,209 +138,319 @@ steps_list:
         yaw: 3.14
         chassis_tolerance_position_: 0.1
         chassis_tolerance_angular_: 0.01
+
+  ################### CHASSIS ####################
+  ARM_RIGHT1:
+    - step: "forward"
+      servo:
+        frame: tools_link
+        position: [ 0., 0.,   0. ]
+        orientation: [ 0., 0., 0. ]
+        servo_tolerance_position: 0.06
+        servo_tolerance_angular: 0.1
+
   ################### HOME ####################
-  NORMAL_HOME0:
-    - step: "approach"
+
+  HOME0:
+    - step: "home with no stone"
       arm:
         <<: *NORMAL_HOME
-  STORE_HOME0:
-    - step: "approach"
+  HOME1:
+    - step: "home with one stone"
       arm:
-        <<: *STORE_HOME
-  ################### HOME ####################
-  ###################   READY   ################
-  READY_BIG_ISLAND0:
-    - step: "add the planning scene of BIG_STONE_ISLAND"
-    - step: "add the planning scene of STORE_STONE"
-    - step: "change gimbal's towards"
-    - step: "ready state"
+        <<: *NORMAL_HOME
+  HOME2:
+    - step: "home with two stone"
       arm:
-        joints: [ 0.458, 0.31, 0,-1.46, 0, 3.14 ]
+        <<: *NORMAL_HOME
+
+
+  ################### GROUND ####################
+  GROUND_STONE0:
+    - step: "ground"
+      arm:
+        joints: [ 0., 0.02,  0.007, -0.05, 0., 0. ]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
-  ###################    MID    ################
-  MID_BIG_ISLAND0:
-    - step: "add the planning scene of BIG_STONE_ISLAND"
-    - step: "add the planning scene of STORE_STONE"
-    - step: "change gimbal's towards"
-    - step: "ready state"
+
+  ###################    SKY_BIG_ISLAND    ####################
+  SKY_BIG_ISLAND0:
+    - step: "arm_wait"
       arm:
-        joints: [ 0.458, 0.31, 0,-1.44, 0, 3.14 ]
+        <<: *PICK_WAIT
+  SKY_BIG_ISLAND00:
+    - step: "up"
+      arm:
+        joints: [ 0.435, 0.266, 0.007, -1.496, -0.005, 0 ]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
-  MID_BIG_ISLAND00:
-    - step: "add the planning scene of BIG_STONE_ISLAND"
-    - step: "add the planning scene of STORE_STONE"
-    - step: "change gimbal's towards"
+  SKY_BIG_ISLAND000:
+    - step: "arm_wait"
+      arm:
+        <<: *PICK_WAIT
+    ###################    BIG_ISLAND    ####################
+    ###################    MID    ################
+  BIG_ISLAND0:
+    - step: "arm_wait"
+      arm:
+        <<: *PICK_WAIT
+  BIG_ISLAND00:
+    - step: "add scenes"
+      scene_name: MID_BIG_ISLAND
+    - step: "arm_ready"
+      arm:
+        frame: base_link
+        position: [ 0.743, 0.007, 0.748 ]
+        rpy: [ -0.555,1.539, 2.581 ]
+        common:
+          <<: *NORMALLY
+        tolerance_position: 0.001
     - step: "change gripper state"
-    - step: "repeat ready state"
+    - step: "delete_scene"
+  BIG_ISLAND000:
+    - step: "get stone"
       arm:
-        joints: [ 0.456, 0.31, 0,-1.44, 0, 3.14 ]
+        joints: [ 0.299, 0.266, 0.007, -1.526, -0.005, 3.119 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "up"
+      arm:
+        joints: [ 0.435, 0.266, 0.007, -1.496, -0.005, 3.119 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "reversal"
+      arm:
+        joints: [ 0.433, 0.042, 0.007, -1.502, -0.001, 0.014 ]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "move arm down to gain stone"
+    - step: "move to wait "
       arm:
-        joints: [ 0.305, 0.31, 0,-1.44, 0, 3.14 ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "move arm up with stone"
-      arm:
-        joints: [ 0.458, 0.31, 0,-1.44, 0, 3.14 ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-  MID_BIG_ISLAND000:
-    - step: "add the planning scene of BIG_STONE_ISLAND"
-      scene_name: "BIG_STONE_ISLAND"
-    - step: "add the planning scene of STORE_STONE"
-      scene_name: "STORE_STONE"
-    - step: "change gimbal's towards"
-    - step: "back to store home"
-      arm:
-        <<: *STORE_HOME
-  ###################    LF    ################
-  ###################    RT    ################
-
-  ###################    SKY_ISLAND    ####################
-  ###################   READY   ################
-  READY_SKY_ISLAND0:
-    - step: "add the planning scene of BIG_STONE_ISLAND"
-    - step: "add the planning scene of STORE_STONE"
-    - step: "change gimbal's towards"
-    - step: "ready state"
-      arm:
-        joints: [ 0.458, 0.31, 0,-1.46, 0, 0 ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-  ###################    MID    ################
-  MID_SKY_ISLAND0:
-    - step: "add the planning scene of BIG_STONE_ISLAND"
-    - step: "add the planning scene of STORE_STONE"
-    - step: "change gimbal's towards"
-    - step: "ready state"
-      arm:
-        joints: [ 0.458, 0.31, 0,-1.44, 0, 0 ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-  MID_SKY_ISLAND00:
-    - step: "add the planning scene of BIG_STONE_ISLAND"
-      scene_name: "BIG_STONE_ISLAND"
-    - step: "add the planning scene of STORE_STONE"
-      scene_name: "STORE_STONE"
-    - step: "change gimbal's towards"
-    - step: "back to store home"
-      arm:
-        <<: *STORE_HOME
-    ###################    LF    ################
-    ###################    RT    ################
-
-  ###################    GAIN_STORE_STONE    ####################
-  GAIN_STORE_STONE0:
-    - step: "ready state"
-      arm:
-        joints: [ 0.2, 0.165, 0,-0.07, 0.1914, 3.14 ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "move joint2 backward"
-      arm:
-        joints: [ 0.2, 0.06, 0,-0.07, 0.1914, 3.14 ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "ready state"
-      arm:
-        joints: [ 0.31, 0.06, 0,-0.87, 0.1914, 3.14 ]
+        frame: base_link
+        position: [ 0.283, 0.225, 0.836 ]
+        rpy: [ -2.15,-1.560,-2.538 ]
         common:
           <<: *SLOWLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-
-    ###################    EXCHANGE    ####################
-    ################### GROUND_STONE ####################
-    - step: "ground"
-      arm:
-        joints: [ 0., 0.06, 0,-0.07, 0, 0 ]
-        common:
-          <<: *SLOWLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-
-    ################### STORE_STONE ####################
-    - step: "ground"
-      arm:
-        joints: [ 0.313, 0.06, 0,-1.25, 0, 3.14 ]
-        common:
-          <<: *SLOWLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "ground"
-      arm:
-        joints: [ 0.313, 0.01, 0,-0.174, 0, 3.14 ]
-        common:
-          <<: *SLOWLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-
   ###################    SMALL_ISLAND    ####################
-  SMALL_ISLAND0:
-    - step: "add the planning scene of BIG_STONE_ISLAND"
-    - step: "add the planning scene of STORE_STONE"
-    - step: "change gimbal's towards"
-    - step: "ready state"
+  LF_SMALL_ISLAND0:
+    - step: "arm_wait"
       arm:
-        joints: [ 0.458, 0.31, 0,-1.44, 0, 3.14 ]
+        <<: *PICK_WAIT
+      gripper:
+        <<: *CLOSE_GRIPPER
+  LF_SMALL_ISLAND00:
+    - step: "add scenes"
+      scene_name: MID_SMALL_ISLAND
+    - step: "arm_ready"
+      arm:
+        frame: base_link
+        position: [ 0.507, 0.265, 0.722 ]
+        rpy: [ -0.649,1.506, 2.485 ]
         common:
           <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-  SMALL_ISLAND00:
-    - step: "add the planning scene of BIG_STONE_ISLAND"
-    - step: "add the planning scene of STORE_STONE"
-    - step: "change gimbal's towards"
+        tolerance_position: 0.001
     - step: "change gripper state"
-    - step: "repeat ready state"
-      arm:
-        joints: [ 0.456, 0.31, 0,-1.44, 0, 3.14 ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *BIGGER_TOLERANCE
+      gripper:
+        <<: *OPEN_GRIPPER
+    - step: "delete_scene"
+  LF_SMALL_ISLAND000:
     - step: "move arm down to gain stone"
       arm:
-        joints: [ 0.305, 0.31, 0,-1.44, 0, 3.14 ]
+        frame: base_link
+        position: [ 0.507, 0.265, 0.6401 ]
+        rpy: [ -0.750,1.510, 2.383 ]
+        common:
+          <<: *QUICKLY
+        tolerance_position: 0.01
+    - step: "move arm up with stone and go right"
+      arm:
+        frame: base_link
+        position: [ 0.504, 0.265, 0.811 ]
+        rpy: [ -0.330, 1.441, 2.809 ]
         common:
           <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "move arm up with stone"
+        tolerance_position: 0.001
+    - step: "go right"
       arm:
-        joints: [ 0.458, 0.31, 0,-1.44, 0, 3.14 ]
+        frame: base_link
+        position: [ 0.506, 0.209, 0.812 ]
+        rpy: [ -0.331, 1.439, 2.815 ]
         common:
           <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-  SMALL_ISLAND000:
-    - step: "add the planning scene of BIG_STONE_ISLAND"
-      scene_name: "BIG_STONE_ISLAND"
-    - step: "add the planning scene of STORE_STONE"
-      scene_name: "STORE_STONE"
-    - step: "change gimbal's towards"
-    - step: "back to store home"
+        tolerance_position: 0.001
+    - step: "reversal"
       arm:
-        <<: *STORE_HOME
+        frame: base_link
+        position: [ 0.506, 0.209, 0.811 ]
+        rpy: [ 0.042,-1.443, -0.033 ]
+        common:
+          <<: *NORMALLY
+        tolerance_position: 0.001
+  LF_SMALL_ISLAND0000:
+    - step: "move to wait "
+      arm:
+        frame: base_link
+        position: [ 0.283, 0.225, 0.836 ]
+        rpy: [ -2.15,-1.560,-2.538 ]
+        common:
+          <<: *NORMALLY
+    ###################    MID    ################
+  MID_SMALL_ISLAND0:
+    - step: "arm_wait"
+      arm:
+        <<: *PICK_WAIT
+  MID_SMALL_ISLAND00:
+    - step: "add scenes"
+      scene_name: MID_SMALL_ISLAND
+    - step: "arm_ready"
+      arm:
+        frame: base_link
+        position: [ 0.507, 0.008, 0.723 ]
+        rpy: [ -0.498,1.515, 2.639 ]
+        common:
+          <<: *NORMALLY
+        tolerance_position: 0.001
+    - step: "change gripper state"
+    - step: "backward"
+      chassis:
+        frame: base_link
+        position: [ -0.09, 0. ]
+        yaw: 0.0
+        chassis_tolerance_position_: 0.025
+        chassis_tolerance_angular_: 0.1
+    - step: "delete_scene"
+  MID_SMALL_ISLAND000:
+    - step: "up"
+      arm:
+        joints: [ 0.2540476892306656, 0.03155902847607778, 0.005682599990380954, -1.5497683296037037, 0.09603447921700581, 3.1295657735691975 ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
+    - step: "up"
+      arm:
+        joints: [ 0.2550476892306656, 0.03255902847607778, 0.005682599990380954, -1.5497683296037037, 0.09603447921700581, 3.1295657735691975 ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
+    - step: "up"
+      arm:
+        joints: [ 0.2560476892306656, 0.03355902847607778, 0.005682599990380954, -1.5497683296037037, 0.09603447921700581, 3.1295657735691975 ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
+    - step: "up"
+      arm:
+        joints: [ 0.2570476892306656, 0.03455902847607778, 0.005682599990380954, -1.5497683296037037, 0.09603447921700581, 3.1295657735691975 ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
+    - step: "up"
+      arm:
+        joints: [ 0.2580476892306656, 0.03555902847607778, 0.005682599990380954, -1.5497683296037037, 0.09603447921700581, 3.1295657735691975 ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
+    - step: "up"
+      arm:
+        joints: [ 0.2590476892306656, 0.03655902847607778, 0.005682599990380954, -1.5497683296037037, 0.09603447921700581, 3.1295657735691975 ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
+    - step: "up"
+      arm:
+        joints: [ 0.26000476892306656, 0.03755902847607778, 0.005682599990380954, -1.5497683296037037, 0.09603447921700581, 3.1295657735691975 ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
+    - step: "up"
+      arm:
+        joints: [ 0.2610476892306656, 0.03855902847607778, 0.005682599990380954, -1.5497683296037037, 0.09603447921700581, 3.1295657735691975 ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
+
+    ###################    RT    ################
+  RT_SMALL_ISLAND0:
+    - step: "arm_wait"
+      arm:
+        <<: *PICK_WAIT
+  RT_SMALL_ISLAND00:
+    - step: "add scenes"
+      scene_name: MID_SMALL_ISLAND
+    - step: "arm_ready"
+      arm:
+        frame: base_link
+        position: [ 0.507, -0.252, 0.718 ]
+        rpy: [ -0.516, 1.498, 2.615 ]
+        common:
+          <<: *NORMALLY
+        tolerance_position: 0.001
+    - step: "change gripper state"
+    - step: "delete_scene"
+  RT_SMALL_ISLAND000:
+    - step: "move arm down to gain stone"
+      arm:
+        frame: base_link
+        position: [ 0.504, -0.250, 0.640 ]
+        rpy: [ -0.524,1.502, 2.614 ]
+        common:
+          <<: *QUICKLY
+        tolerance_position: 0.01
+    - step: "move arm up with stone and go right"
+      arm:
+        frame: base_link
+        position: [ 0.504, -0.250, 0.812 ]
+        rpy: [ -0.334,1.465, 2.802 ]
+        common:
+          <<: *NORMALLY
+        tolerance_position: 0.001
+    - step: "go right"
+      arm:
+        frame: base_link
+        position: [ 0.505, -0.290, 0.811 ]
+        rpy: [ -0.328,1.464, 2.803 ]
+        common:
+          <<: *NORMALLY
+        tolerance_position: 0.001
+    - step: "reversal"
+      arm:
+        frame: base_link
+        position: [ 0.506, -0.295, 0.806 ]
+        rpy: [ -0.137,-1.467, 0.108 ]
+        common:
+          <<: *SLOWLY
+        tolerance_position: 0.001
+  RT_SMALL_ISLAND0000:
+    - step: "move to wait "
+      arm:
+        frame: base_link
+        position: [ 0.283, 0.225, 0.836 ]
+        rpy: [ -2.15,-1.560,-2.538 ]
+        common:
+          <<: *NORMALLY
+      ###################    SMALL_ISLAND    ####################
+
+      ###################   JQ   ####################
+
+  TEST:
+    - step: "move to wait "
+      auto:
+        common:
+        tolerance:

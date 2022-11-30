@@ -80,7 +80,7 @@ public:
           planning_scene_ = new PlanningScene(it->second, arm_group);
     }
   }
-  bool move()
+  bool move(geometry_msgs::Twist target_twist)
   {
     bool success = true;
     if (arm_motion_)

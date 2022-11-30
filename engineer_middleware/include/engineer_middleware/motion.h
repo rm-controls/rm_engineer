@@ -35,8 +35,7 @@
 // Created by qiayuan on 5/29/21.
 //
 
-#ifndef ENGINEER_MIDDLEWARE_MOTION_H_
-#define ENGINEER_MIDDLEWARE_MOTION_H_
+#pragma once
 
 #include <rm_common/ros_utilities.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -389,6 +388,79 @@ private:
   double chassis_tolerance_position_, chassis_tolerance_angular_;
 };
 
-}  // namespace engineer_middleware
+class VisMotion : public MoveitMotionBase
+{
+public:
+  VisMotion(XmlRpc::XmlRpcValue& motion, moveit::planning_interface::MoveGroupInterface& interface, tf2_ros::Buffer& tf)
+    : MoveitMotionBase(motion, interface), tf_(tf), has_pos_(false), has_ori_(false), is_cartesian_(false)
+  {
+    tolerance_position_ = xmlRpcGetDouble(motion, "tolerance_position", 0.01);
+  }
 
-#endif  // ENGINEER_MIDDLEWARE_MOTION_H_
+  bool moveTarget(geometry_msgs::TwistStamped target_twist)
+  {
+    target_.pose.orientation.w = 1.;
+    target_.header.frame_id = target_twist.header.frame_id;
+    target_.pose.position.x = target_twist.twist.linear.x;
+    target_.pose.position.y = target_twist.twist.linear.y;
+    target_.pose.position.z = target_twist.twist.linear.z;
+    has_pos_ = true;
+    tf2::Quaternion quat_tf;
+    quat_tf.setRPY(target_twist.twist.angular.x, target_twist.twist.angular.y, target_twist.twist.angular.z);
+    geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+    target_.pose.orientation = quat_msg;
+    has_ori_ = true;
+
+    MoveitMotionBase::move();
+    if (!target_.header.frame_id.empty() && target_.header.frame_id != interface_.getPlanningFrame())
+    {
+      try
+      {
+        tf2::doTransform(target_.pose, target_.pose,
+                         tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
+        target_.header.frame_id = interface_.getPlanningFrame();
+      }
+      catch (tf2::TransformException& ex)
+      {
+        ROS_WARN("%s", ex.what());
+        return false;
+      }
+    }
+    if (is_cartesian_)
+    {
+      moveit_msgs::RobotTrajectory trajectory;
+      std::vector<geometry_msgs::Pose> waypoints;
+      waypoints.push_back(target_.pose);
+      if (interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory) < 99.9)
+        return false;
+      return interface_.asyncExecute(trajectory) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+    }
+    else
+    {
+      if (has_pos_ && has_ori_)
+        interface_.setPoseTarget(target_);
+      else if (has_pos_ && !has_ori_)
+        interface_.setPositionTarget(target_.pose.position.x, target_.pose.position.y, target_.pose.position.z);
+      else if (!has_pos_ && has_ori_)
+        interface_.setOrientationTarget(target_.pose.orientation.x, target_.pose.orientation.y,
+                                        target_.pose.orientation.z, target_.pose.orientation.w);
+      return interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+    }
+  }
+
+private:
+  bool isReachGoal() override
+  {
+    geometry_msgs::Pose pose = interface_.getCurrentPose().pose;
+    // TODO: Add orientation error check
+    return (std::abs(std::pow(pose.position.x - target_.pose.position.x, 2) +
+                     std::pow(pose.position.y - target_.pose.position.y, 2) +
+                     std::pow(pose.position.z - target_.pose.position.z, 2)) < tolerance_position_);
+  }
+  tf2_ros::Buffer& tf_;
+  bool has_pos_, has_ori_, is_cartesian_;
+  geometry_msgs::PoseStamped target_;
+  double tolerance_position_;
+};
+
+};  // namespace engineer_middleware
