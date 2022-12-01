@@ -67,7 +67,7 @@ public:
       for (int i = 0; i < it->second.size(); i++)
         object_ids_.push_back(it->second[i]["id"]);
   }
-  bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as, geometry_msgs::Twist target_twist)
+  bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as, geometry_msgs::TwistStamped target_twist)
   {
     if (queue_.empty())
     {

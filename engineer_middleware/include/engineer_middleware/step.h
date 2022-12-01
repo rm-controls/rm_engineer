@@ -73,6 +73,8 @@ public:
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
     if (step.hasMember("gripper"))
       gpio_motion_ = new GpioMotion(step["gripper"], gpio_pub);
+    if (step.hasMember("vis"))
+      vis_motion_ = new VisMotion(step["vis"], arm_group, tf);
     if (step.hasMember("scene_name"))
     {
       for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
@@ -80,7 +82,7 @@ public:
           planning_scene_ = new PlanningScene(it->second, arm_group);
     }
   }
-  bool move(geometry_msgs::Twist target_twist)
+  bool move(geometry_msgs::TwistStamped target_twist)
   {
     bool success = true;
     if (arm_motion_)
@@ -97,12 +99,16 @@ public:
       success &= gpio_motion_->move();
     if (planning_scene_)
       planning_scene_->Add();
+    if (vis_motion_)
+      vis_motion_->moveTarget(target_twist);
     return success;
   }
   void stop()
   {
     if (arm_motion_)
       arm_motion_->stop();
+    if (vis_motion_)
+      vis_motion_->stop();
     if (hand_motion_)
       hand_motion_->stop();
     if (chassis_motion_)
@@ -123,6 +129,8 @@ public:
     bool success = true;
     if (arm_motion_)
       success &= arm_motion_->isFinish();
+    if (vis_motion_)
+      success &= vis_motion_->isFinish();
     if (hand_motion_)
       success &= hand_motion_->isFinish();
     if (card_motion_)
@@ -138,6 +146,8 @@ public:
     bool success = true;
     if (arm_motion_)
       success &= arm_motion_->checkTimeout(period);
+    if (vis_motion_)
+      success &= vis_motion_->checkTimeout(period);
     if (hand_motion_)
       success &= hand_motion_->checkTimeout(period);
     if (card_motion_)
@@ -163,6 +173,7 @@ private:
   GimbalMotion* gimbal_motion_{};
   GpioMotion* gpio_motion_{};
   PlanningScene* planning_scene_{};
+  VisMotion* vis_motion_{};
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
   moveit::planning_interface::MoveGroupInterface& arm_group_;
 };
