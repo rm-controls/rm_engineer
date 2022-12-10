@@ -79,8 +79,10 @@ public:
     {
       for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
         if (step["scene_name"] == it->first)
-          planning_scene_ = new PlanningScene(it->second, arm_group);
+          planning_scene_ = new PlanningScene(it->second, arm_group, tf);
+      ROS_INFO("2");
     }
+    ROS_INFO("1");
   }
   bool move(geometry_msgs::TwistStamped target_twist)
   {
@@ -98,7 +100,10 @@ public:
     if (gpio_motion_)
       success &= gpio_motion_->move();
     if (planning_scene_)
-      planning_scene_->Add();
+    {
+      if (planning_scene_->is_current_)
+        planning_scene_->Add();
+    }
     if (vis_motion_)
       vis_motion_->moveTarget(target_twist);
     return success;

@@ -65,7 +65,7 @@ public:
     }
     for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
       for (int i = 0; i < it->second.size(); i++)
-        object_ids_.push_back(it->second[i]["id"]);
+        object_ids_.push_back(it->second["scene"][i]["id"]);
   }
   bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as, geometry_msgs::TwistStamped target_twist)
   {

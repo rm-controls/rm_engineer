@@ -461,8 +461,8 @@ private:
                      std::pow(pose.position.y - target_.pose.position.y, 2) +
                      std::pow(pose.position.z - target_.pose.position.z, 2)) < tolerance_position_ &&
             (std::abs(angles::shortest_angular_distance(roll_current, roll_goal) +
-             angles::shortest_angular_distance(pitch_current, pitch_goal) +
-             angles::shortest_angular_distance(yaw_current, yaw_goal))) < tolerance_rpy_);
+                      angles::shortest_angular_distance(pitch_current, pitch_goal) +
+                      angles::shortest_angular_distance(yaw_current, yaw_goal))) < tolerance_rpy_);
   }
   tf2_ros::Buffer& tf_;
   bool has_pos_, has_ori_, is_cartesian_;

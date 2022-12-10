@@ -12,20 +12,30 @@ namespace engineer_middleware
 class PlanningScene
 {
 public:
-  PlanningScene(const XmlRpc::XmlRpcValue& scene, moveit::planning_interface::MoveGroupInterface& arm_group)
-    : arm_group_(arm_group)
+  PlanningScene(const XmlRpc::XmlRpcValue& scene, moveit::planning_interface::MoveGroupInterface& arm_group,
+                tf2_ros::Buffer& tf)
+    : arm_group_(arm_group), tf_(tf)
   {
-    for (int i = 0; i < scene.size(); i++)
+    trans_.header.frame_id = std::string(scene["target_position"]["frame_id"]);
+    trans_.twist.linear.x = xmlRpcGetDouble(scene["target_position"]["pose"]["position"], 0);
+    trans_.twist.linear.y = xmlRpcGetDouble(scene["target_position"]["pose"]["position"], 1);
+    trans_.twist.linear.z = xmlRpcGetDouble(scene["target_position"]["pose"]["position"], 2);
+    trans_.twist.angular.x = xmlRpcGetDouble(scene["target_position"]["pose"]["rpy"], 0);
+    trans_.twist.angular.y = xmlRpcGetDouble(scene["target_position"]["pose"]["rpy"], 1);
+    trans_.twist.angular.z = xmlRpcGetDouble(scene["target_position"]["pose"]["rpy"], 2);
+    for (int i = 0; i < scene["scene"].size(); i++)
     {
       moveit_msgs::CollisionObject collision_object;
-      collision_object.header.frame_id = std::string(scene[i]["frame_id"]);
-      collision_object.id = std::string(scene[i]["id"]);
-      collision_object.primitives.push_back(Primitive(scene[i]["primitive"]));
-      collision_object.primitive_poses.push_back(Pose(scene[i]["pose"]));
+      collision_object.header.frame_id = std::string(scene["scene"][i]["frame_id"]);
+      frame_id_.frame_id = std::string(scene["scene"][i]["frame_id"]);
+      collision_object.id = std::string(scene["scene"][i]["id"]);
+      collision_object.primitives.push_back(Primitive(scene["scene"][i]["primitive"]));
+      collision_object.primitive_poses.push_back(Pose(scene["scene"][i]["pose"]));
       collision_objects_.push_back(collision_object);
-      if (scene[i].hasMember("attach"))
-        is_attached_ = scene[i]["attach"];
+      if (scene["scene"][i].hasMember("attach"))
+        is_attached_ = scene["scene"][i]["attach"];
     }
+    ROS_INFO("9");
   };
 
   shape_msgs::SolidPrimitive Primitive(const XmlRpc::XmlRpcValue& xmlRpc)
@@ -76,8 +86,53 @@ public:
     return pose;
   }
 
+  bool calculateFinalPosition(geometry_msgs::TwistStamped target_transform)
+  {
+    geometry_msgs::PoseStamped pose;
+    pose.header.frame_id = target_transform.header.frame_id;
+    pose.pose.position.x = target_transform.twist.linear.x;
+    pose.pose.position.y = target_transform.twist.linear.y;
+    pose.pose.position.z = target_transform.twist.linear.z;
+    tf2::Quaternion quat_tf;
+    quat_tf.setRPY(target_transform.twist.linear.x, target_transform.twist.linear.x, target_transform.twist.linear.x);
+    geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+    pose.pose.orientation = quat_msg;
+    try
+    {
+      tf2::doTransform(pose.pose, pose.pose,
+                       tf_.lookupTransform(frame_id_.frame_id, target_transform.header.frame_id, ros::Time(0)));
+      target_transform.header.frame_id = frame_id_.frame_id;
+    }
+    catch (tf2::TransformException& ex)
+    {
+      ROS_WARN("%s", ex.what());
+      return false;
+    }
+    double roll, pitch, yaw;
+    roll = target_transform.twist.angular.x;
+    pitch = target_transform.twist.angular.y;
+    yaw = target_transform.twist.angular.z;
+    for (long unsigned int i = 0; i < collision_objects_.size(); i++)
+    {
+      double roll_temp, pitch_temp, yaw_temp;
+      quatToRPY(collision_objects_[i].primitive_poses[0].orientation, roll_temp, pitch_temp, yaw_temp);
+      roll_temp += roll;
+      pitch_temp += pitch;
+      yaw_temp += yaw;
+      tf2::Quaternion quat_tf1;
+      quat_tf1.setRPY(roll_temp, pitch_temp, yaw_temp);
+      geometry_msgs::Quaternion quat_msg1 = tf2::toMsg(quat_tf1);
+      collision_objects_[i].primitive_poses[0].orientation = quat_msg1;
+      collision_objects_[i].primitive_poses[0].position.x += pose.pose.position.x;
+      collision_objects_[i].primitive_poses[0].position.y += pose.pose.position.y;
+      collision_objects_[i].primitive_poses[0].position.z += pose.pose.position.z;
+    }
+    return true;
+  }
+
   void Add()
   {
+    calculateFinalPosition(trans_);
     for (long unsigned int i = 0; i < collision_objects_.size(); i++)
       collision_objects_[i].operation = collision_objects_[i].ADD;
     planning_scene_interface_.addCollisionObjects(collision_objects_);
@@ -88,7 +143,10 @@ public:
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
   moveit::planning_interface::MoveGroupInterface& arm_group_;
   std::vector<moveit_msgs::CollisionObject> collision_objects_;
-  bool is_attached_;
+  bool is_attached_, is_current_;
+  std_msgs::Header frame_id_;
+  tf2_ros::Buffer& tf_;
+  geometry_msgs::TwistStamped trans_;
 };
 
 }  // namespace engineer_middleware
