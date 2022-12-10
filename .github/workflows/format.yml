@@ -15,8 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - name: Install clang-format-10
-        run: sudo apt-get install clang-format-10
+      - name: Install clang-format-14
+        run: |
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+          sudo apt-get install clang-format-14
       - name: Install catkin-lint
         run: |
           lsb_release -sc
