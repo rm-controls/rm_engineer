@@ -66,6 +66,10 @@ public:
     ROS_INFO("Finish step queue id %s", name.c_str());
     is_middleware_control_ = false;
   }
+  void targetPosDataCallback(const geometry_msgs::TwistStamped::ConstPtr& data)
+  {
+    target_pos_ = *data;
+  }
   void run(ros::Duration period)
   {
     if (is_middleware_control_)
@@ -82,6 +86,8 @@ private:
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener tf_listener_;
   bool is_middleware_control_;
+  ros::Subscriber target_sub_;
+  geometry_msgs::TwistStamped target_pos_;
 };
 
 }  // namespace engineer_middleware
