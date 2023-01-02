@@ -63,7 +63,7 @@ public:
     ROS_INFO("Start step queue id %s", name.c_str());
     auto step_queue = step_queues_.find(name);
     if (step_queue != step_queues_.end())
-      step_queue->second.run(as_);
+      step_queue->second.run(as_, target_pos_);
     ROS_INFO("Finish step queue id %s", name.c_str());
     is_middleware_control_ = false;
   }
