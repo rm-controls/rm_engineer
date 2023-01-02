@@ -396,59 +396,20 @@ public:
   {
     tolerance_position_ = xmlRpcGetDouble(motion, "tolerance_position", 0.01);
     tolerance_rpy_ = xmlRpcGetDouble(motion, "tolerance_rpy", 0.01);
-    target_name_ = std::string(motion["target_object"]);
-    if (motion.hasMember("position"))
-    {
-      ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      transform_.linear.x = xmlRpcGetDouble(motion["position"], 0);
-      transform_.linear.y = xmlRpcGetDouble(motion["position"], 1);
-      transform_.linear.z = xmlRpcGetDouble(motion["position"], 2);
-      has_pos_ = true;
-    }
-    if (motion.hasMember("rpy"))
-    {
-      ROS_ASSERT(motion["rpy"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      transform_.angular.x = xmlRpcGetDouble(motion["rpy"], 0);
-      transform_.angular.y = xmlRpcGetDouble(motion["rpy"], 1);
-      transform_.angular.z = xmlRpcGetDouble(motion["rpy"], 2);
-    }
   }
 
-  bool getTargetPosition(geometry_msgs::TwistStamped exchange_target_twist,
-                         geometry_msgs::TwistStamped stone_target_twist)
+  bool moveTarget(geometry_msgs::TwistStamped target_twist)
   {
-    geometry_msgs::TwistStamped target_twist;
-    if (target_name_ == "exchange")
-    {
-      target_twist = exchange_target_twist;
-    }
-
-    else if (target_name_ == "exchange")
-    {
-      target_twist = stone_target_twist;
-    }
     target_.pose.orientation.w = 1.;
-
-    target_.pose.position.x = target_twist.twist.linear.x + transform_.linear.x;
-    target_.pose.position.y = target_twist.twist.linear.y + transform_.linear.y;
-    target_.pose.position.z = target_twist.twist.linear.z + transform_.linear.z;
-
+    target_.header.frame_id = target_twist.header.frame_id;
+    target_.pose.position.x = target_twist.twist.linear.x;
+    target_.pose.position.y = target_twist.twist.linear.y;
+    target_.pose.position.z = target_twist.twist.linear.z;
+    has_pos_ = true;
     tf2::Quaternion quat_tf;
-    quat_tf.setRPY(target_twist.twist.linear.x + transform_.angular.x,
-                   target_twist.twist.linear.y + transform_.angular.y,
-                   target_twist.twist.linear.z + transform_.angular.z);
+    quat_tf.setRPY(target_twist.twist.angular.x, target_twist.twist.angular.y, target_twist.twist.angular.z);
     geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
     target_.pose.orientation = quat_msg;
-
-    target_twist.header.frame_id = target_twist.header.frame_id;
-    moveTarget();
-
-    return 1;
-  }
-
-  bool moveTarget()
-  {
-    has_pos_ = true;
     has_ori_ = true;
 
     MoveitMotionBase::move();
@@ -507,9 +468,6 @@ private:
   bool has_pos_, has_ori_, is_cartesian_;
   geometry_msgs::PoseStamped target_;
   double tolerance_position_, tolerance_rpy_;
-  geometry_msgs::Twist transform_;
-
-  std::string target_name_;
 };
 
 };  // namespace engineer_middleware

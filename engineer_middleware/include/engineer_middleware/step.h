@@ -100,7 +100,7 @@ public:
     if (planning_scene_)
       planning_scene_->Add();
     if (vis_motion_)
-      vis_motion_->getTargetPosition(target_twist, target_twist);
+      vis_motion_->moveTarget(target_twist);
     return success;
   }
   void stop()
