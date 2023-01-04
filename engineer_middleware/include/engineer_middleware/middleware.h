@@ -66,7 +66,7 @@ public:
     ROS_INFO("Finish step queue id %s", name.c_str());
     is_middleware_control_ = false;
   }
-  void targetPosDataCallback(const geometry_msgs::TwistStamped::ConstPtr& data)
+  void targetPosDataCallback(const geometry_msgs::PoseStamped::ConstPtr& data)
   {
     target_pos_ = *data;
   }
@@ -75,11 +75,10 @@ public:
     if (is_middleware_control_)
       chassis_interface_.run(period);
     tf::Transform transform;
-    transform.setOrigin(tf::Vector3(target_pos_.twist.linear.x, target_pos_.twist.linear.y, target_pos_.twist.linear.z));
-    tf2::Quaternion quat_tf;
-    quat_tf.setRPY(target_pos_.twist.angular.x, target_pos_.twist.angular.y, target_pos_.twist.angular.z);
-    geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
-    transform.setRotation(tf::Quaternion(quat_msg.x, quat_msg.y, quat_msg.z, quat_msg.w));
+    transform.setOrigin(
+        tf::Vector3(target_pos_.pose.position.x, target_pos_.pose.position.y, target_pos_.pose.position.z));
+    transform.setRotation(tf::Quaternion(target_pos_.pose.orientation.x, target_pos_.pose.orientation.y,
+                                         target_pos_.pose.orientation.z, target_pos_.pose.orientation.w));
     br_.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "base_link", "target_link"));
   }
 
@@ -90,12 +89,12 @@ private:
   moveit::planning_interface::MoveGroupInterface arm_group_;
   ChassisInterface chassis_interface_;
   ros::Publisher hand_pub_, card_pub_, gimbal_pub_, gpio_pub_;
+  ros::Subscriber target_sub_;
+  geometry_msgs::PoseStamped target_pos_;
   std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener tf_listener_;
   bool is_middleware_control_;
-  ros::Subscriber target_sub_;
-  geometry_msgs::TwistStamped target_pos_;
 };
 
 }  // namespace engineer_middleware

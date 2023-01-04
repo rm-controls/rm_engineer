@@ -65,7 +65,7 @@ public:
       for (int i = 0; i < it->second.size(); i++)
         object_ids_.push_back(it->second[i]["id"]);
   }
-  bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as, geometry_msgs::TwistStamped target_twist)
+  bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as, geometry_msgs::PoseStamped target_pose)
   {
     if (queue_.empty())
     {
@@ -79,7 +79,7 @@ public:
     for (size_t i = 0; i < queue_.size(); ++i)
     {
       ros::Time start = ros::Time::now();
-      if (!queue_[i].move(target_twist))
+      if (!queue_[i].move(target_pose))
         return false;
       ROS_INFO("Start step: %s", queue_[i].getName().c_str());
       while (!queue_[i].isFinish())

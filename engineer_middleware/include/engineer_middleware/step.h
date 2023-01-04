@@ -81,7 +81,7 @@ public:
           planning_scene_ = new PlanningScene(it->second, arm_group);
     }
   }
-  bool move(geometry_msgs::TwistStamped target_twist)
+  bool move(geometry_msgs::PoseStamped target_pose)
   {
     bool success = true;
     if (arm_motion_)
@@ -99,7 +99,7 @@ public:
     if (planning_scene_)
       planning_scene_->add();
     if (vis_motion_)
-      vis_motion_->moveTarget(target_twist);
+      vis_motion_->moveTarget(target_pose);
     return success;
   }
   void stop()

@@ -398,18 +398,15 @@ public:
     tolerance_rpy_ = xmlRpcGetDouble(motion, "tolerance_rpy", 0.01);
   }
 
-  bool moveTarget(geometry_msgs::TwistStamped target_twist)
+  bool moveTarget(geometry_msgs::PoseStamped target_pose)
   {
     target_.pose.orientation.w = 1.;
-    target_.header.frame_id = target_twist.header.frame_id;
-    target_.pose.position.x = target_twist.twist.linear.x;
-    target_.pose.position.y = target_twist.twist.linear.y;
-    target_.pose.position.z = target_twist.twist.linear.z;
+    target_.header.frame_id = target_pose.header.frame_id;
+    target_.pose.position.x = target_pose.pose.position.x;
+    target_.pose.position.y = target_pose.pose.position.x;
+    target_.pose.position.z = target_pose.pose.position.x;
     has_pos_ = true;
-    tf2::Quaternion quat_tf;
-    quat_tf.setRPY(target_twist.twist.angular.x, target_twist.twist.angular.y, target_twist.twist.angular.z);
-    geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
-    target_.pose.orientation = quat_msg;
+    target_.pose.orientation = target_pose.pose.orientation;
     has_ori_ = true;
 
     MoveitMotionBase::move();
