@@ -51,6 +51,7 @@ Middleware::Middleware(ros::NodeHandle& nh)
   , gpio_pub_(nh.advertise<rm_msgs::GpioData>("/controllers/gpio_controller/command", 10))
   , tf_listener_(tf_)
   , is_middleware_control_(false)
+  , target_sub_(nh.subscribe<geometry_msgs::TwistStamped>("/position", 10, &Middleware::targetPosDataCallback, this))
 {
   if (nh.hasParam("steps_list") && nh.hasParam("scenes_list"))
   {

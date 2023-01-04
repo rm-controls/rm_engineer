@@ -40,6 +40,7 @@
 
 #include "engineer_middleware/step_queue.h"
 #include "engineer_middleware/planning_scene.h"
+#include <tf/transform_broadcaster.h>
 
 // ROS
 #include <ros/ros.h>
@@ -62,17 +63,29 @@ public:
     ROS_INFO("Start step queue id %s", name.c_str());
     auto step_queue = step_queues_.find(name);
     if (step_queue != step_queues_.end())
-      step_queue->second.run(as_);
+      step_queue->second.run(as_, target_pos_);
     ROS_INFO("Finish step queue id %s", name.c_str());
     is_middleware_control_ = false;
+  }
+  void targetPosDataCallback(const geometry_msgs::TwistStamped::ConstPtr& data)
+  {
+    target_pos_ = *data;
   }
   void run(ros::Duration period)
   {
     if (is_middleware_control_)
       chassis_interface_.run(period);
+    tf::Transform transform;
+    transform.setOrigin(tf::Vector3(target_pos_.twist.linear.x, target_pos_.twist.linear.y, target_pos_.twist.linear.z));
+    tf2::Quaternion quat_tf;
+    quat_tf.setRPY(target_pos_.twist.angular.x, target_pos_.twist.angular.y, target_pos_.twist.angular.z);
+    geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+    transform.setRotation(tf::Quaternion(quat_msg.x, quat_msg.y, quat_msg.z, quat_msg.w));
+    br_.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "base_link", "target_link"));
   }
 
 private:
+  tf::TransformBroadcaster br_;
   ros::NodeHandle nh_;
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> as_;
   moveit::planning_interface::MoveGroupInterface arm_group_;
@@ -82,6 +95,8 @@ private:
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener tf_listener_;
   bool is_middleware_control_;
+  ros::Subscriber target_sub_;
+  geometry_msgs::TwistStamped target_pos_;
 };
 
 }  // namespace engineer_middleware
