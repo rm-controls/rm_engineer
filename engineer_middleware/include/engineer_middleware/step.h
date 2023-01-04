@@ -31,8 +31,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#ifndef ENGINEER_MIDDLEWARE_STEP_H_
-#define ENGINEER_MIDDLEWARE_STEP_H_
+#pragma once
 
 #pragma once
 
@@ -98,7 +97,7 @@ public:
     if (gpio_motion_)
       success &= gpio_motion_->move();
     if (planning_scene_)
-      planning_scene_->Add();
+      planning_scene_->add();
     if (vis_motion_)
       vis_motion_->moveTarget(target_twist);
     return success;
@@ -179,4 +178,3 @@ private:
 };
 
 }  // namespace engineer_middleware
-#endif  // ENGINEER_MIDDLEWARE_STEP_H_

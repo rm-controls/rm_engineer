@@ -35,8 +35,6 @@
 // Created by qiayuan on 4/3/21.
 //
 
-#ifndef ENGINEER_MIDDLEWARE_STEP_QUEUE_H_
-#define ENGINEER_MIDDLEWARE_STEP_QUEUE_H_
 #pragma once
 
 #include "engineer_middleware/step.h"
@@ -131,5 +129,3 @@ private:
   ChassisInterface& chassis_interface_;
 };
 }  // namespace engineer_middleware
-
-#endif  // ENGINEER_MIDDLEWARE_STEP_QUEUE_H_
