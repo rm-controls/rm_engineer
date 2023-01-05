@@ -35,8 +35,6 @@
 // Created by qiayuan on 4/3/21.
 //
 
-#ifndef ENGINEER_MIDDLEWARE_STEP_QUEUE_H_
-#define ENGINEER_MIDDLEWARE_STEP_QUEUE_H_
 #pragma once
 
 #include "engineer_middleware/step.h"
@@ -60,9 +58,7 @@ public:
   {
     ROS_ASSERT(steps.getType() == XmlRpc::XmlRpcValue::TypeArray);
     for (int i = 0; i < steps.size(); ++i)
-    {
       queue_.emplace_back(steps[i], scenes, tf, arm_group, chassis_interface, hand_pub, card_pub, gimbal_pub, gpio_pub);
-    }
   }
   bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as)
   {
@@ -127,5 +123,3 @@ private:
   ChassisInterface& chassis_interface_;
 };
 }  // namespace engineer_middleware
-
-#endif  // ENGINEER_MIDDLEWARE_STEP_QUEUE_H_

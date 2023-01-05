@@ -35,8 +35,8 @@
 // Created by qiayuan on 5/30/21.
 //
 
-#ifndef ENGINEER_MIDDLEWARE_CHASSIS_INTERFACE_H_
-#define ENGINEER_MIDDLEWARE_CHASSIS_INTERFACE_H_
+#pragma once
+
 #include <rm_common/ori_tool.h>
 
 #include <tf/transform_listener.h>
@@ -98,11 +98,11 @@ public:
 
   void stop()
   {
-    geometry_msgs::Twist cmd_vel_{};
-    cmd_vel_.linear.x = 0.;
-    cmd_vel_.linear.y = 0.;
-    cmd_vel_.angular.z = 0.;
-    vel_pub_.publish(cmd_vel_);
+    geometry_msgs::Twist cmd_vel{};
+    cmd_vel.linear.x = 0.;
+    cmd_vel.linear.y = 0.;
+    cmd_vel.angular.z = 0.;
+    vel_pub_.publish(cmd_vel);
   }
 
   void run(ros::Duration period)
@@ -133,12 +133,11 @@ public:
     quatToRPY(current.transform.rotation, roll, pitch, yaw_current);
     quatToRPY(goal_.pose.orientation, roll, pitch, yaw_goal);
     error_yaw_ = angles::shortest_angular_distance(yaw_current, yaw_goal);
-    geometry_msgs::Twist cmd_vel_{};
-    cmd_vel_.linear.x = pid_x_.computeCommand(error.x, period);
-    cmd_vel_.linear.y = pid_y_.computeCommand(error.y, period);
-    cmd_vel_.angular.z = pid_yaw_.computeCommand(error_yaw_, period);
-    ;
-    vel_pub_.publish(cmd_vel_);
+    geometry_msgs::Twist cmd_vel{};
+    cmd_vel.linear.x = pid_x_.computeCommand(error.x, period);
+    cmd_vel.linear.y = pid_y_.computeCommand(error.y, period);
+    cmd_vel.angular.z = pid_yaw_.computeCommand(error_yaw_, period);
+    vel_pub_.publish(cmd_vel);
     error_pos_ = std::abs(error.x) + std::abs(error.y);
     error_yaw_ = std::abs(error_yaw_);
   }
@@ -151,4 +150,3 @@ private:
   double error_pos_{}, error_yaw_{};
 };
 }  // namespace engineer_middleware
-#endif  // ENGINEER_MIDDLEWARE_CHASSIS_INTERFACE_H_

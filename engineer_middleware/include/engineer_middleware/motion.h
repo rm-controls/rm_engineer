@@ -35,8 +35,7 @@
 // Created by qiayuan on 5/29/21.
 //
 
-#ifndef ENGINEER_MIDDLEWARE_MOTION_H_
-#define ENGINEER_MIDDLEWARE_MOTION_H_
+#pragma once
 
 #include <rm_common/ros_utilities.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -399,5 +398,3 @@ private:
 };
 
 }  // namespace engineer_middleware
-
-#endif  // ENGINEER_MIDDLEWARE_MOTION_H_

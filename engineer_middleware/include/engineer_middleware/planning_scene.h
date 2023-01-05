@@ -20,15 +20,15 @@ public:
       moveit_msgs::CollisionObject collision_object;
       collision_object.header.frame_id = std::string(scene[i]["frame_id"]);
       collision_object.id = std::string(scene[i]["id"]);
-      collision_object.primitives.push_back(Primitive(scene[i]["primitive"]));
-      collision_object.primitive_poses.push_back(Pose(scene[i]["pose"]));
+      collision_object.primitives.push_back(primitive(scene[i]["primitive"]));
+      collision_object.primitive_poses.push_back(pose(scene[i]["pose"]));
       collision_objects_.push_back(collision_object);
       if (scene[i].hasMember("attach"))
         is_attached_ = scene[i]["attach"];
     }
   };
 
-  shape_msgs::SolidPrimitive Primitive(const XmlRpc::XmlRpcValue& xmlRpc)
+  shape_msgs::SolidPrimitive primitive(const XmlRpc::XmlRpcValue& xmlRpc)
   {
     shape_msgs::SolidPrimitive primitive;
     if (std::string(xmlRpc["type"]) == "box")
@@ -62,7 +62,7 @@ public:
     return primitive;
   };
 
-  geometry_msgs::Pose Pose(const XmlRpc::XmlRpcValue& xmlRpc)
+  geometry_msgs::Pose pose(const XmlRpc::XmlRpcValue& xmlRpc)
   {
     geometry_msgs::Pose pose;
     pose.orientation.x = xmlRpcGetDouble(xmlRpc["orientation"], 0);
@@ -76,7 +76,7 @@ public:
     return pose;
   }
 
-  void Add()
+  void add()
   {
     for (long unsigned int i = 0; i < collision_objects_.size(); i++)
       collision_objects_[i].operation = collision_objects_[i].ADD;
