@@ -7,36 +7,28 @@
 
     <!-- Load joint controller configurations from YAML file to parameter server -->
 
-    <rosparam file="$(find engineer_arm_config)/config/ros_controllers.yaml" command="load"/>
-
     <!-- Load the controllers -->
     <node name="controller_loader" pkg="controller_manager" type="controller_manager" output="screen"
           args="load
                 controllers/robot_state_controller
                 controllers/joint_state_controller
-                controllers/arm_trajectory_controller
-                controllers/joint1_calibration_controller
                 controllers/mimic_joint1_calibration_controller
-                controllers/joint2_calibration_controller
                 controllers/mimic_joint2_calibration_controller
+                controllers/joint1_calibration_controller
+                controllers/joint2_calibration_controller
                 controllers/joint3_calibration_controller
-                controllers/mimic_joint3_calibration_controller
                 controllers/joint4_calibration_controller
                 controllers/joint5_calibration_controller
                 controllers/joint6_calibration_controller
-                controllers/joint7_calibration_controller
+                controllers/arm_trajectory_controller
                 controllers/mimic_joint1_controller
                 controllers/mimic_joint2_controller
-                controllers/mimic_joint3_controller
-                controllers/yaw_calibration_controller
-                controllers/pitch_calibration_controller
-                controllers/card_calibration_controller
-                controllers/drag_calibration_controller
-                controllers/card_controller
-                controllers/drag_controller
                 controllers/chassis_controller
                 controllers/gpio_controller
-                controllers/gimbal_controller
+                controllers/pitch_up_controller
+                controllers/pitch_down_controller
+                controllers/yaw_left_controller
+                controllers/yaw_right_controller
                 "
     />
 </launch>
