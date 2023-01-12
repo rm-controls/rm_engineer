@@ -15,7 +15,7 @@ common:
 
   tolerance:
     normal_tolerance: &NORMAL_TOLERANCE
-      tolerance_joints: [ 0.08, 0.008, 0.008, 0.1, 0.1, 0.1 ]
+      tolerance_joints: [ 0.008, 0.008, 0.008, 0.1, 0.1, 0.1 ]
     bigger_tolerance: &BIGGER_TOLERANCE
       tolerance_joints: [ 0.01, 0.01, 0.01, 0.2, 0.2, 0.2 ]
 

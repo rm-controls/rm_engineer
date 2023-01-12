@@ -13,7 +13,6 @@
                 controllers/robot_state_controller
                 controllers/joint_state_controller
                 controllers/mimic_joint1_calibration_controller
-                controllers/mimic_joint2_calibration_controller
                 controllers/joint1_calibration_controller
                 controllers/joint2_calibration_controller
                 controllers/joint3_calibration_controller
@@ -22,13 +21,14 @@
                 controllers/joint6_calibration_controller
                 controllers/arm_trajectory_controller
                 controllers/mimic_joint1_controller
-                controllers/mimic_joint2_controller
                 controllers/chassis_controller
                 controllers/gpio_controller
-                controllers/pitch_up_controller
-                controllers/pitch_down_controller
-                controllers/yaw_left_controller
-                controllers/yaw_right_controller
+                controllers/pitch_front_controller
+                controllers/pitch_behind_controller
+                controllers/roll_left_controller
+                controllers/roll_right_controller
+                controllers/drag_controller
+                controllers/gimbal_controller
                 "
     />
 </launch>
