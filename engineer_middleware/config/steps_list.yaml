@@ -74,23 +74,23 @@ steps_list:
     - step: "delete_scene"
   ################### GIMBAL ####################
   SKY_GIMBAL:
-    - step: "open gripper"
+    - step: "sky gimbal"
       gimbal:
         <<: *SKY_POS
   ISLAND_GIMBAL:
-    - step: "open gripper"
+    - step: "island gimbal"
       gimbal:
         <<: *ISLAND_POS
   BACK_GIMBAL:
-    - step: "gimbal"
+    - step: "back gimbal"
       gimbal:
         <<: *BACK_POS
   GROUND_GIMBAL:
-    - step: "gimbal"
+    - step: "ground gimbal"
       gimbal:
         <<: *GROUND_POS
   REVERSAL_GIMBAL:
-    - step: "gimbal"
+    - step: "reversal gimbal"
       gimbal:
         <<: *REVERSAL_POS
   ################### GRIPPER ####################
@@ -149,23 +149,6 @@ steps_list:
         chassis_tolerance_position_: 1.
         chassis_tolerance_angular_: 0.01
 
-  CHASSIS_TURN_LEFT:
-    - step: "rotate"
-      chassis:
-        frame: base_link
-        position: [ 0., 0. ]
-        yaw: 0.3
-        chassis_tolerance_position_: 1.
-        chassis_tolerance_angular_: 0.1
-
-  CHASSIS_TURN_RIGHT:
-    - step: "rotate"
-      chassis:
-        frame: base_link
-        position: [ 0., 0. ]
-        yaw: -0.3
-        chassis_tolerance_position_: 1.
-        chassis_tolerance_angular_: 0.1
   ################### CHASSIS ####################
 
   ################### HOME ####################
@@ -189,7 +172,7 @@ steps_list:
     - step: "change gripper state"
       gripper:
         <<: *OPEN_GRIPPER
-    - step: "ground"
+    - step: "get ground stone"
       arm:
         joints: [0., 0.013, 0.007, -0.1, -0.027, -0.092]
         common:
@@ -199,7 +182,7 @@ steps_list:
 
   ################### EXCHANGE ####################
   EXCHANGE_WAIT:
-    - step: "exchange"
+    - step: "move to exchange wait state"
       arm:
         joints: [0.0679, 0.03605, 0.0066, -1.6025, 0.0131, 0.0785]
         common:
@@ -208,11 +191,11 @@ steps_list:
           <<: *BIGGER_TOLERANCE
   ###################    SKY_BIG_ISLAND    ####################
   SKY_BIG_ISLAND0:
-    - step: "arm_wait"
+    - step: "arm wait state"
       arm:
         <<: *PICK_WAIT
   SKY_BIG_ISLAND00:
-    - step: "up"
+    - step: "move to stone down"
       arm:
         joints: [0.434, 0.2830, 0.0057, -1.657, -0.059, 0.0110]
         common:
@@ -222,30 +205,26 @@ steps_list:
     - step: "change gripper state"
       gripper:
         <<: *OPEN_GRIPPER
-    - step: "change gripper state"
-      gripper:
-        <<: *OPEN_GRIPPER
   SKY_BIG_ISLAND000:
-    - step: "arm_wait"
+    - step: "arm back"
       arm:
         <<: *PICK_WAIT
     ###################    BIG_ISLAND    ####################
     ###################    MID    ################
   BIG_ISLAND0:
-    - step: "arm_wait"
+    - step: "arm wait"
       arm:
         <<: *PICK_WAIT
   BIG_ISLAND00:
     - step: "add scenes"
       scene_name: MID_BIG_ISLAND
-    - step: "arm_ready"
+    - step: "arm ready to get"
       arm:
         joints: [0.431, 0.310, 0.005, -1.693, -0.054, 3.208]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
-
     - step: "change gripper state"
       gripper:
           <<: *OPEN_GRIPPER
@@ -258,21 +237,21 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
-    - step: "up"
+    - step: "up stone"
       arm:
         joints: [0.435, 0.310, 0.005, -1.693, -0.054, 3.208]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
-    - step: "reversal"
+    - step: "reversal stone"
       arm:
         joints: [0.433, 0.310, 0.005, -1.693, -0.054, 0.014]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "move to wait "
+    - step: "move to wait"
       arm:
         frame: base_link
         position: [ 0.283, 0.225, 0.836 ]
@@ -281,11 +260,11 @@ steps_list:
           <<: *SLOWLY
   ###################    SMALL_ISLAND    ####################
   LF_SMALL_ISLAND0:
-    - step: "arm_wait"
+    - step: "arm wait"
       arm:
         <<: *PICK_WAIT
   LF_SMALL_ISLAND00:
-    - step: "arm_ready"
+    - step: "arm ready to get stone"
       arm:
         joints: [0.349, 0.031, 0.285, -1.518, -0.043, 3.036]
         common:
@@ -302,39 +281,26 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "move arm down to gain stone"
+    - step: "move arm up"
       arm:
         joints: [ 0.458, 0.031, 0.266, -1.518, -0.043, 3.036 ]
         common:
           <<: *QUICKLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "reversal"
+    - step: "reversal stone"
       arm:
         joints: [0.452, 0.0316, 0.207, -1.436, 0.011, 1.0]
         common:
           <<: *QUICKLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "arm_wait"
-      arm:
-        <<: *PICK_WAIT
-    - step: "get it!"
-      arm:
-        joints: [ 0.453, 0.027, -0.209, -1.541, 1.656, 1.489 ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *BIGGER_TOLERANCE
-    - step: "close gripper"
-      gripper:
-        <<: *CLOSE_GRIPPER
-    - step: "arm_wait"
+    - step: "arm wait"
       arm:
         <<: *PICK_WAIT
     ###################    MID    ################
   SMALL_ISLAND0:
-    - step: "arm_wait"
+    - step: "arm wait"
       arm:
         <<: *PICK_WAIT
     - step: "change gripper state"
@@ -343,7 +309,7 @@ steps_list:
   SMALL_ISLAND00:
     - step: "add scenes"
       scene_name: MID_SMALL_ISLAND
-    - step: "arm_ready"
+    - step: "arm ready to get stone"
       arm:
         joints: [0.349, 0.031, 0.009, -1.520, -0.003, 3.116]
         common:
@@ -351,7 +317,9 @@ steps_list:
         tolerance:
           <<: *BIGGER_TOLERANCE
     - step: "change gripper state"
-    - step: "backward"
+      gripper:
+        <<: *OPEN_GRIPPER
+    - step: "chassis backward"
       chassis:
         frame: base_link
         position: [ -0.08, 0. ]
@@ -360,39 +328,39 @@ steps_list:
         chassis_tolerance_angular_: 0.1
     - step: "delete_scene"
   SMALL_ISLAND000:
-    - step: "arm_pick"
+    - step: "arm get stone"
       arm:
         joints: [0.279, 0.031, 0.009, -1.522, -0.001, 3.123]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "arm_up"
+    - step: "arm up stone"
       arm:
         joints: [0.458, 0.031, 0.009, -1.472, -0.0006, 3.120]
         common:
           <<: *QUICKLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "arm_reversal"
+    - step: "reversal stone"
       arm:
         joints: [ 0.457, 0.031, -0.058, -1.476, 0.001, 1.0 ]
         common:
           <<: *QUICKLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "arm_wait"
+    - step: "arm back"
       arm:
         <<: *PICK_WAIT
 
 
     ###################    RT    ################
   RT_SMALL_ISLAND0:
-    - step: "arm_wait"
+    - step: "arm wait"
       arm:
         <<: *PICK_WAIT
   RT_SMALL_ISLAND00:
-    - step: "arm_ready"
+    - step: "arm ready"
       arm:
         joints: [0.346, 0.031, -0.250, -1.509, -0.008, 3.102]
         common:
@@ -402,41 +370,28 @@ steps_list:
     - step: "change gripper state"
       gripper:
           <<: *OPEN_GRIPPER
-    - step: "arm_pick"
+    - step: "arm get stone"
       arm:
         joints: [ 0.279, 0.031, -0.250, -1.509, -0.008, 3.102 ]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "arm_up"
+    - step: "arm up stone"
       arm:
         joints: [ 0.443, 0.031, -0.288, -1.460, -0.027, 3.140 ]
         common:
           <<: *QUICKLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "arm_reversal"
+    - step: "reversal stone"
       arm:
         joints:  [0.443, 0.031, -0.288, -1.460, -0.027, 1.0]
         common:
           <<: *QUICKLY
         tolerance:
           <<: *BIGGER_TOLERANCE
-    - step: "arm_wait"
-      arm:
-        <<: *PICK_WAIT
-    - step: "get it!"
-      arm:
-        joints: [ 0.453, 0.027, -0.209, -1.541, 1.656, 1.489 ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *BIGGER_TOLERANCE
-    - step: "close gripper"
-      gripper:
-        <<: *CLOSE_GRIPPER
-    - step: "arm_wait"
+    - step: "arm back"
       arm:
         <<: *PICK_WAIT
       ###################    SMALL_ISLAND    ####################
