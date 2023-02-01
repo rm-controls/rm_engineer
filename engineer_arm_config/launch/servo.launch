@@ -1,6 +1,6 @@
 <launch>
     <node name="servo_server" pkg="moveit_servo" type="servo_server" output="screen">
         <param name="parameter_ns" type="string" value="engineer_middleware"/>
-        <rosparam ns="engineer_middleware" command="load" file="servo.yaml"/>
+        <rosparam ns="engineer_middleware" command="load" file="$(find engineer_arm_config)/config/servo.yaml"/>
     </node>
 </launch>

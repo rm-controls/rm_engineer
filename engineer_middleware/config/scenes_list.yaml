@@ -125,24 +125,74 @@ scenes_list:
         orientation: [ 0., 0., 0., 0. ]
         attach: false
 
-  SMALL_STONE_ISLAND:
-    - id: "SMALL_STONE_ISLAND"
+  MID_SMALL_STONE_ISLAND:
+    - id: "front"
       frame_id: "base_link"
       primitive:
         type: box
-        dimension: [ 0.001, 0.767634, 0.7 ]
+        dimension: [ 0.001, 0.100,0.100 ]
       pose:
-        position: [ 0.295, 0., 0.2736 ]
+        position: [ 0.40, 0, 0.450 ]
         orientation: [ 0., 0., 0., 0. ]
-    - id: "SMALL_STONE_ISLAND2"
+      attach: false
+    - id: "back"
       frame_id: "base_link"
       primitive:
         type: box
-        dimension: [ 0.265, 0.767634, 0.001 ]
+        dimension: [ 0.001, 0.100, 0.090 ]
       pose:
-        position: [ 0.4275, 0., 0.6236 ]
+        position: [ 0.640, 0., 0.645 ]
         orientation: [ 0., 0., 0., 0. ]
+      attach: false
+    - id: "bottom"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.200, 0.200, 0.001 ]
+      pose:
+        position: [ 0.500, 0., 0.500 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false
+    - id: "Stone_LF"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.200, 0.001, 0.200 ]
+      pose:
+        position: [ 0.505, 0.170, 0.500 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false
+    - id: "Stone_RT"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.200, 0.001, 0.200 ]
+      pose:
+        position: [ 0.505, -0.170, 0.500 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false
 
+  MID_SMALL_ISLAND:
+    - id: "stone_up"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.300, 0.600, 0.001 ]
+      pose:
+        position: [ 0.505, 0., 0.600 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false
+
+  MID_BIG_ISLAND:
+    - id: "stone"
+      frame_id: "base_link"
+      primitive:
+        type: box
+        dimension: [ 0.300, 0.600, 0.001 ]
+      pose:
+        position: [ 0.855, 0., 0.600 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false
   ###################    OBJECT_IN_CAR    ####################
   NORMAL_STONE:
     - id: "normal_stone"
@@ -176,3 +226,14 @@ scenes_list:
         position: [ 0.031, 0., 0.3 ]
         orientation: [ 0., 0., 0., 0. ]
       attach: false
+
+  PICK_SMALL_STONE:
+    - id: "silver_stone"
+      frame_id: "link6"
+      primitive:
+        type: box
+        dimension: [ 0.21, 0.21, 0.21 ]
+      pose:
+        position: [ 0.17, 0., -0.02 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: true
