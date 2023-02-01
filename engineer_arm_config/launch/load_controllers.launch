@@ -28,6 +28,9 @@
                 controllers/roll_left_controller
                 controllers/roll_right_controller
                 controllers/drag_controller
+                controllers/drag_calibration_controller
+                controllers/pitch_calibration_controller
+                controllers/yaw_calibration_controller
                 controllers/gimbal_controller
                 "
     />
