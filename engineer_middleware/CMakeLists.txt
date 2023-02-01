@@ -69,6 +69,7 @@ include_directories(
 
 add_executable(${PROJECT_NAME}
         src/middleware.cpp
+        src/engineer_middleware.cpp)
 
 add_dependencies(${PROJECT_NAME}
         ${catkin_EXPORTED_TARGETS}
