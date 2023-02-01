@@ -74,7 +74,7 @@ steps_list:
     - step: "delete_scene"
   ################### GIMBAL ####################
   SKY_GIMBAL:
-    - step: "sky gimbal"
+    - step: "sky island gimbal"
       gimbal:
         <<: *SKY_POS
   ISLAND_GIMBAL:
