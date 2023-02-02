@@ -35,8 +35,7 @@
 // Created by astro on 2021/4/25.
 //
 
-#ifndef ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
-#define ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
+#pragma once
 
 #include "engineer_middleware/step_queue.h"
 #include "engineer_middleware/planning_scene.h"
@@ -85,5 +84,3 @@ private:
 };
 
 }  // namespace engineer_middleware
-
-#endif  // SRC_RM_SOFTWARE_RM_ENGINEER_ENGINEER_MIDDLEWARE_INCLUDE_ENGINEER_MIDDLEWARE_MIDDLEWARE_H_
