@@ -31,9 +31,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#ifndef ENGINEER_MIDDLEWARE_STEP_H_
-#define ENGINEER_MIDDLEWARE_STEP_H_
-
 #pragma once
 
 #include "engineer_middleware/motion.h"
@@ -52,6 +49,7 @@ public:
   Step(const XmlRpc::XmlRpcValue& step, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
        moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
        ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub)
+    : arm_group_(arm_group)
   {
     ROS_ASSERT(step.hasMember("step"));
     step_name_ = static_cast<std::string>(step["step"]);
@@ -95,7 +93,7 @@ public:
     if (gpio_motion_)
       success &= gpio_motion_->move();
     if (planning_scene_)
-      planning_scene_->Add();
+      planning_scene_->add();
     return success;
   }
   void stop()
@@ -108,10 +106,13 @@ public:
       chassis_motion_->stop();
   }
 
-  void deleteScene(std::vector<std::string> object_id)
+  void deleteScene()
   {
-    if (object_id.size() > 0)
-      planning_scene_interface_.removeCollisionObjects(object_id);
+    std::map<std::string, moveit_msgs::AttachedCollisionObject> attached_objects =
+        planning_scene_interface_.getAttachedObjects();
+    for (auto iter = attached_objects.begin(); iter != attached_objects.end(); ++iter)
+      arm_group_.detachObject(iter->first);
+    planning_scene_interface_.removeCollisionObjects(planning_scene_interface_.getKnownObjectNames());
   }
   bool isFinish()
   {
@@ -159,7 +160,7 @@ private:
   GpioMotion* gpio_motion_{};
   PlanningScene* planning_scene_{};
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
+  moveit::planning_interface::MoveGroupInterface& arm_group_;
 };
 
 }  // namespace engineer_middleware
-#endif  // ENGINEER_MIDDLEWARE_STEP_H_

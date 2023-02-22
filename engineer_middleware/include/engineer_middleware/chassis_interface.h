@@ -35,8 +35,8 @@
 // Created by qiayuan on 5/30/21.
 //
 
-#ifndef ENGINEER_MIDDLEWARE_CHASSIS_INTERFACE_H_
-#define ENGINEER_MIDDLEWARE_CHASSIS_INTERFACE_H_
+#pragma once
+
 #include <rm_common/ori_tool.h>
 
 #include <tf/transform_listener.h>
@@ -101,11 +101,11 @@ public:
 
   void stop()
   {
-    geometry_msgs::Twist cmd_vel_{};
-    cmd_vel_.linear.x = 0.;
-    cmd_vel_.linear.y = 0.;
-    cmd_vel_.angular.z = 0.;
-    vel_pub_.publish(cmd_vel_);
+    geometry_msgs::Twist cmd_vel{};
+    cmd_vel.linear.x = 0.;
+    cmd_vel.linear.y = 0.;
+    cmd_vel.angular.z = 0.;
+    vel_pub_.publish(cmd_vel);
   }
 
   void run(ros::Duration period)
@@ -157,4 +157,3 @@ private:
   double yaw_start_threshold_{};
 };
 }  // namespace engineer_middleware
-#endif  // ENGINEER_MIDDLEWARE_CHASSIS_INTERFACE_H_
