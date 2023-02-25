@@ -217,7 +217,12 @@ public:
     {
       ROS_ASSERT(motion["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
       for (int i = 0; i < motion["joints"].size(); ++i)
-        target_.push_back(xmlRpcGetDouble(motion["joints"], i));
+      {
+        if (motion["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble)
+          target_.push_back(motion["joints"][i]);
+        else
+          target_.push_back(999);
+      }
     }
     if (motion.hasMember("tolerance"))
     {
@@ -233,6 +238,9 @@ public:
     if (target_.empty())
       return false;
     MoveitMotionBase::move();
+    for (long unsigned int i = 0; i < target_.size(); i++)
+      if (target_[i] == 999)
+        target_[i] = interface_.getCurrentJointValues()[i];
     interface_.setJointValueTarget(target_);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
