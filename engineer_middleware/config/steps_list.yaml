@@ -21,15 +21,15 @@ common:
 
   gripper:
     open_gripper: &OPEN_GRIPPER
-      state: true
-    close_gripper: &CLOSE_GRIPPER
       state: false
+    close_gripper: &CLOSE_GRIPPER
+      state: true
 
   arm:
     home_zero_stone: &HOME_ZERO_STONE
       joints: [0.02, 0.013, 0.007, -1.487, 1.581, -0.194]
       common:
-        <<: *NORMALLY
+        <<: *SLOWLY
       tolerance:
         <<: *NORMAL_TOLERANCE
     home_one_stone: &HOME_ONE_STONE
@@ -117,10 +117,10 @@ steps_list:
     - step: "backward"
       chassis:
         frame: base_link
-        position: [ -0.1, 0. ]
+        position: [ -0.08, 0. ]
         yaw: 0.0
-        chassis_tolerance_position_: 0.025
-        chassis_tolerance_angular_: 0.1
+        chassis_tolerance_position_: 0.04
+        chassis_tolerance_angular_: 0.2
 
   CHASSIS_LEFT:
     - step: "left"
@@ -176,7 +176,7 @@ steps_list:
       arm:
         joints: [0., 0.013, 0.007, -0.1, -0.027, -0.092]
         common:
-          <<: *NORMALLY
+          <<: *SLOWLY
         tolerance:
           <<: *BIGGER_TOLERANCE
 
@@ -319,13 +319,6 @@ steps_list:
     - step: "change gripper state"
       gripper:
         <<: *OPEN_GRIPPER
-    - step: "chassis backward"
-      chassis:
-        frame: base_link
-        position: [ -0.08, 0. ]
-        yaw: 0.0
-        chassis_tolerance_position_: 0.025
-        chassis_tolerance_angular_: 0.1
     - step: "delete_scene"
   SMALL_ISLAND000:
     - step: "arm get stone"
