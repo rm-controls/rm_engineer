@@ -37,6 +37,8 @@
 
 #pragma once
 
+#define KEEP 999
+
 #include <rm_common/ros_utilities.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <geometry_msgs/Twist.h>
@@ -211,15 +213,24 @@ class JointMotion : public MoveitMotionBase
 {
 public:
   JointMotion(XmlRpc::XmlRpcValue& motion, moveit::planning_interface::MoveGroupInterface& interface)
-    : MoveitMotionBase(motion, interface), motion_(motion)
+    : MoveitMotionBase(motion, interface)
   {
+    if (motion.hasMember("joints"))
+    {
+      ROS_ASSERT(motion["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      for (int i = 0; i < motion["joints"].size(); ++i)
+      {
+        if (motion["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble)
+          target_.push_back(motion["joints"][i]);
+        else
+          target_.push_back(KEEP);
+      }
+    }
     if (motion.hasMember("tolerance"))
     {
       ROS_ASSERT(motion["tolerance"]["tolerance_joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
       for (int i = 0; i < motion["tolerance"]["tolerance_joints"].size(); ++i)
-      {
         tolerance_joints_.push_back(xmlRpcGetDouble(motion["tolerance"]["tolerance_joints"], i));
-      }
     }
   }
   bool move() override
@@ -227,19 +238,9 @@ public:
     if (target_.empty())
       return false;
     MoveitMotionBase::move();
-
-    if (motion_.hasMember("joints"))
-    {
-      ROS_ASSERT(motion_["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      for (int i = 0; i < motion_["joints"].size(); ++i)
-      {
-        if (motion_["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble)
-          target_.push_back(motion_["joints"][i]);
-        else
-          target_.push_back(interface_.getCurrentJointValues()[i]);
-      }
-    }
-
+    for (long unsigned int i = 0; i < target_.size(); i++)
+      if (target_[i] == KEEP)
+        target_[i] = interface_.getCurrentJointValues()[i];
     interface_.setJointValueTarget(target_);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
@@ -258,7 +259,6 @@ private:
     return flag;
   }
   std::vector<double> target_, tolerance_joints_;
-  XmlRpc::XmlRpcValue motion_;
 };
 
 template <class MsgType>
