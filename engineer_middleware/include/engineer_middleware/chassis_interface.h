@@ -61,9 +61,7 @@ public:
     pid_y_.init(ros::NodeHandle(nh_pid_y, "pid"));
     pid_yaw_.init(ros::NodeHandle(nh_pid_w, "pid"));
     vel_pub_ = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
-    XmlRpc::XmlRpcValue chassis_common;
-    nh.getParam("chassis_common", chassis_common);
-    yaw_start_threshold_ = xmlRpcGetDouble(chassis_common, "yaw_start_threshold", 0.0);
+    nh_base_motion.getParam("yaw_start_threshold", yaw_start_threshold_);
   }
 
   bool setGoal(const geometry_msgs::PoseStamped& pose)
