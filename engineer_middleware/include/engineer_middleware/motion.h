@@ -222,7 +222,7 @@ public:
       {
         if (motion["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble)
           target_.push_back(motion["joints"][i]);
-        else
+        else if (motion["joints"][i] == "KEEP")
           target_.push_back(KEEP);
       }
     }
