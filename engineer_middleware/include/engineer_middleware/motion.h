@@ -37,8 +37,6 @@
 
 #pragma once
 
-#define KEEP 999
-
 #include <rm_common/ros_utilities.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <geometry_msgs/Twist.h>
@@ -224,7 +222,7 @@ public:
         if (motion["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble)
           target_.push_back(motion["joints"][i]);
         else if (motion["joints"][i] == "KEEP")
-          target_.push_back(KEEP);
+          target_.push_back(NAN);
       }
     }
     if (motion.hasMember("tolerance"))
@@ -240,7 +238,7 @@ public:
       return false;
     MoveitMotionBase::move();
     for (long unsigned int i = 0; i < target_.size(); i++)
-      if (target_[i] == KEEP)
+      if (target_[i] == NAN)
         target_[i] = interface_.getCurrentJointValues()[i];
     interface_.setJointValueTarget(target_);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
