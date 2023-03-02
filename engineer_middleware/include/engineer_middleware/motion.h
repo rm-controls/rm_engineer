@@ -167,8 +167,7 @@ public:
       moveit_msgs::RobotTrajectory trajectory;
       std::vector<geometry_msgs::Pose> waypoints;
       waypoints.push_back(target_.pose);
-      if (interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory) < 99.9)
-        return false;
+      interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory);
       return interface_.asyncExecute(trajectory) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     }
     else
