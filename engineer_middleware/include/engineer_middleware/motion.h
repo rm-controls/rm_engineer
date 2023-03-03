@@ -238,7 +238,7 @@ public:
       return false;
     MoveitMotionBase::move();
     for (long unsigned int i = 0; i < target_.size(); i++)
-      if (target_[i] == NAN)
+      if (!std::isnormal(target_[i]))
         target_[i] = interface_.getCurrentJointValues()[i];
     interface_.setJointValueTarget(target_);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
