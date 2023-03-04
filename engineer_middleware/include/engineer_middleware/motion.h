@@ -217,15 +217,19 @@ public:
     {
       ROS_ASSERT(motion["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
       for (int i = 0; i < motion["joints"].size(); ++i)
-        target_.push_back(xmlRpcGetDouble(motion["joints"], i));
+      {
+        ROS_ASSERT(motion["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble || motion["joints"][i] == "KEEP");
+        if (motion["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble)
+          target_.push_back(motion["joints"][i]);
+        else if (motion["joints"][i] == "KEEP")
+          target_.push_back(NAN);
+      }
     }
     if (motion.hasMember("tolerance"))
     {
       ROS_ASSERT(motion["tolerance"]["tolerance_joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
       for (int i = 0; i < motion["tolerance"]["tolerance_joints"].size(); ++i)
-      {
         tolerance_joints_.push_back(xmlRpcGetDouble(motion["tolerance"]["tolerance_joints"], i));
-      }
     }
   }
   bool move() override
@@ -233,6 +237,9 @@ public:
     if (target_.empty())
       return false;
     MoveitMotionBase::move();
+    for (long unsigned int i = 0; i < target_.size(); i++)
+      if (!std::isnormal(target_[i]))
+        target_[i] = interface_.getCurrentJointValues()[i];
     interface_.setJointValueTarget(target_);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
