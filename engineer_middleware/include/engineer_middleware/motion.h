@@ -238,10 +238,11 @@ public:
     if (target_.empty())
       return false;
     MoveitMotionBase::move();
+    final_target_ = target_;
     for (long unsigned int i = 0; i < target_.size(); i++)
       if (!std::isnormal(target_[i]))
-        target_[i] = interface_.getCurrentJointValues()[i];
-    interface_.setJointValueTarget(target_);
+        final_target_[i] = interface_.getCurrentJointValues()[i];
+    interface_.setJointValueTarget(final_target_);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
 
