@@ -239,11 +239,11 @@ public:
     if (target_.empty())
       return false;
     MoveitMotionBase::move();
-    final_target_ = target_;
+    std::vector<double> final_target = target_;
     for (long unsigned int i = 0; i < target_.size(); i++)
       if (!std::isnormal(target_[i]))
-        final_target_[i] = interface_.getCurrentJointValues()[i];
-    interface_.setJointValueTarget(final_target_);
+        final_target[i] = interface_.getCurrentJointValues()[i];
+    interface_.setJointValueTarget(final_target);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
 
@@ -260,7 +260,7 @@ private:
     }
     return flag;
   }
-  std::vector<double> target_, final_target_, tolerance_joints_;
+  std::vector<double> target_, tolerance_joints_;
 };
 
 template <class MsgType>
