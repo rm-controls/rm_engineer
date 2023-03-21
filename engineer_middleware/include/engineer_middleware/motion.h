@@ -148,13 +148,14 @@ public:
   bool move() override
   {
     MoveitMotionBase::move();
+    geometry_msgs::PoseStamped final_target;
     if (!target_.header.frame_id.empty() && target_.header.frame_id != interface_.getPlanningFrame())
     {
       try
       {
-        tf2::doTransform(target_.pose, target_.pose,
+        tf2::doTransform(target_.pose, final_target.pose,
                          tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
-        target_.header.frame_id = interface_.getPlanningFrame();
+        final_target.header.frame_id = interface_.getPlanningFrame();
       }
       catch (tf2::TransformException& ex)
       {
@@ -174,12 +175,13 @@ public:
     else
     {
       if (has_pos_ && has_ori_)
-        interface_.setPoseTarget(target_);
+        interface_.setPoseTarget(final_target);
       else if (has_pos_ && !has_ori_)
-        interface_.setPositionTarget(target_.pose.position.x, target_.pose.position.y, target_.pose.position.z);
+        interface_.setPositionTarget(final_target.pose.position.x, final_target.pose.position.y,
+                                     final_target.pose.position.z);
       else if (!has_pos_ && has_ori_)
-        interface_.setOrientationTarget(target_.pose.orientation.x, target_.pose.orientation.y,
-                                        target_.pose.orientation.z, target_.pose.orientation.w);
+        interface_.setOrientationTarget(final_target.pose.orientation.x, final_target.pose.orientation.y,
+                                        final_target.pose.orientation.z, final_target.pose.orientation.w);
       return interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     }
   }
@@ -237,10 +239,11 @@ public:
     if (target_.empty())
       return false;
     MoveitMotionBase::move();
+    std::vector<double> final_target = target_;
     for (long unsigned int i = 0; i < target_.size(); i++)
       if (!std::isnormal(target_[i]))
-        target_[i] = interface_.getCurrentJointValues()[i];
-    interface_.setJointValueTarget(target_);
+        final_target[i] = interface_.getCurrentJointValues()[i];
+    interface_.setJointValueTarget(final_target);
     return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
 
