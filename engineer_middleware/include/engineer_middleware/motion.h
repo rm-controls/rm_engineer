@@ -44,6 +44,7 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <rm_msgs/GimbalCmd.h>
 #include <rm_msgs/GpioData.h>
+#include <rm_msgs/MultiDofCmd.h>
 #include <engineer_middleware/chassis_interface.h>
 
 namespace engineer_middleware
@@ -351,6 +352,62 @@ public:
     }
     msg_.mode = msg_.DIRECT;
   }
+};
+
+class ReversalMotion : public PublishMotion<rm_msgs::MultiDofCmd>
+{
+public:
+    ReversalMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
+            : PublishMotion<rm_msgs::MultiDofCmd>(motion, interface)
+    {
+        delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
+        if (std::string(motion["mode"]) == "POSITION")
+            msg_.mode = msg_.POSITION;
+        else
+            msg_.mode = msg_.VELOCITY;
+        if (motion.hasMember("step"))
+        {
+            ROS_ASSERT(motion["value"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+            msg_.values.linear.x = xmlRpcGetDouble(motion["value"], 0);
+            msg_.values.linear.y = xmlRpcGetDouble(motion["value"], 1);
+            msg_.values.linear.z = xmlRpcGetDouble(motion["value"], 2);
+            msg_.values.angular.x = xmlRpcGetDouble(motion["value"], 3);
+            msg_.values.angular.y = xmlRpcGetDouble(motion["value"], 4);
+            msg_.values.angular.z = xmlRpcGetDouble(motion["value"], 5);
+        }
+    }
+    void setZero()
+    {
+        msg_.values.linear.x = 0.;
+        msg_.values.linear.y = 0.;
+        msg_.values.linear.z = 0.;
+        msg_.values.angular.x = 0.;
+        msg_.values.angular.y = 0.;
+        msg_.values.angular.z = 0.;
+    }
+    bool move() override
+    {
+        start_time_ = ros::Time::now();
+        interface_.publish(msg_);
+        if (msg_.mode == msg_.POSITION)
+        {
+            ReversalMotion::setZero();
+            interface_.publish(msg_);
+        }
+        return true;
+    }
+//    bool isFinish() override
+//    {
+//        return ((ros::Time::now() - start_time_).toSec() > delay_);
+//    }
+    void stop() override
+    {
+        ReversalMotion::setZero();
+        interface_.publish(msg_);
+    }
+private:
+    double delay_;
+    ros::Time start_time_;
 };
 
 class ChassisMotion : public MotionBase<ChassisInterface>

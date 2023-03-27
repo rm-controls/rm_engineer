@@ -502,3 +502,17 @@ steps_list:
     - step: "home with no stone"
       arm:
         <<: *HOME_ONE_STONE
+
+
+#  TEST MULTI DOF CONTROLLER
+  TEST0:
+    - step: "TEST"
+      reversal:
+        mode: "POSITION"
+        value: [1,1,1,1,1,1]
+
+  TEST1:
+    - step: "TEST"
+      reversal:
+        mode: "VELOCITY"
+        value: [ 1,1,1,1,1,1]
