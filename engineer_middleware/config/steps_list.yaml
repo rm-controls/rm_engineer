@@ -505,30 +505,35 @@ steps_list:
 
 
 #  TEST MULTI DOF CONTROLLER
-  TEST0:
+  Z_IN:
     - step: "TEST"
       reversal:
         mode: "POSITION"
-        values: [ 0.,0.,20.,0.,0.,0.]
-  TEST00:
+        values: [ 0.,0.,-10.,0.,0.,0.]
+  Z_OUT:
     - step: "TEST"
       reversal:
         mode: "POSITION"
         values: [ 0.,0.,10.,0.,0.,0. ]
-  TEST000:
+
+  PITCH:
     - step: "TEST"
       reversal:
         mode: "POSITION"
-        values: [ 0.,0.,5.,0.,0.,0. ]
+        values: [ 0.,0.,0.,0.,16,0. ]
 
-  TEST0000:
+  ROLL:
     - step: "TEST"
       reversal:
         mode: "POSITION"
-        values: [ 0.,0.,2.,0.,0.,0. ]
-
-  TEST1:
+        values: [ 0.,0.,0.,30,0.,0. ]
+  VELOCITY:
     - step: "TEST"
       reversal:
         mode: "VELOCITY"
         values: [ 1.,1.,1.,1.,1.,1.]
+  VELOCITY_STOP:
+    - step: "TEST"
+      reversal:
+        mode: "VELOCITY"
+        values: [ 0.,0.,0.,0.,0.,0. ]
