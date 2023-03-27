@@ -65,7 +65,7 @@ Middleware::Middleware(ros::NodeHandle& nh)
     {
       step_queues_.insert(
           std::make_pair(it->first, StepQueue(it->second, scenes_list, tf_, arm_group_, chassis_interface_, hand_pub_,
-                                              card_pub_, gimbal_pub_, gpio_pub_,reversal_pub_)));
+                                              card_pub_, gimbal_pub_, gpio_pub_, reversal_pub_)));
     }
   }
   else

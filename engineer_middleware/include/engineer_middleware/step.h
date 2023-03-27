@@ -48,7 +48,8 @@ class Step
 public:
   Step(const XmlRpc::XmlRpcValue& step, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
        moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
-       ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub, ros::Publisher& reversal_pub)
+       ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
+       ros::Publisher& reversal_pub)
     : arm_group_(arm_group)
   {
     ROS_ASSERT(step.hasMember("step"));
@@ -95,7 +96,7 @@ public:
     if (gpio_motion_)
       success &= gpio_motion_->move();
     if (reversal_motion_)
-        success &= reversal_motion_->move();
+      success &= reversal_motion_->move();
     if (planning_scene_)
       planning_scene_->add();
     return success;
@@ -109,7 +110,7 @@ public:
     if (chassis_motion_)
       chassis_motion_->stop();
     if (reversal_motion_)
-        reversal_motion_->stop();
+      reversal_motion_->stop();
   }
 
   void deleteScene()
@@ -134,7 +135,7 @@ public:
     if (gimbal_motion_)
       success &= gimbal_motion_->isFinish();
     if (reversal_motion_)
-        success &= reversal_motion_->isFinish();
+      success &= reversal_motion_->isFinish();
     return success;
   }
   bool checkTimeout(ros::Duration period)
@@ -151,7 +152,7 @@ public:
     if (gimbal_motion_)
       success &= gimbal_motion_->checkTimeout(period);
     if (reversal_motion_)
-        success &= reversal_motion_->checkTimeout(period);
+      success &= reversal_motion_->checkTimeout(period);
     return success;
   }
 
