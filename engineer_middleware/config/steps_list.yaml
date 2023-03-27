@@ -509,10 +509,26 @@ steps_list:
     - step: "TEST"
       reversal:
         mode: "POSITION"
-        value: [1,1,1,1,1,1]
+        values: [ 0.,0.,20.,0.,0.,0.]
+  TEST00:
+    - step: "TEST"
+      reversal:
+        mode: "POSITION"
+        values: [ 0.,0.,10.,0.,0.,0. ]
+  TEST000:
+    - step: "TEST"
+      reversal:
+        mode: "POSITION"
+        values: [ 0.,0.,5.,0.,0.,0. ]
+
+  TEST0000:
+    - step: "TEST"
+      reversal:
+        mode: "POSITION"
+        values: [ 0.,0.,2.,0.,0.,0. ]
 
   TEST1:
     - step: "TEST"
       reversal:
         mode: "VELOCITY"
-        value: [ 1,1,1,1,1,1]
+        values: [ 1.,1.,1.,1.,1.,1.]

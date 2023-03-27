@@ -365,25 +365,26 @@ public:
             msg_.mode = msg_.POSITION;
         else
             msg_.mode = msg_.VELOCITY;
-        if (motion.hasMember("step"))
+        if (motion.hasMember("values"))
         {
-            ROS_ASSERT(motion["value"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-            msg_.values.linear.x = xmlRpcGetDouble(motion["value"], 0);
-            msg_.values.linear.y = xmlRpcGetDouble(motion["value"], 1);
-            msg_.values.linear.z = xmlRpcGetDouble(motion["value"], 2);
-            msg_.values.angular.x = xmlRpcGetDouble(motion["value"], 3);
-            msg_.values.angular.y = xmlRpcGetDouble(motion["value"], 4);
-            msg_.values.angular.z = xmlRpcGetDouble(motion["value"], 5);
+            ROS_ASSERT(motion["values"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+            msg_.values.linear.x = xmlRpcGetDouble(motion["values"], 0);
+            msg_.values.linear.y = xmlRpcGetDouble(motion["values"], 1);
+            msg_.values.linear.z = xmlRpcGetDouble(motion["values"], 2);
+            msg_.values.angular.x = xmlRpcGetDouble(motion["values"], 3);
+            msg_.values.angular.y = xmlRpcGetDouble(motion["values"], 4);
+            msg_.values.angular.z = xmlRpcGetDouble(motion["values"], 5);
         }
     }
     void setZero()
     {
-        msg_.values.linear.x = 0.;
-        msg_.values.linear.y = 0.;
-        msg_.values.linear.z = 0.;
-        msg_.values.angular.x = 0.;
-        msg_.values.angular.y = 0.;
-        msg_.values.angular.z = 0.;
+        zero_msg_.mode = msg_.POSITION;
+        zero_msg_.values.linear.x = 0.;
+        zero_msg_.values.linear.y = 0.;
+        zero_msg_.values.linear.z = 0.;
+        zero_msg_.values.angular.x = 0.;
+        zero_msg_.values.angular.y = 0.;
+        zero_msg_.values.angular.z = 0.;
     }
     bool move() override
     {
@@ -391,8 +392,9 @@ public:
         interface_.publish(msg_);
         if (msg_.mode == msg_.POSITION)
         {
+            t.sleep();
             ReversalMotion::setZero();
-            interface_.publish(msg_);
+            interface_.publish(zero_msg_);
         }
         return true;
     }
@@ -402,12 +404,14 @@ public:
 //    }
     void stop() override
     {
-        ReversalMotion::setZero();
-        interface_.publish(msg_);
+//        ReversalMotion::setZero();
+//        interface_.publish(msg_);
     }
 private:
     double delay_;
     ros::Time start_time_;
+    rm_msgs::MultiDofCmd zero_msg_;
+    ros::Duration t = ros::Duration(0.08);
 };
 
 class ChassisMotion : public MotionBase<ChassisInterface>
