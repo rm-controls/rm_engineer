@@ -411,6 +411,7 @@ public:
 private:
   double delay_;
   ros::Time start_time_;
+  ros::Duration t = ros::Duration(0.08);
   rm_msgs::MultiDofCmd zero_msg_;
 };
 
