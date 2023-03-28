@@ -412,7 +412,6 @@ private:
   double delay_;
   ros::Time start_time_;
   rm_msgs::MultiDofCmd zero_msg_;
-  ros::Duration t = ros::Duration(0.08);
 };
 
 class ChassisMotion : public MotionBase<ChassisInterface>
