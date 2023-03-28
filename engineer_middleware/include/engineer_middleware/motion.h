@@ -378,7 +378,7 @@ public:
   }
   void setZero()
   {
-    zero_msg_.mode = msg_.POSITION;
+    zero_msg_.mode = msg_.mode;
     zero_msg_.values.linear.x = 0.;
     zero_msg_.values.linear.y = 0.;
     zero_msg_.values.linear.z = 0.;
@@ -398,14 +398,14 @@ public:
     }
     return true;
   }
-  //    bool isFinish() override
-  //    {
-  //        return ((ros::Time::now() - start_time_).toSec() > delay_);
-  //    }
   void stop() override
   {
-    //        ReversalMotion::setZero();
-    //        interface_.publish(msg_);
+    ReversalMotion::setZero();
+    interface_.publish(msg_);
+  }
+  bool isFinish() override
+  {
+    return ((ros::Time::now() - start_time_).toSec() > delay_);
   }
 
 private:
