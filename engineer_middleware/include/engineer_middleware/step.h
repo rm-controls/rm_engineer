@@ -48,8 +48,9 @@ class Step
 public:
   Step(const XmlRpc::XmlRpcValue& step, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
        moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
-       ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub)
-    : arm_group_(arm_group)
+       ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
+       ros::Publisher& planning_result_pub)
+    : planning_result_pub_(planning_result_pub), arm_group_(arm_group)
   {
     ROS_ASSERT(step.hasMember("step"));
     step_name_ = static_cast<std::string>(step["step"]);
@@ -81,7 +82,11 @@ public:
   {
     bool success = true;
     if (arm_motion_)
+    {
       success &= arm_motion_->move();
+      std_msgs::Int32 msg = arm_motion_->judgePlanningResult();
+      planning_result_pub_.publish(msg);
+    }
     if (hand_motion_)
       success &= hand_motion_->move();
     if (card_motion_)
@@ -152,6 +157,7 @@ public:
 
 private:
   std::string step_name_;
+  ros::Publisher planning_result_pub_;
   MoveitMotionBase* arm_motion_{};
   HandMotion* hand_motion_{};
   JointPositionMotion* card_motion_{};

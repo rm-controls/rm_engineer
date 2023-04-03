@@ -44,6 +44,7 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <rm_msgs/GimbalCmd.h>
 #include <rm_msgs/GpioData.h>
+#include <std_msgs/Int32.h>
 #include <engineer_middleware/chassis_interface.h>
 
 namespace engineer_middleware
@@ -105,11 +106,16 @@ public:
     interface_.setMaxAccelerationScalingFactor(0.);
     interface_.stop();
   }
+  std_msgs::Int32 judgePlanningResult()
+  {
+    return msg_;
+  }
 
 protected:
   virtual bool isReachGoal() = 0;
   double speed_, accel_;
   int countdown_{};
+  std_msgs::Int32 msg_;
 };
 
 class EndEffectorMotion : public MoveitMotionBase
@@ -182,7 +188,9 @@ public:
       else if (!has_pos_ && has_ori_)
         interface_.setOrientationTarget(final_target.pose.orientation.x, final_target.pose.orientation.y,
                                         final_target.pose.orientation.z, final_target.pose.orientation.w);
-      return interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+      moveit::planning_interface::MoveGroupInterface::Plan plan;
+      msg_.data = interface_.plan(plan).val;
+      return interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     }
   }
 
@@ -244,7 +252,9 @@ public:
       if (!std::isnormal(target_[i]))
         final_target[i] = interface_.getCurrentJointValues()[i];
     interface_.setJointValueTarget(final_target);
-    return (interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+    moveit::planning_interface::MoveGroupInterface::Plan plan;
+    msg_.data = interface_.plan(plan).val;
+    return interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
   }
 
 private:
