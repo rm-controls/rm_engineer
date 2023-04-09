@@ -260,40 +260,51 @@ scenes_list:
         orientation: [ 0., 0., 0., 0. ]
       attach: false
 
+  EXCHANGE_STONE:
+    - id: "stone"
+      frame_id: "link6"
+      primitive:
+        type: box
+        dimension: [ 0.20, 0.20, 0.24 ]
+      pose:
+        position: [ 0.195, 0., -0.115 ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: true
+
   EXCHANGER:
     - id: "up"
       frame_id: "exchanger"
       primitive:
         type: box
-        dimension: [ 0.26, 0.288, 0.024 ]
+        dimension: [ 0.34, 0.024, 0.212 ]
       pose:
-        position: [ 0.106, 0., 0.132 ]
+        position: [ 0., -0.132, 0.106 ]
         orientation: [ 0., 0., 0., 1. ]
       attach: false
     - id: "down"
       frame_id: "exchanger"
       primitive:
         type: box
-        dimension: [ 0.25, 0.288, 0.024 ]
+        dimension: [ 0.31, 0.024, 0.212 ]
       pose:
-        position: [ 0.106, 0., -0.132 ]
+        position: [ 0., 0.132, 0.106 ]
         orientation: [ 0., 0., 0., 1. ]
       attach: false
-    - id: "left"
+    - id: "lf"
       frame_id: "exchanger"
       primitive:
         type: box
-        dimension: [ 0.25, 0.024, 0.288 ]
+        dimension: [ 0.024, 0.31, 0.28 ]
       pose:
-        position: [ 0.106, 0.132, 0. ]
+        position: [ 0.132, 0., 0.106 ]
         orientation: [ 0., 0., 0., 1. ]
       attach: false
-    - id: "right"
+    - id: "rt"
       frame_id: "exchanger"
       primitive:
         type: box
-        dimension: [ 0.25, 0.024, 0.288 ]
+        dimension: [ 0.024, 0.31, 0.28 ]
       pose:
-        position: [ 0.106, -0.132, 0. ]
+        position: [ -0.132, 0., 0.106 ]
         orientation: [ 0., 0., 0., 1. ]
       attach: false

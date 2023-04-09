@@ -510,57 +510,38 @@ steps_list:
       arm:
         <<: *HOME_ONE_STONE
 
-  READY_EXCHANGE:
-    - step: "move joint6 to get stone"
-      arm:
-        joints: [ "KEEP", 0.17, "KEEP", "KEEP", "KEEP","KEEP" ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *BIGGER_TOLERANCE
-
-  AUTO_PUSH:
-    - step: "PUSH"
-      arm:
-        frame: link6
-        position: [ 0., 0.,-0.04 ]
-        rpy: [ 0., 0.435, 0. ]
-        tolerance_position: 0.001
-        tolerance_orientation: 0.15
-        common:
-          <<: *SLOWLY
-    - step: "close gripper"
-      gripper:
-        <<: *OPEN_GRIPPER
-    - step: "BACK"
-      arm:
-        frame: link6
-        position: [ 0., 0.,0.2 ]
-        rpy: [ 0., -0.435, 0. ]
-        tolerance_position: 0.005
-        tolerance_orientation: 0.1
-        common:
-          <<: *SLOWLY
-    - step: "PUSH"
-      arm:
-        frame: link6
-        position: [ 0., 0.,-0.22 ]
-        rpy: [ 0., 0., 0. ]
-        tolerance_position: 0.01
-        tolerance_orientation: 0.3
-        common:
-          <<: *NORMALLY
+      ###################   AUTO_EXCHANGE   ####################
 
   GENERATE_EXCHANGE:
     - step: "add scenes"
+      scene_name: STONE
+    - step: "add scenes"
+      scene_name: EXCHANGE_STONE
+    - step: "move to wait"
+      arm:
+        frame: exchanger
+        position: [ -0.18, 0., -110.12 ]
+        rpy: [ 0., -1.57, 0. ]
+        common:
+          <<: *SLOWLY
 
   AUTO_EXCHANGER:
     - step: "move to wait"
       arm:
         frame: exchanger
-        position: [ -0.09, 0., -0.18 ]
-        rpy: [ 0., -1.57, 0. ]
-        tolerance_position: 0.006
-        tolerance_orientation: 0.01
+        position: [ 0., 0.185, -0.24 ]
+        rpy: [ 0., 3.14, 1.57 ]
+        stone: 3
+        tolerance_position: 0.008
+        tolerance_orientation: 0.03
         common:
-          <<: *SLOWLY
+          <<: *NORMALLY
+
+  READY_EXCHANGE:
+    - step: "move joint6"
+      arm:
+        joints: [ 0.16, 0.02740, 0.2908, -1.46781, 1.513300, -0.20451 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
