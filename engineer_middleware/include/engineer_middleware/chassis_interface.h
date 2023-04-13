@@ -61,6 +61,7 @@ public:
     pid_y_.init(ros::NodeHandle(nh_pid_y, "pid"));
     pid_yaw_.init(ros::NodeHandle(nh_pid_w, "pid"));
     vel_pub_ = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
+    nh_base_motion.getParam("yaw_start_threshold", yaw_start_threshold_);
   }
 
   bool setGoal(const geometry_msgs::PoseStamped& pose)
@@ -136,7 +137,9 @@ public:
     geometry_msgs::Twist cmd_vel{};
     cmd_vel.linear.x = pid_x_.computeCommand(error.x, period);
     cmd_vel.linear.y = pid_y_.computeCommand(error.y, period);
-    cmd_vel.angular.z = pid_yaw_.computeCommand(error_yaw_, period);
+    cmd_vel.angular.z = pid_yaw_.computeCommand(error_yaw_, period) >= yaw_start_threshold_ ?
+                            pid_yaw_.computeCommand(error_yaw_, period) :
+                            0;
     vel_pub_.publish(cmd_vel);
     error_pos_ = std::abs(error.x) + std::abs(error.y);
     error_yaw_ = std::abs(error_yaw_);
@@ -148,5 +151,6 @@ private:
   geometry_msgs::PoseStamped goal_{};
   ros::Publisher vel_pub_;
   double error_pos_{}, error_yaw_{};
+  double yaw_start_threshold_{};
 };
 }  // namespace engineer_middleware
