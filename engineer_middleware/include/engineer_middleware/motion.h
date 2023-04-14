@@ -106,7 +106,7 @@ public:
     interface_.setMaxAccelerationScalingFactor(0.);
     interface_.stop();
   }
-  std_msgs::Int32 judgePlanningResult()
+  std_msgs::Int32 getPlanningResult()
   {
     return msg_;
   }

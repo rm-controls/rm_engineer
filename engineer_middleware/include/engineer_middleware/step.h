@@ -84,7 +84,7 @@ public:
     if (arm_motion_)
     {
       success &= arm_motion_->move();
-      std_msgs::Int32 msg = arm_motion_->judgePlanningResult();
+      std_msgs::Int32 msg = arm_motion_->getPlanningResult();
       planning_result_pub_.publish(msg);
     }
     if (hand_motion_)
