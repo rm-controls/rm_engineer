@@ -325,7 +325,7 @@ scenes_list:
         orientation: [ 0., 0., 0., 1. ]
       attach: false
 
-  STONE_TEST:
+  EXCHANGE_STONE:
     - id: "stone"
       frame_id: "exchanger"
       primitive:
