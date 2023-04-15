@@ -168,7 +168,12 @@ public:
       moveit_msgs::RobotTrajectory trajectory;
       std::vector<geometry_msgs::Pose> waypoints;
       waypoints.push_back(target_.pose);
-      interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory);
+      if (interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory) != 1)
+      {
+        ROS_INFO_STREAM("Collisions will occur in the"
+                        << interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory) << "of the trajectory");
+        return false;
+      }
       return interface_.asyncExecute(trajectory) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     }
     else
