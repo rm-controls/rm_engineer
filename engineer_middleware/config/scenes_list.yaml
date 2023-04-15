@@ -324,3 +324,14 @@ scenes_list:
         position: [ -0.132, 0., 0.106 ]
         orientation: [ 0., 0., 0., 1. ]
       attach: false
+
+  STONE_TEST:
+    - id: "stone"
+      frame_id: "exchanger"
+      primitive:
+        type: box
+        dimension: [ 0.28, 0.235, 0.23 ]
+      pose:
+        position: [ 0., 0., 0. ]
+        orientation: [ 0., 0., 0., 0. ]
+      attach: false
