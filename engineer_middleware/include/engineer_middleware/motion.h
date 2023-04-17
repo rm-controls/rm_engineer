@@ -368,23 +368,23 @@ public:
     if (motion.hasMember("values"))
     {
       ROS_ASSERT(motion["values"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      msg_.values.linear.x = xmlRpcGetDouble(motion["values"], 0);
-      msg_.values.linear.y = xmlRpcGetDouble(motion["values"], 1);
-      msg_.values.linear.z = xmlRpcGetDouble(motion["values"], 2);
-      msg_.values.angular.x = xmlRpcGetDouble(motion["values"], 3);
-      msg_.values.angular.y = xmlRpcGetDouble(motion["values"], 4);
-      msg_.values.angular.z = xmlRpcGetDouble(motion["values"], 5);
+      msg_.linear.x = xmlRpcGetDouble(motion["values"], 0);
+      msg_.linear.y = xmlRpcGetDouble(motion["values"], 1);
+      msg_.linear.z = xmlRpcGetDouble(motion["values"], 2);
+      msg_.angular.x = xmlRpcGetDouble(motion["values"], 3);
+      msg_.angular.y = xmlRpcGetDouble(motion["values"], 4);
+      msg_.angular.z = xmlRpcGetDouble(motion["values"], 5);
     }
   }
   void setZero()
   {
     zero_msg_.mode = msg_.mode;
-    zero_msg_.values.linear.x = 0.;
-    zero_msg_.values.linear.y = 0.;
-    zero_msg_.values.linear.z = 0.;
-    zero_msg_.values.angular.x = 0.;
-    zero_msg_.values.angular.y = 0.;
-    zero_msg_.values.angular.z = 0.;
+    zero_msg_.linear.x = 0.;
+    zero_msg_.linear.y = 0.;
+    zero_msg_.linear.z = 0.;
+    zero_msg_.angular.x = 0.;
+    zero_msg_.angular.y = 0.;
+    zero_msg_.angular.z = 0.;
   }
   bool move() override
   {
