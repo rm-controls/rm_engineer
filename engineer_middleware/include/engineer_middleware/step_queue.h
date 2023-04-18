@@ -53,12 +53,14 @@ class StepQueue
 public:
   StepQueue(const XmlRpc::XmlRpcValue& steps, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
             moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
-            ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub)
+            ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
+            ros::Publisher& planning_result_pub)
     : chassis_interface_(chassis_interface)
   {
     ROS_ASSERT(steps.getType() == XmlRpc::XmlRpcValue::TypeArray);
     for (int i = 0; i < steps.size(); ++i)
-      queue_.emplace_back(steps[i], scenes, tf, arm_group, chassis_interface, hand_pub, card_pub, gimbal_pub, gpio_pub);
+      queue_.emplace_back(steps[i], scenes, tf, arm_group, chassis_interface, hand_pub, card_pub, gimbal_pub, gpio_pub,
+                          planning_result_pub);
   }
   bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as)
   {

@@ -82,7 +82,10 @@ public:
       collision_objects_[i].operation = collision_objects_[i].ADD;
     planning_scene_interface_.addCollisionObjects(collision_objects_);
     if (is_attached_)
+    {
+      std::cout << planning_scene_interface_.getAttachedObjects().size() << std::endl;
       arm_group_.attachObject(collision_objects_[0].id, collision_objects_[0].header.frame_id);
+    }
   }
 
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
