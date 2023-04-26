@@ -1,8 +1,8 @@
 chassis:
   x:
-    pid: { p: 4.5, i: 0.0, d: 0.2, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+    pid: { p: 3.0, i: 0.0, d: 0.1, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
   y:
-    pid: { p: 4.5, i: 0.0, d: 0.2, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+    pid: { p: 0.0, i: 0.0, d: 0.0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
   yaw:
-    pid: { p: 10., i: 0.0, d: 0.01, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-  yaw_start_threshold: 0.1
+    pid: { p: 0.0, i: 0.0, d: 0.0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+  yaw_start_threshold: 10
