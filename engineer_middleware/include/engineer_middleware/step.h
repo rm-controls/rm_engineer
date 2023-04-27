@@ -48,7 +48,7 @@ class Step
 public:
   Step(const XmlRpc::XmlRpcValue& step, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
        moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
-       ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
+       ros::Publisher& hand_pub, ros::Publisher& joint7_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
        ros::Publisher& reversal_pub, ros::Publisher& planning_result_pub)
     : planning_result_pub_(planning_result_pub), arm_group_(arm_group)
   {
@@ -65,8 +65,8 @@ public:
       chassis_motion_ = new ChassisMotion(step["chassis"], chassis_interface);
     if (step.hasMember("hand"))
       hand_motion_ = new HandMotion(step["hand"], hand_pub);
-    if (step.hasMember("card"))
-      card_motion_ = new JointPositionMotion(step["card"], card_pub);
+    if (step.hasMember("joint7"))
+      joint7_motion_ = new JointPositionMotion(step["joint7"], joint7_pub);
     if (step.hasMember("gimbal"))
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
     if (step.hasMember("gripper"))
@@ -80,7 +80,7 @@ public:
           planning_scene_ = new PlanningScene(it->second, arm_group);
     }
   }
-  bool move(geometry_msgs::TwistStamped test)
+  bool move()
   {
     bool success = true;
     if (arm_motion_)
@@ -91,8 +91,8 @@ public:
     }
     if (hand_motion_)
       success &= hand_motion_->move();
-    if (card_motion_)
-      success &= card_motion_->move();
+    if (joint7_motion_)
+      success &= joint7_motion_->move();
     if (chassis_motion_)
       success &= chassis_motion_->move();
     if (gimbal_motion_)
@@ -132,8 +132,6 @@ public:
       success &= arm_motion_->isFinish();
     if (hand_motion_)
       success &= hand_motion_->isFinish();
-    if (card_motion_)
-      success &= card_motion_->isFinish();
     if (chassis_motion_)
       success &= chassis_motion_->isFinish();
     if (gimbal_motion_)
@@ -147,8 +145,6 @@ public:
       success &= arm_motion_->checkTimeout(period);
     if (hand_motion_)
       success &= hand_motion_->checkTimeout(period);
-    if (card_motion_)
-      success &= card_motion_->checkTimeout(period);
     if (chassis_motion_)
       success &= chassis_motion_->checkTimeout(period);
     if (gimbal_motion_)
@@ -166,7 +162,7 @@ private:
   ros::Publisher planning_result_pub_;
   MoveitMotionBase* arm_motion_{};
   HandMotion* hand_motion_{};
-  JointPositionMotion* card_motion_{};
+  JointPositionMotion* joint7_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
   GpioMotion* gpio_motion_{};
