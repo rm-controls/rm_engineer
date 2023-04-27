@@ -156,7 +156,7 @@ public:
   {
     MoveitMotionBase::move();
     geometry_msgs::PoseStamped final_target;
-    if (!target_.header.frame_id.empty() && target_.header.frame_id != interface_.getPlanningFrame())
+    if (!target_.header.frame_id.empty())
     {
       try
       {
@@ -301,8 +301,9 @@ public:
     quat_tf.setRPY(test.twist.angular.x, test.twist.angular.y, test.twist.angular.z);
     geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
     target_.pose.orientation = quat_msg;
-    if (!target_.header.frame_id.empty() && target_.header.frame_id != interface_.getPlanningFrame())
+    if (!target_.header.frame_id.empty())
     {
+      std::cout << "1" << std::endl;
       try
       {
         tf2::doTransform(target_.pose, final_target_.pose,
