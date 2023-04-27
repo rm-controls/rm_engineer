@@ -48,8 +48,9 @@ class Step
 public:
   Step(const XmlRpc::XmlRpcValue& step, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
        moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
-       ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub)
-    : arm_group_(arm_group)
+       ros::Publisher& hand_pub, ros::Publisher& card_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
+       ros::Publisher& reversal_pub, ros::Publisher& planning_result_pub)
+    : planning_result_pub_(planning_result_pub), arm_group_(arm_group)
   {
     ROS_ASSERT(step.hasMember("step"));
     step_name_ = static_cast<std::string>(step["step"]);
@@ -70,6 +71,8 @@ public:
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
     if (step.hasMember("gripper"))
       gpio_motion_ = new GpioMotion(step["gripper"], gpio_pub);
+    if (step.hasMember("reversal"))
+      reversal_motion_ = new ReversalMotion(step["reversal"], reversal_pub);
     if (step.hasMember("scene_name"))
     {
       for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
@@ -77,11 +80,15 @@ public:
           planning_scene_ = new PlanningScene(it->second, arm_group);
     }
   }
-  bool move()
+  bool move(geometry_msgs::TwistStamped test)
   {
     bool success = true;
     if (arm_motion_)
+    {
       success &= arm_motion_->move();
+      std_msgs::Int32 msg = arm_motion_->judgePlanningResult();
+      planning_result_pub_.publish(msg);
+    }
     if (hand_motion_)
       success &= hand_motion_->move();
     if (card_motion_)
@@ -92,6 +99,8 @@ public:
       success &= gimbal_motion_->move();
     if (gpio_motion_)
       success &= gpio_motion_->move();
+    if (reversal_motion_)
+      success &= reversal_motion_->move();
     if (planning_scene_)
       planning_scene_->add();
     return success;
@@ -111,7 +120,9 @@ public:
     std::map<std::string, moveit_msgs::AttachedCollisionObject> attached_objects =
         planning_scene_interface_.getAttachedObjects();
     for (auto iter = attached_objects.begin(); iter != attached_objects.end(); ++iter)
+    {
       arm_group_.detachObject(iter->first);
+    }
     planning_scene_interface_.removeCollisionObjects(planning_scene_interface_.getKnownObjectNames());
   }
   bool isFinish()
@@ -152,12 +163,14 @@ public:
 
 private:
   std::string step_name_;
+  ros::Publisher planning_result_pub_;
   MoveitMotionBase* arm_motion_{};
   HandMotion* hand_motion_{};
   JointPositionMotion* card_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
   GpioMotion* gpio_motion_{};
+  ReversalMotion* reversal_motion_{};
   PlanningScene* planning_scene_{};
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
   moveit::planning_interface::MoveGroupInterface& arm_group_;
