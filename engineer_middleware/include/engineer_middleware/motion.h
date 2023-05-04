@@ -46,6 +46,7 @@
 #include <rm_msgs/GpioData.h>
 #include <rm_msgs/MultiDofCmd.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/String.h>
 #include <engineer_middleware/chassis_interface.h>
 
 namespace engineer_middleware
@@ -422,6 +423,16 @@ private:
   bool state_;
 };
 
+class StoneNumMotion : public PublishMotion<std_msgs::String>
+{
+public:
+  StoneNumMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
+    : PublishMotion<std_msgs::String>(motion, interface)
+  {
+    msg_.data = static_cast<std::string>(motion["change"]);
+  }
+};
+
 class JointPositionMotion : public PublishMotion<std_msgs::Float64>
 {
 public:
@@ -429,8 +440,24 @@ public:
     : PublishMotion<std_msgs::Float64>(motion, interface)
   {
     ROS_ASSERT(motion.hasMember("target"));
-    msg_.data = xmlRpcGetDouble(motion, "target", 0.0);
+    ROS_ASSERT(motion.hasMember("delay"));
+    target_ = xmlRpcGetDouble(motion, "target", 0.0);
+    delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
   }
+  bool move() override
+  {
+    start_time_ = ros::Time::now();
+    msg_.data = target_;
+    return PublishMotion::move();
+  }
+  bool isFinish() override
+  {
+    return ((ros::Time::now() - start_time_).toSec() > delay_);
+  }
+
+private:
+  double target_, delay_;
+  ros::Time start_time_;
 };
 
 class GimbalMotion : public PublishMotion<rm_msgs::GimbalCmd>
@@ -550,4 +577,5 @@ private:
   ros::Time start_time_;
   rm_msgs::MultiDofCmd zero_msg_;
 };
-}  // namespace engineer_middleware
+
+};  // namespace engineer_middleware
