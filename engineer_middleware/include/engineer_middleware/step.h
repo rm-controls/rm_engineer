@@ -49,7 +49,7 @@ public:
   Step(const XmlRpc::XmlRpcValue& step, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
        moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
        ros::Publisher& hand_pub, ros::Publisher& joint7_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
-       ros::Publisher& reversal_pub, ros::Publisher& planning_result_pub)
+       ros::Publisher& reversal_pub, ros::Publisher& stone_num_pub, ros::Publisher& planning_result_pub)
     : planning_result_pub_(planning_result_pub), arm_group_(arm_group)
   {
     ROS_ASSERT(step.hasMember("step"));
@@ -67,6 +67,8 @@ public:
       hand_motion_ = new HandMotion(step["hand"], hand_pub);
     if (step.hasMember("joint7"))
       joint7_motion_ = new JointPositionMotion(step["joint7"], joint7_pub);
+    if (step.hasMember("stone_num"))
+      stone_num_motion_ = new StoneNumMotion(step["stone_num"], stone_num_pub);
     if (step.hasMember("gimbal"))
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
     if (step.hasMember("gripper"))
@@ -93,6 +95,8 @@ public:
       success &= hand_motion_->move();
     if (joint7_motion_)
       success &= joint7_motion_->move();
+    if (stone_num_motion_)
+      success &= stone_num_motion_->move();
     if (chassis_motion_)
       success &= chassis_motion_->move();
     if (gimbal_motion_)
@@ -132,6 +136,8 @@ public:
       success &= arm_motion_->isFinish();
     if (hand_motion_)
       success &= hand_motion_->isFinish();
+    if (joint7_motion_)
+      success &= joint7_motion_->isFinish();
     if (chassis_motion_)
       success &= chassis_motion_->isFinish();
     if (gimbal_motion_)
@@ -145,6 +151,8 @@ public:
       success &= arm_motion_->checkTimeout(period);
     if (hand_motion_)
       success &= hand_motion_->checkTimeout(period);
+    if (joint7_motion_)
+      success &= joint7_motion_->checkTimeout(period);
     if (chassis_motion_)
       success &= chassis_motion_->checkTimeout(period);
     if (gimbal_motion_)
@@ -163,6 +171,7 @@ private:
   MoveitMotionBase* arm_motion_{};
   HandMotion* hand_motion_{};
   JointPositionMotion* joint7_motion_{};
+  StoneNumMotion* stone_num_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
   GpioMotion* gpio_motion_{};
