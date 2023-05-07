@@ -44,9 +44,7 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <rm_msgs/GimbalCmd.h>
 #include <rm_msgs/GpioData.h>
-#include <rm_msgs/MultiDofCmd.h>
 #include <std_msgs/Int32.h>
-#include <std_msgs/String.h>
 #include <engineer_middleware/chassis_interface.h>
 
 namespace engineer_middleware
@@ -108,7 +106,7 @@ public:
     interface_.setMaxAccelerationScalingFactor(0.);
     interface_.stop();
   }
-  std_msgs::Int32 judgePlanningResult()
+  std_msgs::Int32 getPlanningResult()
   {
     return msg_;
   }
@@ -157,7 +155,7 @@ public:
   {
     MoveitMotionBase::move();
     geometry_msgs::PoseStamped final_target;
-    if (!target_.header.frame_id.empty())
+    if (!target_.header.frame_id.empty() && target_.header.frame_id != interface_.getPlanningFrame())
     {
       try
       {
@@ -176,8 +174,12 @@ public:
       moveit_msgs::RobotTrajectory trajectory;
       std::vector<geometry_msgs::Pose> waypoints;
       waypoints.push_back(target_.pose);
-      if (interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory) < 99.9)
+      if (interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory) != 1)
+      {
+        ROS_INFO_STREAM("Collisions will occur in the"
+                        << interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory) << "of the trajectory");
         return false;
+      }
       return interface_.asyncExecute(trajectory) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     }
     else
@@ -249,18 +251,14 @@ public:
     if (target_.empty())
       return false;
     MoveitMotionBase::move();
-    for (int i = 0; i < (int)target_.size(); i++)
-    {
+    std::vector<double> final_target = target_;
+    for (long unsigned int i = 0; i < target_.size(); i++)
       if (!std::isnormal(target_[i]))
-      {
-        target_[i] = interface_.getCurrentJointValues()[i];
-      }
-    }
-    interface_.setJointValueTarget(target_);
+        final_target[i] = interface_.getCurrentJointValues()[i];
+    interface_.setJointValueTarget(final_target);
     moveit::planning_interface::MoveGroupInterface::Plan plan;
-    interface_.plan(plan);
     msg_.data = interface_.plan(plan).val;
-    return (interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+    return interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
   }
 
 private:
@@ -276,80 +274,7 @@ private:
     }
     return flag;
   }
-  std::vector<double> target_, final_target_, tolerance_joints_;
-};
-
-class VisMotion : public MoveitMotionBase
-{
-public:
-  VisMotion(XmlRpc::XmlRpcValue& motion, moveit::planning_interface::MoveGroupInterface& interface, tf2_ros::Buffer& tf)
-    : MoveitMotionBase(motion, interface), tf_(tf), has_pos_(false), has_ori_(false)
-  {
-    target_.pose.orientation.w = 1.;
-    tolerance_position_ = xmlRpcGetDouble(motion, "tolerance_position", 0.01);
-    tolerance_orientation_ = xmlRpcGetDouble(motion, "tolerance_orientation", 0.1);
-    has_pos_ = true;
-    has_ori_ = true;
-  }
-  bool moveing(geometry_msgs::TwistStamped test)
-  {
-    geometry_msgs::PoseStamped temp_;
-    target_.header.frame_id = test.header.frame_id;
-    target_.pose.position.x = test.twist.linear.x;
-    target_.pose.position.y = test.twist.linear.y;
-    target_.pose.position.z = test.twist.linear.z;
-    tf2::Quaternion quat_tf;
-    quat_tf.setRPY(test.twist.angular.x, test.twist.angular.y, test.twist.angular.z);
-    geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
-    target_.pose.orientation = quat_msg;
-    if (!target_.header.frame_id.empty())
-    {
-      std::cout << "1" << std::endl;
-      try
-      {
-        tf2::doTransform(target_.pose, final_target_.pose,
-                         tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
-        final_target_.header.frame_id = interface_.getPlanningFrame();
-      }
-      catch (tf2::TransformException& ex)
-      {
-        ROS_WARN("%s", ex.what());
-        return false;
-      }
-    }
-    if (has_pos_ && has_ori_)
-      interface_.setPoseTarget(final_target_);
-    else if (has_pos_ && !has_ori_)
-      interface_.setPositionTarget(final_target_.pose.position.x, final_target_.pose.position.y,
-                                   final_target_.pose.position.z);
-    else if (!has_pos_ && has_ori_)
-      interface_.setOrientationTarget(final_target_.pose.orientation.x, final_target_.pose.orientation.y,
-                                      final_target_.pose.orientation.z, final_target_.pose.orientation.w);
-    MoveitMotionBase::move();
-    return interface_.asyncMove() == moveit::planning_interface::MoveItErrorCode::SUCCESS;
-  }
-
-private:
-  bool isReachGoal() override
-  {
-    geometry_msgs::Pose pose = interface_.getCurrentPose().pose;
-    double roll_current, pitch_current, yaw_current, roll_goal, pitch_goal, yaw_goal;
-    quatToRPY(pose.orientation, roll_current, pitch_current, yaw_current);
-    quatToRPY(final_target_.pose.orientation, roll_goal, pitch_goal, yaw_goal);
-    // TODO: Add orientation error check
-    return (std::pow(pose.position.x - final_target_.pose.position.x, 2) +
-                    std::pow(pose.position.y - final_target_.pose.position.y, 2) +
-                    std::pow(pose.position.z - final_target_.pose.position.z, 2) <
-                tolerance_position_ &&
-            std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) +
-                    std::abs(angles::shortest_angular_distance(pitch_current, pitch_goal)) +
-                    std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) <
-                tolerance_orientation_);
-  }
-  tf2_ros::Buffer& tf_;
-  bool has_pos_, has_ori_;
-  geometry_msgs::PoseStamped target_, final_target_;
-  double tolerance_position_, tolerance_orientation_;
+  std::vector<double> target_, tolerance_joints_;
 };
 
 template <class MsgType>
@@ -423,16 +348,6 @@ private:
   bool state_;
 };
 
-class StoneNumMotion : public PublishMotion<std_msgs::String>
-{
-public:
-  StoneNumMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
-    : PublishMotion<std_msgs::String>(motion, interface)
-  {
-    msg_.data = static_cast<std::string>(motion["change"]);
-  }
-};
-
 class JointPositionMotion : public PublishMotion<std_msgs::Float64>
 {
 public:
@@ -440,24 +355,8 @@ public:
     : PublishMotion<std_msgs::Float64>(motion, interface)
   {
     ROS_ASSERT(motion.hasMember("target"));
-    ROS_ASSERT(motion.hasMember("delay"));
-    target_ = xmlRpcGetDouble(motion, "target", 0.0);
-    delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
+    msg_.data = xmlRpcGetDouble(motion, "target", 0.0);
   }
-  bool move() override
-  {
-    start_time_ = ros::Time::now();
-    msg_.data = target_;
-    return PublishMotion::move();
-  }
-  bool isFinish() override
-  {
-    return ((ros::Time::now() - start_time_).toSec() > delay_);
-  }
-
-private:
-  double target_, delay_;
-  ros::Time start_time_;
 };
 
 class GimbalMotion : public PublishMotion<rm_msgs::GimbalCmd>
@@ -522,60 +421,4 @@ private:
   double chassis_tolerance_position_, chassis_tolerance_angular_;
 };
 
-class ReversalMotion : public PublishMotion<rm_msgs::MultiDofCmd>
-{
-public:
-  ReversalMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
-    : PublishMotion<rm_msgs::MultiDofCmd>(motion, interface)
-  {
-    delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
-    if (std::string(motion["mode"]) == "POSITION")
-      msg_.mode = msg_.POSITION;
-    else
-      msg_.mode = msg_.VELOCITY;
-    if (motion.hasMember("values"))
-    {
-      ROS_ASSERT(motion["values"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      msg_.linear.x = xmlRpcGetDouble(motion["values"], 0);
-      msg_.linear.y = xmlRpcGetDouble(motion["values"], 1);
-      msg_.linear.z = xmlRpcGetDouble(motion["values"], 2);
-      msg_.angular.x = xmlRpcGetDouble(motion["values"], 3);
-      msg_.angular.y = xmlRpcGetDouble(motion["values"], 4);
-      msg_.angular.z = xmlRpcGetDouble(motion["values"], 5);
-    }
-  }
-  void setZero()
-  {
-    zero_msg_.mode = msg_.mode;
-    zero_msg_.linear.x = 0.;
-    zero_msg_.linear.y = 0.;
-    zero_msg_.linear.z = 0.;
-    zero_msg_.angular.x = 0.;
-    zero_msg_.angular.y = 0.;
-    zero_msg_.angular.z = 0.;
-  }
-  bool move() override
-  {
-    start_time_ = ros::Time::now();
-    interface_.publish(msg_);
-    if (msg_.mode == msg_.POSITION)
-    {
-      t.sleep();
-      ReversalMotion::setZero();
-      interface_.publish(zero_msg_);
-    }
-    return true;
-  }
-  bool isFinish() override
-  {
-    return ((ros::Time::now() - start_time_).toSec() > delay_);
-  }
-
-private:
-  double delay_;
-  ros::Duration t = ros::Duration(0.2);
-  ros::Time start_time_;
-  rm_msgs::MultiDofCmd zero_msg_;
-};
-
-};  // namespace engineer_middleware
+}  // namespace engineer_middleware

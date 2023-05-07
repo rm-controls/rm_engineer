@@ -46,11 +46,6 @@
 #include <controller_manager_msgs/SwitchController.h>
 #include <rm_msgs/EngineerAction.h>
 #include <rm_msgs/GpioData.h>
-#include <tf/transform_broadcaster.h>
-#include <tf/tf.h>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-#include <tf2_ros/transform_listener.h>
-#include <tf2_ros/transform_broadcaster.h>
 
 namespace engineer_middleware
 {
@@ -75,42 +70,16 @@ public:
     if (is_middleware_control_)
       chassis_interface_.run(period);
   }
-  void positionCallBack(const geometry_msgs::TwistStamped::ConstPtr& data)
-  {
-    position_ = *data;
-    transform1.setOrigin(tf::Vector3(position_.twist.linear.x, position_.twist.linear.y, position_.twist.linear.z));
-    tf2::Quaternion quat_tf;
-    quat_tf.setRPY(position_.twist.angular.x, position_.twist.angular.y, position_.twist.angular.z);
-    geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
-    transform1.setRotation(tf::Quaternion(quat_msg.x, quat_msg.y, quat_msg.z, quat_msg.w));
-    br_.sendTransform(tf::StampedTransform(transform1, ros::Time::now(), position_.header.frame_id, "target"));
-  }
-
-  void transCallBack(const geometry_msgs::TwistStamped::ConstPtr& data)
-  {
-    test_ = *data;
-    transform.setOrigin(tf::Vector3(test_.twist.linear.x, test_.twist.linear.y, test_.twist.linear.z));
-    tf2::Quaternion quat_tf;
-    quat_tf.setRPY(test_.twist.angular.x, test_.twist.angular.y, test_.twist.angular.z);
-    geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
-    transform.setRotation(tf::Quaternion(quat_msg.x, quat_msg.y, quat_msg.z, quat_msg.w));
-    br_.sendTransform(tf::StampedTransform(transform, ros::Time::now(), test_.header.frame_id, "exchanger"));
-  }
 
 private:
   ros::NodeHandle nh_;
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> as_;
   moveit::planning_interface::MoveGroupInterface arm_group_;
   ChassisInterface chassis_interface_;
-  geometry_msgs::TwistStamped position_;
-  geometry_msgs::TwistStamped test_;
-  ros::Publisher hand_pub_, joint7_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, planning_result_pub_, stone_num_pub_;
-  ros::Subscriber target_pub_, trans_pub_;
+  ros::Publisher hand_pub_, card_pub_, gimbal_pub_, gpio_pub_, planning_result_pub_;
   std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener tf_listener_;
-  tf::TransformBroadcaster br_;
-  tf::Transform transform, transform1;
   bool is_middleware_control_;
 };
 
