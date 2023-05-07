@@ -4,5 +4,6 @@ chassis:
   y:
     pid: { p: 0.0, i: 0.0, d: 0.0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
   yaw:
-    pid: { p: 0.0, i: 0.0, d: 0.0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-  yaw_start_threshold: 10
+    pid: { p: 2.5, i: 0.0, d: 0.1, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+  yaw_start_threshold: 0.05
+  max_vel: 4
