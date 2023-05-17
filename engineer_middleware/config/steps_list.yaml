@@ -480,38 +480,6 @@ steps_list:
         <<: *HOME_THREE_STONE
 
   ################### DRAG ####################
-  #  ENGINEER_DRAG_CAR0:
-  #    - step: "joint7 up"
-  #      joint7:
-  #        <<: *JOINT7_UP_NO_DELAY_POSITION
-  #    - step: "gimbal ready"
-  #      gimbal:
-  #        <<: *GROUND_POS
-  #    - step: "avoid collision"
-  #      arm:
-  #        joints: [ *JOINT1_TAKE_ONE_STONE_POSITION, *JOINT2_REVERSAL_POSITION, *JOINT3_DRAG_CAR_POSITION, *JOINT4_UP_POSITION, *JOINT5_MID_POSITION, *JOINT6_DRAG_CAR_POSITION ]
-  #        common:
-  #          <<: *QUICKLY
-  #        tolerance:
-  #          <<: *BIGGER_TOLERANCE
-  #    - step: "ready to drag car"
-  #      arm:
-  #        joints: [ *JOINT1_TAKE_ONE_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_DRAG_CAR_POSITION, *JOINT4_DRAG_CAR_POSITION, *JOINT5_DRAG_CAR_POSITION, *JOINT6_DRAG_CAR_POSITION ]
-  #        common:
-  #          <<: *QUICKLY
-  #        tolerance:
-  #          <<: *BIGGER_TOLERANCE
-  #  ENGINEER_DRAG_CAR00:
-  #    - step: "gimbal ready"
-  #      gimbal:
-  #        <<: *EXCHANGE_POS
-  #  ENGINEER_DRAG_CAR000:
-  #    - step: "gimbal ready"
-  #      gimbal:
-  #        <<: *BACK_POS
-  #    - step: "ready to drag car"
-  #      arm:
-  #        <<: *HOME_ZERO_STONE
   ENGINEER_DRAG_CAR:
     - step: "gimbal ready"
       gimbal:
@@ -2150,7 +2118,6 @@ steps_list:
       reversal:
         <<: *POSITION_PITCH_REVERSAL_PI_2
 
-  ### ljq's part
   EXCHANGE_AUTO:
     - step: "auto exchange"
       arm:
@@ -2166,20 +2133,6 @@ steps_list:
         max_planning_times: 100
         common:
           <<: *SLOWLY_LOW_TIMEOUT
-#  EXCHANGE_AUTO:
-#    - step: "auto exchange"
-#      arm:
-#        frame: exchanger
-#        position: [ -0.5, 0., 0. ]
-#        rpy: [ 0., -1.57, 0. ]
-#        xyz: [ 1.0,0.01,0.01 ]
-#        tolerance_position: 0.2
-#        tolerance_orientation: 0.2
-#        spacial_shape: BASICS
-#        point_resolution: 0.90
-#        max_planning_times: 100
-#        common:
-#          <<: *SLOWLY_LOW_TIMEOUT
   JOINT_TWO_BACK:
     - step: "JOINT_TWO_BACK"
       arm:
@@ -2197,30 +2150,3 @@ steps_list:
           <<: *SLOWLY_LOW_TIMEOUT
         tolerance:
           <<: *BIGGER_TOLERANCE
-
-
-
-  #  EXCHANGE_AUTO:
-  #    - step: "auto exchange"
-  #      arm:
-  #        frame: exchanger
-  #        position: [ 0., 0., -0.4 ]
-  #        rpy: [ 0., 3.14, 1.57 ]
-  #        tolerance_position: 0.001
-  #        tolerance_orientation: 0.005
-  #        spacial_shape: BASICS
-  #        xyz: [0.1,0.3,0.3]
-  #        point_resolution: 0.9
-  #        common:
-  #          <<: *SLOWLY
-
-  EXCHANGE_GENERATE:
-    - step: "move to wait"
-      arm:
-        frame: exchanger
-        position: [ 0., 0., -0.30 ]
-        rpy: [ 0., 0.,1.57 ]
-        tolerance_position: 0.001
-        tolerance_orientation: 0.005
-        common:
-          <<: *SLOWLY
