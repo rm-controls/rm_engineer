@@ -278,12 +278,12 @@ scenes_list:
 
   STONE:
     - id: "stone"
-      frame_id: "link6"
+      frame_id: "tools_link"
       primitive:
         type: box
         dimension: [ 0.20, 0.20, 0.20 ]
       pose:
-        position: [ 0.20, 0., -0.06 ]
+        position: [ 0., 0., 0. ]
         orientation: [ 0., 0., 0., 0. ]
       attach: true
 
