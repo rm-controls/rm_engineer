@@ -44,8 +44,11 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <rm_msgs/GimbalCmd.h>
 #include <rm_msgs/GpioData.h>
+#include <rm_msgs/MultiDofCmd.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/String.h>
 #include <engineer_middleware/chassis_interface.h>
+#include <engineer_middleware/points.h>
 
 namespace engineer_middleware
 {
@@ -106,9 +109,13 @@ public:
     interface_.setMaxAccelerationScalingFactor(0.);
     interface_.stop();
   }
-  std_msgs::Int32 getPlanningResult()
+  std_msgs::Int32 judgePlanningResult()
   {
     return msg_;
+  }
+  sensor_msgs::PointCloud2 getPointCloud2()
+  {
+    return points_.getPointCloud2();
   }
 
 protected:
@@ -116,6 +123,7 @@ protected:
   double speed_, accel_;
   int countdown_{};
   std_msgs::Int32 msg_;
+  Points points_;
 };
 
 class EndEffectorMotion : public MoveitMotionBase
@@ -151,11 +159,12 @@ public:
     if (motion.hasMember("cartesian"))
       is_cartesian_ = motion["cartesian"];
   }
+
   bool move() override
   {
     MoveitMotionBase::move();
     geometry_msgs::PoseStamped final_target;
-    if (!target_.header.frame_id.empty() && target_.header.frame_id != interface_.getPlanningFrame())
+    if (!target_.header.frame_id.empty())
     {
       try
       {
@@ -174,12 +183,8 @@ public:
       moveit_msgs::RobotTrajectory trajectory;
       std::vector<geometry_msgs::Pose> waypoints;
       waypoints.push_back(target_.pose);
-      if (interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory) != 1)
-      {
-        ROS_INFO_STREAM("Collisions will occur in the"
-                        << interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory) << "of the trajectory");
+      if (interface_.computeCartesianPath(waypoints, 0.01, 0.0, trajectory) < 99.9)
         return false;
-      }
       return interface_.asyncExecute(trajectory) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     }
     else
@@ -221,6 +226,107 @@ private:
   double tolerance_position_, tolerance_orientation_;
 };
 
+class SpaceEEMotion : public EndEffectorMotion
+{
+public:
+  SpaceEEMotion(XmlRpc::XmlRpcValue& motion, moveit::planning_interface::MoveGroupInterface& interface,
+                tf2_ros::Buffer& tf)
+    : EndEffectorMotion(motion, interface, tf), tf_(tf)
+  {
+    if (motion.hasMember("frame"))
+      target_.header.frame_id = std::string(motion["frame"]);
+    if (motion.hasMember("position"))
+    {
+      ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      target_.pose.position.x = xmlRpcGetDouble(motion["position"], 0);
+      target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1);
+      target_.pose.position.z = xmlRpcGetDouble(motion["position"], 2);
+    }
+    if (motion.hasMember("rpy"))
+    {
+      ROS_ASSERT(motion["rpy"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      tf2::Quaternion quat_tf;
+      quat_tf.setRPY(motion["rpy"][0], motion["rpy"][1], motion["rpy"][2]);
+      geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+      target_.pose.orientation = quat_msg;
+    }
+    radius_ = xmlRpcGetDouble(motion, "radius", 0.1);
+    if (motion.hasMember("xyz"))
+    {
+      x_length_ = xmlRpcGetDouble(motion["xyz"], 0);
+      y_length_ = xmlRpcGetDouble(motion["xyz"], 1);
+      z_length_ = xmlRpcGetDouble(motion["xyz"], 2);
+    }
+    if (motion.hasMember("rpy_rectify"))
+    {
+      k_x_ = xmlRpcGetDouble(motion["rpy_rectify"], 0);
+      k_theta_ = xmlRpcGetDouble(motion["rpy_rectify"], 1);
+      k_beta_ = xmlRpcGetDouble(motion["rpy_rectify"], 2);
+    }
+    point_resolution_ = xmlRpcGetDouble(motion, "point_resolution", 0.01);
+    max_planning_times_ = (int)xmlRpcGetDouble(motion, "max_planning_times", 100);
+    if (motion.hasMember("spacial_shape"))
+    {
+      points_.cleanPoints();
+      if (motion["spacial_shape"] == "SPHERE")
+        points_.setValue(Points::SPHERE, target_.pose.position.x, target_.pose.position.y, target_.pose.position.z,
+                         radius_, point_resolution_);
+      else if (motion["spacial_shape"] == "BASICS")
+        points_.setValue(Points::BASICS, target_.pose.position.x, target_.pose.position.y, target_.pose.position.z,
+                         x_length_, y_length_, z_length_, point_resolution_);
+      else
+        ROS_ERROR("NO");
+      points_.generateGeometryPoints();
+    }
+  }
+  bool move() override
+  {
+    points_.cleanPoints();
+    points_.generateGeometryPoints();
+    MoveitMotionBase::move();
+    int move_times = (int)points_.getPoints().size();
+    for (int i = 0; i < move_times && i < max_planning_times_; ++i)
+    {
+      geometry_msgs::PoseStamped final_target;
+      if (!target_.header.frame_id.empty())
+      {
+        try
+        {
+          tf2::doTransform(target_.pose, final_target.pose,
+                           tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
+          final_target.header.frame_id = interface_.getPlanningFrame();
+          exchange2base_ = tf_.lookupTransform("base_link", target_.header.frame_id, ros::Time(0));
+          double roll, pitch, yaw;
+          quatToRPY(exchange2base_.transform.rotation, roll, pitch, yaw);
+          points_.rectifyForRPY(pitch, yaw, k_x_, k_theta_, k_beta_);
+        }
+        catch (tf2::TransformException& ex)
+        {
+          ROS_WARN("%s", ex.what());
+          return false;
+        }
+      }
+      target_.pose.position.x = points_.getPoints()[i].x;
+      target_.pose.position.y = points_.getPoints()[i].y;
+      target_.pose.position.z = points_.getPoints()[i].z;
+      interface_.setPoseTarget(final_target);
+      moveit::planning_interface::MoveGroupInterface::Plan plan;
+      msg_.data = interface_.plan(plan).val;
+      if (msg_.data == 1)
+        return interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+    }
+    return false;
+  }
+
+private:
+  tf2_ros::Buffer& tf_;
+  geometry_msgs::PoseStamped target_;
+  geometry_msgs::TransformStamped exchange2base_;
+  int max_planning_times_{};
+  bool is_moved_{ false };
+  double radius_, point_resolution_, x_length_, y_length_, z_length_, k_theta_, k_beta_, k_x_;
+};
+
 class JointMotion : public MoveitMotionBase
 {
 public:
@@ -232,10 +338,9 @@ public:
       ROS_ASSERT(motion["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
       for (int i = 0; i < motion["joints"].size(); ++i)
       {
-        ROS_ASSERT(motion["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble || motion["joints"][i] == "KEEP");
         if (motion["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble)
           target_.push_back(motion["joints"][i]);
-        else if (motion["joints"][i] == "KEEP")
+        else
           target_.push_back(NAN);
       }
     }
@@ -248,17 +353,23 @@ public:
   }
   bool move() override
   {
+    final_target_.clear();
     if (target_.empty())
       return false;
     MoveitMotionBase::move();
-    std::vector<double> final_target = target_;
-    for (long unsigned int i = 0; i < target_.size(); i++)
+    for (int i = 0; i < (int)target_.size(); i++)
+    {
       if (!std::isnormal(target_[i]))
-        final_target[i] = interface_.getCurrentJointValues()[i];
-    interface_.setJointValueTarget(final_target);
+      {
+        final_target_.push_back(interface_.getCurrentJointValues()[i]);
+      }
+      else
+        final_target_.push_back(target_[i]);
+    }
+    interface_.setJointValueTarget(final_target_);
     moveit::planning_interface::MoveGroupInterface::Plan plan;
     msg_.data = interface_.plan(plan).val;
-    return interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
+    return (interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
 
 private:
@@ -267,14 +378,14 @@ private:
     std::vector<double> current = interface_.getCurrentJointValues();
     double error = 0.;
     bool flag = 1;
-    for (int i = 0; i < (int)target_.size(); ++i)
+    for (int i = 0; i < (int)final_target_.size(); ++i)
     {
-      error = std::abs(target_[i] - current[i]);
+      error = std::abs(final_target_[i] - current[i]);
       flag &= (error < tolerance_joints_[i]);
     }
     return flag;
   }
-  std::vector<double> target_, tolerance_joints_;
+  std::vector<double> target_, final_target_, tolerance_joints_;
 };
 
 template <class MsgType>
@@ -348,6 +459,16 @@ private:
   bool state_;
 };
 
+class StoneNumMotion : public PublishMotion<std_msgs::String>
+{
+public:
+  StoneNumMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
+    : PublishMotion<std_msgs::String>(motion, interface)
+  {
+    msg_.data = static_cast<std::string>(motion["change"]);
+  }
+};
+
 class JointPositionMotion : public PublishMotion<std_msgs::Float64>
 {
 public:
@@ -355,8 +476,24 @@ public:
     : PublishMotion<std_msgs::Float64>(motion, interface)
   {
     ROS_ASSERT(motion.hasMember("target"));
-    msg_.data = xmlRpcGetDouble(motion, "target", 0.0);
+    ROS_ASSERT(motion.hasMember("delay"));
+    target_ = xmlRpcGetDouble(motion, "target", 0.0);
+    delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
   }
+  bool move() override
+  {
+    start_time_ = ros::Time::now();
+    msg_.data = target_;
+    return PublishMotion::move();
+  }
+  bool isFinish() override
+  {
+    return ((ros::Time::now() - start_time_).toSec() > delay_);
+  }
+
+private:
+  double target_, delay_;
+  ros::Time start_time_;
 };
 
 class GimbalMotion : public PublishMotion<rm_msgs::GimbalCmd>
@@ -421,4 +558,60 @@ private:
   double chassis_tolerance_position_, chassis_tolerance_angular_;
 };
 
-}  // namespace engineer_middleware
+class ReversalMotion : public PublishMotion<rm_msgs::MultiDofCmd>
+{
+public:
+  ReversalMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
+    : PublishMotion<rm_msgs::MultiDofCmd>(motion, interface)
+  {
+    delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
+    if (std::string(motion["mode"]) == "POSITION")
+      msg_.mode = msg_.POSITION;
+    else
+      msg_.mode = msg_.VELOCITY;
+    if (motion.hasMember("values"))
+    {
+      ROS_ASSERT(motion["values"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      msg_.linear.x = xmlRpcGetDouble(motion["values"], 0);
+      msg_.linear.y = xmlRpcGetDouble(motion["values"], 1);
+      msg_.linear.z = xmlRpcGetDouble(motion["values"], 2);
+      msg_.angular.x = xmlRpcGetDouble(motion["values"], 3);
+      msg_.angular.y = xmlRpcGetDouble(motion["values"], 4);
+      msg_.angular.z = xmlRpcGetDouble(motion["values"], 5);
+    }
+  }
+  void setZero()
+  {
+    zero_msg_.mode = msg_.mode;
+    zero_msg_.linear.x = 0.;
+    zero_msg_.linear.y = 0.;
+    zero_msg_.linear.z = 0.;
+    zero_msg_.angular.x = 0.;
+    zero_msg_.angular.y = 0.;
+    zero_msg_.angular.z = 0.;
+  }
+  bool move() override
+  {
+    start_time_ = ros::Time::now();
+    interface_.publish(msg_);
+    if (msg_.mode == msg_.POSITION)
+    {
+      t.sleep();
+      ReversalMotion::setZero();
+      interface_.publish(zero_msg_);
+    }
+    return true;
+  }
+  bool isFinish() override
+  {
+    return ((ros::Time::now() - start_time_).toSec() > delay_);
+  }
+
+private:
+  double delay_;
+  ros::Duration t = ros::Duration(0.2);
+  ros::Time start_time_;
+  rm_msgs::MultiDofCmd zero_msg_;
+};
+
+};  // namespace engineer_middleware
