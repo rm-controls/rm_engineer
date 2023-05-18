@@ -46,7 +46,7 @@ Middleware::Middleware(ros::NodeHandle& nh)
   , arm_group_(moveit::planning_interface::MoveGroupInterface("engineer_arm"))
   , chassis_interface_(nh, tf_)
   , hand_pub_(nh.advertise<std_msgs::Float64>("/controllers/hand_controller/command", 10))
-  , joint7_pub_(nh.advertise<std_msgs::Float64>("/controllers/joint7_controller/command", 10))
+  , end_effector_pub_(nh.advertise<std_msgs::Float64>("/controllers/joint7_controller/command", 10))
   , gimbal_pub_(nh.advertise<rm_msgs::GimbalCmd>("/controllers/gimbal_controller/command", 10))
   , gpio_pub_(nh.advertise<rm_msgs::GpioData>("/controllers/gpio_controller/command", 10))
   , reversal_pub_(nh.advertise<rm_msgs::MultiDofCmd>("/controllers/multi_dof_controller/command", 10))
@@ -68,7 +68,7 @@ Middleware::Middleware(ros::NodeHandle& nh)
     {
       step_queues_.insert(
           std::make_pair(it->first, StepQueue(it->second, scenes_list, tf_, arm_group_, chassis_interface_, hand_pub_,
-                                              joint7_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, stone_num_pub_,
+                                              end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, stone_num_pub_,
                                               planning_result_pub_, point_cloud_pub_)));
     }
   }

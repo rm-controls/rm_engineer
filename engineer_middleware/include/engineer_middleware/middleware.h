@@ -81,8 +81,8 @@ private:
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> as_;
   moveit::planning_interface::MoveGroupInterface arm_group_;
   ChassisInterface chassis_interface_;
-  ros::Publisher hand_pub_, joint7_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, planning_result_pub_, stone_num_pub_,
-      point_cloud_pub_;
+  ros::Publisher hand_pub_, end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, planning_result_pub_,
+      stone_num_pub_, point_cloud_pub_;
   std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener tf_listener_;
