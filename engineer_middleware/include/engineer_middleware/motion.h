@@ -136,14 +136,14 @@ public:
     target_.pose.orientation.w = 1.;
     tolerance_position_ = xmlRpcGetDouble(motion, "tolerance_position", 0.01);
     tolerance_orientation_ = xmlRpcGetDouble(motion, "tolerance_orientation", 0.1);
-    if (motion.hasMember("frame"))
-      target_.header.frame_id = std::string(motion["frame"]);
-    if (motion.hasMember("position"))
+    ROS_ASSERT(motion.hasMember("frame"));
+    target_.header.frame_id = std::string(motion["frame"]);
+    if (motion.hasMember("xyz"))
     {
-      ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      target_.pose.position.x = xmlRpcGetDouble(motion["position"], 0);
-      target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1);
-      target_.pose.position.z = xmlRpcGetDouble(motion["position"], 2);
+      ROS_ASSERT(motion["xyz"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      target_.pose.position.x = xmlRpcGetDouble(motion["xyz"], 0);
+      target_.pose.position.y = xmlRpcGetDouble(motion["xyz"], 1);
+      target_.pose.position.z = xmlRpcGetDouble(motion["xyz"], 2);
       has_pos_ = true;
     }
     if (motion.hasMember("rpy"))
@@ -237,14 +237,14 @@ public:
                 tf2_ros::Buffer& tf)
     : EndEffectorMotion(motion, interface, tf), tf_(tf)
   {
-    if (motion.hasMember("frame"))
-      target_.header.frame_id = std::string(motion["frame"]);
-    if (motion.hasMember("position"))
+    ROS_ASSERT(motion.hasMember("frame"));
+    target_.header.frame_id = std::string(motion["frame"]);
+    if (motion.hasMember("xyz"))
     {
-      ROS_ASSERT(motion["position"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      target_.pose.position.x = xmlRpcGetDouble(motion["position"], 0);
-      target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1);
-      target_.pose.position.z = xmlRpcGetDouble(motion["position"], 2);
+      ROS_ASSERT(motion["xyz"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      target_.pose.position.x = xmlRpcGetDouble(motion["xyz"], 0);
+      target_.pose.position.y = xmlRpcGetDouble(motion["xyz"], 1);
+      target_.pose.position.z = xmlRpcGetDouble(motion["xyz"], 2);
     }
     if (motion.hasMember("rpy"))
     {
@@ -255,11 +255,12 @@ public:
       target_.pose.orientation = quat_msg;
     }
     radius_ = xmlRpcGetDouble(motion, "radius", 0.1);
-    if (motion.hasMember("xyz"))
+    if (motion.hasMember("basics_length"))
     {
-      x_length_ = xmlRpcGetDouble(motion["xyz"], 0);
-      y_length_ = xmlRpcGetDouble(motion["xyz"], 1);
-      z_length_ = xmlRpcGetDouble(motion["xyz"], 2);
+      ROS_ASSERT(motion["basics_length"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+      x_length_ = xmlRpcGetDouble(motion["basics_length"], 0);
+      y_length_ = xmlRpcGetDouble(motion["basics_length"], 1);
+      z_length_ = xmlRpcGetDouble(motion["basics_length"], 2);
     }
     if (motion.hasMember("rpy_rectify"))
     {
