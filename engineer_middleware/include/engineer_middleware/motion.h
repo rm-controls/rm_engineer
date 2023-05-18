@@ -237,23 +237,6 @@ public:
                 tf2_ros::Buffer& tf)
     : EndEffectorMotion(motion, interface, tf), tf_(tf)
   {
-    ROS_ASSERT(motion.hasMember("frame"));
-    target_.header.frame_id = std::string(motion["frame"]);
-    if (motion.hasMember("xyz"))
-    {
-      ROS_ASSERT(motion["xyz"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      target_.pose.position.x = xmlRpcGetDouble(motion["xyz"], 0);
-      target_.pose.position.y = xmlRpcGetDouble(motion["xyz"], 1);
-      target_.pose.position.z = xmlRpcGetDouble(motion["xyz"], 2);
-    }
-    if (motion.hasMember("rpy"))
-    {
-      ROS_ASSERT(motion["rpy"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      tf2::Quaternion quat_tf;
-      quat_tf.setRPY(motion["rpy"][0], motion["rpy"][1], motion["rpy"][2]);
-      geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
-      target_.pose.orientation = quat_msg;
-    }
     radius_ = xmlRpcGetDouble(motion, "radius", 0.1);
     if (motion.hasMember("basics_length"))
     {
@@ -328,7 +311,6 @@ private:
   geometry_msgs::PoseStamped target_;
   geometry_msgs::TransformStamped exchange2base_;
   int max_planning_times_{};
-  bool is_moved_{ false };
   double radius_, point_resolution_, x_length_, y_length_, z_length_, k_theta_, k_beta_, k_x_;
 };
 
