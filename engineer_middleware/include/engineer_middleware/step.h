@@ -96,7 +96,7 @@ public:
         sensor_msgs::PointCloud2 point_cloud2 = arm_motion_->getPointCloud2();
         point_cloud_pub_.publish(point_cloud2);
       }
-      std_msgs::Int32 msg = arm_motion_->judgePlanningResult();
+      std_msgs::Int32 msg = arm_motion_->getPlanningResult();
       planning_result_pub_.publish(msg);
     }
     if (hand_motion_)

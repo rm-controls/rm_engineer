@@ -109,7 +109,7 @@ public:
     interface_.setMaxAccelerationScalingFactor(0.);
     interface_.stop();
   }
-  std_msgs::Int32 judgePlanningResult()
+  std_msgs::Int32 getPlanningResult()
   {
     return msg_;
   }
@@ -325,9 +325,10 @@ public:
       ROS_ASSERT(motion["joints"].getType() == XmlRpc::XmlRpcValue::TypeArray);
       for (int i = 0; i < motion["joints"].size(); ++i)
       {
+        ROS_ASSERT(motion["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble || motion["joints"][i] == "KEEP");
         if (motion["joints"][i].getType() == XmlRpc::XmlRpcValue::TypeDouble)
           target_.push_back(motion["joints"][i]);
-        else
+        else if (motion["joints"][i] == "KEEP")
           target_.push_back(NAN);
       }
     }
