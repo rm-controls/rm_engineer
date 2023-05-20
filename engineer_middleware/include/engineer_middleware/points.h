@@ -74,7 +74,6 @@ public:
       cloud.points[i].x = points_final_[i].x;
       cloud.points[i].y = points_final_[i].y;
       cloud.points[i].z = points_final_[i].z;
-      // cloud.channels[0].values[i] = i;
     }
     sensor_msgs::convertPointCloudToPointCloud2(cloud, cloud2);
     return cloud2;

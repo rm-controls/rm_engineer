@@ -584,7 +584,7 @@ public:
     interface_.publish(msg_);
     if (msg_.mode == msg_.POSITION)
     {
-      t.sleep();
+      ros::Duration(0.2).sleep();
       ReversalMotion::setZero();
       interface_.publish(zero_msg_);
     }
@@ -597,7 +597,6 @@ public:
 
 private:
   double delay_;
-  ros::Duration t = ros::Duration(0.2);
   ros::Time start_time_;
   rm_msgs::MultiDofCmd zero_msg_;
 };
