@@ -60,7 +60,7 @@ public:
       if (step["arm"].hasMember("joints"))
         arm_motion_ = new JointMotion(step["arm"], arm_group);
       else if (step["arm"].hasMember("spacial_shape"))
-        arm_motion_ = new SpaceEEMotion(step["arm"], arm_group, tf);
+        arm_motion_ = new SpaceEeMotion(step["arm"], arm_group, tf);
       else
         arm_motion_ = new EndEffectorMotion(step["arm"], arm_group, tf);
     }

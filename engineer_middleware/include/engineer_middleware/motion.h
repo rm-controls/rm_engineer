@@ -230,10 +230,10 @@ private:
   double tolerance_position_, tolerance_orientation_;
 };
 
-class SpaceEEMotion : public EndEffectorMotion
+class SpaceEeMotion : public EndEffectorMotion
 {
 public:
-  SpaceEEMotion(XmlRpc::XmlRpcValue& motion, moveit::planning_interface::MoveGroupInterface& interface,
+  SpaceEeMotion(XmlRpc::XmlRpcValue& motion, moveit::planning_interface::MoveGroupInterface& interface,
                 tf2_ros::Buffer& tf)
     : EndEffectorMotion(motion, interface, tf), tf_(tf)
   {
@@ -263,7 +263,7 @@ public:
         points_.setValue(Points::BASICS, target_.pose.position.x, target_.pose.position.y, target_.pose.position.z,
                          x_length_, y_length_, z_length_, point_resolution_);
       else
-        ROS_ERROR("NO");
+        ROS_ERROR("NO SUCH SHAPE");
       points_.generateGeometryPoints();
     }
   }
@@ -276,6 +276,9 @@ public:
     for (int i = 0; i < move_times && i < max_planning_times_; ++i)
     {
       geometry_msgs::PoseStamped final_target;
+      target_.pose.position.x = points_.getPoints()[i].x;
+      target_.pose.position.y = points_.getPoints()[i].y;
+      target_.pose.position.z = points_.getPoints()[i].z;
       if (!target_.header.frame_id.empty())
       {
         try
@@ -294,9 +297,6 @@ public:
           return false;
         }
       }
-      target_.pose.position.x = points_.getPoints()[i].x;
-      target_.pose.position.y = points_.getPoints()[i].y;
-      target_.pose.position.z = points_.getPoints()[i].z;
       interface_.setPoseTarget(final_target);
       moveit::planning_interface::MoveGroupInterface::Plan plan;
       msg_.data = interface_.plan(plan).val;
@@ -307,11 +307,27 @@ public:
   }
 
 private:
+  bool isReachGoal() override
+  {
+    geometry_msgs::Pose pose = interface_.getCurrentPose().pose;
+    double roll_current, pitch_current, yaw_current, roll_goal, pitch_goal, yaw_goal;
+    quatToRPY(pose.orientation, roll_current, pitch_current, yaw_current);
+    quatToRPY(target_.pose.orientation, roll_goal, pitch_goal, yaw_goal);
+    return (std::pow(pose.position.x - target_.pose.position.x, 2) +
+                    std::pow(pose.position.y - target_.pose.position.y, 2) +
+                    std::pow(pose.position.z - target_.pose.position.z, 2) <
+                tolerance_position_ &&
+            std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) +
+                    std::abs(angles::shortest_angular_distance(pitch_current, pitch_goal)) +
+                    std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) <
+                tolerance_orientation_);
+  }
   tf2_ros::Buffer& tf_;
   geometry_msgs::PoseStamped target_;
   geometry_msgs::TransformStamped exchange2base_;
   int max_planning_times_{};
-  double radius_, point_resolution_, x_length_, y_length_, z_length_, k_theta_, k_beta_, k_x_;
+  double radius_, point_resolution_, x_length_, y_length_, z_length_, k_theta_, k_beta_, k_x_, tolerance_position_,
+      tolerance_orientation_;
 };
 
 class JointMotion : public MoveitMotionBase
