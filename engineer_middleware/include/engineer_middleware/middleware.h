@@ -46,6 +46,11 @@
 #include <controller_manager_msgs/SwitchController.h>
 #include <rm_msgs/EngineerAction.h>
 #include <rm_msgs/GpioData.h>
+#include <tf/transform_broadcaster.h>
+#include <tf/tf.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2_ros/transform_broadcaster.h>
 
 namespace engineer_middleware
 {
@@ -76,7 +81,8 @@ private:
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> as_;
   moveit::planning_interface::MoveGroupInterface arm_group_;
   ChassisInterface chassis_interface_;
-  ros::Publisher hand_pub_, card_pub_, gimbal_pub_, gpio_pub_, planning_result_pub_;
+  ros::Publisher hand_pub_, end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, planning_result_pub_,
+      stone_num_pub_, point_cloud_pub_;
   std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener tf_listener_;

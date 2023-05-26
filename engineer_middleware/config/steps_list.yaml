@@ -155,7 +155,7 @@ common:
     drag_car_position: &JOINT6_DRAG_CAR_POSITION
                          1.631
 
-  joint7:
+  end_effector:
     use_for_delay: &DELAY_0_1
       target: 0.008
       delay: 0.1
@@ -365,11 +365,11 @@ steps_list:
   ################### JOINT7 ####################
   JOINT7_UP:
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
   JOINT7_DOWN:
     - step: "joint7 down"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
   ################### GRIPPER ####################
   OPEN_GRIPPER:
@@ -436,7 +436,7 @@ steps_list:
       gimbal:
         <<: *SIDE_POS
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "avoid collision"
       arm:
@@ -453,7 +453,7 @@ steps_list:
       gimbal:
         <<: *SIDE_POS
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "home with one stone"
       arm:
@@ -463,7 +463,7 @@ steps_list:
       gimbal:
         <<: *SIDE_POS
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "home with two stone"
       arm:
@@ -473,7 +473,7 @@ steps_list:
       gimbal:
         <<: *SIDE_POS
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "home with three stone"
       arm:
@@ -506,7 +506,7 @@ steps_list:
         tolerance:
           <<: *BIGGER_TOLERANCE
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_POSITION
   GROUND_STONE00:
     - step: "change gripper state"
@@ -535,7 +535,7 @@ steps_list:
         tolerance:
           <<: *BIGGER_TOLERANCE
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "move joint2"
       arm:
@@ -589,16 +589,16 @@ steps_list:
       gimbal:
         <<: *ISLAND_POS
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_LESS_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_MORE_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
     - step: "move to exchange wait state"
       arm:
@@ -666,7 +666,7 @@ steps_list:
       gripper:
         <<: *OPEN_GRIPPER
     - step: "joint7 down"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
     - step: "move to exchange wait state"
       arm:
@@ -684,7 +684,7 @@ steps_list:
         tolerance:
           <<: *BIGGER_TOLERANCE
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_POSITION
     - step: "move joint6"
       arm:
@@ -719,7 +719,7 @@ steps_list:
   ###################    SMALL_ISLAND    ####################
   LF_SMALL_ISLAND0:
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "island gimbal"
       gimbal:
@@ -787,7 +787,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
     - step: "change gripper state"
       gripper:
@@ -811,7 +811,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_POSITION
     - step: "move joint1 and 3"
       arm:
@@ -855,7 +855,7 @@ steps_list:
     ###################    MID    ################
   SMALL_ISLAND:
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "arm wait"
       arm:
@@ -922,7 +922,7 @@ steps_list:
       gimbal:
         <<: *ISLAND_POS
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
     - step: "arm ready to get stone"
       arm:
@@ -951,7 +951,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_POSITION
     - step: "move joint1 and 3"
       arm:
@@ -993,7 +993,7 @@ steps_list:
     ###################    RT    ################
   RT_SMALL_ISLAND0:
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "island gimbal"
       gimbal:
@@ -1062,7 +1062,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
     - step: "change gripper state"
       gripper:
@@ -1086,7 +1086,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_POSITION
     - step: "move joint1 and 3"
       arm:
@@ -1128,7 +1128,7 @@ steps_list:
       ###################    STORE    ####################
   STORE_WHEN_ZERO_STONE0:
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "open gripper"
       gripper:
@@ -1172,7 +1172,7 @@ steps_list:
 
   STORE_WHEN_ONE_STONE0:
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "open gripper"
       gripper:
@@ -1223,7 +1223,7 @@ steps_list:
 
   STORE_WHEN_TWO_STONE0:
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "open gripper"
       gripper:
@@ -1271,7 +1271,7 @@ steps_list:
       gimbal:
         <<: *ISLAND_POS
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "avoid collision"
       arm:
@@ -1324,16 +1324,16 @@ steps_list:
       stone_num:
         change: "-1"
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_LESS_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_MORE_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
     - step: "move to exchange wait state"
       arm:
@@ -1348,7 +1348,7 @@ steps_list:
       gimbal:
         <<: *ISLAND_POS
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "avoid collision"
       arm:
@@ -1375,7 +1375,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "DELAY 0.1"
-      joint7:
+      end_effector:
         <<: *DELAY_0_1
     - step: "REVERSAL OUT"
       reversal:
@@ -1394,16 +1394,16 @@ steps_list:
       stone_num:
         change: "-1"
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_LESS_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_MORE_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
     - step: "move to exchange wait state"
       arm:
@@ -1418,7 +1418,7 @@ steps_list:
       gimbal:
         <<: *ISLAND_POS
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "avoid collision"
       arm:
@@ -1445,7 +1445,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "DELAY 0.1"
-      joint7:
+      end_effector:
         <<: *DELAY_0_1
     - step: "move joint2 to get stone"
       arm:
@@ -1471,16 +1471,16 @@ steps_list:
       stone_num:
         change: "-1"
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_LESS_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_MID_MORE_NO_DELAY_POSITION
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
     - step: "move to exchange wait state"
       arm:
@@ -1500,7 +1500,7 @@ steps_list:
       gimbal:
         <<: *ISLAND_POS
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
     - step: "arm ready to get stone"
       arm:
@@ -1529,7 +1529,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_POSITION
     - step: "move joint1 and 3"
       arm:
@@ -1572,7 +1572,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_POSITION
     - step: "change gripper state"
       gripper:
@@ -1599,7 +1599,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_POSITION
     - step: "move joint1 and 3"
       arm:
@@ -1642,7 +1642,7 @@ steps_list:
         tolerance:
           <<: *BIGGER_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_POSITION
     - step: "change gripper state"
       gripper:
@@ -1679,7 +1679,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_POSITION
     - step: "move joint1 and 3"
       arm:
@@ -1723,7 +1723,7 @@ steps_list:
       gimbal:
         <<: *ISLAND_POS
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
     - step: "arm ready to get stone"
       arm:
@@ -1752,7 +1752,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_POSITION
     - step: "move joint1 and 3"
       arm:
@@ -1798,7 +1798,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_DOWN_POSITION
     - step: "change gripper state"
       gripper:
@@ -1829,7 +1829,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "joint7"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_POSITION
     - step: "move joint1 and 3"
       arm:
@@ -1883,7 +1883,7 @@ steps_list:
         <<: *SIDE_POS
   THREE_STONE_SMALL_ISLAND:
     - step: "joint7 up"
-      joint7:
+      end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
     - step: "arm wait"
       arm:
