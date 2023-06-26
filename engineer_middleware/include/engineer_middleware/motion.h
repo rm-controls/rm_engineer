@@ -276,7 +276,6 @@ public:
     int move_times = (int)points_.getPoints().size();
     for (int i = 0; i < move_times && i < max_planning_times_; ++i)
     {
-      tf2::Quaternion original_quat_msg;
       target_.pose.position.x = points_.getPoints()[i].x;
       target_.pose.position.y = points_.getPoints()[i].y;
       target_.pose.position.z = points_.getPoints()[i].z;
