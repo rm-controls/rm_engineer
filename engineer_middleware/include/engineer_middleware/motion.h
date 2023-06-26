@@ -485,18 +485,30 @@ public:
 class JointPositionMotion : public PublishMotion<std_msgs::Float64>
 {
 public:
-  JointPositionMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
-    : PublishMotion<std_msgs::Float64>(motion, interface)
+  JointPositionMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface, tf2_ros::Buffer& tf)
+    : PublishMotion<std_msgs::Float64>(motion, interface), tf_(tf)
   {
-    ROS_ASSERT(motion.hasMember("target"));
-    ROS_ASSERT(motion.hasMember("delay"));
+    original_tf_ = std::string(motion["original_tf"]);
+    reference_tf_ = std::string(motion["reference_tf"]);
+    direction_ = std::string(motion["direction"]);
     target_ = xmlRpcGetDouble(motion, "target", 0.0);
     delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
   }
   bool move() override
   {
+    double roll, pitch, yaw;
+    geometry_msgs::TransformStamped tf;
+    tf = tf_.lookupTransform(reference_tf_, original_tf_, ros::Time(0));
+    quatToRPY(tf.transform.rotation, roll, pitch, yaw);
     start_time_ = ros::Time::now();
-    msg_.data = target_;
+    if (direction_ == "roll")
+      msg_.data = roll;
+    else if (direction_ == "pitch")
+      msg_.data = pitch;
+    else if (direction_ == "yaw")
+      msg_.data = yaw;
+    else
+      msg_.data = target_;
     return PublishMotion::move();
   }
   bool isFinish() override
@@ -507,6 +519,8 @@ public:
 private:
   double target_, delay_;
   ros::Time start_time_;
+  tf2_ros::Buffer& tf_;
+  std::string original_tf_, reference_tf_, direction_;
 };
 
 class GimbalMotion : public PublishMotion<rm_msgs::GimbalCmd>

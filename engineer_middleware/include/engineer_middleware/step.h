@@ -69,7 +69,7 @@ public:
     if (step.hasMember("hand"))
       hand_motion_ = new HandMotion(step["hand"], hand_pub);
     if (step.hasMember("end_effector"))
-      end_effector_motion_ = new JointPositionMotion(step["end_effector"], end_effector_pub);
+      end_effector_motion_ = new JointPositionMotion(step["end_effector"], end_effector_pub, tf);
     if (step.hasMember("stone_num"))
       stone_num_motion_ = new StoneNumMotion(step["stone_num"], stone_num_pub);
     if (step.hasMember("gimbal"))
