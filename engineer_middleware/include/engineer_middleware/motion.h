@@ -238,6 +238,7 @@ public:
     : EndEffectorMotion(motion, interface, tf), tf_(tf)
   {
     radius_ = xmlRpcGetDouble(motion, "radius", 0.1);
+    link7_length_ = xmlRpcGetDouble(motion, "link7_length", 0.);
     if (motion.hasMember("basics_length"))
     {
       ROS_ASSERT(motion["basics_length"].getType() == XmlRpc::XmlRpcValue::TypeArray);
@@ -290,6 +291,8 @@ public:
           double roll, pitch, yaw;
           quatToRPY(exchange2base_.transform.rotation, roll, pitch, yaw);
           points_.rectifyForRPY(pitch, yaw, k_x_, k_theta_, k_beta_);
+          if (link7_length_)
+            points_.rectifyForLink7(pitch_temp, link7_length_);
         }
         catch (tf2::TransformException& ex)
         {
@@ -327,7 +330,7 @@ private:
   geometry_msgs::TransformStamped exchange2base_;
   int max_planning_times_{};
   double radius_, point_resolution_, x_length_, y_length_, z_length_, k_theta_, k_beta_, k_x_, tolerance_position_,
-      tolerance_orientation_;
+      tolerance_orientation_, link7_length_;
 };
 
 class JointMotion : public MoveitMotionBase
