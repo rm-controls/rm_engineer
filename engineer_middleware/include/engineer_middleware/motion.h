@@ -280,19 +280,19 @@ public:
       {
         try
         {
-          double roll, pitch, yaw, roll_temp, pitch_temp, yaw_temp;
+          double roll, pitch, yaw, roll_exchange2base, pitch_exchange2base, yaw__exchange2base;
           exchange2base_ = tf_.lookupTransform("base_link", target_.header.frame_id, ros::Time(0));
-          quatToRPY(exchange2base_.transform.rotation, roll_temp, pitch_temp, yaw_temp);
+          quatToRPY(exchange2base_.transform.rotation, roll_exchange2base, pitch_exchange2base, yaw__exchange2base);
           quatToRPY(target_.pose.orientation, roll, pitch, yaw);
-          pitch -= pitch_temp;
+          pitch -= pitch_exchange2base;
           tf2::Quaternion tmp_tf_quaternion;
           tmp_tf_quaternion.setRPY(roll, pitch, yaw);
           geometry_msgs::Quaternion quat_tf = tf2::toMsg(tmp_tf_quaternion);
           target_.pose.orientation = quat_tf;
           quatToRPY(target_.pose.orientation, roll, pitch, yaw);
-          points_.rectifyForRPY(pitch_temp, yaw_temp, k_x_, k_theta_, k_beta_);
-          if (link7_length_)
-            points_.rectifyForLink7(pitch_temp, link7_length_);
+          points_.rectifyForRPY(pitch_exchange2base, yaw__exchange2base, k_x_, k_theta_, k_beta_);
+          if (link7_length_ > 0)
+            points_.rectifyForLink7(pitch_exchange2base, link7_length_);
           target_.pose.position.x = points_.getPoints()[i].x;
           target_.pose.position.y = points_.getPoints()[i].y;
           target_.pose.position.z = points_.getPoints()[i].z;
