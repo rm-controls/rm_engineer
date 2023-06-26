@@ -280,7 +280,6 @@ public:
       target_.pose.position.x = points_.getPoints()[i].x;
       target_.pose.position.y = points_.getPoints()[i].y;
       target_.pose.position.z = points_.getPoints()[i].z;
-      target_.pose.orientation = original_quat_msg;
       if (!target_.header.frame_id.empty())
       {
         try
