@@ -276,21 +276,30 @@ public:
     int move_times = (int)points_.getPoints().size();
     for (int i = 0; i < move_times && i < max_planning_times_; ++i)
     {
-      geometry_msgs::PoseStamped final_target;
+      tf2::Quaternion original_quat_msg;
       target_.pose.position.x = points_.getPoints()[i].x;
       target_.pose.position.y = points_.getPoints()[i].y;
       target_.pose.position.z = points_.getPoints()[i].z;
+      target_.pose.orientation = original_quat_msg;
       if (!target_.header.frame_id.empty())
       {
         try
         {
-          tf2::doTransform(target_.pose, final_target.pose,
-                           tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
-          final_target.header.frame_id = interface_.getPlanningFrame();
+          double roll, pitch, yaw, roll_temp, pitch_temp, yaw_temp;
           exchange2base_ = tf_.lookupTransform("base_link", target_.header.frame_id, ros::Time(0));
-          double roll, pitch, yaw;
-          quatToRPY(exchange2base_.transform.rotation, roll, pitch, yaw);
-          points_.rectifyForRPY(pitch, yaw, k_x_, k_theta_, k_beta_);
+          quatToRPY(exchange2base_.transform.rotation, roll_temp, pitch_temp, yaw_temp);
+          quatToRPY(target_.pose.orientation, roll, pitch, yaw);
+          pitch -= pitch_temp;
+          tf2::Quaternion tmp_tf_quaternion;
+          tmp_tf_quaternion.setRPY(roll, pitch, yaw);
+          geometry_msgs::Quaternion quat_tf = tf2::toMsg(tmp_tf_quaternion);
+          target_.pose.orientation = quat_tf;
+          quatToRPY(target_.pose.orientation, roll, pitch, yaw);
+
+          tf2::doTransform(target_.pose, final_target_.pose,
+                           tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
+          final_target_.header.frame_id = interface_.getPlanningFrame();
+          points_.rectifyForRPY(pitch_temp, yaw_temp, k_x_, k_theta_, k_beta_);
           if (link7_length_)
             points_.rectifyForLink7(pitch_temp, link7_length_);
         }
@@ -300,7 +309,7 @@ public:
           return false;
         }
       }
-      interface_.setPoseTarget(final_target);
+      interface_.setPoseTarget(final_target_);
       moveit::planning_interface::MoveGroupInterface::Plan plan;
       msg_.data = interface_.plan(plan).val;
       if (msg_.data == 1)
@@ -326,7 +335,7 @@ private:
                 tolerance_orientation_);
   }
   tf2_ros::Buffer& tf_;
-  geometry_msgs::PoseStamped target_;
+  geometry_msgs::PoseStamped target_, final_target_;
   geometry_msgs::TransformStamped exchange2base_;
   int max_planning_times_{};
   double radius_, point_resolution_, x_length_, y_length_, z_length_, k_theta_, k_beta_, k_x_, tolerance_position_,
