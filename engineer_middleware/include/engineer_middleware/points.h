@@ -84,7 +84,6 @@ public:
     rectify.x = abs(points_final_[0].x) * sin(theta) * k_x;
     rectify.y = abs(points_final_[0].x) * sin(beta) * k_beta;
     rectify.z = abs(points_final_[0].x) * sin(theta) * k_theta;
-    ROS_INFO_STREAM(rectify);
     for (int i = 0; i < (int)points_final_.size(); ++i)
     {
       points_final_[i].x += rectify.x;

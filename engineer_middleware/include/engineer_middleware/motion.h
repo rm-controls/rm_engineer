@@ -276,9 +276,6 @@ public:
     int move_times = (int)points_.getPoints().size();
     for (int i = 0; i < move_times && i < max_planning_times_; ++i)
     {
-      target_.pose.position.x = points_.getPoints()[i].x;
-      target_.pose.position.y = points_.getPoints()[i].y;
-      target_.pose.position.z = points_.getPoints()[i].z;
       if (!target_.header.frame_id.empty())
       {
         try
@@ -293,13 +290,15 @@ public:
           geometry_msgs::Quaternion quat_tf = tf2::toMsg(tmp_tf_quaternion);
           target_.pose.orientation = quat_tf;
           quatToRPY(target_.pose.orientation, roll, pitch, yaw);
-
-          tf2::doTransform(target_.pose, final_target_.pose,
-                           tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
-          final_target_.header.frame_id = interface_.getPlanningFrame();
           points_.rectifyForRPY(pitch_temp, yaw_temp, k_x_, k_theta_, k_beta_);
           if (link7_length_)
             points_.rectifyForLink7(pitch_temp, link7_length_);
+          target_.pose.position.x = points_.getPoints()[i].x;
+          target_.pose.position.y = points_.getPoints()[i].y;
+          target_.pose.position.z = points_.getPoints()[i].z;
+          tf2::doTransform(target_.pose, final_target_.pose,
+                           tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
+          final_target_.header.frame_id = interface_.getPlanningFrame();
         }
         catch (tf2::TransformException& ex)
         {
