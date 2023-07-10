@@ -131,11 +131,11 @@ Visualization Manager:
         base_link:
           Value: true
         camera_link:
-          Value: true
-        camera_optical_frame:
           Value: false
-        drag_link:
+        camera_optical_frame:
           Value: true
+        drag_link:
+          Value: false
         exchanger:
           Value: true
         fake_link5:
@@ -169,7 +169,7 @@ Visualization Manager:
         odom:
           Value: false
         pitch:
-          Value: true
+          Value: false
         pitch_behind_link:
           Value: false
         pitch_front_link:
@@ -260,7 +260,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.086756467819214
+      Distance: 3.905416488647461
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -276,9 +276,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.29000014066696167
+      Pitch: 0.2750001847743988
       Target Frame: base_link
-      Yaw: 3.673126697540283
+      Yaw: 4.083136081695557
     Saved: ~
 Window Geometry:
   Displays:
@@ -296,5 +296,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1291
-  X: 454
-  Y: 27
+  X: -240
+  Y: 154

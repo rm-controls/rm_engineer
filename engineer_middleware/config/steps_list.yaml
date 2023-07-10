@@ -139,6 +139,8 @@ common:
                          0.011
     drag_car_position: &JOINT5_DRAG_CAR_POSITION
                          0.4977
+    home_position: &JOINT5_HOME_POSITION
+                      -1.53
   joint6:
     up_position: &JOINT6_UP_POSITION
                    0.0127
@@ -180,6 +182,11 @@ common:
     down_position_no_delay: &JOINT7_DOWN_NO_DELAY_POSITION
       target: 1.67
       delay: 0.05
+    auto_exchange_position: &JOINT7_AUTO_EXCHANGE_POSITION
+      original_tf: link4
+      reference_tf: base_link
+      direction: pitch
+      delay: 0.05
   gripper:
     open_gripper: &OPEN_GRIPPER
       state: false
@@ -196,37 +203,37 @@ common:
         change: "+1"
   arm:
     home_zero_stone: &HOME_ZERO_STONE
-      joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_UP_POSITION, *JOINT5_LEFT_POSITION, *JOINT6_HOLD_STONE_POSITION ]
+      joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_REVERSAL_POSITION, *JOINT3_LF_TAKE_POSITION, *JOINT4_UP_POSITION, *JOINT5_MID_POSITION, *JOINT6_HOLD_STONE_POSITION ]
       common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
     home_zero_stone_and_no_stone_in_hand: &HOME_ZERO_STONE_WITH_NO_STONE_IN_HAND
-      joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_UP_POSITION, *JOINT5_LEFT_POSITION, *JOINT6_LITTLE_BACK_POSITION ]
+      joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_UP_POSITION, *JOINT5_HOME_POSITION, *JOINT6_LITTLE_BACK_POSITION ]
       common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
     home_one_stone: &HOME_ONE_STONE
-      joints: [ *JOINT1_ONE_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_HAS_STONE_POSITION, *JOINT5_LEFT_POSITION, *JOINT6_HOLD_STONE_POSITION ]
+      joints: [ *JOINT1_ONE_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_HAS_STONE_POSITION, *JOINT5_HOME_POSITION, *JOINT6_HOLD_STONE_POSITION ]
       common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
     home_two_stone: &HOME_TWO_STONE
-      joints: [ *JOINT1_TWO_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_HAS_STONE_POSITION, *JOINT5_LEFT_POSITION, *JOINT6_HOLD_STONE_POSITION ]
+      joints: [ *JOINT1_TWO_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_HAS_STONE_POSITION, *JOINT5_HOME_POSITION, *JOINT6_HOLD_STONE_POSITION ]
       common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
     home_three_stone: &HOME_THREE_STONE
-      joints: [ *JOINT1_THREE_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_HAS_STONE_POSITION, *JOINT5_LEFT_POSITION, *JOINT6_HOLD_STONE_POSITION ]
+      joints: [ *JOINT1_THREE_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_HAS_STONE_POSITION, *JOINT5_HOME_POSITION, *JOINT6_HOLD_STONE_POSITION ]
       common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
     pick_wait: &PICK_WAIT
-      joints: [ *JOINT1_UP_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_UP_POSITION, *JOINT5_LEFT_POSITION, *JOINT6_HOLD_STONE_POSITION ]
+      joints: [ *JOINT1_UP_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_UP_POSITION, *JOINT5_HOME_POSITION, *JOINT6_HOLD_STONE_POSITION ]
       common:
         <<: *QUICKLY
       tolerance:
@@ -371,6 +378,10 @@ steps_list:
     - step: "joint7 down"
       end_effector:
         <<: *JOINT7_DOWN_NO_DELAY_POSITION
+  JOINT7_AUTO_EXCHANGE:
+    - step: "joint7 auto exchange"
+      end_effector:
+        <<: *JOINT7_AUTO_EXCHANGE_POSITION
   ################### GRIPPER ####################
   OPEN_GRIPPER:
     - step: "open gripper"
@@ -438,13 +449,6 @@ steps_list:
     - step: "joint7 up"
       end_effector:
         <<: *JOINT7_UP_NO_DELAY_POSITION
-    - step: "avoid collision"
-      arm:
-        joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_RECENTLY_POSITION, *JOINT3_MID_POSITION, *JOINT4_UP_POSITION, *JOINT5_LEFT_POSITION, *JOINT6_HOLD_STONE_POSITION ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
     - step: "home with no stone"
       arm:
         <<: *HOME_ZERO_STONE
