@@ -58,7 +58,7 @@ common:
   joint2:
     mechanical:
       back_position: &JOINT2_BACK_POSITION
-                       0.05
+                       0.0001
       furthest_position: &JOINT2_FURTHEST_POSITION
                            0.40045
     store:
@@ -95,7 +95,7 @@ common:
   joint4:
     mechanical:
       up_position: &JOINT4_UP_POSITION
-                     0.1
+                     0.000001
       down_position: &JOINT4_DOWN_POSITION
                        1.07
 
@@ -322,6 +322,16 @@ common:
 
 
 steps_list:
+  ###############   GRIPPER   ###############
+  CLOSE_GRIPPER:
+    - step: "close gripper"
+      gripper:
+        <<: *CLOSE_GRIPPER
+
+  OPEN_GRIPPER:
+    - step: "open  gripper"
+      gripper:
+        <<: *OPEN_GRIPPER
   ###############   HOME   ###############
 
   HOME_ZERO_STONE:
@@ -741,7 +751,7 @@ steps_list:
         <<: *JOINT7_UP_POSITION
     - step: "exchange wait"
       arm:
-        joints: [ *JOINT1_ONE_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_LF_POSITION, *JOINT4_UP_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION ]
+        joints: [ *JOINT1_TWO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_LF_POSITION, *JOINT4_UP_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION ]
         common:
           <<: *NORMALLY
         tolerance:
