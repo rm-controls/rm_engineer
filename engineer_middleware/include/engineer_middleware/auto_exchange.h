@@ -51,18 +51,30 @@ class JointInfo
 public:
   JointInfo(XmlRpc::XmlRpcValue& joint)
   {
+    //      joint1:
+    //        offset: 0.01
+    //        range: [0.,1.]
+    //        near_tolerance: 0.03
+    offset_ = xmlRpcGetDouble(joint, "offset", 0.);
+    near_tolerance_ = xmlRpcGetDouble(joint, "near_tolerance", 0.05);
+    ROS_ASSERT(joint["range"].getType() == XmlRpc::XmlRpcValue::TypeArray);
+    min_position_ = xmlRpcGetDouble(joint["range"], 0);
+    max_position_ = xmlRpcGetDouble(joint["range"], 1);
   }
   bool judgeJointPosition()
   {
-    return (abs(current_position - offset - min_position) <= near_tolerance_ ||
-            abs(max_position + offset - current_position) <= near_tolerance_) ?
+    return (abs(current_position_ - offset_ - min_position_) <= near_tolerance_ ||
+            abs(max_position_ + offset_ - current_position_) <= near_tolerance_) ?
                true :
                false;
   }
+  int judgeMoveDirect()
+  {
+    return ((current_position_ - offset_) >= ((max_position_ - min_position_) / 2)) ? 1 : -1;
+  }
 
 private:
-  int move_direct;
-  double offset, max_position, min_position, current_position, max_vel, near_tolerance_;
+  double offset_, max_position_, min_position_, current_position_, max_vel_, near_tolerance_;
 };
 
 class ProgressBase
