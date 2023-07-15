@@ -278,7 +278,7 @@ private:
     servo_errors_[4] = pitch;
     servo_errors_[5] = yaw;
   }
-  void computeServoMoveScale(rm_common::JointPositionBinaryCommandSender* joint7_command_sender)
+  void computeServoMoveScale()
   {
     computeServoMoveError();
     switch (process_)
@@ -305,7 +305,7 @@ private:
       break;
       case PITCH:
       {
-        joint7_command_sender->getMsg()->data = servo_errors_[4];
+        joint7_msg_ = servo_errors_[4];
       }
       break;
       case PUSH:
@@ -340,8 +340,12 @@ private:
     //        else if (arrived_joint_num == move_joint_num)
     //            nextProcess();
   }
+  double getJoint7Msg()
+  {
+    return joint7_msg_;
+  }
   std_msgs::Bool enter_servo_move_{};
-  double link7_length_{};
+  double link7_length_{}, joint7_msg_{};
   ros::Publisher exchanger_tf_update_pub_;
   std::vector<double> xyz_offset_{}, servo_p_{}, servo_errors_{}, servo_scales_{}, servo_error_tolerance_{};
 };
