@@ -164,9 +164,9 @@ common:
 
   gripper:
     open_gripper: &OPEN_GRIPPER
-      state: false
-    close_gripper: &CLOSE_GRIPPER
       state: true
+    close_gripper: &CLOSE_GRIPPER
+      state: false
 
   gimbal:
     back_pos: &BACK_POS
