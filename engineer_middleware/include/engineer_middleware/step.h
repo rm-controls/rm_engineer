@@ -150,6 +150,8 @@ public:
       success &= chassis_motion_->isFinish();
     if (gimbal_motion_)
       success &= gimbal_motion_->isFinish();
+    if (reversal_motion_)
+      success &= reversal_motion_->isFinish();
     return success;
   }
   bool checkTimeout(ros::Duration period)
