@@ -136,8 +136,10 @@ public:
     quatToRPY(goal_.pose.orientation, roll, pitch, yaw_goal);
     error_yaw_ = angles::shortest_angular_distance(yaw_current, yaw_goal);
     geometry_msgs::Twist cmd_vel{};
-    cmd_vel.linear.x = pid_x_.computeCommand(error.x, period) <= max_vel_ ? pid_x_.computeCommand(error.x, period) : 0;
-    cmd_vel.linear.y = pid_y_.computeCommand(error.y, period) <= max_vel_ ? pid_y_.computeCommand(error.y, period) : 0;
+    cmd_vel.linear.x =
+        abs(pid_x_.computeCommand(error.x, period)) <= max_vel_ ? pid_x_.computeCommand(error.x, period) : 0;
+    cmd_vel.linear.y =
+        abs(pid_y_.computeCommand(error.y, period)) <= max_vel_ ? pid_y_.computeCommand(error.y, period) : 0;
     cmd_vel.angular.z = abs(pid_yaw_.computeCommand(error_yaw_, period)) >= yaw_start_threshold_ ?
                             pid_yaw_.computeCommand(error_yaw_, period) :
                             0;
