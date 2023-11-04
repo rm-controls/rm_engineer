@@ -6,10 +6,11 @@ Panels:
       Expanded:
         - /MotionPlanning1
         - /MotionPlanning1/Planning Metrics1
+        - /MotionPlanning1/Planned Path1
         - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.5
-    Tree Height: 357
+    Tree Height: 315
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -87,7 +88,7 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          fake_link5:
+          drag_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -141,6 +142,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          mimic_drag_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           pitch:
             Alpha: 1
             Show Axes: false
@@ -176,6 +181,10 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+          tools_link6:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           yaw:
             Alpha: 1
             Show Axes: false
@@ -185,7 +194,7 @@ Visualization Manager:
         Robot Alpha: 0.5
         Robot Color: 150; 50; 150
         Show Robot Collision: false
-        Show Robot Visual: false
+        Show Robot Visual: true
         Show Trail: false
         State Display Time: 0.05 s
         Trail Step Size: 1
@@ -241,7 +250,7 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          fake_link5:
+          drag_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -295,6 +304,10 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          mimic_drag_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           pitch:
             Alpha: 1
             Show Axes: false
@@ -330,6 +343,10 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+          tools_link6:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           yaw:
             Alpha: 1
             Show Axes: false
@@ -341,62 +358,12 @@ Visualization Manager:
       Value: true
       Velocity_Scaling_Factor: 0.1
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
+      Filter (blacklist): ""
+      Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        base_link:
-          Value: true
-        camera_link:
-          Value: false
-        camera_optical_frame:
-          Value: true
-        exchanger:
-          Value: true
-        fake_link5:
-          Value: false
-        gimbal_base:
-          Value: false
-        left_back_wheel:
-          Value: false
-        left_front_wheel:
-          Value: false
-        link1:
-          Value: true
-        link2:
-          Value: true
-        link3:
-          Value: true
-        link4:
-          Value: true
-        link5:
-          Value: true
-        link6:
-          Value: true
-        link7:
-          Value: true
-        map:
-          Value: true
-        odom:
-          Value: true
-        pitch:
-          Value: false
-        pitch_behind_link:
-          Value: false
-        pitch_front_link:
-          Value: false
-        right_back_wheel:
-          Value: false
-        right_front_wheel:
-          Value: false
-        roll_left_link:
-          Value: false
-        roll_right_link:
-          Value: false
-        tools_link:
-          Value: true
-        yaw:
-          Value: false
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
@@ -404,47 +371,9 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          exchanger:
-            {}
-          odom:
-            base_link:
-              left_back_wheel:
-                {}
-              left_front_wheel:
-                {}
-              link1:
-                gimbal_base:
-                  yaw:
-                    pitch:
-                      camera_link:
-                        {}
-                      camera_optical_frame:
-                        {}
-                link2:
-                  link3:
-                    link4:
-                      link5:
-                        fake_link5:
-                          {}
-                        link6:
-                          link7:
-                            tools_link:
-                              {}
-              pitch_behind_link:
-                {}
-              pitch_front_link:
-                {}
-              right_back_wheel:
-                {}
-              right_front_wheel:
-                {}
-              roll_left_link:
-                {}
-              roll_right_link:
-                {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -461,7 +390,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 4.128435134887695
+      Distance: 1.5691611766815186
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -469,33 +398,33 @@ Visualization Manager:
         Value: false
       Field of View: 0.75
       Focal Point:
-        X: -0.17658083140850067
-        Y: 0.4902980625629425
-        Z: 0.38593053817749023
+        X: 0.2072981297969818
+        Y: -0.0745711624622345
+        Z: 0.24762113392353058
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3947972059249878
+      Pitch: 0.49479714035987854
       Target Frame: base_link
-      Yaw: 1.5382111072540283
+      Yaw: 5.426367282867432
     Saved: ~
 Window Geometry:
   Displays:
-    collapsed: true
+    collapsed: false
   Height: 1016
   Help:
     collapsed: false
-  Hide Left Dock: true
+  Hide Left Dock: false
   Hide Right Dock: false
   MotionPlanning:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001f30000039efc0200000007fb000000100044006900730070006c006100790073000000003d0000039e000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a00560069006500770073000000010c000000a4000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000001600000016fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006700000001ab000002300000017d00ffffff000007320000039e00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000001f30000039efc0200000007fb000000100044006900730070006c006100790073010000003d000001cc000000c900fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a00560069006500770073000000010c000000a4000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000001600000016fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000020f000001cc0000017d00ffffff000004880000039e00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1842
-  X: 78
-  Y: 27
+  Width: 1665
+  X: 465
+  Y: 245
