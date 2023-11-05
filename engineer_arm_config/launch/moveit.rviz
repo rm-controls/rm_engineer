@@ -213,7 +213,7 @@ Visualization Manager:
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: engineer_arm
+        Planning Group: ""
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
@@ -390,7 +390,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.5691611766815186
+      Distance: 0.9410187602043152
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -398,17 +398,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.75
       Focal Point:
-        X: 0.2072981297969818
-        Y: -0.0745711624622345
-        Z: 0.24762113392353058
+        X: 0.3315882384777069
+        Y: 0.12195970118045807
+        Z: 0.27018725872039795
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.49479714035987854
+      Pitch: 0.4797971844673157
       Target Frame: base_link
-      Yaw: 5.426367282867432
+      Yaw: 5.201375961303711
     Saved: ~
 Window Geometry:
   Displays:
@@ -426,5 +426,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1665
-  X: 465
-  Y: 245
+  X: 575
+  Y: 235
