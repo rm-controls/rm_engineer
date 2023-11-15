@@ -18,6 +18,7 @@
                 controllers/joint4_calibration_controller
                 controllers/joint5_calibration_controller
                 controllers/joint6_calibration_controller
+                controllers/joint7_calibration_controller
                 controllers/arm_trajectory_controller
                 controllers/chassis_controller
                 controllers/gpio_controller

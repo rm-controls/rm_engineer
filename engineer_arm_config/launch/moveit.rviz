@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /MotionPlanning1
+        - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planning Metrics1
         - /MotionPlanning1/Planned Path1
         - /TF1
@@ -213,7 +214,7 @@ Visualization Manager:
         Goal State Color: 250; 128; 0
         Interactive Marker Size: 0
         Joint Violation Color: 255; 0; 255
-        Planning Group: ""
+        Planning Group: engineer_arm
         Query Goal State: true
         Query Start State: false
         Show Workspace: false
@@ -390,7 +391,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.9410187602043152
+      Distance: 0.8833990097045898
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -398,17 +399,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.75
       Focal Point:
-        X: 0.3315882384777069
-        Y: 0.12195970118045807
-        Z: 0.27018725872039795
+        X: 0.7602222561836243
+        Y: -0.15494105219841003
+        Z: 0.9399657249450684
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4797971844673157
+      Pitch: 0.5947970747947693
       Target Frame: base_link
-      Yaw: 5.201375961303711
+      Yaw: 1.4263750314712524
     Saved: ~
 Window Geometry:
   Displays:
@@ -426,5 +427,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1665
-  X: 575
-  Y: 235
+  X: 757
+  Y: 84

@@ -48,7 +48,7 @@ common:
                      0.43
     home:
       zero_stone_position: &JOINT1_ZERO_STONE_POSITION
-                             0.001
+                             0.08
       one_stone_position: &JOINT1_ONE_STONE_POSITION
                             0.08
       two_stone_position: &JOINT1_TWO_STONE_POSITION
@@ -132,7 +132,7 @@ common:
       right_position: &JOINT5_RT_POSITION
                         -1.54
       mid_position: &JOINT5_MID_POSITION
-                      0.01
+                      -1.538
       left_position: &JOINT5_LF_POSITION
                        1.25
 
@@ -246,7 +246,7 @@ common:
         <<: *NORMAL_TOLERANCE
 
     home: &HOME
-      joints: [ "VARIABLE", *JOINT2_BACK_POSITION, *JOINT3_MID_POSITION, *JOINT4_UP_POSITION, *JOINT5_RT_POSITION, *JOINT6_UP_POSITION ]
+      joints: [ "VARIABLE", *JOINT2_BACK_POSITION, *JOINT3_LF_POSITION, *JOINT4_UP_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION ]
       common:
         <<: *QUICKLY
       tolerance:
