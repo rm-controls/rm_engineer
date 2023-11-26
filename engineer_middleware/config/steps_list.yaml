@@ -31,9 +31,9 @@ common:
 
   tolerance:
     small_tolerance: &SMALL_TOLERANCE
-      tolerance_joints: [ 0.005, 0.008, 0.01, 0.1, 0.1, 0.1 ]
+      tolerance_joints: [ 0.005, 0.008, 0.015, 0.1, 0.1, 0.1 ]
     normal_tolerance: &NORMAL_TOLERANCE
-      tolerance_joints: [ 0.005, 0.010, 0.01, 0.2, 0.15, 0.15 ]
+      tolerance_joints: [ 0.01, 0.010, 0.015, 0.3, 0.2, 0.15, 0.1 ]
     bigger_tolerance: &BIGGER_TOLERANCE
       tolerance_joints: [ 0.005, 0.010, 0.01, 0.3, 0.2, 0.2 ]
     max_tolerance: &MAX_TOLERANCE
@@ -248,9 +248,9 @@ common:
     home: &HOME
       joints: [ "VARIABLE", *JOINT2_BACK_POSITION, *JOINT3_LF_POSITION, *JOINT4_UP_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION ]
       common:
-        <<: *QUICKLY
+        <<: *NORMALLY
       tolerance:
-        <<: *SMALL_TOLERANCE
+        <<: *NORMAL_TOLERANCE
 
 
     get_ore:
@@ -1426,5 +1426,39 @@ steps_list:
         joints: [ *JOINT1_UP_POSITION, *JOINT2_BACK_POSITION, *JOINT3_MID_POSITION, *JOINT4_UP_POSITION, *JOINT5_RT_POSITION, *JOINT6_BLOCK_DART_POSITION ]
         common:
           <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+
+  HOME:
+    - step: "home test"
+      arm:
+        joints: [ 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+
+  HOME2:
+    - step: "home2"
+      arm:
+        joints: [ 0.3, 0.2, 0.3, 0.01, 0.31, 0.31, 2.31 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+
+  TEST1:
+    - step: "home test"
+      arm:
+        joints: [ 0.1, 0.1, 0.01, 0.01, 0.01, 0.01, 0.01 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "home2"
+      arm:
+        joints: [ 0.3, 0.2, 0.3, 0.01, 0.31, 0.31, 2.31 ]
+        common:
+          <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE

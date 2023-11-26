@@ -435,7 +435,6 @@ public:
       if (!std::isnormal(target_[i]))
       {
         final_target_.push_back(interface_.getCurrentJointValues()[i]);
-        ROS_INFO_STREAM(target_[i]);
       }
       else
       {
