@@ -9,6 +9,8 @@
 #include <rm_msgs/ExchangerMsg.h>
 #include <control_toolbox/pid.h>
 #include <angles/angles.h>
+#include <geometry_msgs/Twist.h>
+#include <std_msgs/Bool.h>
 
 namespace auto_exchange
 {
