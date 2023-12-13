@@ -17,7 +17,7 @@ namespace auto_exchange
 class JointInfo
 {
 public:
-  JointInfo(XmlRpc::XmlRpcValue& joint)
+  explicit JointInfo(XmlRpc::XmlRpcValue& joint)
   {
     offset_ = xmlRpcGetDouble(joint, "offset", 0.);
     max_scale_ = xmlRpcGetDouble(joint, "max_scale", 1.0);
@@ -25,9 +25,10 @@ public:
     ROS_ASSERT(joint["range"].getType() == XmlRpc::XmlRpcValue::TypeArray);
     min_position_ = xmlRpcGetDouble(joint["range"], 0);
     max_position_ = xmlRpcGetDouble(joint["range"], 1);
+    current_position_ = 0;
     move_direct_ = -1;
   }
-  bool judgeJointLimit()
+  bool judgeJointLimit() const
   {
     return abs(current_position_ - offset_ - min_position_) <= near_tolerance_ ||
            abs(max_position_ + offset_ - current_position_) <= near_tolerance_;
@@ -49,7 +50,7 @@ class SingleDirectionMove
 {
 public:
   std::string name;
-  double tolerance, start_vel, offset_refer_exchanger, max_vel, error, pid_value;
+  double tolerance{}, start_vel{}, offset_refer_exchanger{}, max_vel{}, error{}, pid_value{};
   control_toolbox::Pid pid;
   void init(XmlRpc::XmlRpcValue& config, std::string config_name, ros::NodeHandle& nh)
   {
@@ -62,7 +63,7 @@ public:
     ros::NodeHandle pid_config = ros::NodeHandle(nh, name);
     pid.init(ros::NodeHandle(pid_config, "pid"));
   }
-  bool isFinish()
+  bool isFinish() const
   {
     return abs(error) <= tolerance;
   }
