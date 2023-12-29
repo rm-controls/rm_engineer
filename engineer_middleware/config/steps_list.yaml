@@ -607,7 +607,7 @@ steps_list:
         xyz: [ -0.4, 0., -0.25 ]
         rpy: [ 0., 0., 0. ]
         rpy_rectify: [ 0.01,0.1,0.03 ]
-        drift_dimensions: [ true, true, true, true, false, true ]
+        drift_dimensions: [ true, true, true, true, true, true ]
         tolerance_position: 0.1
         tolerance_orientation: 0.01
         spacial_shape: SPHERE
@@ -617,13 +617,29 @@ steps_list:
         common:
           <<: *QUICKLY
 
-  EXCHANGE_SPHERE:
+  EXCHANGE_DOWN:
+    - step: "test new exchange"
+      arm:
+        frame: exchanger
+        is_refer_planning_frame: true
+        xyz: [ -0.23, 0., -0.12 ]
+        rpy: [ 0., -1.5707963, 0. ]
+        drift_dimensions: [ true, true, true, true, true, true ]
+        tolerance_position: 0.05
+        tolerance_orientation: 0.05
+        spacial_shape: SPHERE
+        radius: 0.5
+        point_resolution: 0.5
+        max_planning_times: 100
+        common:
+          <<: *NORMALLY
+  EXCHANGE_STRAIGHT:
     - step: "test new exchange"
       arm:
         frame: exchanger
         is_refer_planning_frame: true
         xyz: [ -0.3, 0., 0. ]
-        rpy: [ 0., 0., 0. ]
+        rpy: [ 0., 3.1415926, 0. ]
         drift_dimensions: [ true, true, true, true, false, true ]
         tolerance_position: 0.05
         tolerance_orientation: 0.05
@@ -633,40 +649,24 @@ steps_list:
         max_planning_times: 100
         common:
           <<: *NORMALLY
-    - step: "test joint7"
-      end_effector:
-        original_tf: base_link
-        reference_tf: exchanger
-        direction: pitch
-    - step: "test new exchange"
+  WAIT:
+    - step: "move to exchange wait state"
       arm:
-        frame: exchanger
-        is_refer_planning_frame: false
-        xyz: [ -0.2, 0., -0.18 ]
-        rpy: [ 0., 0., 0. ]
-        drift_dimensions: [ true, true, true, true, false, true ]
-        tolerance_position: 0.01
-        tolerance_orientation: 0.01
-        spacial_shape: BASICS
-        basics_length: [ 0.1, 0.1, 0.1 ]
-        point_resolution: 0.6
-        max_planning_times: 50
-        common:
-          <<: *NORMALLY
-  TEST1:
-    - step: "a"
-      reversal:
-        <<: *VELOCITY_Z_IN
-  TEST2:
-    - step: "a"
-      reversal:
-        <<: *VELOCITY_Z_IN_QUICKLY
+        <<: *EXCHANGE_POSITION
 
-  TEST3:
-    - step: "a"
-      reversal:
-        <<: *VELOCITY_Z_OUT
-  TEST4:
-    - step: "a"
-      reversal:
-        <<: *VELOCITY_STOP
+#    - step: "test new exchange"
+#      arm:
+#        frame: exchanger
+#        is_refer_planning_frame: false
+#        xyz: [ -0.2, 0., -0.18 ]
+#        rpy: [ 0., 3.141592, 0. ]
+#        drift_dimensions: [ true, true, true, true, false, true ]
+#        tolerance_position: 0.01
+#        tolerance_orientation: 0.01
+#        spacial_shape: BASICS
+#        basics_length: [ 0.1, 0.1, 0.1 ]
+#        point_resolution: 0.6
+#        max_planning_times: 50
+#        common:
+#          <<: *NORMALLY
+
