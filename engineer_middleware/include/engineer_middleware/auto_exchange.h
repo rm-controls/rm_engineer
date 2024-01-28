@@ -70,13 +70,13 @@ public:
   double computerVel(ros::Duration dt)
   {
     double vel = start_vel + abs(pid.computeCommand(error, dt));
-    int direction = error / abs(error);
+    int direction = (error > 0) ? 1 : -1;
     return abs(vel) >= max_vel ? direction * max_vel : direction * vel;
   }
   void getPidValue(ros::Duration dt)
   {
     double vel = start_vel + abs(pid.computeCommand(error, dt));
-    int direction = error / abs(error);
+    int direction = (error > 0) ? 1 : -1;
     pid_value = abs(vel) >= max_vel ? direction * max_vel : direction * vel;
   }
 };
@@ -117,19 +117,19 @@ public:
     }
   }
   virtual void printProcess() = 0;
-  bool getFinishFlag()
+  bool getFinishFlag() const
   {
     return is_finish_;
   }
-  bool getEnterFlag()
+  bool getEnterFlag() const
   {
     return enter_flag_;
   }
-  bool getTimeOutFlag()
+  bool getTimeOutFlag() const
   {
     return is_time_out_;
   }
-  bool getProcess()
+  bool getProcess() const
   {
     return process_;
   }
@@ -341,7 +341,7 @@ public:
   {
     ProgressBase::init();
     process_ = SET_GOAL;
-    re_adjust_ = false;
+    re_adjusted_ = false;
     initComputerValue();
   }
   void stateMachine() override
@@ -360,7 +360,7 @@ public:
         chassis_vel_cmd_.linear.y = 0.;
         chassis_vel_cmd_.angular.z = 0.;
         if (x_.isFinish())
-          process_ = re_adjust_ ? FINISH : CHASSIS_Y;
+          process_ = re_adjusted_ ? FINISH : CHASSIS_Y;
       }
       break;
       case CHASSIS_Y:
@@ -380,14 +380,14 @@ public:
         if (yaw_.isFinish())
         {
           process_ = SET_GOAL;
-          re_adjust_ = true;
+          re_adjusted_ = true;
         }
       }
       break;
       case FINISH:
       {
         is_finish_ = true;
-        re_adjust_ = false;
+        re_adjusted_ = false;
         initComputerValue();
         ROS_INFO_STREAM("PRE ADJUST FINISH");
       }
@@ -455,7 +455,7 @@ private:
     tf2::doTransform(chassis_target_, chassis_target_, tf_buffer_.lookupTransform("map", "base_link", ros::Time(0)));
   }
 
-  bool re_adjust_{ false };
+  bool re_adjusted_{ false };
   ros::Time last_time_;
   std::string chassis_command_source_frame_{ "base_link" };
   geometry_msgs::Twist chassis_vel_cmd_{};
@@ -515,7 +515,7 @@ public:
     initComputerValue();
     joint7_msg_ = 0.;
   }
-  double getJoint7Msg()
+  double getJoint7Msg() const
   {
     return joint7_msg_;
   }
@@ -737,11 +737,11 @@ public:
   {
     return motion_name_;
   }
-  bool getIsMotionFinish()
+  bool getIsMotionFinish() const
   {
     return is_motion_finish_;
   }
-  bool getIsMotionStart()
+  bool getIsMotionStart() const
   {
     return is_motion_start_;
   }
@@ -783,9 +783,9 @@ private:
   }
   void initComputerValue()
   {
-    for (int i = 0; i < (int)servo_scales_.size(); ++i)
+    for (double & servo_scale : servo_scales_)
     {
-      servo_scales_[i] = 0.;
+      servo_scale = 0.;
     }
     move_gather_[0] = x_;
     move_gather_[1] = y_;
@@ -918,7 +918,7 @@ public:
     ros::NodeHandle nh_auto_servo_move(nh, "auto_servo_move");
     ros::NodeHandle nh_union_move(nh, "union_move");
     find_ = new Find(auto_exchange["auto_find"], tf_buffer, nh_auto_find);
-    pre_adjust_ = new ProAdjust(auto_exchange["auto_pre_adjust"], tf_buffer, nh_auto_pre_adjust);
+    pre_adjusted_ = new ProAdjust(auto_exchange["auto_pre_adjust"], tf_buffer, nh_auto_pre_adjust);
     auto_servo_move_ = new AutoServoMove(auto_exchange["auto_servo_move"], tf_buffer, nh_auto_servo_move);
     union_move_ = new UnionMove(auto_exchange["union_move"], tf_buffer, nh_union_move);
     exchanger_tf_update_pub_ = nh_.advertise<std_msgs::Bool>("/is_update_exchanger", 1);
@@ -928,14 +928,14 @@ public:
     ProgressBase::init();
     process_ = FIND;
     find_->init();
-    pre_adjust_->init();
+    pre_adjusted_->init();
     union_move_->init();
     exchangerTfUpdate(true);
   }
 
 public:
   Find* find_{};
-  ProAdjust* pre_adjust_{};
+  ProAdjust* pre_adjusted_{};
   AutoServoMove* auto_servo_move_{};
   UnionMove* union_move_{};
 
@@ -971,11 +971,11 @@ private:
       case PRE_ADJUST:
       {
         exchangerTfUpdate(true);
-        pre_adjust_->run();
-        if (pre_adjust_->getFinishFlag())
+        pre_adjusted_->run();
+        if (pre_adjusted_->getFinishFlag())
         {
           process_ = MOVE;
-          pre_adjust_->init();
+          pre_adjusted_->init();
         }
       }
       break;
