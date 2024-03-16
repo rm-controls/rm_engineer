@@ -216,13 +216,11 @@ protected:
     quatToRPY(target_.pose.orientation, roll_goal, pitch_goal, yaw_goal);
     // TODO: Add orientation error check
     return (std::pow(pose.position.x - target_.pose.position.x, 2) +
-                    std::pow(pose.position.y - target_.pose.position.y, 2) +
-                    std::pow(pose.position.z - target_.pose.position.z, 2) <
-                tolerance_position_ &&
-            std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) +
-                    std::abs(angles::shortest_angular_distance(pitch_current, pitch_goal)) +
-                    std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) <
-                tolerance_orientation_);
+            std::pow(pose.position.y - target_.pose.position.y, 2) +
+            std::pow(pose.position.z - target_.pose.position.z, 2) < tolerance_position_ &&
+            std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) < tolerance_orientation_ &&
+            std::abs(angles::shortest_angular_distance(pitch_current, pitch_goal)) < tolerance_orientation_ &&
+            std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) <tolerance_orientation_);
   }
   tf2_ros::Buffer& tf_;
   bool has_pos_, has_ori_, is_cartesian_;
@@ -700,6 +698,24 @@ private:
   double delay_;
   ros::Time start_time_;
   rm_msgs::MultiDofCmd zero_msg_;
+};
+
+class JointPointMotion : public PublishMotion<std_msgs::Float64>
+{
+public:
+  JointPointMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
+    : PublishMotion<std_msgs::Float64>(motion, interface)
+  {
+    ROS_ASSERT(motion.hasMember("target"));
+    target_ = xmlRpcGetDouble(motion, "target", 0.0);
+  }
+  bool move() override
+  {
+    msg_.data = target_;
+    return PublishMotion::move();
+  }
+private:
+  double target_;
 };
 
 };  // namespace engineer_middleware

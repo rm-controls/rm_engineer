@@ -47,6 +47,8 @@ common:
                            0.1
       furthest_position: &JOINT2_FURTHEST_POSITION
                            0.2575
+      exchange_position: &JOINT2_EXCHANGE_POSITION
+                          0.07
 
   joint3:
     mechanical:
@@ -91,19 +93,29 @@ common:
                            1.49
   gimbal:
     side_pos: &SIDE_POS
-      frame: gimbal_base
+      frame: gimbal_lifter
       position: [ 0.03 ,3, -0.02 ]
     island_pos: &ISLAND_POS
-      frame: gimbal_base
+      frame: gimbal_lifter
       position: [ 2, 0.001, 0.001 ]
     ground_pos: &GROUND_POS
-      frame: gimbal_base
+      frame: gimbal_lifter
       position: [ 2, 0.001, -0.8 ]
+
+  gimbal_lifter:
+    button_pos: &BUTTON_POS
+      0.01
+    mid_pos: &MID_POS
+      0.1
+    tallest_pos: &TALLEST_POS
+      0.28
 
   gripper:
     open_gripper: &OPEN_GRIPPER
+      pin: 0
       state: true
     close_gripper: &CLOSE_GRIPPER
+      pin: 0
       state: false
 
   arm:
@@ -205,13 +217,34 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+
+  EXCHANGE_POS:
+    - step: "gimbal look front"
+      gimbal:
+        <<: *ISLAND_POS
+    - step: "move arm"
+      arm:
+        joints: [*JOINT1_TWO_STONE_POSITION, *JOINT2_EXCHANGE_POSITION, *JOINT3_L_POSITION, *JOINT4_MID_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+
+  GIMBAL_FRONT:
+    - step: "gimbal look front"
+      gimbal:
+        <<: *ISLAND_POS
+  GIMBAL_LEFT:
+    - step: "gimbal look left"
+      gimbal:
+        <<: *SIDE_POS
   ############ MID #############
 
   ############################ HOME ##########################
   HOME_ZERO_STONE:
     - step: "gimbal look side"
       gimbal:
-        <<: *SIDE_POS
+        <<: *ISLAND_POS
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -222,7 +255,7 @@ steps_list:
   HOME_ONE_STONE:
     - step: "gimbal look side"
       gimbal:
-        <<: *SIDE_POS
+        <<: *ISLAND_POS
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -233,7 +266,7 @@ steps_list:
   HOME_TWO_STONE:
     - step: "gimbal look side"
       gimbal:
-        <<: *SIDE_POS
+        <<: *ISLAND_POS
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -274,11 +307,26 @@ steps_list:
       arm:
         frame: exchanger
         is_refer_planning_frame: true
-        xyz: [ -0.23, 0., -0.12 ]
+        xyz: [ -0.3, 0.2, -0.2 ]
         rpy: [ 0., -1.5707963, 0. ]
         drift_dimensions: [ true, true, true, true, true, true ]
-        tolerance_position: 0.05
-        tolerance_orientation: 0.05
+        tolerance_position: 0.01
+        tolerance_orientation: 0.001
+        spacial_shape: SPHERE
+        radius: 0.5
+        point_resolution: 0.5
+        max_planning_times: 100
+        common:
+          <<: *NORMALLY
+  EXCHANGE_ORI:
+    - step: "test new exchange"
+      arm:
+        frame: exchanger
+        is_refer_planning_frame: true
+        rpy: [ 0., -1.5707963, 0. ]
+        drift_dimensions: [ true, true, true, true, true, true ]
+        tolerance_position: 0.01
+        tolerance_orientation: 0.001
         spacial_shape: SPHERE
         radius: 0.5
         point_resolution: 0.5
@@ -292,15 +340,28 @@ steps_list:
         is_refer_planning_frame: true
         xyz: [ -0.3, 0., 0. ]
         rpy: [ 0., 3.1415926, 0. ]
-        drift_dimensions: [ true, true, true, true, false, true ]
-        tolerance_position: 0.05
-        tolerance_orientation: 0.05
+        drift_dimensions: [ true, true, true, true, true, true ]
+        tolerance_position: 0.01
+        tolerance_orientation: 0.001
         spacial_shape: SPHERE
         radius: 0.5
         point_resolution: 0.5
         max_planning_times: 100
         common:
           <<: *NORMALLY
+
+  GTESTL:
+    - step: "test"
+      gimbal_lifter:
+        target: *BUTTON_POS
+  GTESTM:
+    - step: "test"
+      gimbal_lifter:
+        target: *MID_POS
+  GTESTH:
+    - step: "test"
+      gimbal_lifter:
+        target: *TALLEST_POS
 
 
 #    - step: "test new exchange"

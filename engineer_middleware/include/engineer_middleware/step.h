@@ -50,7 +50,7 @@ public:
        moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
        ros::Publisher& hand_pub, ros::Publisher& end_effector_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
        ros::Publisher& reversal_pub, ros::Publisher& stone_num_pub, ros::Publisher& planning_result_pub,
-       ros::Publisher& point_cloud_pub)
+       ros::Publisher& point_cloud_pub, ros::Publisher& ore_rotate_pub, ros::Publisher& ore_lift_pub, ros::Publisher& gimbal_lift_pub)
     : planning_result_pub_(planning_result_pub), point_cloud_pub_(point_cloud_pub), arm_group_(arm_group)
   {
     ROS_ASSERT(step.hasMember("step"));
@@ -84,6 +84,12 @@ public:
         if (step["scene_name"] == it->first)
           planning_scene_ = new PlanningScene(it->second, arm_group);
     }
+    if (step.hasMember("ore_rotater"))
+      ore_rotate_motion_ = new JointPointMotion(step["ore_rotator"], ore_rotate_pub);
+    if (step.hasMember("ore_lifter"))
+      ore_lift_motion_ = new JointPointMotion(step["ore_lifter"], ore_lift_pub);
+    if (step.hasMember("gimbal_lifter"))
+      gimbal_lift_motion_ = new JointPointMotion(step["gimbal_lifter"], gimbal_lift_pub);
   }
   bool move()
   {
@@ -115,6 +121,12 @@ public:
       success &= reversal_motion_->move();
     if (planning_scene_)
       planning_scene_->add();
+    if (ore_lift_motion_)
+      success &= ore_lift_motion_->move();
+    if (ore_rotate_motion_)
+      success &= ore_rotate_motion_->move();
+    if (gimbal_lift_motion_)
+      success &= gimbal_lift_motion_->move();
     return success;
   }
   void stop()
@@ -182,6 +194,7 @@ private:
   MoveitMotionBase* arm_motion_{};
   HandMotion* hand_motion_{};
   JointPositionMotion* end_effector_motion_{};
+  JointPointMotion* ore_rotate_motion_{},* ore_lift_motion_{},* gimbal_lift_motion_{};
   StoneNumMotion* stone_num_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
