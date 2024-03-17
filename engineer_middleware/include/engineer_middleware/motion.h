@@ -58,7 +58,7 @@ class MotionBase
 public:
   MotionBase(XmlRpc::XmlRpcValue& motion, Interface& interface) : interface_(interface)
   {
-    time_out_ = xmlRpcGetDouble(motion["common"], "timeout", 1e10);
+    time_out_ = xmlRpcGetDouble(motion["common"], "timeout", 3);
   };
   ~MotionBase() = default;
   virtual bool move() = 0;
@@ -216,11 +216,12 @@ protected:
     quatToRPY(target_.pose.orientation, roll_goal, pitch_goal, yaw_goal);
     // TODO: Add orientation error check
     return (std::pow(pose.position.x - target_.pose.position.x, 2) +
-            std::pow(pose.position.y - target_.pose.position.y, 2) +
-            std::pow(pose.position.z - target_.pose.position.z, 2) < tolerance_position_ &&
+                    std::pow(pose.position.y - target_.pose.position.y, 2) +
+                    std::pow(pose.position.z - target_.pose.position.z, 2) <
+                tolerance_position_ &&
             std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) < tolerance_orientation_ &&
             std::abs(angles::shortest_angular_distance(pitch_current, pitch_goal)) < tolerance_orientation_ &&
-            std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) <tolerance_orientation_);
+            std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) < tolerance_orientation_);
   }
   tf2_ros::Buffer& tf_;
   bool has_pos_, has_ori_, is_cartesian_;
@@ -259,7 +260,7 @@ public:
       k_beta_ = xmlRpcGetDouble(motion["rpy_rectify"], 2);
     }
     point_resolution_ = xmlRpcGetDouble(motion, "point_resolution", 0.01);
-    max_planning_times_ = (int)xmlRpcGetDouble(motion, "max_planning_times", 100);
+    max_planning_times_ = (int)xmlRpcGetDouble(motion, "max_planning_times", 10);
     if (motion.hasMember("spacial_shape"))
     {
       points_.cleanPoints();
@@ -382,7 +383,7 @@ private:
                     std::pow(pose.position.y - final_target_.pose.position.y, 2) +
                     std::pow(pose.position.z - final_target_.pose.position.z, 2) <
                 tolerance_position_ &&
-            std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) +
+            std::abs(angles::shortest_angular_distance(roll_current, roll_goal)) +
                     std::abs(angles::shortest_angular_distance(pitch_current, pitch_goal)) +
                     std::abs(angles::shortest_angular_distance(yaw_current, yaw_goal)) <
                 tolerance_orientation_);
@@ -714,6 +715,7 @@ public:
     msg_.data = target_;
     return PublishMotion::move();
   }
+
 private:
   double target_;
 };
