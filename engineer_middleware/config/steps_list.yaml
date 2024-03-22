@@ -395,7 +395,10 @@ steps_list:
 
   ###################SMALL_ISLAND_FROM_TOP################
   ONE_STONE_SMALL_ISLAND:
-    - gimbal:
+    - step: "GIMBAL_READY"
+      gimbal:
+        <<: *SIDE_POS
+      gimbal_lifter:
         <<:
     - step: "SI_ARM_READY"
       arm:
