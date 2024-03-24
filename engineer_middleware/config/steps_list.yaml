@@ -50,13 +50,15 @@ common:
       get_ore_position: &JOINT2_GET_ORE_POSITION
                            0.1
       furthest_position: &JOINT2_FURTHEST_POSITION
-                           0.2575
+                           0.232
       exchange_position: &JOINT2_EXCHANGE_POSITION
                           0.07
       lift_stone_position: &JOINT2_LIFT_STONE_POSITION
                             0.085
       store_stone_position: &JOINT2_STORE_STONE_POSITION
                               0.02
+      ready_second_position: &JOINT2_READY_SECOND_POSITION
+                              0.142
 
   joint3:
     mechanical:
@@ -68,8 +70,12 @@ common:
                         -0.275
       ready_position: &JOINT3_READY_POSITION
                         0.098
+      ready_second_position: &JOINT3_READY_SECOND_POSITION
+                        0.03
       get_stone_position: &JOINT3_GET_STONE_POSITION
                             0.034
+      get_second_position: &JOINT3_GET_SECOND_POSITION
+                            -0.018
 
 
   joint4:
@@ -80,6 +86,8 @@ common:
                       0.001
       right_position: &JOINT4_R_POSITION
                         -1.45
+      ready_second_position: &JOINT4_READY_SECOND_POSITION
+                        -0.777
   joint5:
     mechanical:
       mid_position: &JOINT5_MID_POSITION
@@ -96,6 +104,8 @@ common:
                      -1.49
       down_position: &JOINT6_DOWN_POSITION
                        1.569
+      ready_second_position: &JOINT6_READY_SECOND_POSITION
+                       0.694
   joint7:
     mechanical:
       mid_position: &JOINT7_MID_POSITION
@@ -185,8 +195,7 @@ common:
       chassis_tolerance_position: 0.1
       chassis_tolerance_angular: 0.2
       common:
-        timeout:
-          2.
+        timeout: 2.
 
 steps_list:
   ###################### SMALL_ISLAND #######################
@@ -312,7 +321,7 @@ steps_list:
         spacial_shape: SPHERE
         radius: 0.5
         point_resolution: 0.5
-        max_planning_times: 100
+        max_planning_times: 1
         common:
           <<: *QUICKLY
 
@@ -329,9 +338,26 @@ steps_list:
         spacial_shape: SPHERE
         radius: 0.5
         point_resolution: 0.5
-        max_planning_times: 100
+        max_planning_times: 1
         common:
           <<: *NORMALLY
+
+  TEST_ORI:
+    - step: "ori test"
+      arm:
+        frame: exchanger
+        rpy: [ 0., -1.5707963, 0. ]
+        tolerance_orientation: 0.001
+
+  TEST_ORI2:
+    - step: "ori test2"
+      arm:
+        frame: exchanger
+        rpy: [ 0., -1.5707963, 0. ]
+        xyz: [ -0.3, 0.2, -0.2 ]
+        tolerance_position: 0.01
+        tolerance_orientation: 0.001
+
   EXCHANGE_ORI:
     - step: "test new exchange"
       arm:
@@ -344,7 +370,7 @@ steps_list:
         spacial_shape: SPHERE
         radius: 0.5
         point_resolution: 0.5
-        max_planning_times: 100
+        max_planning_times: 1
         common:
           <<: *NORMALLY
   EXCHANGE_STRAIGHT:
@@ -360,7 +386,7 @@ steps_list:
         spacial_shape: SPHERE
         radius: 0.5
         point_resolution: 0.5
-        max_planning_times: 100
+        max_planning_times: 1
         common:
           <<: *NORMALLY
 
@@ -521,7 +547,7 @@ steps_list:
   TWO_STONE_SMALL_ISLAND00:
     - step: "SI_ARM_READY"
       arm:
-        joints: [ *JOINT1_READY_POSITION, *JOINT2_FURTHEST_POSITION, *JOINT3_READY_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        joints: [ *JOINT1_READY_POSITION, *JOINT2_READY_SECOND_POSITION, *JOINT3_READY_SECOND_POSITION, *JOINT4_READY_SECOND_POSITION, *JOINT5_L90_POSITION, *JOINT6_READY_SECOND_POSITION, *JOINT7_R90_POSITION ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -532,7 +558,7 @@ steps_list:
   TWO_STONE_SMALL_ISLAND000:
     - step: "SI_GET_STONE"
       arm:
-        joints: [ *JOINT1_READY_POSITION, *JOINT2_FURTHEST_POSITION, *JOINT3_GET_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        joints: [ *JOINT1_READY_POSITION, *JOINT2_READY_SECOND_POSITION, *JOINT3_GET_SECOND_POSITION, *JOINT4_READY_SECOND_POSITION, *JOINT5_L90_POSITION, *JOINT6_READY_SECOND_POSITION, *JOINT7_R90_POSITION ]
         common:
           <<: *NORMALLY
         tolerance:
