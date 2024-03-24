@@ -2,12 +2,20 @@
 <launch>
     <!-- By default, we are not load controllers -->
     <arg name="spawn_controllers" default="true"/>
+    <arg name="use_simulation" default="false"/>
 
-    <rosparam file="$(find rm_config)/config/rm_controllers/engineer.yaml" command="load"/>
+    <group unless="$(arg use_simulation)">
+        <rosparam file="$(find rm_config)/config/rm_controllers/engineer.yaml" command="load"/>
+    </group>
+    <group if="$(arg use_simulation)">
+        <rosparam file="$(find engineer_middleware)/config/simulation_controllers.yaml" command="load"/>
+    </group>
+
 
     <!-- Load joint controller configurations from YAML file to parameter server -->
 
     <!-- Load the controllers -->
+
     <node name="controller_loader" pkg="controller_manager" type="controller_manager" output="screen"
           args="load
                 controllers/robot_state_controller
