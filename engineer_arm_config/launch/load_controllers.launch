@@ -22,15 +22,16 @@
                 controllers/arm_trajectory_controller
                 controllers/chassis_controller
                 controllers/gpio_controller
-                controllers/pitch_front_controller
-                controllers/pitch_behind_controller
-                controllers/roll_left_controller
-                controllers/roll_right_controller
-                controllers/drag_controller
-                controllers/drag_calibration_controller
-                controllers/pitch_calibration_controller
-                controllers/yaw_calibration_controller
                 controllers/gimbal_controller
+                controllers/ore_bin_rotate_controller
+                controllers/ore_bin_lifter_controller
+                controllers/ore_bin_lifter_calibration_controller
+                controllers/gimbal_lifter_controller
+                controllers/gimbal_lifter_calibration_controller
+                controllers/arm_trajectory_controller
                 "
     />
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="odom_tf_publisher"
+          args="0 0 0 0 0 0 1 map odom"/>
 </launch>
