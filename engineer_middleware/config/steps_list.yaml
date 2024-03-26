@@ -184,9 +184,9 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
-    - step: "open gripper"
-      gripper:
-        <<: *OPEN_GRIPPER
+#    - step: "open gripper"
+#      gripper:
+#        <<: *OPEN_GRIPPER
     - step: "ready to get ore"
       arm:
         joints: [ *JOINT1_ONE_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_L90_POSITION, *JOINT6_UP_POSITION, *JOINT7_R90_POSITION]
@@ -298,7 +298,7 @@ steps_list:
         spacial_shape: SPHERE
         radius: 0.5
         point_resolution: 0.5
-        max_planning_times: 100
+        max_planning_times: 1
         common:
           <<: *QUICKLY
 
@@ -313,11 +313,28 @@ steps_list:
         tolerance_position: 0.01
         tolerance_orientation: 0.001
         spacial_shape: SPHERE
-        radius: 0.5
+        radius: 0.3
         point_resolution: 0.5
-        max_planning_times: 100
+        max_planning_times: 1
         common:
           <<: *NORMALLY
+
+  TEST_ORI:
+    - step: "ori test"
+      arm:
+        frame: exchanger
+        rpy: [ 0., -1.5707963, 0. ]
+        tolerance_orientation: 0.001
+
+  TEST_ORI2:
+    - step: "ori test2"
+      arm:
+        frame: exchanger
+        rpy: [ 0., -1.5707963, 0. ]
+        xyz: [ -0.3, 0.2, -0.2 ]
+        tolerance_position: 0.01
+        tolerance_orientation: 0.001
+
   EXCHANGE_ORI:
     - step: "test new exchange"
       arm:
@@ -330,7 +347,7 @@ steps_list:
         spacial_shape: SPHERE
         radius: 0.5
         point_resolution: 0.5
-        max_planning_times: 100
+        max_planning_times: 1
         common:
           <<: *NORMALLY
   EXCHANGE_STRAIGHT:
@@ -346,7 +363,7 @@ steps_list:
         spacial_shape: SPHERE
         radius: 0.5
         point_resolution: 0.5
-        max_planning_times: 100
+        max_planning_times: 1
         common:
           <<: *NORMALLY
 
@@ -379,4 +396,3 @@ steps_list:
 #        max_planning_times: 50
 #        common:
 #          <<: *NORMALLY
-
