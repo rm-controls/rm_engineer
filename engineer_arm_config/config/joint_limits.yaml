@@ -38,3 +38,8 @@ joint_limits:
     max_velocity: 50
     has_acceleration_limits: true
     max_acceleration: 90
+  joint7:
+    has_velocity_limits: true
+    max_velocity: 50
+    has_acceleration_limits: true
+    max_acceleration: 90

@@ -84,12 +84,19 @@ public:
     rectify.x = abs(points_final_[0].x) * sin(theta) * k_x;
     rectify.y = abs(points_final_[0].x) * sin(beta) * k_beta;
     rectify.z = abs(points_final_[0].x) * sin(theta) * k_theta;
-    ROS_INFO_STREAM(rectify);
     for (int i = 0; i < (int)points_final_.size(); ++i)
     {
       points_final_[i].x += rectify.x;
       points_final_[i].y += rectify.y;
       points_final_[i].z -= rectify.z;
+    }
+  }
+  void rectifyForLink7(double theta, double link7_length)
+  {
+    for (int i = 0; i < (int)points_final_.size(); ++i)
+    {
+      points_final_[i].x -= link7_length * pow(sin(theta), 2) / (tan(M_PI_2 - theta / 2));
+      points_final_[i].z = link7_length * sin(theta) * cos(theta) / (tan(M_PI_2 - theta / 2));
     }
   }
   void generateBasicsPoints(double center_x, double center_y, double center_z, double x_length, double y_length,
