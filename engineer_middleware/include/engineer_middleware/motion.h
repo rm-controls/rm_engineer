@@ -260,7 +260,7 @@ public:
       k_beta_ = xmlRpcGetDouble(motion["rpy_rectify"], 2);
     }
     point_resolution_ = xmlRpcGetDouble(motion, "point_resolution", 0.01);
-    max_planning_times_ = (int)xmlRpcGetDouble(motion, "max_planning_times", 10);
+    max_planning_times_ = (int)xmlRpcGetDouble(motion, "max_planning_times", 3);
     if (motion.hasMember("spacial_shape"))
     {
       points_.cleanPoints();
