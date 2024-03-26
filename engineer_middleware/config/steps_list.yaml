@@ -199,6 +199,18 @@ common:
       common:
         timeout: 2.
 
+  ore_rotator:
+    ready_pos: &READY_POS
+            0.001
+    exchange_pos: &EXCHANGE_POS
+            1.59
+
+  ore_lifter:
+    bin_mid_pos: &BIN_MID_POS
+            0.1
+    bin_down_pos: &BIN_DOWN_POS
+            0.001
+
 steps_list:
   ###################### SMALL_ISLAND #######################
   SMALL_ISLAND_DEMO:
@@ -427,6 +439,12 @@ steps_list:
     - step: "GIMBAL_READY"
       gimbal:
         <<: *SIDE_POS
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_READY"
+      ore_lifter:
+        target: *BIN_MID_POS
     - step: "SI_ARM_READY"
       arm:
         joints: [ *JOINT1_READY_POSITION, *JOINT2_BACK_POSITION, *JOINT3_READY_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
@@ -468,6 +486,13 @@ steps_list:
           <<: *SMALL_TOLERANCE
     - step: "STORE_STONE"
       arm:
+        joints: [ *JOINT1_READY_STORE_POSITION, *JOINT2_STORE_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "JOINT5"
+      arm:
         joints: [ *JOINT1_READY_STORE_POSITION, *JOINT2_STORE_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
           <<: *SLOWLY
@@ -483,12 +508,21 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+    - step: "ORE_LIFTER_DOWN"
+      ore_lifter:
+        target: *BIN_DOWN_POS
 
   ####FIRST_STONE###
   TWO_STONE_SMALL_ISLAND:
     - step: "GIMBAL_READY"
       gimbal:
         <<: *SIDE_POS
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_READY"
+      ore_lifter:
+        target: *BIN_MID_POS
     - step: "SI_ARM_READY"
       arm:
         joints: [ *JOINT1_READY_POSITION, *JOINT2_BACK_POSITION, *JOINT3_READY_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
@@ -530,6 +564,13 @@ steps_list:
           <<: *SMALL_TOLERANCE
     - step: "STORE_STONE"
       arm:
+        joints: [ *JOINT1_READY_STORE_POSITION, *JOINT2_STORE_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "JOINT5"
+      arm:
         joints: [ *JOINT1_READY_STORE_POSITION, *JOINT2_STORE_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
           <<: *SLOWLY
@@ -545,6 +586,9 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+    - step: "ORE_LIFTER_DOWN"
+      ore_lifter:
+        target: *BIN_DOWN_POS
   ###SECOND_STONE###
   TWO_STONE_SMALL_ISLAND00:
     - step: "SI_ARM_READY"
@@ -587,6 +631,13 @@ steps_list:
         tolerance:
           <<: *SMALL_TOLERANCE
     - step: "STORE_STONE"
+      arm:
+        joints: [ *JOINT1_READY_STORE_POSITION, *JOINT2_STORE_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "JOINT5"
       arm:
         joints: [ *JOINT1_READY_STORE_POSITION, *JOINT2_STORE_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
