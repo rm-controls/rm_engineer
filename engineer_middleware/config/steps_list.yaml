@@ -15,7 +15,7 @@ common:
 
   tolerance:
     small_tolerance: &SMALL_TOLERANCE
-      tolerance_joints: [ 0.005, 0.008, 0.015, 0.1, 0.1, 0.1 ]
+      tolerance_joints: [ 0.005, 0.008, 0.015, 0.1, 0.1, 0.1, 0.05 ]
     normal_tolerance: &NORMAL_TOLERANCE
       tolerance_joints: [ 0.01, 0.010, 0.015, 0.3, 0.2, 0.15, 0.1 ]
     bigger_tolerance: &BIGGER_TOLERANCE
@@ -28,7 +28,7 @@ common:
       down_position: &JOINT1_DOWN_POSITION
                        0.015
       ready_position: &JOINT1_READY_POSITION
-                      0.165
+                      0.15
       up_position: &JOINT1_UP_POSITION
                    0.312
       ready_store: &JOINT1_READY_STORE_POSITION
@@ -87,7 +87,7 @@ common:
       mid_position: &JOINT4_MID_POSITION
                       0.001
       right_position: &JOINT4_R_POSITION
-                        -1.45
+                        -1.49
       ready_second_position: &JOINT4_READY_SECOND_POSITION
                         -0.777
   joint5:
@@ -115,7 +115,7 @@ common:
       left_90_position: &JOINT7_L90_POSITION
                           -1.59
       right_90_position: &JOINT7_R90_POSITION
-                           1.49
+                           1.57
   gimbal:
     side_pos: &SIDE_POS
       frame: gimbal_lifter
@@ -456,31 +456,23 @@ steps_list:
       arm:
         joints: [ *JOINT1_UP_POSITION, *JOINT2_LIFT_STONE_POSITION, *JOINT3_GET_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *NORMALLY
+          <<: *SLOWLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "READY_TO_STORE_STONE"
       arm:
-        joints: [ *JOINT1_UP_POSITION, *JOINT2_LIFT_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        joints: [ *JOINT1_READY_STORE_POSITION, *JOINT2_LIFT_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
           <<: *NORMALLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
-  ONE_STONE_SMALL_ISLAND00:
+          <<: *SMALL_TOLERANCE
     - step: "STORE_STONE"
       arm:
-        joints: [ *JOINT1_UP_POSITION, *JOINT2_STORE_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        joints: [ *JOINT1_READY_STORE_POSITION, *JOINT2_STORE_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *NORMALLY
+          <<: *SLOWLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "JOINT1_DOWN"
-      arm:
-        joints: [ *JOINT1_READY_STORE_POSITION, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *SMALL_TOLERANCE
     - step: "CLOSE_GRIPPER"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -526,7 +518,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_UP_POSITION, *JOINT2_LIFT_STONE_POSITION, *JOINT3_GET_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *NORMALLY
+          <<: *SLOWLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "READY_TO_STORE_STONE"
@@ -535,14 +527,14 @@ steps_list:
         common:
           <<: *NORMALLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *SMALL_TOLERANCE
     - step: "STORE_STONE"
       arm:
         joints: [ *JOINT1_READY_STORE_POSITION, *JOINT2_STORE_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *NORMALLY
+          <<: *SLOWLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *SMALL_TOLERANCE
     - step: "CLOSE_GRIPPER"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -561,7 +553,7 @@ steps_list:
         common:
           <<: *NORMALLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *SMALL_TOLERANCE
     - step: "OPEN_GRIPPER"
       gripper:
         <<: *OPEN_GRIPPER
@@ -572,7 +564,7 @@ steps_list:
         common:
           <<: *NORMALLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *SMALL_TOLERANCE
     - step: "JOINT1_UP"
       arm:
         joints: [ *JOINT1_UP_POSITION, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP"]
@@ -593,14 +585,14 @@ steps_list:
         common:
           <<: *NORMALLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *SMALL_TOLERANCE
     - step: "STORE_STONE"
       arm:
         joints: [ *JOINT1_READY_STORE_POSITION, *JOINT2_STORE_STONE_POSITION, *JOINT3_STORE_STONE_POSITION, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
           <<: *NORMALLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *SMALL_TOLERANCE
     - step: "CLOSE_GRIPPER"
       gripper:
         <<: *CLOSE_GRIPPER
