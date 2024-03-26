@@ -72,7 +72,8 @@ Middleware::Middleware(ros::NodeHandle& nh)
       step_queues_.insert(
           std::make_pair(it->first, StepQueue(it->second, scenes_list, tf_, arm_group_, chassis_interface_, hand_pub_,
                                               end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, stone_num_pub_,
-                                              planning_result_pub_, point_cloud_pub_, ore_rotate_pub_, ore_lift_pub_, gimbal_lift_pub)));
+                                              planning_result_pub_, point_cloud_pub_, ore_rotate_pub_, ore_lift_pub_,
+                                              gimbal_lift_pub)));
     }
   }
   else

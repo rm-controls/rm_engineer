@@ -783,7 +783,7 @@ private:
   }
   void initComputerValue()
   {
-    for (double & servo_scale : servo_scales_)
+    for (double& servo_scale : servo_scales_)
     {
       servo_scale = 0.;
     }
