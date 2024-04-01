@@ -35,6 +35,8 @@ common:
                    0.162
       bin_get_stone: &JOINT1_BIN_GET_STONE
                      0.142
+      big_ready: &JOINT1_BIG_READY
+                     0.006
     home:
       zero_stone_position: &JOINT1_ZERO_STONE_POSITION
                              0.08
@@ -65,6 +67,8 @@ common:
                             0.087
       back_bin_position: &JOINT2_BACK_BIN_POSITION
                              0.001
+      big_ready: &JOINT2_BIG_READY
+                       0.009
 
   joint3:
     mechanical:
@@ -86,6 +90,8 @@ common:
                               0.30
       bin_get_stone: &JOINT3_BIN_GET_STONE
                           0.258
+      big_ready: &JOINT3_BIG_READY
+                     0.071
 
   joint4:
     mechanical:
@@ -107,6 +113,8 @@ common:
                            1.59
       bin_get_stone: &JOINT5_BIN_GET_STONE
                            1.679
+      big_ready: &JOINT5_BIG_READY
+                  -0.017
 
   joint6:
     mechanical:
@@ -120,6 +128,9 @@ common:
                        0.694
       bin_get_stone: &JOINT6_BIN_GET_STONE
                       -1.611
+      big_ready: &JOINT6_BIG_READY
+                       0.014
+
   joint7:
     mechanical:
       mid_position: &JOINT7_MID_POSITION
@@ -128,6 +139,9 @@ common:
                           -1.59
       right_90_position: &JOINT7_R90_POSITION
                            1.57
+      big_ready: &JOINT7_BIG_READY
+                         -0.013
+
   gimbal:
     side_pos: &SIDE_POS
       frame: gimbal_lifter
@@ -744,57 +758,73 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
   #################BIG_ISLAND#############
-#  ONE_STONE_BIG_ISLAND：
-#  - gimbal:
-#      <<: *NORMALLY
-#  - step: "BI_ARM_READY"
-#    arm:
-#      joints: [ ]
-#      common:
-#        <<: *NORMALLY
-#      tolerance:
-#        <<: *NORMAL_TOLERANCE
-#  - step: "OPEN_GRIPPER"
-#    gripper:
-#      <<: *OPEN_GRIPPER
-#  - step: "BI_GET_STONE"
-#    arm:
-#      joints: [ ]
-#      common:
-#        <<: *NORMALLY
-#      tolerance:
-#        <<: *NORMAL_TOLERANCE
-#  - step: "PULL_OUT_STONE"
-#    arm:
-#      joints: [ ]
-#      common:
-#        <<: *NORMALLY
-#      tolerance:
-#        <<: *NORMAL_TOLERANCE
-#  - step: "BI_ARM_UP_STONE"         #########joint6抬起，无需转动joint7#######
-#    arm:
-#      joints: [ ]
-#      common:
-#        <<: *NORMALLY
-#      tolerance:
-#        <<: *NORMAL_TOLERANCE
-#  - step: "ORE_LIFTER_UP"
-#    ore_lifter:
-#
-#  - step: "STORE_STONE"
-#    arm:
-#      joints: [ ]
-#      common:
-#        <<: *NORMALLY
-#      tolerance:
-#        <<: *NORMAL_TOLERANCE
-#  - step: "CLOSE_GRIPPER"
-#    gripper:
-#      <<: *CLOSE_GRIPPER
-#  - step: "ARM_RESET"
-#    arm:
-#      joints: [ ]
-#      common:
-#        <<: *NORMALLY
-#      tolerance:
-#        <<: *NORMAL_TOLERANCE
+  MID_BIG_ISLAND:
+    - step: "MID_ARM_READY"
+      arm:
+        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_READY ]
+        common:
+         <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+    - step: "GET_MID_STONE"
+      arm:
+        joints: [ "KEEP", "KEEP", -0.281, "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT1_MICRO_UP"
+      arm:
+        joints: [ 0.071, "KEEP", "KEEP", "KEEP", "KEEP", -0.119, "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "PULL_OUT_STONE"
+      arm:
+        joints: [ "KEEP", "KEEP", 0.188, "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ 0.320, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ARM_UP_STONE"
+      arm:
+        joints: [ "KEEP", 0.142, 0.289, "KEEP", "KEEP", -1.519, "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "READY_TO_STORE"
+      arm:
+        joints: [ 0.155, 0.030, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "STORE_STONE"
+      arm:
+        joints: [ "KEEP", "KEEP", "KEEP", "KEEP", 1.617, "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "CLOSE_GRIPPER"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "ARM_RESET"
+      arm:
+        joints: [ 0.006, 0.009, 0.071, -1.495, -0.017, 0.014, -0.013 ]
+      common:
+        <<: *SLOWLY
+      tolerance:
+        <<: *NORMAL_TOLERANCE
