@@ -84,7 +84,7 @@ public:
         if (step["scene_name"] == it->first)
           planning_scene_ = new PlanningScene(it->second, arm_group);
     }
-    if (step.hasMember("ore_rotater"))
+    if (step.hasMember("ore_rotator"))
       ore_rotate_motion_ = new JointPointMotion(step["ore_rotator"], ore_rotate_pub);
     if (step.hasMember("ore_lifter"))
       ore_lift_motion_ = new JointPointMotion(step["ore_lifter"], ore_lift_pub);
