@@ -51,5 +51,5 @@
         <disable_collisions link1="link5" link2="link7" reason="Never"/>
         <disable_collisions link1="link1" link2="camera_link" reason="Never"/>
         <disable_collisions link1="link7" link2="ore_bin_lifter" reason="Never"/>
-
+        <disable_collisions link1="link7" link2="ore_bin_rotator" reason="Never"/>
 </robot>
