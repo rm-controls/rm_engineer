@@ -262,49 +262,6 @@ common:
             0.001
 
 steps_list:
-  ###################### SMALL_ISLAND #######################
-  SMALL_ISLAND_DEMO:
-    - step: "home pos"
-      arm:
-        joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "open gripper"
-      gripper:
-        <<: *OPEN_GRIPPER
-    - step: "ready to get ore"
-      arm:
-        joints: [ *JOINT1_ONE_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_L90_POSITION, *JOINT6_UP_POSITION, *JOINT7_R90_POSITION]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-
-  SMALL_ISLAND_DEMO0:
-    - step: "move up ore"
-      arm:
-        joints: [ *JOINT1_TWO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_L90_POSITION, *JOINT6_UP_POSITION, *JOINT7_R90_POSITION ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "reverse ore"
-      arm:
-        joints: [ *JOINT1_TWO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_R90_POSITION ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "move ore back"
-      arm:
-        joints: [ *JOINT1_ONE_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_R90_POSITION ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-
   EXCHANGE_POS:
     - step: "gimbal look front"
       gimbal:
@@ -400,7 +357,7 @@ steps_list:
         tolerance_position: 0.01
         tolerance_orientation: 0.001
         spacial_shape: SPHERE
-        radius: 0.5
+        radius: 0.3
         point_resolution: 0.5
         max_planning_times: 1
         common:
@@ -466,23 +423,6 @@ steps_list:
     - step: "test"
       gimbal_lifter:
         target: *TALLEST_POS
-
-
-#    - step: "test new exchange"
-#      arm:
-#        frame: exchanger
-#        is_refer_planning_frame: false
-#        xyz: [ -0.2, 0., -0.18 ]
-#        rpy: [ 0., 3.141592, 0. ]
-#        drift_dimensions: [ true, true, true, true, false, true ]
-#        tolerance_position: 0.01
-#        tolerance_orientation: 0.01
-#        spacial_shape: BASICS
-#        basics_length: [ 0.1, 0.1, 0.1 ]
-#        point_resolution: 0.6
-#        max_planning_times: 50
-#        common:
-#          <<: *NORMALLY
 
   ###################SMALL_ISLAND_FROM_TOP################
   ONE_STONE_SMALL_ISLAND:
