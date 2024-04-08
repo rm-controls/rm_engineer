@@ -166,10 +166,10 @@ common:
 
   gimbal:
     side_pos: &SIDE_POS
-      frame: gimbal_lifter
+      frame: pitch
       position: [ 0.001 , -3, 0. ]
     front_pos: &FRONT_POS
-      frame: gimbal_lifter
+      frame: pitch
       position: [ 2, 0.001, 0. ]
 
   gimbal_lifter:
@@ -254,7 +254,7 @@ steps_list:
 
   ############################ HOME ##########################
   HOME_ZERO_STONE:
-    - step: "gimbal look side"
+    - step: "gimbal look front"
       gimbal:
         <<: *FRONT_POS
     - step: "close gripper"
@@ -265,7 +265,7 @@ steps_list:
         <<: *HOME_1
         variable: [ *JOINT1_ZERO_STONE_POSITION, 0, 0, 0, 0, 0 ]
   HOME_ONE_STONE:
-    - step: "gimbal look side"
+    - step: "gimbal look front"
       gimbal:
         <<: *FRONT_POS
     - step: "close gripper"
@@ -276,7 +276,7 @@ steps_list:
         <<: *HOME_1
         variable: [ *JOINT1_ONE_STONE_POSITION, 0, 0, 0, 0, 0 ]
   HOME_TWO_STONE:
-    - step: "gimbal look side"
+    - step: "gimbal look front"
       gimbal:
         <<: *FRONT_POS
     - step: "close gripper"
@@ -376,6 +376,9 @@ steps_list:
     - step: "add stone"
       stone_num:
         change: "+1"
+    - step: "GIMBAL_READY"
+      gimbal:
+        <<: *SIDE_POS
 
   ####FIRST_STONE###
   TWO_STONE_SMALL_ISLAND:
