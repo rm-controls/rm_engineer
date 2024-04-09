@@ -799,3 +799,32 @@ steps_list:
         max_planning_times: 1
         common:
           <<: *NORMALLY
+  TEST11:
+    - step: "test"
+      extend_arm_front:
+        target: 1
+    - step: "test"
+      extend_arm_back:
+        target: 1
+
+  TEST10:
+    - step: "test"
+      extend_arm_front:
+        target: 1
+    - step: "test"
+      extend_arm_back:
+        target: 0
+  TEST01:
+    - step: "test"
+      extend_arm_front:
+        target: 0
+    - step: "test"
+      extend_arm_back:
+        target: 1
+  TEST00:
+    - step: "test"
+      extend_arm_front:
+        target: 0
+    - step: "test"
+      extend_arm_back:
+        target: 0

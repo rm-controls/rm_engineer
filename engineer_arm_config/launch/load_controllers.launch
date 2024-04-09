@@ -32,6 +32,10 @@
                 controllers/gpio_controller
                 controllers/gimbal_controller
                 controllers/ore_bin_rotate_controller
+                controllers/extend_arm_front_controller
+                controllers/extend_arm_back_controller
+                controllers/extend_arm_front_calibration_controller
+                controllers/extend_arm_back_calibration_controller
                 controllers/ore_bin_lifter_controller
                 controllers/ore_bin_lifter_calibration_controller
                 controllers/gimbal_lifter_controller

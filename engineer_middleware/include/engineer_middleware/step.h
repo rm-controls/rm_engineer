@@ -51,7 +51,7 @@ public:
        ros::Publisher& hand_pub, ros::Publisher& end_effector_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
        ros::Publisher& reversal_pub, ros::Publisher& stone_num_pub, ros::Publisher& planning_result_pub,
        ros::Publisher& point_cloud_pub, ros::Publisher& ore_rotate_pub, ros::Publisher& ore_lift_pub,
-       ros::Publisher& gimbal_lift_pub)
+       ros::Publisher& gimbal_lift_pub, ros::Publisher& extend_arm_f_pub, ros::Publisher& extend_arm_b_pub)
     : planning_result_pub_(planning_result_pub), point_cloud_pub_(point_cloud_pub), arm_group_(arm_group)
   {
     ROS_ASSERT(step.hasMember("step"));
@@ -91,6 +91,10 @@ public:
       ore_lift_motion_ = new JointPointMotion(step["ore_lifter"], ore_lift_pub);
     if (step.hasMember("gimbal_lifter"))
       gimbal_lift_motion_ = new JointPointMotion(step["gimbal_lifter"], gimbal_lift_pub);
+    if (step.hasMember("extend_arm_front"))
+      extend_arm_front_motion_ = new JointPointMotion(step["extend_arm_front"], extend_arm_f_pub);
+    if (step.hasMember("extend_arm_back"))
+      extend_arm_back_motion_ = new JointPointMotion(step["extend_arm_back"], extend_arm_b_pub);
   }
   bool move()
   {
@@ -128,6 +132,10 @@ public:
       success &= ore_rotate_motion_->move();
     if (gimbal_lift_motion_)
       success &= gimbal_lift_motion_->move();
+    if (extend_arm_back_motion_)
+      success &= extend_arm_back_motion_->move();
+    if (extend_arm_front_motion_)
+      success &= extend_arm_front_motion_->move();
     return success;
   }
   void stop()
@@ -195,7 +203,8 @@ private:
   MoveitMotionBase* arm_motion_{};
   HandMotion* hand_motion_{};
   JointPositionMotion* end_effector_motion_{};
-  JointPointMotion *ore_rotate_motion_{}, *ore_lift_motion_{}, *gimbal_lift_motion_{};
+  JointPointMotion *ore_rotate_motion_{}, *ore_lift_motion_{}, *gimbal_lift_motion_{}, *extend_arm_front_motion_{},
+      *extend_arm_back_motion_{};
   StoneNumMotion* stone_num_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
