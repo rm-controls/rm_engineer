@@ -166,15 +166,20 @@ common:
 
   gimbal:
     side_pos: &SIDE_POS
-      frame: pitch
+      frame: gimbal_lifter
       position: [ 0.001 , -3, 0. ]
     front_pos: &FRONT_POS
-      frame: pitch
+      frame: gimbal_lifter
       position: [ 2, 0.001, 0. ]
+    small_island_pos: &SMALL_ISLAND_POS
+      frame: gimbal_lifter
+      position: [ 1, 1, 0.]
 
   gimbal_lifter:
     button_pos: &BUTTON_POS
-      0.01
+      0.05
+    small_island: &LIFTER_SMALL_ISLAND
+      0.06
     mid_pos: &MID_POS
       0.1
     tallest_pos: &TALLEST_POS
@@ -228,6 +233,11 @@ common:
             0.1
     bin_down_pos: &BIN_DOWN_POS
             0.001
+  extend_arm:
+    close: &EX_CLOSE
+          0.0
+    open: &EX_OPEN
+          2.6
 
 steps_list:
   EXCHANGE_POS:
@@ -257,6 +267,15 @@ steps_list:
     - step: "gimbal look front"
       gimbal:
         <<: *FRONT_POS
+    - step: "gimbal lifter down"
+      gimbal_lifter:
+        target: *BUTTON_POS
+    - step: "close ex arm"
+      extend_arm_front:
+        target: *EX_CLOSE
+    - step: "close ex arm"
+      extend_arm_back:
+        target: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -268,6 +287,15 @@ steps_list:
     - step: "gimbal look front"
       gimbal:
         <<: *FRONT_POS
+    - step: "gimbal lifter down"
+      gimbal_lifter:
+        target: *MID_POS
+    - step: "close ex arm"
+      extend_arm_front:
+        target: *EX_CLOSE
+    - step: "close ex arm"
+      extend_arm_back:
+        target: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -279,6 +307,15 @@ steps_list:
     - step: "gimbal look front"
       gimbal:
         <<: *FRONT_POS
+    - step: "gimbal lifter down"
+      gimbal_lifter:
+        target: *MID_POS
+    - step: "close ex arm"
+      extend_arm_front:
+        target: *EX_CLOSE
+    - step: "close ex arm"
+      extend_arm_back:
+        target: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -300,7 +337,7 @@ steps_list:
   ONE_STONE_SMALL_ISLAND:
     - step: "GIMBAL_READY"
       gimbal:
-        <<: *SIDE_POS
+        <<: *SMALL_ISLAND_POS
     - step: "ORE_ROTATOR_READY"
       ore_rotator:
         target: *READY_POS
@@ -384,7 +421,7 @@ steps_list:
   TWO_STONE_SMALL_ISLAND:
     - step: "GIMBAL_READY"
       gimbal:
-        <<: *SIDE_POS
+        <<: *SMALL_ISLAND_POS
     - step: "ORE_ROTATOR_READY"
       ore_rotator:
         target: *READY_POS
@@ -632,6 +669,12 @@ steps_list:
 
   #################BIG_ISLAND#############
   MID_BIG_ISLAND:
+    - step: "open ex arm"
+      extend_arm_front:
+        target: *EX_OPEN
+    - step: "open ex arm"
+      extend_arm_back:
+        target: *EX_OPEN
     - step: "MID_ARM_READY"
       arm:
         joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
@@ -700,6 +743,9 @@ steps_list:
     - step: "CLOSE_GRIPPER"
       gripper:
         <<: *CLOSE_GRIPPER
+    - step: "move arm out"
+      arm:
+        joints: ["KEEP", ]
     - step: "ARM_RESET"
       arm:
         joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_GET_BIG_MID, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
