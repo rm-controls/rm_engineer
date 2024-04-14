@@ -236,16 +236,8 @@ public:
                 tf2_ros::Buffer& tf)
     : EndEffectorMotion(motion, interface, tf)
   {
-    drift_dimensions_.resize(6, true);
     radius_ = xmlRpcGetDouble(motion, "radius", 0.1);
     link7_length_ = xmlRpcGetDouble(motion, "link7_length", 0.);
-    if (motion.hasMember("drift_dimensions"))
-    {
-      for (int i = 0; i < (int)drift_dimensions_.size(); ++i)
-      {
-        drift_dimensions_[i] = motion["drift_dimensions"][i];
-      }
-    }
     if (motion.hasMember("basics_length"))
     {
       ROS_ASSERT(motion["basics_length"].getType() == XmlRpc::XmlRpcValue::TypeArray);
@@ -298,9 +290,6 @@ public:
             exchange2base = tf_.lookupTransform("base_link", target_.header.frame_id, ros::Time(0));
             quatToRPY(exchange2base.transform.rotation, roll_temp, pitch_temp, yaw_temp);
             quatToRPY(target_.pose.orientation, roll, pitch, yaw);
-            roll = drift_dimensions_[3] ? roll : (roll - roll_temp);
-            pitch = drift_dimensions_[4] ? pitch : (pitch - pitch_temp);
-            yaw = drift_dimensions_[5] ? yaw : (yaw - yaw_temp);
 
             tf2::Quaternion tmp_tf_quaternion;
             tmp_tf_quaternion.setRPY(roll, pitch, yaw);
@@ -317,9 +306,9 @@ public:
             temp_target.pose.orientation = quat_tf;
             tf2::doTransform(temp_target.pose, final_target_.pose,
                              tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
-            final_target_.pose.position.x = drift_dimensions_[0] ? final_target_.pose.position.x : 0.;
-            final_target_.pose.position.y = drift_dimensions_[1] ? final_target_.pose.position.y : 0.;
-            final_target_.pose.position.z = drift_dimensions_[2] ? final_target_.pose.position.z : 0.;
+            final_target_.pose.position.x = final_target_.pose.position.x;
+            final_target_.pose.position.y = final_target_.pose.position.y;
+            final_target_.pose.position.z = final_target_.pose.position.z;
             final_target_.header.frame_id = interface_.getPlanningFrame();
           }
           catch (tf2::TransformException& ex)
@@ -340,19 +329,16 @@ public:
             target_.pose.position.z = points_.getPoints()[i].z;
             quatToRPY(base2exchange.transform.rotation, roll, pitch, yaw);
             quatToRPY(target_.pose.orientation, roll_temp, pitch_temp, yaw_temp);
-            roll = drift_dimensions_[3] ? (roll + roll_temp) : 0.;
-            pitch = drift_dimensions_[4] ? (pitch + pitch_temp) : 0.;
-            yaw = drift_dimensions_[5] ? (yaw + yaw_temp) : 0.;
+            roll = roll + roll_temp;
+            pitch = pitch + pitch_temp;
+            yaw = yaw + yaw_temp;
             tf2::Quaternion tf_quaternion;
             tf_quaternion.setRPY(roll, pitch, yaw);
             geometry_msgs::Quaternion quat_tf = tf2::toMsg(tf_quaternion);
 
-            final_target_.pose.position.x =
-                drift_dimensions_[0] ? base2exchange.transform.translation.x + target_.pose.position.x : 0.;
-            final_target_.pose.position.y =
-                drift_dimensions_[1] ? base2exchange.transform.translation.y + target_.pose.position.y : 0.;
-            final_target_.pose.position.z =
-                drift_dimensions_[2] ? base2exchange.transform.translation.z + target_.pose.position.z : 0.;
+            final_target_.pose.position.x = base2exchange.transform.translation.x + target_.pose.position.x;
+            final_target_.pose.position.y = base2exchange.transform.translation.y + target_.pose.position.y;
+            final_target_.pose.position.z = base2exchange.transform.translation.z + target_.pose.position.z;
             final_target_.pose.orientation = quat_tf;
             final_target_.header.frame_id = interface_.getPlanningFrame();
           }
@@ -389,7 +375,6 @@ private:
                 tolerance_orientation_);
   }
   bool is_refer_planning_frame_;
-  std::vector<bool> drift_dimensions_;
   geometry_msgs::PoseStamped final_target_;
   int max_planning_times_{};
   double radius_, point_resolution_, x_length_, y_length_, z_length_, k_theta_, k_beta_, k_x_, link7_length_;
