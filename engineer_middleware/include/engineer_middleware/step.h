@@ -94,9 +94,9 @@ public:
     if (step.hasMember("extend_arm"))
     {
       if (step["extend_arm"].hasMember("front"))
-        extend_arm_front_motion_ = new ExtendFrontMotion(step["extend_arm"], extend_arm_f_pub);
+        extend_arm_front_motion_ = new ExtendMotion(step["extend_arm"], extend_arm_f_pub, true);
       if (step["extend_arm"].hasMember("back"))
-        extend_arm_back_motion_ = new ExtendBackMotion(step["extend_arm"], extend_arm_b_pub);
+        extend_arm_back_motion_ = new ExtendMotion(step["extend_arm"], extend_arm_b_pub, false);
     }
   }
   bool move()
@@ -207,8 +207,7 @@ private:
   HandMotion* hand_motion_{};
   JointPositionMotion* end_effector_motion_{};
   JointPointMotion *ore_rotate_motion_{}, *ore_lift_motion_{}, *gimbal_lift_motion_{};
-  ExtendFrontMotion *extend_arm_front_motion_{};
-  ExtendBackMotion *extend_arm_back_motion_{};
+  ExtendMotion *extend_arm_front_motion_{}, *extend_arm_back_motion_{};
   StoneNumMotion* stone_num_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};

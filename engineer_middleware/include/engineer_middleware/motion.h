@@ -720,33 +720,17 @@ private:
   double target_;
 };
 
-class ExtendFrontMotion : public PublishMotion<std_msgs::Float64>
+class ExtendMotion : public PublishMotion<std_msgs::Float64>
 {
 public:
-  ExtendFrontMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
+  ExtendMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface, bool is_front)
     : PublishMotion<std_msgs::Float64>(motion, interface)
   {
-    ROS_ASSERT(motion.hasMember("front"));
-    target_ = xmlRpcGetDouble(motion, "front", 0.0);
-  }
-  bool move() override
-  {
-    msg_.data = target_;
-    return PublishMotion::move();
-  }
-
-private:
-  double target_;
-};
-
-class ExtendBackMotion : public PublishMotion<std_msgs::Float64>
-{
-public:
-  ExtendBackMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
-    : PublishMotion<std_msgs::Float64>(motion, interface)
-  {
-    ROS_ASSERT(motion.hasMember("back"));
-    target_ = xmlRpcGetDouble(motion, "back", 0.0);
+    ROS_ASSERT(motion.hasMember("front") || motion.hasMember("back"));
+    if (is_front)
+      target_ = xmlRpcGetDouble(motion, "front", 0.0);
+    else
+      target_ = xmlRpcGetDouble(motion, "back", 0.0);
   }
   bool move() override
   {
