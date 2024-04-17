@@ -48,7 +48,6 @@
 #include <std_msgs/Int32.h>
 #include <std_msgs/String.h>
 #include <engineer_middleware/chassis_interface.h>
-#include <engineer_middleware/points.h>
 
 namespace engineer_middleware
 {
@@ -113,17 +112,12 @@ public:
   {
     return msg_;
   }
-  sensor_msgs::PointCloud2 getPointCloud2()
-  {
-    return points_.getPointCloud2();
-  }
 
 protected:
   virtual bool isReachGoal() = 0;
   double speed_, accel_;
   int countdown_{};
   std_msgs::Int32 msg_;
-  Points points_;
 };
 
 class EndEffectorMotion : public MoveitMotionBase
@@ -236,36 +230,7 @@ public:
                 tf2_ros::Buffer& tf)
     : EndEffectorMotion(motion, interface, tf)
   {
-    radius_ = xmlRpcGetDouble(motion, "radius", 0.1);
-    link7_length_ = xmlRpcGetDouble(motion, "link7_length", 0.);
-    if (motion.hasMember("basics_length"))
-    {
-      ROS_ASSERT(motion["basics_length"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      x_length_ = xmlRpcGetDouble(motion["basics_length"], 0);
-      y_length_ = xmlRpcGetDouble(motion["basics_length"], 1);
-      z_length_ = xmlRpcGetDouble(motion["basics_length"], 2);
-    }
-    if (motion.hasMember("rpy_rectify"))
-    {
-      k_x_ = xmlRpcGetDouble(motion["rpy_rectify"], 0);
-      k_theta_ = xmlRpcGetDouble(motion["rpy_rectify"], 1);
-      k_beta_ = xmlRpcGetDouble(motion["rpy_rectify"], 2);
-    }
-    point_resolution_ = xmlRpcGetDouble(motion, "point_resolution", 0.01);
     max_planning_times_ = (int)xmlRpcGetDouble(motion, "max_planning_times", 3);
-    if (motion.hasMember("spacial_shape"))
-    {
-      points_.cleanPoints();
-      if (motion["spacial_shape"] == "SPHERE")
-        points_.setValue(Points::SPHERE, target_.pose.position.x, target_.pose.position.y, target_.pose.position.z,
-                         radius_, point_resolution_);
-      else if (motion["spacial_shape"] == "BASICS")
-        points_.setValue(Points::BASICS, target_.pose.position.x, target_.pose.position.y, target_.pose.position.z,
-                         x_length_, y_length_, z_length_, point_resolution_);
-      else
-        ROS_ERROR("NO SUCH SHAPE");
-      points_.generateGeometryPoints();
-    }
     if (motion.hasMember("is_refer_planning_frame"))
       is_refer_planning_frame_ = motion["is_refer_planning_frame"];
     else
@@ -273,87 +238,72 @@ public:
   }
   bool move() override
   {
-    points_.cleanPoints();
-    points_.generateGeometryPoints();
     MoveitMotionBase::move();
-    int move_times = (int)points_.getPoints().size();
-    for (int i = 0; i < move_times && i < max_planning_times_; ++i)
+    if (!target_.header.frame_id.empty())
     {
-      if (!target_.header.frame_id.empty())
+      if (!is_refer_planning_frame_)
       {
-        if (!is_refer_planning_frame_)
+        try
         {
-          try
-          {
-            double roll, pitch, yaw, roll_temp, pitch_temp, yaw_temp;
-            geometry_msgs::TransformStamped exchange2base;
-            exchange2base = tf_.lookupTransform("base_link", target_.header.frame_id, ros::Time(0));
-            quatToRPY(exchange2base.transform.rotation, roll_temp, pitch_temp, yaw_temp);
-            quatToRPY(target_.pose.orientation, roll, pitch, yaw);
+          double roll, pitch, yaw, roll_temp, pitch_temp, yaw_temp;
+          geometry_msgs::TransformStamped exchange2base;
+          exchange2base = tf_.lookupTransform("base_link", target_.header.frame_id, ros::Time(0));
+          quatToRPY(exchange2base.transform.rotation, roll_temp, pitch_temp, yaw_temp);
+          quatToRPY(target_.pose.orientation, roll, pitch, yaw);
 
-            tf2::Quaternion tmp_tf_quaternion;
-            tmp_tf_quaternion.setRPY(roll, pitch, yaw);
-            geometry_msgs::Quaternion quat_tf = tf2::toMsg(tmp_tf_quaternion);
-            quatToRPY(quat_tf, roll, pitch, yaw);
-            points_.rectifyForRPY(pitch_temp, yaw_temp, k_x_, k_theta_, k_beta_);
-            if (link7_length_)
-              points_.rectifyForLink7(pitch_temp, link7_length_);
-            target_.pose.position.x = points_.getPoints()[i].x;
-            target_.pose.position.y = points_.getPoints()[i].y;
-            target_.pose.position.z = points_.getPoints()[i].z;
-            geometry_msgs::PoseStamped temp_target;
-            temp_target.pose.position = target_.pose.position;
-            temp_target.pose.orientation = quat_tf;
-            tf2::doTransform(temp_target.pose, final_target_.pose,
-                             tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
-            final_target_.pose.position.x = final_target_.pose.position.x;
-            final_target_.pose.position.y = final_target_.pose.position.y;
-            final_target_.pose.position.z = final_target_.pose.position.z;
-            final_target_.header.frame_id = interface_.getPlanningFrame();
-          }
-          catch (tf2::TransformException& ex)
-          {
-            ROS_WARN("%s", ex.what());
-            return false;
-          }
+          tf2::Quaternion tmp_tf_quaternion;
+          tmp_tf_quaternion.setRPY(roll, pitch, yaw);
+          geometry_msgs::Quaternion quat_tf = tf2::toMsg(tmp_tf_quaternion);
+          quatToRPY(quat_tf, roll, pitch, yaw);
+          geometry_msgs::PoseStamped temp_target;
+          temp_target.pose.position = target_.pose.position;
+          temp_target.pose.orientation = quat_tf;
+          tf2::doTransform(temp_target.pose, final_target_.pose,
+                           tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
+          final_target_.pose.position.x = final_target_.pose.position.x;
+          final_target_.pose.position.y = final_target_.pose.position.y;
+          final_target_.pose.position.z = final_target_.pose.position.z;
+          final_target_.header.frame_id = interface_.getPlanningFrame();
         }
-        else
+        catch (tf2::TransformException& ex)
         {
-          try
-          {
-            double roll, pitch, yaw, roll_temp, pitch_temp, yaw_temp;
-            geometry_msgs::TransformStamped base2exchange;
-            base2exchange = tf_.lookupTransform("base_link", target_.header.frame_id, ros::Time(0));
-            target_.pose.position.x = points_.getPoints()[i].x;
-            target_.pose.position.y = points_.getPoints()[i].y;
-            target_.pose.position.z = points_.getPoints()[i].z;
-            quatToRPY(base2exchange.transform.rotation, roll, pitch, yaw);
-            quatToRPY(target_.pose.orientation, roll_temp, pitch_temp, yaw_temp);
-            roll = roll + roll_temp;
-            pitch = pitch + pitch_temp;
-            yaw = yaw + yaw_temp;
-            tf2::Quaternion tf_quaternion;
-            tf_quaternion.setRPY(roll, pitch, yaw);
-            geometry_msgs::Quaternion quat_tf = tf2::toMsg(tf_quaternion);
-
-            final_target_.pose.position.x = base2exchange.transform.translation.x + target_.pose.position.x;
-            final_target_.pose.position.y = base2exchange.transform.translation.y + target_.pose.position.y;
-            final_target_.pose.position.z = base2exchange.transform.translation.z + target_.pose.position.z;
-            final_target_.pose.orientation = quat_tf;
-            final_target_.header.frame_id = interface_.getPlanningFrame();
-          }
-          catch (tf2::TransformException& ex)
-          {
-            ROS_WARN("%s", ex.what());
-            return false;
-          }
+          ROS_WARN("%s", ex.what());
+          return false;
         }
-        interface_.setPoseTarget(final_target_);
-        moveit::planning_interface::MoveGroupInterface::Plan plan;
-        msg_.data = interface_.plan(plan).val;
-        if (msg_.data == 1)
-          return interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
       }
+      else
+      {
+        try
+        {
+          double roll, pitch, yaw, roll_temp, pitch_temp, yaw_temp;
+          geometry_msgs::TransformStamped base2exchange;
+          base2exchange = tf_.lookupTransform("base_link", target_.header.frame_id, ros::Time(0));
+          quatToRPY(base2exchange.transform.rotation, roll, pitch, yaw);
+          quatToRPY(target_.pose.orientation, roll_temp, pitch_temp, yaw_temp);
+          roll = roll + roll_temp;
+          pitch = pitch + pitch_temp;
+          yaw = yaw + yaw_temp;
+          tf2::Quaternion tf_quaternion;
+          tf_quaternion.setRPY(roll, pitch, yaw);
+          geometry_msgs::Quaternion quat_tf = tf2::toMsg(tf_quaternion);
+
+          final_target_.pose.position.x = base2exchange.transform.translation.x + target_.pose.position.x;
+          final_target_.pose.position.y = base2exchange.transform.translation.y + target_.pose.position.y;
+          final_target_.pose.position.z = base2exchange.transform.translation.z + target_.pose.position.z;
+          final_target_.pose.orientation = quat_tf;
+          final_target_.header.frame_id = interface_.getPlanningFrame();
+        }
+        catch (tf2::TransformException& ex)
+        {
+          ROS_WARN("%s", ex.what());
+          return false;
+        }
+      }
+      interface_.setPoseTarget(final_target_);
+      moveit::planning_interface::MoveGroupInterface::Plan plan;
+      msg_.data = interface_.plan(plan).val;
+      if (msg_.data == 1)
+        return interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     }
     return false;
   }
@@ -377,7 +327,6 @@ private:
   bool is_refer_planning_frame_;
   geometry_msgs::PoseStamped final_target_;
   int max_planning_times_{};
-  double radius_, point_resolution_, x_length_, y_length_, z_length_, k_theta_, k_beta_, k_x_, link7_length_;
 };
 
 class JointMotion : public MoveitMotionBase
