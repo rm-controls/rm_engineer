@@ -368,59 +368,59 @@ Visualization Manager:
         base_link:
           Value: true
         camera_link:
-          Value: true
+          Value: false
         camera_optical_frame:
-          Value: true
+          Value: false
         exchanger:
           Value: true
         extend_arm_back:
-          Value: true
+          Value: false
         extend_arm_front:
-          Value: true
+          Value: false
         gimbal_lifter:
-          Value: true
+          Value: false
         left_back_wheel:
-          Value: true
+          Value: false
         left_front_wheel:
-          Value: true
+          Value: false
         link1:
-          Value: true
+          Value: false
         link2:
-          Value: true
+          Value: false
         link3:
-          Value: true
+          Value: false
         link4:
-          Value: true
+          Value: false
         link5:
-          Value: true
+          Value: false
         link6:
-          Value: true
+          Value: false
         link7:
           Value: true
         map:
-          Value: true
+          Value: false
         mimic_link1:
-          Value: true
+          Value: false
         odom:
-          Value: true
+          Value: false
         ore_bin_lifter:
-          Value: true
+          Value: false
         ore_bin_rotator:
-          Value: true
+          Value: false
         pitch:
-          Value: true
+          Value: false
         real_world:
-          Value: true
+          Value: false
         right_back_wheel:
-          Value: true
+          Value: false
         right_front_wheel:
-          Value: true
+          Value: false
         tools_link:
-          Value: true
+          Value: false
         tools_link_st:
-          Value: true
+          Value: false
         yaw:
-          Value: true
+          Value: false
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
@@ -490,7 +490,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.3441882133483887
+      Distance: 2.504984140396118
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -498,17 +498,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.75
       Focal Point:
-        X: 0.7602222561836243
-        Y: -0.15494105219841003
-        Z: 0.9399657249450684
+        X: 0.23874804377555847
+        Y: 0.04174364358186722
+        Z: 0.6224369406700134
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.20979738235473633
+      Pitch: 0.5297974348068237
       Target Frame: base_link
-      Yaw: 3.1727137565612793
+      Yaw: 2.0677237510681152
     Saved: ~
 Window Geometry:
   Displays:

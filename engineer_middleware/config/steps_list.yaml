@@ -284,10 +284,6 @@ steps_list:
     - step: "gimbal lifter down"
       gimbal_lifter:
         target: *BUTTON_POS
-    - step: "close ex arm"
-      extend_arm_front:
-        front: *EX_CLOSE
-        back: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -308,10 +304,6 @@ steps_list:
     - step: "gimbal lifter down"
       gimbal_lifter:
         target: *MID_POS
-    - step: "close ex arm"
-      extend_arm_front:
-        front: *EX_CLOSE
-        back: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -332,10 +324,6 @@ steps_list:
     - step: "gimbal lifter down"
       gimbal_lifter:
         target: *MID_POS
-    - step: "close ex arm"
-      extend_arm_front:
-        front: *EX_CLOSE
-        back: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -830,10 +818,6 @@ steps_list:
     - step: "gimbal ready"
       gimbal:
         <<: *SMALL_ISLAND_POS
-    - step: "open ex arm"
-      extend_arm:
-        front: *EX_OPEN
-        back: *EX_OPEN
     - step: "MID_ARM_READY"
       arm:
         joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
@@ -937,10 +921,6 @@ steps_list:
     - step: "gimbal ready"
       gimbal:
         <<: *SMALL_ISLAND_POS
-    - step: "open ex arm"
-      extend_arm:
-        front: *EX_OPEN
-        back: *EX_OPEN
     - step: "MID_ARM_READY"
       arm:
         joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
@@ -1041,9 +1021,6 @@ steps_list:
     - step: "gimbal ready"
       gimbal:
         <<: *SMALL_ISLAND_POS
-    - step: "open ex arm"
-      extend_arm:
-        front: *EX_OPEN
     - step: "MID_ARM_READY"
       arm:
         joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
@@ -1147,9 +1124,6 @@ steps_list:
     - step: "gimbal ready"
       gimbal:
         <<: *SMALL_ISLAND_POS
-    - step: "open ex arm"
-      extend_arm:
-        front: *EX_OPEN
     - step: "MID_ARM_READY"
       arm:
         joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
@@ -1321,7 +1295,6 @@ steps_list:
         is_refer_planning_frame: true
         xyz: [ -0.3, 0., 0. ]
         rpy: [ 0., 3.1415926, 0. ]
-        drift_dimensions: [ true, true, true, true, true, true ]
         tolerance_position: 0.01
         tolerance_orientation: 0.001
         spacial_shape: SPHERE
