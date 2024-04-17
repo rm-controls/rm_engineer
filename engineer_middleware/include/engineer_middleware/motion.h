@@ -720,4 +720,26 @@ private:
   double target_;
 };
 
+class ExtendMotion : public PublishMotion<std_msgs::Float64>
+{
+public:
+  ExtendMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface, bool is_front)
+    : PublishMotion<std_msgs::Float64>(motion, interface)
+  {
+    ROS_ASSERT(motion.hasMember("front") || motion.hasMember("back"));
+    if (is_front)
+      target_ = xmlRpcGetDouble(motion, "front", 0.0);
+    else
+      target_ = xmlRpcGetDouble(motion, "back", 0.0);
+  }
+  bool move() override
+  {
+    msg_.data = target_;
+    return PublishMotion::move();
+  }
+
+private:
+  double target_;
+};
+
 };  // namespace engineer_middleware
