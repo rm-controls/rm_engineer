@@ -291,18 +291,39 @@ public:
           ROS_INFO_STREAM("base2exchange roll: " << roll);
           quatToRPY(target_.pose.orientation, roll_temp, pitch_temp, yaw_temp);
           ROS_INFO_STREAM("target roll: " << roll_temp);
-          roll = roll + roll_temp;
-          pitch = pitch + pitch_temp;
-          yaw = yaw + yaw_temp;
-          ROS_INFO_STREAM("roll added: " << roll);
+          quat_base2exchange_.setW(base2exchange.transform.rotation.w);
+          quat_base2exchange_.setX(base2exchange.transform.rotation.x);
+          quat_base2exchange_.setY(base2exchange.transform.rotation.y);
+          quat_base2exchange_.setZ(base2exchange.transform.rotation.z);
+          ROS_INFO_STREAM("base2exchange quat w: " << quat_base2exchange_.w());
+          ROS_INFO_STREAM("base2exchange quat x: " << quat_base2exchange_.x());
+          ROS_INFO_STREAM("base2exchange quat y: " << quat_base2exchange_.y());
+          ROS_INFO_STREAM("base2exchange quat z: " << quat_base2exchange_.z());
+
+          quat_target_.setW(target_.pose.orientation.w);
+          quat_target_.setX(target_.pose.orientation.x);
+          quat_target_.setY(target_.pose.orientation.y);
+          quat_target_.setZ(target_.pose.orientation.z);
+          ROS_INFO_STREAM("target quat w: " << quat_target_.w());
+          ROS_INFO_STREAM("target quat x: " << quat_target_.x());
+          ROS_INFO_STREAM("target quat y: " << quat_target_.y());
+          ROS_INFO_STREAM("target quat z: " << quat_target_.z());
+
           tf2::Quaternion tf_quaternion;
-          tf_quaternion.setRPY(roll, pitch, yaw);
-          geometry_msgs::Quaternion quat_tf = tf2::toMsg(tf_quaternion);
+          tf_quaternion = quat_target_ * quat_base2exchange_;
 
           final_target_.pose.position.x = base2exchange.transform.translation.x + target_.pose.position.x;
           final_target_.pose.position.y = base2exchange.transform.translation.y + target_.pose.position.y;
           final_target_.pose.position.z = base2exchange.transform.translation.z + target_.pose.position.z;
-          final_target_.pose.orientation = quat_tf;
+          final_target_.pose.orientation.w = tf_quaternion.w();
+          final_target_.pose.orientation.x = tf_quaternion.x();
+          final_target_.pose.orientation.y = tf_quaternion.y();
+          final_target_.pose.orientation.z = tf_quaternion.z();
+          ROS_INFO_STREAM("final target w: " << final_target_.pose.orientation.w);
+          ROS_INFO_STREAM("final target x: " << final_target_.pose.orientation.x);
+          ROS_INFO_STREAM("final target y: " << final_target_.pose.orientation.y);
+          ROS_INFO_STREAM("final target z: " << final_target_.pose.orientation.z);
+
           final_target_.header.frame_id = interface_.getPlanningFrame();
           double rolll, pitchh, yaww;
           quatToRPY(final_target_.pose.orientation, rolll, pitchh, yaww);
@@ -341,6 +362,7 @@ private:
   }
   bool is_refer_planning_frame_;
   geometry_msgs::PoseStamped final_target_;
+  tf2::Quaternion quat_base2exchange_, quat_target_;
 };
 
 class JointMotion : public MoveitMotionBase

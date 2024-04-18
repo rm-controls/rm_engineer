@@ -428,50 +428,60 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          exchanger:
+        base_link:
+          {}
+        exchanger:
+          {}
+        extend_arm_back:
+          {}
+        extend_arm_front:
+          {}
+        gimbal_lifter:
+          camera_link:
             {}
-          odom:
-            base_link:
-              extend_arm_back:
-                {}
-              extend_arm_front:
-                {}
-              gimbal_lifter:
-                camera_link:
-                  {}
-                camera_optical_frame:
-                  {}
-                pitch:
-                  {}
-                yaw:
-                  {}
-              left_back_wheel:
-                {}
-              left_front_wheel:
-                {}
-              link1:
-                link2:
-                  link3:
-                    link4:
-                      link5:
-                        link6:
-                          link7:
-                            tools_link:
-                              {}
-                            tools_link_st:
-                              {}
-              mimic_link1:
-                {}
-              ore_bin_rotator:
-                ore_bin_lifter:
-                  {}
-              real_world:
-                {}
-              right_back_wheel:
-                {}
-              right_front_wheel:
-                {}
+          camera_optical_frame:
+            {}
+        left_back_wheel:
+          {}
+        left_front_wheel:
+          {}
+        link1:
+          {}
+        link2:
+          {}
+        link3:
+          {}
+        link4:
+          {}
+        link5:
+          {}
+        link6:
+          {}
+        link7:
+          tools_link:
+            {}
+          tools_link_st:
+            {}
+        map:
+          {}
+        mimic_link1:
+          {}
+        odom:
+          {}
+        ore_bin_lifter:
+          {}
+        ore_bin_rotator:
+          {}
+        pitch:
+          {}
+        real_world:
+          {}
+        right_back_wheel:
+          {}
+        right_front_wheel:
+          {}
+        yaw:
+          {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -490,7 +500,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.504984140396118
+      Distance: 1.4108070135116577
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -506,9 +516,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5297974348068237
+      Pitch: 0.48979732394218445
       Target Frame: base_link
-      Yaw: 2.0677237510681152
+      Yaw: 3.2827558517456055
     Saved: ~
 Window Geometry:
   Displays:
