@@ -1349,4 +1349,3 @@ steps_list:
     - step: "gimbal tall"
       gimbal_lifter:
         target: *TALLEST_POS
-
