@@ -1245,7 +1245,7 @@ steps_list:
       arm:
         frame: exchanger
         is_refer_planning_frame: true
-        xyz: [ -0.3, 0.2, -0.2 ]
+        xyz: [ -0.2, 0., 0. ]
         rpy: [ 0., -1.5707963, 0. ]
         drift_dimensions: [ true, true, true, true, true, true ]
         tolerance_position: 0.01
@@ -1270,27 +1270,13 @@ steps_list:
         tolerance_position: 0.01
         tolerance_orientation: 0.001
 
-  EXCHANGE_ORI:
-    - step: "test new exchange"
-      arm:
-        frame: exchanger
-        is_refer_planning_frame: true
-        rpy: [ 0., -1.5707963, 0. ]
-        drift_dimensions: [ true, true, true, true, true, true ]
-        tolerance_position: 0.01
-        tolerance_orientation: 0.001
-        spacial_shape: SPHERE
-        radius: 0.5
-        point_resolution: 0.5
-        max_planning_times: 1
-        common:
-          <<: *NORMALLY
+
   EXCHANGE_STRAIGHT:
     - step: "test new exchange"
       arm:
         frame: exchanger
         is_refer_planning_frame: true
-        xyz: [ -0.3, 0., 0. ]
+        xyz: [ -0.2, 0., 0. ]
         rpy: [ 0., 3.1415926, 0. ]
         tolerance_position: 0.01
         tolerance_orientation: 0.001

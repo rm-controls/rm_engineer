@@ -310,7 +310,7 @@ public:
           ROS_INFO_STREAM("target quat z: " << quat_target_.z());
 
           tf2::Quaternion tf_quaternion;
-          tf_quaternion = quat_target_ * quat_base2exchange_;
+          tf_quaternion = quat_base2exchange_ * quat_target_;
 
           final_target_.pose.position.x = base2exchange.transform.translation.x + target_.pose.position.x;
           final_target_.pose.position.y = base2exchange.transform.translation.y + target_.pose.position.y;
