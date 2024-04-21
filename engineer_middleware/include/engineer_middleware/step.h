@@ -50,9 +50,9 @@ public:
        moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
        ros::Publisher& hand_pub, ros::Publisher& end_effector_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
        ros::Publisher& reversal_pub, ros::Publisher& stone_num_pub, ros::Publisher& planning_result_pub,
-       ros::Publisher& point_cloud_pub, ros::Publisher& ore_rotate_pub, ros::Publisher& ore_lift_pub,
-       ros::Publisher& gimbal_lift_pub, ros::Publisher& extend_arm_f_pub, ros::Publisher& extend_arm_b_pub)
-    : planning_result_pub_(planning_result_pub), point_cloud_pub_(point_cloud_pub), arm_group_(arm_group)
+       ros::Publisher& ore_rotate_pub, ros::Publisher& ore_lift_pub, ros::Publisher& gimbal_lift_pub,
+       ros::Publisher& extend_arm_f_pub, ros::Publisher& extend_arm_b_pub)
+    : planning_result_pub_(planning_result_pub), arm_group_(arm_group)
   {
     ROS_ASSERT(step.hasMember("step"));
     step_name_ = static_cast<std::string>(step["step"]);
@@ -105,11 +105,6 @@ public:
     if (arm_motion_)
     {
       success &= arm_motion_->move();
-      if (!arm_motion_->getPointCloud2().data.empty())
-      {
-        sensor_msgs::PointCloud2 point_cloud2 = arm_motion_->getPointCloud2();
-        point_cloud_pub_.publish(point_cloud2);
-      }
       std_msgs::Int32 msg = arm_motion_->getPlanningResult();
       planning_result_pub_.publish(msg);
     }

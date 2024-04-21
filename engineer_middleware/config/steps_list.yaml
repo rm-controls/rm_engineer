@@ -187,13 +187,14 @@ common:
     small_island: &LIFTER_SMALL_ISLAND
       0.1
     mid_pos: &MID_POS
-      0.14
+      0.1
     big_island: &LIFTER_BIG_ISLAND
-      0.260
+
+      0.14
     two_stone_pos: &TWO_STONE_POS
       0.163
     tallest_pos: &TALLEST_POS
-      0.394
+      0.28
 
   gripper:
     open_gripper: &OPEN_GRIPPER
@@ -283,10 +284,6 @@ steps_list:
     - step: "gimbal lifter down"
       gimbal_lifter:
         target: *BUTTON_POS
-    - step: "close ex arm"
-      extend_arm_front:
-        front: *EX_CLOSE
-        back: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -307,10 +304,6 @@ steps_list:
     - step: "gimbal lifter down"
       gimbal_lifter:
         target: *MID_POS
-    - step: "close ex arm"
-      extend_arm_front:
-        front: *EX_CLOSE
-        back: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -331,10 +324,6 @@ steps_list:
     - step: "gimbal lifter down"
       gimbal_lifter:
         target: *MID_POS
-    - step: "close ex arm"
-      extend_arm_front:
-        front: *EX_CLOSE
-        back: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -494,16 +483,16 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
-    - step: "JOINT1_UP"
+    - step: "JOINT1_UP AND BACK"
       arm:
-        joints: [ *JOINT1_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP"]
+        joints: [ *JOINT1_UP_POS, "KEEP", *JOINT3_SMALL_GET_STONE2, "KEEP", "KEEP", "KEEP", "KEEP"]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "SMALL_ARM_UP_STONE"
       arm:
-        joints: [ *JOINT1_UP_POS, *JOINT2_SMALL_ARM_UP, *JOINT3_SMALL_GET_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        joints: [ *JOINT1_UP_POS, *JOINT2_SMALL_ARM_UP, *JOINT3_SMALL_GET_STONE2, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
           <<: *SLOWLY
         tolerance:
@@ -829,10 +818,6 @@ steps_list:
     - step: "gimbal ready"
       gimbal:
         <<: *SMALL_ISLAND_POS
-    - step: "open ex arm"
-      extend_arm:
-        front: *EX_OPEN
-        back: *EX_OPEN
     - step: "MID_ARM_READY"
       arm:
         joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
@@ -932,16 +917,10 @@ steps_list:
       gimbal:
         <<: *FRONT_POS
 
-
   HAS1_MID_BIG_ISLAND:
     - step: "gimbal ready"
       gimbal:
         <<: *SMALL_ISLAND_POS
-    - step: "open ex arm"
-
-      extend_arm:
-        front: *EX_OPEN
-        back: *EX_OPEN
     - step: "MID_ARM_READY"
       arm:
         joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
@@ -1042,10 +1021,6 @@ steps_list:
     - step: "gimbal ready"
       gimbal:
         <<: *SMALL_ISLAND_POS
-    - step: "open ex arm"
-      extend_arm:
-        front: *EX_OPEN
-
     - step: "MID_ARM_READY"
       arm:
         joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
@@ -1065,7 +1040,6 @@ steps_list:
     - step: "OPEN_GRIPPER"
       gripper:
         <<: *OPEN_GRIPPER
-
   HAS0_SIDE_BIG_ISLAND0:
     - step: "GET_MID_STONE"
       arm:
@@ -1150,9 +1124,6 @@ steps_list:
     - step: "gimbal ready"
       gimbal:
         <<: *SMALL_ISLAND_POS
-    - step: "open ex arm"
-      extend_arm:
-        front: *EX_OPEN
     - step: "MID_ARM_READY"
       arm:
         joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
@@ -1274,14 +1245,11 @@ steps_list:
       arm:
         frame: exchanger
         is_refer_planning_frame: true
-        xyz: [ -0.3, 0.2, -0.2 ]
+        xyz: [ -0.2, 0., 0. ]
         rpy: [ 0., -1.5707963, 0. ]
         drift_dimensions: [ true, true, true, true, true, true ]
         tolerance_position: 0.01
         tolerance_orientation: 0.001
-        spacial_shape: SPHERE
-        radius: 0.3
-        point_resolution: 0.5
         max_planning_times: 1
         common:
           <<: *NORMALLY
@@ -1302,29 +1270,14 @@ steps_list:
         tolerance_position: 0.01
         tolerance_orientation: 0.001
 
-  EXCHANGE_ORI:
-    - step: "test new exchange"
-      arm:
-        frame: exchanger
-        is_refer_planning_frame: true
-        rpy: [ 0., -1.5707963, 0. ]
-        drift_dimensions: [ true, true, true, true, true, true ]
-        tolerance_position: 0.01
-        tolerance_orientation: 0.001
-        spacial_shape: SPHERE
-        radius: 0.5
-        point_resolution: 0.5
-        max_planning_times: 1
-        common:
-          <<: *NORMALLY
+
   EXCHANGE_STRAIGHT:
     - step: "test new exchange"
       arm:
         frame: exchanger
         is_refer_planning_frame: true
-        xyz: [ -0.3, 0., 0. ]
+        xyz: [ -0.2, 0., 0. ]
         rpy: [ 0., 3.1415926, 0. ]
-        drift_dimensions: [ true, true, true, true, true, true ]
         tolerance_position: 0.01
         tolerance_orientation: 0.001
         spacial_shape: SPHERE
@@ -1333,7 +1286,6 @@ steps_list:
         max_planning_times: 1
         common:
           <<: *NORMALLY
-
 
   GIMBAL_DOWN:
     - step: "gimbal lowest"
