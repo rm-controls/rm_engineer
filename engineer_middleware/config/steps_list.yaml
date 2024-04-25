@@ -103,7 +103,7 @@ common:
       big_ready: &JOINT3_BIG_READY
                      0.071
       get_big_mid: &JOINT3_GET_BIG_MID
-                      -0.292
+                      -0.295
       get_big_side: &JOINT3_GET_BIG_SIDE
                      -0.199
       big_pull_out: &JOINT3_BIG_PULL_OUT
@@ -118,7 +118,7 @@ common:
       mid_position: &JOINT4_MID_POSITION
                       0.001
       right_position: &JOINT4_R_POSITION
-                        -1.52
+                        -1.554
       small_ready: &JOINT4_SMALL_READY
                         0.054
       small_turn: &JOINT4_SMALL_TURN
@@ -209,7 +209,7 @@ common:
     mid_pos: &MID_POS
       0.14
     big_island: &LIFTER_BIG_ISLAND
-      0.260
+      0.230
     two_stone_pos: &TWO_STONE_POS
       0.05
     tallest_pos: &TALLEST_POS
