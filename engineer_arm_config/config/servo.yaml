@@ -7,8 +7,8 @@ use_gazebo: true # Whether the robot is started in a Gazebo simulation environme
 command_in_type: "speed_units" # "unitless"> in the range [-1:1], as if from joystick. "speed_units"> cmds are in m/s and rad/s
 scale:
   # Scale parameters are only used if command_in_type=="unitless"
-  linear: 0.6  # Max linear velocity. Meters per publish_period. Unit is [m/s]. Only used for Cartesian commands.
-  rotational: 0.3 # Max angular velocity. Rads per publish_period. Unit is [rad/s]. Only used for Cartesian commands.
+  linear: 0.4  # Max linear velocity. Meters per publish_period. Unit is [m/s]. Only used for Cartesian commands.
+  rotational: 0.2 # Max angular velocity. Rads per publish_period. Unit is [rad/s]. Only used for Cartesian commands.
   # Max joint angular/linear velocity. Rads or Meters per publish period. Only used for joint commands on joint_command_in_topic.
   joint: 0.005
 low_pass_filter_coeff: 1.  # Larger --> trust the filtered data more, trust the measurements less.
@@ -32,8 +32,8 @@ move_group_name: engineer_arm  # Often 'manipulator' or 'arm'
 planning_frame: base_link  # The MoveIt planning frame. Often 'base_link' or 'world'
 
 ## Other frames
-ee_frame_name: link7  # The name of the end effector link, used to return the EE pose
-robot_link_command_frame: link7  # commands must be given in the frame of a robot link. Usually either the base or end effector
+ee_frame_name: tools_link  # The name of the end effector link, used to return the EE pose
+robot_link_command_frame: tools_link  # commands must be given in the frame of a robot link. Usually either the base or end effector
 
 ## Stopping behaviour
 incoming_command_timeout: 0.1  # Stop servoing if X seconds elapse without a new command
