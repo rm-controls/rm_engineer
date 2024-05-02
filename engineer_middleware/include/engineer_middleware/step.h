@@ -59,7 +59,7 @@ public:
     if (step.hasMember("arm"))
     {
       if (step["arm"].hasMember("joints"))
-        arm_motion_ = new JointMotion(step["arm"], arm_group);
+        arm_motion_ = new JointMotion(step["arm"], arm_group, tf);
       else if (step["arm"].hasMember("spacial_shape"))
         arm_motion_ = new SpaceEeMotion(step["arm"], arm_group, tf);
       else
@@ -98,6 +98,8 @@ public:
       if (step["extend_arm"].hasMember("back"))
         extend_arm_back_motion_ = new ExtendMotion(step["extend_arm"], extend_arm_b_pub, false);
     }
+    if (step.hasMember("chassis_target"))
+      chassis_target_motion_ = new ChassisTargetMotion(step["chassis_target"], chassis_interface, tf);
   }
   bool move()
   {
@@ -139,6 +141,8 @@ public:
       success &= extend_arm_back_motion_->move();
     if (extend_arm_front_motion_)
       success &= extend_arm_front_motion_->move();
+    if (chassis_target_motion_)
+      success &= chassis_target_motion_->move();
     return success;
   }
   void stop()
@@ -149,6 +153,8 @@ public:
       hand_motion_->stop();
     if (chassis_motion_)
       chassis_motion_->stop();
+    if (chassis_target_motion_)
+      chassis_target_motion_->stop();
   }
 
   void deleteScene()
@@ -176,6 +182,8 @@ public:
       success &= gimbal_motion_->isFinish();
     if (reversal_motion_)
       success &= reversal_motion_->isFinish();
+    if (chassis_target_motion_)
+      success &= chassis_target_motion_->isFinish();
     return success;
   }
   bool checkTimeout(ros::Duration period)
@@ -191,6 +199,8 @@ public:
       success &= chassis_motion_->checkTimeout(period);
     if (gimbal_motion_)
       success &= gimbal_motion_->checkTimeout(period);
+    if (chassis_target_motion_)
+      success &= chassis_target_motion_->checkTimeout(period);
     return success;
   }
 
@@ -216,6 +226,7 @@ private:
   PlanningScene* planning_scene_{};
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
   moveit::planning_interface::MoveGroupInterface& arm_group_;
+  ChassisTargetMotion* chassis_target_motion_{};
 };
 
 }  // namespace engineer_middleware
