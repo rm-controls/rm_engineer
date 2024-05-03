@@ -409,6 +409,7 @@ public:
     if (motion.hasMember("record_arm2base"))
       record_arm2base_ = bool(motion["record_arm2base"]);
   }
+  static geometry_msgs::TransformStamped arm2base;
   bool move() override
   {
     if (record_arm2base_)
@@ -418,7 +419,9 @@ public:
         arm2base.header.frame_id = "base_link";
         arm2base.header.stamp = ros::Time::now();
         arm2base.child_frame_id = "chassis_target";
-        arm2base = tf_buffer_.lookupTransform("base_link", "joint4", ros::Time(0));
+
+        arm2base = tf_buffer_.lookupTransform("base_link", "link4", ros::Time(0));
+        ROS_INFO_STREAM("X is: " << arm2base.transform.translation.x << "Y is: " << arm2base.transform.translation.y);
       }
       catch (tf2::TransformException& ex)
       {
@@ -446,7 +449,6 @@ public:
     msg_.data = interface_.plan(plan).val;
     return (interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
   }
-  static geometry_msgs::TransformStamped arm2base;
 
 private:
   bool isReachGoal() override
@@ -763,12 +765,10 @@ public:
     {
       try
       {
-        double roll, pitch, yaw;
-        target_.pose.position.x = JointMotion::arm2base.transform.translation.x;
-        target_.pose.position.y = JointMotion::arm2base.transform.translation.y;
-        quatToRPY(JointMotion::arm2base.transform.rotation, roll, pitch, yaw);
+        target_.pose.position.x = JointMotion::arm2base.transform.translation.x + x_offset_;
+        target_.pose.position.y = JointMotion::arm2base.transform.translation.y + y_offset_;
         tf2::Quaternion quat_tf;
-        quat_tf.setRPY(0, 0, yaw * yaw_scale_);
+        quat_tf.setRPY(0, 0, 0);
         geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
         target_.pose.orientation = quat_msg;
       }
@@ -783,11 +783,11 @@ public:
       try
       {
         double roll, pitch, yaw;
-        geometry_msgs::TransformStamped target2base_link;
-        target2base_link = tf_buffer_.lookupTransform("base_link", move_target_, ros::Time(0));
-        target_.pose.position.x = target2base_link.transform.translation.x;
-        target_.pose.position.y = target2base_link.transform.translation.y;
-        quatToRPY(target2base_link.transform.rotation, roll, pitch, yaw);
+        geometry_msgs::TransformStamped base2target;
+        base2target = tf_buffer_.lookupTransform("base_link", move_target_, ros::Time(0));
+        target_.pose.position.x = base2target.transform.translation.x + x_offset_;
+        target_.pose.position.y = base2target.transform.translation.y + y_offset_;
+        quatToRPY(base2target.transform.rotation, roll, pitch, yaw);
         tf2::Quaternion quat_tf;
         quat_tf.setRPY(0, 0, yaw * yaw_scale_);
         geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
@@ -805,8 +805,8 @@ public:
   }
 
 private:
-  double x_offset_, y_offset_, yaw_scale_;
-  std::string move_target_;
+  double x_offset_{}, y_offset_{}, yaw_scale_{};
+  std::string move_target_{};
   tf2_ros::Buffer& tf_buffer_;
 };
 

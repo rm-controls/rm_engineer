@@ -82,5 +82,6 @@ Middleware::Middleware(ros::NodeHandle& nh)
     ROS_ERROR("no steps list define in yaml");
   as_.start();
 }
+geometry_msgs::TransformStamped engineer_middleware::JointMotion::arm2base;
 
 }  // namespace engineer_middleware
