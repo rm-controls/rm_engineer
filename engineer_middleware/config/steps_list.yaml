@@ -329,11 +329,6 @@ common:
           2.6
 
 steps_list:
-  TEST:
-    - step: "test"
-      chassis_target:
-        <<: *TEST
-
   EXCHANGE_POS:
     - step: "gimbal look front"
       gimbal:
@@ -361,6 +356,12 @@ steps_list:
 
   ############################ HOME ##########################
   HOME:
+    - step: "close gripper"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "pre_home"
+      arm:
+        <<: *PRE_HOME
     - step: "gimbal look front"
       gimbal:
         <<: *FRONT_POS
@@ -371,18 +372,12 @@ steps_list:
       extend_arm:
         front: *EX_CLOSE
         back: *EX_CLOSE
-    - step: "close gripper"
-      gripper:
-        <<: *CLOSE_GRIPPER
     - step: "ORE_ROTATOR_READY"
       ore_rotator:
         target: *READY_POS
     - step: "ORE_LIFTER_UP"
       ore_lifter:
         target: *BIN_DOWN_POS
-    - step: "pre_home"
-      arm:
-        <<: *PRE_HOME
     - step: "home"
       arm:
         <<: *HOME
@@ -398,7 +393,7 @@ steps_list:
 
   ################### SMALL_ISLAND_FROM_UP ################
   ########ONE_STONE_ONCE#########
-  ONE_STONE_SMALL_ISLAND:
+  0_TAKE_ONE_STONE_SMALL_ISLAND:
     - step: "GIMBAL_READY"
       gimbal:
         <<: *FRONT_POS
@@ -421,7 +416,7 @@ steps_list:
     - step: "gimbal lifter ready"
       gimbal_lifter:
         target: *LIFTER_SMALL_ISLAND
-  ONE_STONE_SMALL_ISLAND0:
+  0_TAKE_ONE_STONE_SMALL_ISLAND0:
     - step: "GET_STONE"
       arm:
         joints: [ *JOINT1_SMALL_DOWN, *JOINT2_SMALL_READY, *JOINT3_SMALL_READY_MID, *JOINT4_SMALL_READY, *JOINT5_SMALL_READY, *JOINT6_SMALL_READY, *JOINT7_SMALL_READY ]
@@ -472,6 +467,108 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
 #  ONE_STONE_SMALL_ISLAND00:
+    - step: "CLOSE_GRIPPER"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "MOVE_ARM_OUT"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_READY, *JOINT3_SMALL_TURN, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "CHASSIS_BACK"
+      chassis:
+        <<: *CHASSIS_BACK
+    - step: "CHASSIS_TURN"
+      chassis:
+        <<: *CHASSIS_TURN
+    - step: "pre_home"
+      arm:
+        <<: *PRE_HOME
+    - step: "home"
+      arm:
+        <<: *HOME
+    - step: "ORE_LIFTER_DOWN"
+      ore_lifter:
+        target: *BIN_DOWN_POS
+    - step: "ADD_STONE"
+      stone_num:
+        change: "SILVER"
+  1_TAKE_ONE_STONE_SMALL_ISLAND:
+    - step: "GIMBAL_READY"
+      gimbal:
+        <<: *FRONT_POS
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_READY"
+      ore_lifter:
+        target: *BIN_DOWN_POS
+    - step: "ARM_READY"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_SMALL_READY, *JOINT3_SMALL_READY_MID, *JOINT4_SMALL_READY, *JOINT5_SMALL_READY, *JOINT6_SMALL_READY, *JOINT7_SMALL_READY ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+    - step: "gimbal lifter ready"
+      gimbal_lifter:
+        target: *LIFTER_SMALL_ISLAND
+  1_TAKE_ONE_STONE_SMALL_ISLAND0:
+    - step: "GET_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_DOWN, *JOINT2_SMALL_READY, *JOINT3_SMALL_READY_MID, *JOINT4_SMALL_READY, *JOINT5_SMALL_READY, *JOINT6_SMALL_READY, *JOINT7_SMALL_READY ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ARM_UP_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_SMALL_READY, *JOINT3_SMALL_READY_MID, *JOINT4_SMALL_READY, *JOINT5_SMALL_UP_STONE, *JOINT6_SMALL_READY, *JOINT7_SMALL_READY ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT6_BACK"
+      arm:
+        joints: [ "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", *JOINT6_SMALL_BACK, "KEEP" ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "TURN_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_SMALL_READY, *JOINT3_SMALL_TURN, *JOINT4_SMALL_TURN, *JOINT5_SMALL_UP_STONE, *JOINT6_SMALL_READY, *JOINT7_SMALL_READY ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "READY_STORE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE, *JOINT3_SMALL_TURN, *JOINT4_SMALL_TURN, *JOINT5_SMALL_UP_STONE, *JOINT6_SMALL_READY_STORE, *JOINT7_SMALL_READY_STORE ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "STORE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE, *JOINT3_SMALL_TURN, *JOINT4_SMALL_TURN, *JOINT5_SMALL_STORE, *JOINT6_SMALL_READY_STORE, *JOINT7_SMALL_READY_STORE ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    #  ONE_STONE_SMALL_ISLAND00:
     - step: "CLOSE_GRIPPER"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -1453,6 +1550,14 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+
+  CHASSIS_TARGET_TEST2:
+    - step: "test"
+      chassis:
+        frame: "base_link"
+        offset: [0., 0.]
+        yaw_scale: 0.9
+        target_frame: "arm"
 
   CHASSIS_TARGET_TEST1:
     - step: "test"
