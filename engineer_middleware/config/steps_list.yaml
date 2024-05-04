@@ -76,7 +76,7 @@ common:
       bin_get_stone: &JOINT2_BIN_GET_STONE
                             0.087
       back_bin_position: &JOINT2_BACK_BIN_POSITION
-                             0.001
+                             0.05
       big_ready: &JOINT2_BIG_READY
                        0.03
       big_arm_up: &JOINT2_BIG_ARM_UP
@@ -1540,6 +1540,21 @@ steps_list:
       ore_lifter:
         target: *BIN_UP_POS
 
+  GIMBAL_DOWN:
+    - step: "gimbal lowest"
+      gimbal_lifter:
+        target: *BUTTON_POS
+
+  GIMBAL_MID:
+    - step: "gimbal mid"
+      gimbal_lifter:
+        target: *LIFTER_BIG_ISLAND
+
+  GIMBAL_TALL:
+    - step: "gimbal tall"
+      gimbal_lifter:
+        target: *TALLEST_POS
+
   ####################################################  TEST  ##########################################################
   ARM_BACK_TEST:
     - step: "arm back test"
@@ -1550,41 +1565,41 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
-
-  CHASSIS_TARGET_TEST2:
+  ARM_BACK_TEST1:
     - step: "test"
-      chassis:
-        frame: "base_link"
-        offset: [0., 0.]
+      chassis_target:
+        frame: base_link
+        position: [ 0., 0. ]
+        yaw: 0.
+        offset: [ 0., 0. ]
         yaw_scale: 0.9
-        target_frame: "arm"
+        target_frame: arm
+        common:
+          timeout: 2.
+
+
+#    - step: "test2"
+#      chassis:
+#        frame: base_link
+#        position: [ 0., 0. ]
+#        yaw: -1.40
+#        chassis_tolerance_position: 0.1
+#        chassis_tolerance_angular: 0.2
+#        common:
+#          timeout: 2.
+
 
   CHASSIS_TARGET_TEST1:
     - step: "test"
-      chassis:
-        frame: "base_link"
+      chassis_target:
+        frame: base_link
         offset: [ 0., 0. ]
         yaw_scale: 0.9
-        target_frame: "exchanger"
+        target_frame: exchanger
+        common:
+          timeout: 2.
 
   ########## EXCHANGE ############
-  OLD_EXCHANGE_SPHERE:
-    - step: "close to a sphere"
-      arm:
-        frame: exchanger
-        xyz: [ -0.4, 0., -0.25 ]
-        rpy: [ 0., 0., 0. ]
-        rpy_rectify: [ 0.01,0.1,0.03 ]
-        drift_dimensions: [ true, true, true, true, true, true ]
-        tolerance_position: 0.1
-        tolerance_orientation: 0.01
-        spacial_shape: SPHERE
-        radius: 0.5
-        point_resolution: 0.5
-        max_planning_times: 1
-        common:
-          <<: *QUICKLY
-
   EXCHANGE_DOWN:
     - step: "test new exchange"
       arm:
@@ -1602,37 +1617,6 @@ steps_list:
         common:
           <<: *NORMALLY
 
-  TEST_ORI:
-    - step: "ori test"
-      arm:
-        frame: exchanger
-        rpy: [ 0., -1.5707963, 0. ]
-        tolerance_orientation: 0.001
-
-  TEST_ORI2:
-    - step: "ori test2"
-      arm:
-        frame: exchanger
-        rpy: [ 0., -1.5707963, 0. ]
-        xyz: [ -0.3, 0.2, -0.2 ]
-        tolerance_position: 0.01
-        tolerance_orientation: 0.001
-
-  EXCHANGE_ORI:
-    - step: "test new exchange"
-      arm:
-        frame: exchanger
-        is_refer_planning_frame: true
-        rpy: [ 0., -1.5707963, 0. ]
-        drift_dimensions: [ true, true, true, true, true, true ]
-        tolerance_position: 0.01
-        tolerance_orientation: 0.001
-        spacial_shape: SPHERE
-        radius: 0.5
-        point_resolution: 0.5
-        max_planning_times: 1
-        common:
-          <<: *NORMALLY
   EXCHANGE_STRAIGHT:
     - step: "test new exchange"
       arm:
@@ -1650,28 +1634,46 @@ steps_list:
         common:
           <<: *NORMALLY
 
-
-  GIMBAL_DOWN:
-    - step: "gimbal lowest"
-      gimbal_lifter:
-        target: *BUTTON_POS
-
-  GIMBAL_MID:
-    - step: "gimbal mid"
-      gimbal_lifter:
-        target: *LIFTER_BIG_ISLAND
-
-  GIMBAL_TALL:
-    - step: "gimbal tall"
-      gimbal_lifter:
-        target: *TALLEST_POS
-
-  CHASSIS_TEST1:
-    - step: "chassis turn"
-      chassis:
-        <<: *CHASSIS_TURN
-
-  CHASSIS_TEST2:
-    - step: "chassis back"
-      chassis:
-        <<: *CHASSIS_BACK
+  AUTO_TEST:
+    - step: "chassis approach"
+      chassis_target:
+        frame: base_link
+        offset: [ 0., 0. ]
+        yaw_scale: 0.9
+        target_frame: exchanger
+        common:
+          timeout: 2.
+    - step: "auto sphere exchange"
+      arm:
+        frame: exchanger
+        is_refer_planning_frame: true
+        xyz: [ -0.3, 0., 0. ]
+        rpy: [ 0., 3.1415926, 0. ]
+        drift_dimensions: [ true, true, true, true, true, true ]
+        tolerance_position: 0.01
+        tolerance_orientation: 0.001
+        spacial_shape: SPHERE
+        radius: 0.5
+        point_resolution: 0.5
+        max_planning_times: 1
+        common:
+          <<: *NORMALLY
+    - step: "arm back"
+      arm:
+        joints: [ "KEEP", *JOINT2_BACK_POSITION, *JOINT3_HOME_POS, "KEEP", "KEEP", "KEEP", "KEEP" ]
+        record_arm2base: true
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+  AUTO_TEST0:
+    - step: "chassis compensation"
+      chassis_target:
+        frame: base_link
+        position: [ 0., 0. ]
+        yaw: 0.
+        offset: [ 0., 0. ]
+        yaw_scale: 0.9
+        target_frame: arm
+        common:
+          timeout: 2.
