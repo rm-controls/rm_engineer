@@ -51,6 +51,8 @@ common:
                       0.133
       bin_get_stone: &JOINT1_BIN_GET_STONE
         0.1668
+      exchange_pos: &JOINT1_EXCHANGE_POS
+        0.1
     home:
       zero_stone_position: &JOINT1_ZERO_STONE_POSITION
                              0.01
@@ -258,7 +260,7 @@ common:
     pre_home: &PRE_HOME
       joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_HOME_POS, *JOINT4_PRE_HOME, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
       common:
-        <<: *QUICKLY
+        <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
 
@@ -334,6 +336,7 @@ common:
       0.033
     bin_get_down: &BIN_GET_DOWN
       0.225
+
   extend_arm:
     close: &EX_CLOSE
           0.0
@@ -347,7 +350,7 @@ steps_list:
         <<: *FRONT_POS
     - step: "move arm"
       arm:
-        joints: [*JOINT1_DOWN_POSITION, *JOINT2_EXCHANGE_POSITION, *JOINT3_MID_POSITION, *JOINT4_MID_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION]
+        joints: [*JOINT1_EXCHANGE_POS, *JOINT2_EXCHANGE_POSITION, *JOINT3_MID_POSITION, *JOINT4_MID_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION]
         common:
           <<: *NORMALLY
         tolerance:
@@ -478,7 +481,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_READY, *JOINT3_SMALL_TURN, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *QUICKLY
+          <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "CHASSIS_BACK"
@@ -580,7 +583,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_READY, *JOINT3_SMALL_TURN, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *QUICKLY
+          <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "CHASSIS_BACK"
@@ -684,7 +687,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_READY, *JOINT3_SMALL_TURN, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *QUICKLY
+          <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "ORE_LIFTER_DOWN"
@@ -772,7 +775,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_READY, *JOINT3_SMALL_TURN, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *QUICKLY
+          <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "CHASSIS_BACK"
@@ -1103,7 +1106,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_DOWN_POSITION, *JOINT2_EXCHANGE_POSITION, *JOINT3_MID_POSITION, *JOINT4_MID_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *QUICKLY
+          <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "ORE_LIFTER_DOWN"
@@ -1123,9 +1126,9 @@ steps_list:
     - step: "ORE_ROTATOR_READY"
       ore_rotator:
         target: *EXCHANGE_POS
-    - step: "roe lifter ready"
-      ore_lifter:
-        target: *BIN_SMALL_UP_POS
+#    - step: "roe lifter ready"
+#      ore_lifter:
+#        target: *BIN_SMALL_UP_POS
     - step: "JOINT2 move out"
       arm:
         joints: [ "KEEP", *JOINT2_AVOID_COLLISION, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
@@ -1168,7 +1171,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_DOWN_POSITION, *JOINT2_EXCHANGE_POSITION, *JOINT3_MID_POSITION, *JOINT4_MID_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *QUICKLY
+          <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "ORE_LIFTER_DOWN"
@@ -1260,7 +1263,7 @@ steps_list:
       arm:
         joints: [ "KEEP", *JOINT2_AVOID_COLLISION, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
         common:
-          <<: *QUICKLY
+          <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "READY_TO_GET"
@@ -1646,7 +1649,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_DOWN_POSITION, *JOINT2_BACK_POSITION, "KEEP", *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
         common:
-          <<: *QUICKLY
+          <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "pre_home"
