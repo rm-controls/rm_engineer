@@ -114,12 +114,12 @@ controllers:
     joint: gimbal_lifter_joint
     pid: { p: 20000., i: 0., d: 1200, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
 
-  extend_arm_a_controller:
+  extend_arm_front_controller:
     type: effort_controllers/JointPositionController
-    joint: extend_arm_a_joint
+    joint: extend_arm_front_joint
     pid: { p: 3., i: 0.1, d: 0.05, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
 
-  extend_arm_b_controller:
+  extend_arm_back_controller:
     type: effort_controllers/JointPositionController
-    joint: extend_arm_b_joint
+    joint: extend_arm_back_joint
     pid: { p: 3., i: 0.1, d: 0.05, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }

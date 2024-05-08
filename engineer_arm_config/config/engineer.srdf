@@ -34,6 +34,7 @@
         <disable_collisions link1="base_link" link2="left_front_wheel" reason="Adjacent"/>
         <disable_collisions link1="base_link" link2="link1" reason="Adjacent"/>
         <disable_collisions link1="base_link" link2="link2" reason="Default"/>
+        <disable_collisions link1="base_link" link2="link3" reason="Never"/>
         <disable_collisions link1="base_link" link2="link5" reason="Default"/>
         <disable_collisions link1="base_link" link2="link6" reason="Default"/>
         <disable_collisions link1="gimbal_base" link2="link1" reason="Never"/>
@@ -50,4 +51,6 @@
         <disable_collisions link1="link6" link2="link7" reason="Never"/>
         <disable_collisions link1="link5" link2="link7" reason="Never"/>
         <disable_collisions link1="link1" link2="camera_link" reason="Never"/>
+        <disable_collisions link1="link7" link2="ore_bin_lifter" reason="Never"/>
+        <disable_collisions link1="link7" link2="ore_bin_rotator" reason="Never"/>
 </robot>

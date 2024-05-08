@@ -55,7 +55,9 @@ Middleware::Middleware(ros::NodeHandle& nh)
   , point_cloud_pub_(nh.advertise<sensor_msgs::PointCloud2>("/cloud", 100))
   , ore_rotate_pub_(nh.advertise<std_msgs::Float64>("/controllers/ore_bin_rotate_controller/command", 10))
   , ore_lift_pub_(nh.advertise<std_msgs::Float64>("/controllers/ore_bin_lifter_controller/command", 10))
-  , gimbal_lift_pub(nh.advertise<std_msgs::Float64>("/controllers/gimbal_lifter_controller/command", 10))
+  , gimbal_lift_pub_(nh.advertise<std_msgs::Float64>("/controllers/gimbal_lifter_controller/command", 10))
+  , extend_arm_f_pub_(nh.advertise<std_msgs::Float64>("/controllers/extend_arm_front_controller/command", 10))
+  , extend_arm_b_pub_(nh.advertise<std_msgs::Float64>("/controllers/extend_arm_back_controller/command", 10))
   , tf_listener_(tf_)
   , is_middleware_control_(false)
 {
@@ -73,7 +75,7 @@ Middleware::Middleware(ros::NodeHandle& nh)
           std::make_pair(it->first, StepQueue(it->second, scenes_list, tf_, arm_group_, chassis_interface_, hand_pub_,
                                               end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, stone_num_pub_,
                                               planning_result_pub_, point_cloud_pub_, ore_rotate_pub_, ore_lift_pub_,
-                                              gimbal_lift_pub)));
+                                              gimbal_lift_pub_, extend_arm_f_pub_, extend_arm_b_pub_)));
     }
   }
   else

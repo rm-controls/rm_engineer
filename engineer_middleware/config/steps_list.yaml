@@ -15,7 +15,7 @@ common:
 
   tolerance:
     small_tolerance: &SMALL_TOLERANCE
-      tolerance_joints: [ 0.005, 0.008, 0.015, 0.1, 0.1, 0.1 ]
+      tolerance_joints: [ 0.005, 0.008, 0.015, 0.1, 0.1, 0.1, 0.05 ]
     normal_tolerance: &NORMAL_TOLERANCE
       tolerance_joints: [ 0.01, 0.010, 0.015, 0.3, 0.2, 0.15, 0.1 ]
     bigger_tolerance: &BIGGER_TOLERANCE
@@ -26,12 +26,26 @@ common:
   joint1:
     mechanical:
       down_position: &JOINT1_DOWN_POSITION
-                       0.015
-      up_position: &JOINT1_UP_POSITION
-                     0.22
+                       0.02
+      small_ready: &JOINT1_SMALL_READY
+                      0.16
+      up_pos: &JOINT1_UP_POS
+                   0.312
+      small_ready_store: &JOINT1_SMALL_READY_STORE
+                   0.17
+      bin_get_stone: &JOINT1_BIN_GET_STONE
+                     0.142
+      big_ready: &JOINT1_BIG_READY
+                     0.006
+      big_adjust_mid: &JOINT1_BIG_ADJUST_MID
+                      0.08
+      big_up_pos: &JOINT1_BIG_UP_POS
+                      0.320
+      big_ready_store: &JOINT1_BIG_READY_STORE
+                      0.155
     home:
       zero_stone_position: &JOINT1_ZERO_STONE_POSITION
-                             0.08
+                             0.01
       one_stone_position: &JOINT1_ONE_STONE_POSITION
                             0.156
       two_stone_position: &JOINT1_TWO_STONE_POSITION
@@ -46,18 +60,60 @@ common:
       get_ore_position: &JOINT2_GET_ORE_POSITION
                            0.1
       furthest_position: &JOINT2_FURTHEST_POSITION
-                           0.2575
+                           0.232
       exchange_position: &JOINT2_EXCHANGE_POSITION
                           0.07
+      small_arm_up: &JOINT2_SMALL_ARM_UP
+                            0.085
+      small_store_stone: &JOINT2_SMALL_STORE_STONE
+                              0.02
+      small_ready_second: &JOINT2_SMALL_READY_SECOND
+                              0.142
+      bin_get_stone: &JOINT2_BIN_GET_STONE
+                            0.087
+      back_bin_position: &JOINT2_BACK_BIN_POSITION
+                             0.001
+      big_ready: &JOINT2_BIG_READY
+                       0.009
+      big_arm_up: &JOINT2_BIG_ARM_UP
+                    0.142
+      big_ready_store: &JOINT2_BIG_READY_STORE
+                      0.020
 
   joint3:
     mechanical:
       left_position: &JOINT3_L_POSITION
                        0.28
       mid_position: &JOINT3_MID_POSITION
-                      0.0001
+                      0.04
       right_position: &JOINT3_R_POSITION
                         -0.275
+      home: &JOINT3_HOME_POS
+        0.08
+      small_ready: &JOINT3_SMALL_READY
+                        0.208
+      small_ready_second: &JOINT3_SMALL_READY_SECOND
+                        0.03
+      small_get_stone: &JOINT3_SMALL_GET_STONE
+                            0.047
+      small_get_stone2: &JOINT3_SMALL_GET_STONE2
+                            0.056
+      small_get_second: &JOINT3_SMALL_GET_SECOND
+                            -0.018
+      small_store_stone: &JOINT3_SMALL_STORE_STONE
+                              0.291
+      bin_get_stone: &JOINT3_BIN_GET_STONE
+                          0.258
+      big_ready: &JOINT3_BIG_READY
+                     0.071
+      get_big_mid: &JOINT3_GET_BIG_MID
+                      -0.281
+      get_big_side: &JOINT3_GET_BIG_SIDE
+                     -0.199
+      big_pull_out: &JOINT3_BIG_PULL_OUT
+                     0.188
+      big_arm_up: &JOINT3_BIG_ARM_UP
+                    0.291
 
   joint4:
     mechanical:
@@ -66,49 +122,78 @@ common:
       mid_position: &JOINT4_MID_POSITION
                       0.001
       right_position: &JOINT4_R_POSITION
-                        -1.45
+                        -1.495
+      small_ready_second: &JOINT4_SMALL_READY_SECOND
+                        -0.777
   joint5:
     mechanical:
       mid_position: &JOINT5_MID_POSITION
-                      0.001
+                      0.011
       left_90_position: &JOINT5_L90_POSITION
                           -1.54
       right_90_position: &JOINT5_R90_POSITION
                            1.59
+      bin_get_stone: &JOINT5_BIN_GET_STONE
+                           1.679
+      big_ready: &JOINT5_BIG_READY
+                  -0.017
+      big_store: &JOINT5_BIG_STORE
+                  1.617
+
   joint6:
     mechanical:
       mid_position: &JOINT6_MID_POSITION
                       0.001
       up_position: &JOINT6_UP_POSITION
-                     -1.49
+                     -1.569
       down_position: &JOINT6_DOWN_POSITION
                        1.569
+      small_ready_second: &JOINT6_SMALL_READY_SECOND
+                       0.694
+      bin_get_stone: &JOINT6_BIN_GET_STONE
+                      -1.611
+      big_ready: &JOINT6_BIG_READY
+                       0.014
+      big_adjust_mid: &JOINT6_BIG_ADJUST_MID
+                       -0.119
+      big_arm_up: &JOINT6_BIG_ARM_UP
+                       -1.519
+
   joint7:
     mechanical:
       mid_position: &JOINT7_MID_POSITION
-                      0.001
+                      0.044
       left_90_position: &JOINT7_L90_POSITION
                           -1.59
       right_90_position: &JOINT7_R90_POSITION
-                           1.49
+                           1.62
+      big_pos: &JOINT7_BIG_POS
+                         -0.013
+
   gimbal:
     side_pos: &SIDE_POS
       frame: gimbal_lifter
-      position: [ 0.03 ,3, -0.02 ]
-    island_pos: &ISLAND_POS
+      position: [ 0.001 , -3, 0. ]
+    front_pos: &FRONT_POS
       frame: gimbal_lifter
-      position: [ 2, 0.001, 0.001 ]
-    ground_pos: &GROUND_POS
+      position: [ 2, 0.001, 0. ]
+    small_island_pos: &SMALL_ISLAND_POS
       frame: gimbal_lifter
-      position: [ 2, 0.001, -0.8 ]
+      position: [ 1, -1, 0.]
 
   gimbal_lifter:
     button_pos: &BUTTON_POS
-      0.01
-    mid_pos: &MID_POS
+      0.07
+    small_island: &LIFTER_SMALL_ISLAND
       0.1
+    mid_pos: &MID_POS
+      0.14
+    big_island: &LIFTER_BIG_ISLAND
+      0.260
+    two_stone_pos: &TWO_STONE_POS
+      0.163
     tallest_pos: &TALLEST_POS
-      0.28
+      0.394
 
   gripper:
     open_gripper: &OPEN_GRIPPER
@@ -120,120 +205,70 @@ common:
 
   arm:
     home: &HOME_1
-      joints: [ "VARIABLE", *JOINT2_BACK_POSITION, *JOINT3_MID_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+      joints: [ "VARIABLE", *JOINT2_BACK_POSITION, *JOINT3_HOME_POS, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
       common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
 
 
-    reversal:
-      velocity_stop: &VELOCITY_STOP
-        mode: "VELOCITY"
-        values: [ 0.,0.,0.,0.,0.,0. ]
-      velocity_z_out: &VELOCITY_Z_OUT
-        mode: "VELOCITY"
-        values: [ 0.,0.,3.,0.,0.,0. ]
-      velocity_z_out_store: &VELOCITY_Z_OUT_STORE
-        mode: "VELOCITY"
-        values: [ 0.,0.,0.2,0.,0.,0. ]
-      velocity_z_in: &VELOCITY_Z_IN
-        mode: "VELOCITY"
-        values: [ 0.,0.,-1.2,0.,-0.01,0. ]
-      velocity_z_in_quickly: &VELOCITY_Z_IN_QUICKLY
-        mode: "VELOCITY"
-        values: [ 0.,0.,-3.0,0.,-0.01,0. ]
-      velocity_z_in_quickly_with_delay: &VELOCITY_Z_IN_QUICKLY_WITH_DELAY
-        mode: "VELOCITY"
-        values: [ 0.,0.,-3.0,0.,-0.01,0. ]
-        delay: 0.3
-      position_z_out: &POSITION_Z_OUT
-        mode: "POSITION"
-        values: [ 0.,0.,7.,0.,0.,0. ]
-        delay: 0.2
-      position_z_out_little: &POSITION_Z_OUT_LITTLE
-        mode: "POSITION"
-        values: [ 0.,0.,3.,0.,0.,0. ]
-        delay: 0.4
+  chassis_move:
+    chassis_left_315: &CHASSIS_LEFT_15
+      frame: base_link
+      position: [ 0., 15. ]
+      yaw: 0.0
+      chassis_tolerance_position: 0.1
+      chassis_tolerance_angular: 0.3
+      common:
+        timeout: 2.
+    chassis_180: &CHASSIS_180
+      frame: base_link
+      position: [ 0., 0. ]
+      yaw: 2.80
+      chassis_tolerance_position: 0.1
+      chassis_tolerance_angular: 0.2
+      common:
+        timeout: 2.
 
-    chassis_move:
-      chassis_backward_30: &CHASSIS_BACKWARD_25
-        frame: base_link
-        position: [ -0.35,0. ]
-        yaw: 0.0
-        chassis_tolerance_position: 0.1
-        chassis_tolerance_angular: 0.3
-        common:
-          timeout: 2.
-      chassis_180: &CHASSIS_180
-        frame: base_link
-        position: [ 0., 0. ]
-        yaw: 2.80
-        chassis_tolerance_position: 0.1
-        chassis_tolerance_angular: 0.2
-        common:
-          timeout: 2.
+  ore_rotator:
+    ready_pos: &READY_POS
+            0.001
+    exchange_pos: &EXCHANGE_POS
+            1.59
+
+  ore_lifter:
+    bin_up_pos: &BIN_UP_POS
+            0.2
+    bin_mid_pos: &BIN_MID_POS
+            0.1
+    bin_down_pos: &BIN_DOWN_POS
+            0.001
+  extend_arm:
+    close: &EX_CLOSE
+          0.0
+    open: &EX_OPEN
+          2.6
 
 steps_list:
-  ###################### SMALL_ISLAND #######################
-  SMALL_ISLAND_DEMO:
-    - step: "home pos"
-      arm:
-        joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-#    - step: "open gripper"
-#      gripper:
-#        <<: *OPEN_GRIPPER
-    - step: "ready to get ore"
-      arm:
-        joints: [ *JOINT1_ONE_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_L90_POSITION, *JOINT6_UP_POSITION, *JOINT7_R90_POSITION]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-
-  SMALL_ISLAND_DEMO0:
-    - step: "move up ore"
-      arm:
-        joints: [ *JOINT1_TWO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_L90_POSITION, *JOINT6_UP_POSITION, *JOINT7_R90_POSITION ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "reverse ore"
-      arm:
-        joints: [ *JOINT1_TWO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_R90_POSITION ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "move ore back"
-      arm:
-        joints: [ *JOINT1_ONE_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_R90_POSITION ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-
   EXCHANGE_POS:
     - step: "gimbal look front"
       gimbal:
-        <<: *ISLAND_POS
+        <<: *FRONT_POS
     - step: "move arm"
       arm:
-        joints: [*JOINT1_TWO_STONE_POSITION, *JOINT2_EXCHANGE_POSITION, *JOINT3_L_POSITION, *JOINT4_MID_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION]
+        joints: [*JOINT1_DOWN_POSITION, *JOINT2_EXCHANGE_POSITION, *JOINT3_MID_POSITION, *JOINT4_MID_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+    - step: "gimbal lifter tallest"
+      gimbal_lifter:
+        target: *TALLEST_POS
 
   GIMBAL_FRONT:
     - step: "gimbal look front"
       gimbal:
-        <<: *ISLAND_POS
+        <<: *FRONT_POS
   GIMBAL_LEFT:
     - step: "gimbal look left"
       gimbal:
@@ -242,38 +277,77 @@ steps_list:
 
   ############################ HOME ##########################
   HOME_ZERO_STONE:
-    - step: "gimbal look side"
+    - step: "gimbal look front"
       gimbal:
-        <<: *ISLAND_POS
+        <<: *FRONT_POS
+    - step: "gimbal lifter down"
+      gimbal_lifter:
+        target: *BUTTON_POS
+    - step: "close ex arm"
+      extend_arm_front:
+        front: *EX_CLOSE
+        back: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_UP"
+      ore_lifter:
+        target: *BIN_DOWN_POS
     - step: "home with no stone"
       arm:
         <<: *HOME_1
         variable: [ *JOINT1_ZERO_STONE_POSITION, 0, 0, 0, 0, 0 ]
   HOME_ONE_STONE:
-    - step: "gimbal look side"
+    - step: "gimbal look front"
       gimbal:
-        <<: *ISLAND_POS
+        <<: *FRONT_POS
+    - step: "gimbal lifter down"
+      gimbal_lifter:
+        target: *MID_POS
+    - step: "close ex arm"
+      extend_arm_front:
+        front: *EX_CLOSE
+        back: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_UP"
+      ore_lifter:
+        target: *BIN_DOWN_POS
     - step: "home with one stone"
       arm:
         <<: *HOME_1
-        variable: [ *JOINT1_ONE_STONE_POSITION, 0, 0, 0, 0, 0 ]
+        variable: [ *JOINT1_ZERO_STONE_POSITION, 0, 0, 0, 0, 0 ]
   HOME_TWO_STONE:
-    - step: "gimbal look side"
+    - step: "gimbal look front"
       gimbal:
-        <<: *ISLAND_POS
+        <<: *FRONT_POS
+    - step: "gimbal lifter down"
+      gimbal_lifter:
+        target: *MID_POS
+    - step: "close ex arm"
+      extend_arm_front:
+        front: *EX_CLOSE
+        back: *EX_CLOSE
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_UP"
+      ore_lifter:
+        target: *BIN_DOWN_POS
     - step: "home with two stone"
       arm:
         <<: *HOME_1
-        variable: [ *JOINT1_TWO_STONE_POSITION, 0, 0, 0, 0, 0 ]
+        variable: [ *JOINT1_ZERO_STONE_POSITION, 0, 0, 0, 0, 0 ]
 
   OPEN_GRIPPER:
     - step: "open gripper"
@@ -283,6 +357,899 @@ steps_list:
     - step: "close gripper"
       gripper:
         <<: *CLOSE_GRIPPER
+
+  ################### SMALL_ISLAND_FROM_SIDE ################
+  ########ONE_STONE_ONCE#########
+  HAS0_ONE_STONE_SMALL_ISLAND:
+    - step: "GIMBAL_READY"
+      gimbal:
+        <<: *SMALL_ISLAND_POS
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_READY"
+      ore_lifter:
+        target: *BIN_MID_POS
+    - step: "SMALL_ARM_READY"
+      arm:
+        joints: [ *JOINT1_DOWN_POSITION, *JOINT2_BACK_POSITION, *JOINT3_SMALL_READY, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+  HAS0_ONE_STONE_SMALL_ISLAND0:
+    - step: "SMALL_ARM_READY"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_BACK_POSITION, *JOINT3_SMALL_READY, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "SMALL_GET_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_BACK_POSITION, *JOINT3_SMALL_GET_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT1_UP AND BACK"
+      arm:
+        joints: [ *JOINT1_UP_POS, "KEEP", *JOINT3_SMALL_GET_STONE2, "KEEP", "KEEP", "KEEP", "KEEP"]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "SMALL_ARM_UP_STONE"
+      arm:
+        joints: [ *JOINT1_UP_POS, *JOINT2_SMALL_ARM_UP, *JOINT3_SMALL_GET_STONE2, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "READY_TO_STORE_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_ARM_UP, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "STORE_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "JOINT5_TURN"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "CLOSE_GRIPPER"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "ARM_RESET"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_HOME_POS, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ORE_LIFTER_DOWN"
+      ore_lifter:
+        target: *BIN_DOWN_POS
+    - step: "add stone"
+      stone_num:
+        change: "+1"
+    - step: "GIMBAL_READY"
+      gimbal:
+        <<: *FRONT_POS
+
+  HAS1_ONE_STONE_SMALL_ISLAND:
+    - step: "GIMBAL_READY"
+      gimbal:
+        <<: *SMALL_ISLAND_POS
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_READY"
+      ore_lifter:
+        target: *BIN_DOWN_POS
+    - step: "SMALL_ARM_READY"
+      arm:
+        joints: [ *JOINT1_DOWN_POSITION, *JOINT2_BACK_POSITION, *JOINT3_SMALL_READY, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+  ONE_STONE_SMALL_ISLAND0:
+    - step: "SMALL_ARM_READY"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_BACK_POSITION, *JOINT3_SMALL_READY, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "SMALL_GET_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_BACK_POSITION, *JOINT3_SMALL_GET_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ *JOINT1_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP"]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "SMALL_ARM_UP_STONE"
+      arm:
+        joints: [ *JOINT1_UP_POS, *JOINT2_SMALL_ARM_UP, *JOINT3_SMALL_GET_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "READY_TO_STORE_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_ARM_UP, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "STORE_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "JOINT5_TURN"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "CLOSE_GRIPPER"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "ARM_RESET"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_HOME_POS, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "add stone"
+      stone_num:
+        change: "+1"
+    - step: "GIMBAL_READY"
+      gimbal:
+        <<: *FRONT_POS
+  ##########TWO_STONE_ONCE###########
+  ####FIRST_STONE###
+  TWO_STONE_SMALL_ISLAND:
+    - step: "GIMBAL_READY"
+      gimbal:
+        <<: *SMALL_ISLAND_POS
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_READY"
+      ore_lifter:
+        target: *BIN_MID_POS
+    - step: "SMALL_ARM_READY"
+      arm:
+        joints: [ *JOINT1_DOWN_POSITION, *JOINT2_BACK_POSITION, *JOINT3_SMALL_READY, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+  TWO_STONE_SMALL_ISLAND0:
+    - step: "SMALL_ARM_READY"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_BACK_POSITION, *JOINT3_SMALL_READY, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "SMALL_GET_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_BACK_POSITION, *JOINT3_SMALL_GET_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ *JOINT1_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP"]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "SMALL_ARM_UP_STONE"
+      arm:
+        joints: [ *JOINT1_UP_POS, *JOINT2_SMALL_ARM_UP, *JOINT3_SMALL_GET_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "READY_TO_STORE_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_ARM_UP, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "STORE_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "JOINT5_TURN"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "CLOSE_GRIPPER"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "ARM_RESET"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ORE_LIFTER_DOWN"
+      ore_lifter:
+        target: *BIN_DOWN_POS
+    - step: "add stone"
+      stone_num:
+        change: "+1"
+  ###SECOND_STONE###
+  TWO_STONE_SMALL_ISLAND00:
+    - step: "SMALL_ARM_READY_TWO"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_SMALL_READY_SECOND, *JOINT3_SMALL_READY_SECOND, *JOINT4_SMALL_READY_SECOND, *JOINT5_L90_POSITION, *JOINT6_SMALL_READY_SECOND, *JOINT7_R90_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+  TWO_STONE_SMALL_ISLAND000:
+    - step: "SMALL_GET_STONE_TWO"
+      arm:
+        joints: [ *JOINT1_SMALL_READY, *JOINT2_SMALL_READY_SECOND, *JOINT3_SMALL_GET_SECOND, *JOINT4_SMALL_READY_SECOND, *JOINT5_L90_POSITION, *JOINT6_SMALL_READY_SECOND, *JOINT7_R90_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ *JOINT1_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP"]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "SMALL_ARM_LIFT_STONE"
+      arm:
+        joints: [ *JOINT1_UP_POS, *JOINT2_SMALL_ARM_UP, *JOINT3_SMALL_GET_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "READY_TO_STORE_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_ARM_UP, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "STORE_STONE"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "JOINT5"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_SMALL_STORE_STONE, *JOINT4_R_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *SMALL_TOLERANCE
+    - step: "CLOSE_GRIPPER"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "ARM_RESET"
+      arm:
+        joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_STORE_STONE, *JOINT3_L_POSITION, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_MID_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_HOME_POS, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "add stone"
+      stone_num:
+        change: "+1"
+
+  GET_DOWN_STONE_BIN:
+    - step: "GIMBAL_READY"
+      gimbal:
+        <<: *FRONT_POS
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *EXCHANGE_POS
+    - step: "ORE_LIFTER_UP"
+      ore_lifter:
+        target: *BIN_UP_POS
+    - step: "READY_TO_GET"
+      arm:
+        joints: [ *JOINT1_BIN_GET_STONE, *JOINT2_BIN_GET_STONE, *JOINT3_BIN_GET_STONE, *JOINT4_R_POSITION, *JOINT5_BIN_GET_STONE, *JOINT6_BIN_GET_STONE, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+    - step: "JOINT2_BACK_GET_STONE"
+      arm:
+        joints: [ "KEEP", *JOINT2_BACK_BIN_POSITION, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ *JOINT1_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT5_LIFT_STONE"
+      arm:
+        joints: [ "KEEP", "KEEP", "KEEP", "KEEP", *JOINT5_MID_POSITION, "KEEP", "KEEP" ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "exchange pos"
+      arm:
+        joints: [ *JOINT1_DOWN_POSITION, *JOINT2_EXCHANGE_POSITION, *JOINT3_MID_POSITION, *JOINT4_MID_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "gimbal lifter tallest"
+      gimbal_lifter:
+        target: *TALLEST_POS
+    - step: "remove stone"
+      stone_num:
+        change: "-1"
+
+  GET_UP_STONE_BIN:
+    - step: "GIMBAL_READY"
+      gimbal:
+        <<: *FRONT_POS
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *EXCHANGE_POS
+    - step: "READY_TO_GET"
+      arm:
+        joints: [ *JOINT1_BIN_GET_STONE, *JOINT2_BIN_GET_STONE, *JOINT3_BIN_GET_STONE, *JOINT4_R_POSITION, *JOINT5_BIN_GET_STONE, *JOINT6_BIN_GET_STONE, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+    - step: "JOINT2_BACK_GET_STONE"
+      arm:
+        joints: [ "KEEP", *JOINT2_BACK_BIN_POSITION, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ *JOINT1_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "JOINT5_LIFT_STONE"
+      arm:
+        joints: [ "KEEP", "KEEP", "KEEP", "KEEP", *JOINT5_MID_POSITION, "KEEP", "KEEP" ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "exchange pos"
+      arm:
+        joints: [ *JOINT1_DOWN_POSITION, *JOINT2_EXCHANGE_POSITION, *JOINT3_MID_POSITION, *JOINT4_MID_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "gimbal lifter tallest"
+      gimbal_lifter:
+        target: *TALLEST_POS
+    - step: "remove stone"
+      stone_num:
+        change: "-1"
+
+  #################BIG_ISLAND#############
+  ######MID_STONE#######
+  HAS0_MID_BIG_ISLAND:
+    - step: "gimbal ready"
+      gimbal:
+        <<: *SMALL_ISLAND_POS
+    - step: "open ex arm"
+      extend_arm:
+        front: *EX_OPEN
+        back: *EX_OPEN
+    - step: "MID_ARM_READY"
+      arm:
+        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
+        common:
+         <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_READY"
+      ore_lifter:
+        target: *BIN_MID_POS
+    - step: "gimbal lifter"
+      gimbal_lifter:
+        target: *LIFTER_BIG_ISLAND
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+  HAS0_MID_BIG_ISLAND0:
+    - step: "GET_MID_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_GET_BIG_MID, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ADJUST_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_ADJUST_MID, *JOINT2_BIG_READY, *JOINT3_GET_BIG_MID, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ADJUST_MID, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "PULL_OUT_STONE"
+      arm:
+        joints: [ "KEEP", "KEEP", *JOINT3_BIG_PULL_OUT, "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+#    - step: "chassis move left"
+#      chassis:
+#        <<: *CHASSIS_LEFT_15
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ *JOINT1_BIG_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ARM_UP_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_UP_POS, *JOINT2_BIG_ARM_UP, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "READY_TO_STORE"
+      arm:
+        joints: [ *JOINT1_BIG_READY_STORE, *JOINT2_BIG_READY_STORE, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "STORE_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_READY_STORE, *JOINT2_BIG_READY_STORE, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_STORE, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "CLOSE_GRIPPER"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "move arm out"
+      arm:
+        joints: [ *JOINT1_DOWN_POSITION, *JOINT2_BACK_POSITION, "KEEP", *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_HOME_POS, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ORE_LIFTER_DOWN"
+      ore_lifter:
+        target: *BIN_DOWN_POS
+    - step: "add stone"
+      stone_num:
+        change: "+1"
+    - step: "gimbal front"
+      gimbal:
+        <<: *FRONT_POS
+
+
+  HAS1_MID_BIG_ISLAND:
+    - step: "gimbal ready"
+      gimbal:
+        <<: *SMALL_ISLAND_POS
+    - step: "open ex arm"
+
+      extend_arm:
+        front: *EX_OPEN
+        back: *EX_OPEN
+    - step: "MID_ARM_READY"
+      arm:
+        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_READY"
+      ore_lifter:
+        target: *BIN_DOWN_POS
+    - step: "gimbal lifter"
+      gimbal_lifter:
+        target: *LIFTER_BIG_ISLAND
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+  HAS1_MID_BIG_ISLAND0:
+    - step: "GET_MID_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_GET_BIG_MID, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ADJUST_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_ADJUST_MID, *JOINT2_BIG_READY, *JOINT3_GET_BIG_MID, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ADJUST_MID, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "PULL_OUT_STONE"
+      arm:
+        joints: [ "KEEP", "KEEP", *JOINT3_BIG_PULL_OUT, "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    #    - step: "chassis move left"
+    #      chassis:
+    #        <<: *CHASSIS_LEFT_15
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ *JOINT1_BIG_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ARM_UP_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_UP_POS, *JOINT2_BIG_ARM_UP, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "READY_TO_STORE"
+      arm:
+        joints: [ *JOINT1_BIG_READY_STORE, *JOINT2_BIG_READY_STORE, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "STORE_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_READY_STORE, *JOINT2_BIG_READY_STORE, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_STORE, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "CLOSE_GRIPPER"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "move arm out"
+      arm:
+        joints: [ *JOINT1_DOWN_POSITION, *JOINT2_BACK_POSITION, "KEEP", *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_HOME_POS, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "add stone"
+      stone_num:
+        change: "+1"
+    - step: "gimbal front"
+      gimbal:
+        <<: *FRONT_POS
+  ########SIDE_STONE#########
+  HAS0_SIDE_BIG_ISLAND:
+    - step: "gimbal ready"
+      gimbal:
+        <<: *SMALL_ISLAND_POS
+    - step: "open ex arm"
+      extend_arm:
+        front: *EX_OPEN
+
+    - step: "MID_ARM_READY"
+      arm:
+        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_READY"
+      ore_lifter:
+        target: *BIN_MID_POS
+    - step: "gimbal lifter"
+      gimbal_lifter:
+        target: *LIFTER_BIG_ISLAND
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+
+  HAS0_SIDE_BIG_ISLAND0:
+    - step: "GET_MID_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_GET_BIG_SIDE, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ADJUST_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_ADJUST_MID, *JOINT2_BIG_READY, *JOINT3_GET_BIG_SIDE, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ADJUST_MID, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "PULL_OUT_STONE"
+      arm:
+        joints: [ "KEEP", "KEEP", *JOINT3_BIG_PULL_OUT, "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    #    - step: "chassis move left"
+    #      chassis:
+    #        <<: *CHASSIS_LEFT_15
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ *JOINT1_BIG_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ARM_UP_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_UP_POS, *JOINT2_BIG_ARM_UP, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "READY_TO_STORE"
+      arm:
+        joints: [ *JOINT1_BIG_READY_STORE, *JOINT2_BIG_READY_STORE, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "STORE_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_READY_STORE, *JOINT2_BIG_READY_STORE, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_STORE, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "CLOSE_GRIPPER"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "move arm out"
+      arm:
+        joints: [ *JOINT1_DOWN_POSITION, *JOINT2_BACK_POSITION, "KEEP", *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_HOME_POS, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ORE_LIFTER_DOWN"
+      ore_lifter:
+        target: *BIN_DOWN_POS
+    - step: "add stone"
+      stone_num:
+        change: "+1"
+    - step: "gimbal front"
+      gimbal:
+        <<: *FRONT_POS
+
+  HAS1_SIDE_BIG_ISLAND:
+    - step: "gimbal ready"
+      gimbal:
+        <<: *SMALL_ISLAND_POS
+    - step: "open ex arm"
+      extend_arm:
+        front: *EX_OPEN
+    - step: "MID_ARM_READY"
+      arm:
+        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ORE_ROTATOR_READY"
+      ore_rotator:
+        target: *READY_POS
+    - step: "ORE_LIFTER_READY"
+      ore_lifter:
+        target: *BIN_DOWN_POS
+    - step: "gimbal lifter"
+      gimbal_lifter:
+        target: *LIFTER_BIG_ISLAND
+    - step: "OPEN_GRIPPER"
+      gripper:
+        <<: *OPEN_GRIPPER
+  HAS1_SIDE_BIG_ISLAND0:
+    - step: "GET_MID_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_GET_BIG_SIDE, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ADJUST_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_ADJUST_MID, *JOINT2_BIG_READY, *JOINT3_GET_BIG_SIDE, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ADJUST_MID, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "PULL_OUT_STONE"
+      arm:
+        joints: [ "KEEP", "KEEP", *JOINT3_BIG_PULL_OUT, "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    #    - step: "chassis move left"
+    #      chassis:
+    #        <<: *CHASSIS_LEFT_15
+    - step: "JOINT1_UP"
+      arm:
+        joints: [ *JOINT1_BIG_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "ARM_UP_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_UP_POS, *JOINT2_BIG_ARM_UP, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "READY_TO_STORE"
+      arm:
+        joints: [ *JOINT1_BIG_READY_STORE, *JOINT2_BIG_READY_STORE, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "STORE_STONE"
+      arm:
+        joints: [ *JOINT1_BIG_READY_STORE, *JOINT2_BIG_READY_STORE, *JOINT3_BIG_ARM_UP, *JOINT4_R_POSITION, *JOINT5_BIG_STORE, *JOINT6_BIG_ARM_UP, *JOINT7_BIG_POS ]
+        common:
+          <<: *SLOWLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "CLOSE_GRIPPER"
+      gripper:
+        <<: *CLOSE_GRIPPER
+    - step: "move arm out"
+      arm:
+        joints: [ *JOINT1_DOWN_POSITION, *JOINT2_BACK_POSITION, "KEEP", *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "home"
+      arm:
+        joints: [ *JOINT1_ZERO_STONE_POSITION, *JOINT2_BACK_POSITION, *JOINT3_HOME_POS, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "add stone"
+      stone_num:
+        change: "+1"
+    - step: "gimbal front"
+      gimbal:
+        <<: *FRONT_POS
+
+  ####################################################  TEST  ##########################################################
 
   ########## EXCHANGE ############
   OLD_EXCHANGE_SPHERE:
@@ -367,32 +1334,18 @@ steps_list:
         common:
           <<: *NORMALLY
 
-  GTESTL:
-    - step: "test"
+
+  GIMBAL_DOWN:
+    - step: "gimbal lowest"
       gimbal_lifter:
         target: *BUTTON_POS
-  GTESTM:
-    - step: "test"
+
+  GIMBAL_MID:
+    - step: "gimbal mid"
       gimbal_lifter:
-        target: *MID_POS
-  GTESTH:
-    - step: "test"
+        target: *LIFTER_BIG_ISLAND
+
+  GIMBAL_TALL:
+    - step: "gimbal tall"
       gimbal_lifter:
         target: *TALLEST_POS
-
-
-#    - step: "test new exchange"
-#      arm:
-#        frame: exchanger
-#        is_refer_planning_frame: false
-#        xyz: [ -0.2, 0., -0.18 ]
-#        rpy: [ 0., 3.141592, 0. ]
-#        drift_dimensions: [ true, true, true, true, false, true ]
-#        tolerance_position: 0.01
-#        tolerance_orientation: 0.01
-#        spacial_shape: BASICS
-#        basics_length: [ 0.1, 0.1, 0.1 ]
-#        point_resolution: 0.6
-#        max_planning_times: 50
-#        common:
-#          <<: *NORMALLY
