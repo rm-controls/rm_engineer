@@ -477,8 +477,7 @@ steps_list:
         common:
           <<: *NORMALLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
-#  ONE_STONE_SMALL_ISLAND00:
+          <<: *BIGGER_TOLERANCE
     - step: "CLOSE_GRIPPER"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -488,7 +487,7 @@ steps_list:
         common:
           <<: *NORMALLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *BIGGER_TOLERANCE
     - step: "CHASSIS_BACK"
       chassis:
         <<: *CHASSIS_BACK
@@ -579,8 +578,7 @@ steps_list:
         common:
           <<: *NORMALLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
-    #  ONE_STONE_SMALL_ISLAND00:
+          <<: *BIGGER_TOLERANCE
     - step: "CLOSE_GRIPPER"
       gripper:
         <<: *CLOSE_GRIPPER
@@ -777,12 +775,6 @@ steps_list:
     - step: "ADD_STONE"
       stone_num:
         change: "SILVER"
-    - step: "CHASSIS_BACK"
-      chassis:
-        <<: *CHASSIS_BACK
-    - step: "CHASSIS_TURN"
-      chassis:
-        <<: *CHASSIS_TURN
     - step: "MOVE_ARM_OUT"
       arm:
         joints: [ *JOINT1_SMALL_READY_STORE, *JOINT2_SMALL_READY, *JOINT3_SMALL_TURN, *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
@@ -790,6 +782,12 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *BIGGER_TOLERANCE
+    - step: "CHASSIS_BACK"
+      chassis:
+        <<: *CHASSIS_BACK
+    - step: "CHASSIS_TURN"
+      chassis:
+        <<: *CHASSIS_TURN
     - step: "pre_home"
       arm:
         <<: *PRE_HOME
@@ -1424,7 +1422,7 @@ steps_list:
         back: *EX_OPEN
     - step: "MID_ARM_READY"
       arm:
-        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY, *JOINT7_BIG_POS ]
+        joints: [ *JOINT1_BIG_READY, *JOINT2_BIG_READY, *JOINT3_BIG_READY, *JOINT4_R_POSITION, *JOINT5_BIG_READY, *JOINT6_BIG_READY ]
         common:
          <<: *QUICKLY
         tolerance:
@@ -1460,6 +1458,9 @@ steps_list:
           <<: *SLOWLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+    - step: "left"
+      chassis:
+        <<: *CHASSIS_LEFT_15
     - step: "JOINT1_UP"
       arm:
         joints: [ *JOINT1_BIG_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
@@ -1492,6 +1493,9 @@ steps_list:
     - step: "CLOSE_GRIPPER"
       gripper:
         <<: *CLOSE_GRIPPER
+    - step: "add stone"
+      stone_num:
+        change: "GOLD"
     - step: "move arm out"
       arm:
         joints: [ *JOINT1_DOWN_POSITION, *JOINT2_BACK_POSITION, "KEEP", *JOINT4_R_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION ]
@@ -1499,6 +1503,12 @@ steps_list:
           <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+    - step: "chassis left"
+      chassis:
+        <<: *CHASSIS_LEFT_15
+    - step: "chassis turn"
+      chassis:
+        <<: *CHASSIS_180
     - step: "pre_home"
       arm:
         <<: *PRE_HOME
@@ -1515,9 +1525,6 @@ steps_list:
       extend_arm:
         front: *EX_CLOSE
         back: *EX_CLOSE
-    - step: "add stone"
-      stone_num:
-        change: "GOLD"
     - step: "gimbal front"
       gimbal:
         <<: *FRONT_POS
@@ -1570,6 +1577,9 @@ steps_list:
           <<: *SLOWLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+    - step: "left"
+      chassis:
+        <<: *CHASSIS_LEFT_15
     - step: "JOINT1_UP"
       arm:
         joints: [ *JOINT1_BIG_UP_POS, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
@@ -1617,6 +1627,12 @@ steps_list:
     - step: "ORE_LIFTER_DOWN"
       ore_lifter:
         target: *BIN_DOWN_POS
+    - step: "chassis left"
+      chassis:
+        <<: *CHASSIS_LEFT_15
+    - step: "chassis turn"
+      chassis:
+        <<: *CHASSIS_180
     - step: "ORE_ROTATOR_RESET"
       ore_rotator:
         target: *READY_POS
