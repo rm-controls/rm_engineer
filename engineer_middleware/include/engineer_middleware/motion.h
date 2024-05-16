@@ -455,11 +455,14 @@ private:
   {
     std::vector<double> current = interface_.getCurrentJointValues();
     double error = 0.;
-    bool flag = 1;
+    bool flag = 1, joint_reached = 0;
     for (int i = 0; i < (int)final_target_.size(); ++i)
     {
       error = std::abs(final_target_[i] - current[i]);
-      flag &= (error < tolerance_joints_[i]);
+      joint_reached = (error < tolerance_joints_[i]);
+      if (!joint_reached)
+        ROS_INFO_STREAM("Joint" << i + 1 << " didn't reach configured tolerance range,error: " << error);
+      flag &= joint_reached;
     }
     return flag;
   }
