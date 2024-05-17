@@ -115,7 +115,7 @@ common:
       bin_get_stone: &JOINT3_BIN_GET_STONE
                           0.2608
       bin_get_lv4_stone: &JOINT3_BIN_GET_LV4_STONE
-                           0.31
+                           0.294414
       big_ready: &JOINT3_BIG_READY
                      0.071
       get_big_mid: &JOINT3_GET_BIG_MID
@@ -1640,7 +1640,6 @@ steps_list:
     - step: "home"
       arm:
         <<: *HOME
-
     - step: "gimbal front"
       gimbal:
         <<: *FRONT_POS
