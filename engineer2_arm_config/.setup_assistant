@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: rm_description
+    relative_path: urdf/engineer2/engineer2.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/engineer2.srdf
+  CONFIG:
+    author_name: QiayuanLiao
+    author_email: liaoqiayuan@gmail.com
+    generated_timestamp: 1617294211
