@@ -460,8 +460,8 @@ private:
     {
       error = std::abs(final_target_[i] - current[i]);
       joint_reached = (error < tolerance_joints_[i]);
-      if (!joint_reached)
-        ROS_INFO_STREAM("Joint" << i + 1 << " didn't reach configured tolerance range,error: " << error);
+      //      if (!joint_reached)
+      //        ROS_INFO_STREAM("Joint" << i + 1 << " didn't reach configured tolerance range,error: " << error);
       flag &= joint_reached;
     }
     return flag;
