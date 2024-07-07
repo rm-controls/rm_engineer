@@ -1,0 +1,24 @@
+common:
+  speed:
+    slowly: &SLOWLY
+      speed: 0.15
+      accel: 0.1
+      timeout: 15.
+    normally: &NORMALLY
+      speed: 0.4
+      accel: 0.3
+      timeout: 3
+    quickly: &QUICKLY
+      speed: 0.6
+      accel: 0.6
+      timeout: 7.
+
+  tolerance:
+    small_tolerance: &SMALL_TOLERANCE
+      tolerance_joints: [ 0.005, 0.008, 0.015, 0.1, 0.1, 0.1, 0.03 ]
+    normal_tolerance: &NORMAL_TOLERANCE
+      tolerance_joints: [ 0.012, 0.02, 0.015, 0.1, 0.2, 0.15, 0.07 ]
+    bigger_tolerance: &BIGGER_TOLERANCE
+      tolerance_joints: [ 0.015, 0.015, 0.02, 0.35, 0.2, 0.2, 0.1 ]
+    max_tolerance: &MAX_TOLERANCE
+      tolerance_joints: [ 0.03, 0.03, 0.03, 0.3, 0.3, 0.3 , 0.3]

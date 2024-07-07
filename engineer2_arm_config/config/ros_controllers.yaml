@@ -1,13 +1,5 @@
-# Simulation settings for using moveit_sim_controllers
-moveit_sim_hw_interface:
-  joint_model_group: engineer_arm
-  joint_model_group_pose: home
-# Settings for ros_control_boilerplate control loop
-generic_hw_control_loop:
-  loop_hz: 300
-  cycle_time_error_threshold: 0.01
-# Settings for ros_control hardware interface
-hardware_interface:
+arm_trajectory_controller:
+  type: effort_controllers/JointTrajectoryController
   joints:
     - joint1
     - joint2
@@ -15,17 +7,34 @@ hardware_interface:
     - joint4
     - joint5
     - joint6
-  sim_control_mode: 1  # 0: position, 1: velocity
-
-controller_list:
-  - name: controllers/arm_trajectory_controller
-    action_ns: follow_joint_trajectory
-    default: True
-    type: FollowJointTrajectory
-    joints:
-      - joint1
-      - joint2
-      - joint3
-      - joint4
-      - joint5
-      - joint6
+  gains:
+    joint1:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    joint2:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    joint3:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    joint4:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    joint5:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    joint6:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1

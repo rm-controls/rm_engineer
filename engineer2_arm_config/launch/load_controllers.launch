@@ -5,10 +5,10 @@
     <arg name="use_simulation" default="false"/>
 
     <group unless="$(arg use_simulation)">
-        <rosparam file="$(find rm_config)/config/rm_controllers/engineer.yaml" command="load"/>
+        <rosparam file="$(find rm_config)/config/rm_controllers/engineer2.yaml" command="load"/>
     </group>
     <group if="$(arg use_simulation)">
-        <rosparam file="$(find engineer_middleware)/config/simulation_controllers.yaml" command="load"/>
+        <rosparam file="$(find engineer_middleware)/config/engineer2_simulation_controllers.yaml" command="load"/>
     </group>
 
 
@@ -20,26 +20,8 @@
           args="load
                 controllers/robot_state_controller
                 controllers/joint_state_controller
-                controllers/joint1_calibration_controller
-                controllers/joint2_calibration_controller
-                controllers/joint3_calibration_controller
-                controllers/joint4_calibration_controller
-                controllers/joint5_calibration_controller
-                controllers/joint6_calibration_controller
-                controllers/joint7_calibration_controller
                 controllers/arm_trajectory_controller
                 controllers/chassis_controller
-                controllers/gpio_controller
-                controllers/gimbal_controller
-                controllers/ore_bin_rotate_controller
-                controllers/extend_arm_front_controller
-                controllers/extend_arm_back_controller
-                controllers/extend_arm_front_calibration_controller
-                controllers/extend_arm_back_calibration_controller
-                controllers/ore_bin_lifter_controller
-                controllers/ore_bin_lifter_calibration_controller
-                controllers/gimbal_lifter_controller
-                controllers/gimbal_lifter_calibration_controller
                 controllers/arm_trajectory_controller
                 "
     />
