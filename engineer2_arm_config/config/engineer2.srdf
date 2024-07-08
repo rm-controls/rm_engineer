@@ -22,15 +22,15 @@
         <joint name="joint6" value="0"/>
     </group_state>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
-    <disable_collisions link1="base_link" link2="link6" reason="User"/>
-    <disable_collisions link1="base_link" link2="link5" reason="User"/>
-    <disable_collisions link1="base_link" link2="link4" reason="User"/>
     <disable_collisions link1="link1" link2="link4" reason="User"/>
-    <disable_collisions link1="link1" link2="link5" reason="User"/>
-    <disable_collisions link1="link1" link2="link6" reason="User"/>
-    <disable_collisions link1="link2" link2="link4" reason="User"/>
-    <disable_collisions link1="link2" link2="link5" reason="User"/>
-    <disable_collisions link1="base_link" link2="link2" reason="User"/>
-    <disable_collisions link1="link2" link2="link6" reason="User"/>
-    <disable_collisions link1="base_link" link2="link3" reason="User"/>
+    <disable_collisions link1="link5" link2="link6" reason="User"/>
+    <disable_collisions link1="base_link" link2="link1" reason="User"/>
+    <disable_collisions link1="link1" link2="link2" reason="User"/>
+    <disable_collisions link1="link1" link2="link3" reason="User"/>
+    <disable_collisions link1="link2" link2="link3" reason="User"/>
+    <disable_collisions link1="link3" link2="link4" reason="User"/>
+    <disable_collisions link1="link3" link2="link5" reason="User"/>
+    <disable_collisions link1="link4" link2="link5" reason="User"/>
+    <disable_collisions link1="link3" link2="link6" reason="User"/>
+    <disable_collisions link1="link4" link2="link6" reason="User"/>
 </robot>
