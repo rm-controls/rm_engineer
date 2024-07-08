@@ -22,7 +22,6 @@
                 controllers/joint_state_controller
                 controllers/arm_trajectory_controller
                 controllers/chassis_controller
-                controllers/arm_trajectory_controller
                 "
     />
 
