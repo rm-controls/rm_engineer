@@ -675,15 +675,22 @@ public:
   {
     ROS_ASSERT(motion.hasMember("target"));
     target_ = xmlRpcGetDouble(motion, "target", 0.0);
+    delay_ = xmlRpcGetDouble(motion, "delay", 0.5);
   }
   bool move() override
   {
+    start_time_ = ros::Time::now();
     msg_.data = target_;
     return PublishMotion::move();
   }
+  bool isFinish() override
+  {
+    return ((ros::Time::now() - start_time_).toSec() > delay_);
+  }
 
 private:
-  double target_;
+  double target_, delay_;
+  ros::Time start_time_;
 };
 
 class ExtendMotion : public PublishMotion<std_msgs::Float64>

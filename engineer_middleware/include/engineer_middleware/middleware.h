@@ -83,7 +83,8 @@ private:
   ChassisInterface chassis_interface_;
   ros::Publisher hand_pub_, end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, planning_result_pub_,
       stone_num_pub_, point_cloud_pub_, ore_rotate_pub_, ore_lift_pub_, gimbal_lift_pub_, extend_arm_f_pub_,
-      extend_arm_b_pub_;
+      extend_arm_b_pub_, silver_lifter_pub_, silver_pusher_pub_, silver_rotator_pub_, gold_pusher_pub_,
+      gold_lifter_pub_, middle_pitch_pub_;
   std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener tf_listener_;
