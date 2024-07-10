@@ -69,3 +69,35 @@ controllers:
         roller_angle: -0.785
         joint: right_back_wheel_joint
         <<: *wheel_setting
+
+  middle_pitch_controller:
+    type: effort_controllers/JointPositionController
+    joint: middle_pitch_joint
+    pid: { p: 5., i: 0., d: 1, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+
+  silver_lifter_controller:
+    type: effort_controllers/JointPositionController
+    joint: silver_lifter_joint
+    pid: { p: 1000., i: 0., d: 100, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+
+  silver_pusher_controller:
+    type: effort_controllers/JointPositionController
+    joint: silver_pusher_joint
+    pid: { p: 1000., i: 0., d: 100, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+
+  silver_rotator_controller:
+    type: effort_controllers/JointPositionController
+    joint: silver_rotator_joint
+    pid: { p: 50., i: 0., d: 1, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+
+  ######################### Gold  Ore Controllers ########################
+
+  gold_lifter_controller:
+    type: effort_controllers/JointPositionController
+    joint: gold_lifter_joint
+    pid: { p: 100., i: 0., d: 10, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+
+  gold_pusher_controller:
+    type: effort_controllers/JointPositionController
+    joint: gold_pusher_joint
+    pid: { p: 1000., i: 0., d: 100, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
