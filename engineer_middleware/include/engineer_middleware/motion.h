@@ -675,7 +675,7 @@ public:
   {
     ROS_ASSERT(motion.hasMember("target"));
     target_ = xmlRpcGetDouble(motion, "target", 0.0);
-    delay_ = xmlRpcGetDouble(motion, "delay", 0.5);
+    delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
   }
   bool move() override
   {
