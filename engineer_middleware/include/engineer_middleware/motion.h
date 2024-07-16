@@ -528,18 +528,41 @@ public:
   GpioMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
     : PublishMotion<rm_msgs::GpioData>(motion, interface)
   {
+    msg_.gpio_state.assign(6, false);
+    msg_.gpio_name.assign(6, "no_registered");
+    pin_ = motion["pin"];
     state_ = motion["state"];
-    msg_.gpio_state.push_back(0);
-    msg_.gpio_name.push_back("gripper");
+    switch (pin_)
+    {
+      case 0:
+        msg_.gpio_name[0] = "main_gripper";
+        break;
+      case 1:
+        msg_.gpio_name[1] = "silver_gripper1";
+        break;
+      case 2:
+        msg_.gpio_name[2] = "silver_gripper2";
+        break;
+      case 3:
+        msg_.gpio_name[3] = "silver_gripper3";
+        break;
+      case 4:
+        msg_.gpio_name[4] = "gold_gripper";
+        break;
+      case 5:
+        msg_.gpio_name[5] = "silver_pump";
+        break;
+    }
   }
   bool move() override
   {
-    msg_.gpio_state[0] = state_;
+    msg_.gpio_state[pin_] = state_;
     return PublishMotion::move();
   }
 
 private:
   bool state_;
+  int pin_;
 };
 
 class StoneNumMotion : public PublishMotion<std_msgs::String>

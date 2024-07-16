@@ -169,6 +169,43 @@ common:
       tolerance:
         <<: *NORMAL_TOLERANCE
 
+  gripper:
+    open_main_gripper: &OPEN_MAIN_GRIPPER
+      pin: 0
+      state: true
+    close_main_gripper: &CLOSE_MAIN_GRIPPER
+      pin: 0
+      state: false
+    open_s1: &OPEN_S1
+      pin: 1
+      state: true
+    close_s1: &CLOSE_S1
+      pin: 1
+      state: false
+    open_s2: &OPEN_S2
+      pin: 2
+      state: true
+    close_s2: &CLOSE_S2
+      pin: 2
+      state: false
+    open_s3: &OPEN_S3
+      pin: 3
+      state: true
+    close_s3: &CLOSE_S3
+      pin: 3
+      state: false
+    open_gold: &OPEN_GOLD
+      pin: 4
+      state: true
+    close_gold: &CLOSE_GOLD
+      pin: 4
+      state: false
+    open_s_gripper: &OPEN_S_GRIPPER
+      pin: 5
+      state: true
+    close_s_gripper: &CLOSE_S_GRIPPER
+      pin: 5
+      state: false
 
 
 steps_list:
@@ -226,7 +263,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
 
-  STORE_SILVER_TO_GRIPPER1: &STORE_SILVER_TO_GRIPPER1
+  STORE_SILVER_TO_GRIPPER1:
     - step: "ready to store"
       arm:
         joints: [*JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER1_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS]
@@ -253,7 +290,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
 
-  STORE_SILVER_TO_GRIPPER2: &STORE_SILVER_TO_GRIPPER2
+  STORE_SILVER_TO_GRIPPER2:
     - step: "ready to store"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER2_POS, *JOINT3_GET_STORED_SILVER2_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -281,7 +318,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
 
-  STORE_SILVER_TO_GRIPPER3: &STORE_SILVER_TO_GRIPPER3
+  STORE_SILVER_TO_GRIPPER3:
     - step: "ready to store"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER3_POS, *JOINT3_GET_STORED_SILVER3_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -340,7 +377,7 @@ steps_list:
 
 
 
-  GET_SILVER_FROM_GRIPPER1:
+  GET_STORED_SILVER1:
     - step: "ready to get silver from gripper1"
       arm:
         joints: [*JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER1_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS]
@@ -367,7 +404,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
 
-  GET_SILVER_FROM_GRIPPER2:
+  GET_STORED_SILVER2:
     - step: "ready to get silver from gripper2"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER2_POS, *JOINT3_GET_STORED_SILVER2_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -395,7 +432,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
 
-  GET_SILVER_FROM_GRIPPER3:
+  GET_STORED_SILVER3:
     - step: "ready to get silver from gripper3"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER3_POS, *JOINT3_GET_STORED_SILVER3_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -455,7 +492,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
 
-  THREE_SILVER_ARM:
+  ARM_THREE_SILVER:
     - step: "silver rotator up"
       silver_rotator:
         target: 1.57
@@ -586,7 +623,7 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
 
-  THREE_SILVER_GRIPPER:
+  GRIPPER_THREE_SILVER:
     - step: "rotate down"
       silver_rotator:
         target: 0.0001
@@ -620,7 +657,7 @@ steps_list:
       silver_lifter:
         target: 0.
 
-  GET_MIDDLE_GOLD:
+  MID_BIG_ISLAND:
     - step: "pusher back"
       gold_pusher:
         target: 0.
@@ -643,3 +680,55 @@ steps_list:
     - step: "lifter down"
       gold_lifter:
         target: 0
+
+  TEST1:
+    - step: "main open"
+      gripper:
+        <<: *OPEN_MAIN_GRIPPER
+
+#
+  TEST2:
+    - step: "main close"
+      gripper:
+        <<: *CLOSE_MAIN_GRIPPER
+  TEST3:
+    - step: "s1 open"
+      gripper:
+        <<: *OPEN_S1
+  TEST4:
+    - step: "s1 c"
+      gripper:
+        <<: *CLOSE_S1
+  TEST5:
+    - step: "s2 open"
+      gripper:
+        <<: *OPEN_S2
+
+  TEST6:
+    - step: "s2 close"
+      gripper:
+        <<: *CLOSE_S2
+  TEST7:
+    - step: "s3 open"
+      gripper:
+        <<: *OPEN_S3
+  TEST8:
+    - step: "s3 close"
+      gripper:
+        <<: *CLOSE_S3
+  TEST9:
+    - step: "g1 open"
+      gripper:
+        <<: *OPEN_GOLD
+  TEST10:
+    - step: "g1 close"
+      gripper:
+        <<: *CLOSE_GOLD
+  TEST11:
+    - step: "g1 close"
+      gripper:
+        <<: *OPEN_S_GRIPPER
+  TEST12:
+    - step: "g1 close"
+      gripper:
+        <<: *CLOSE_S_GRIPPER
