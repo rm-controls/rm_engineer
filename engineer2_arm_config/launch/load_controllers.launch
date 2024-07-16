@@ -21,6 +21,7 @@
                 controllers/robot_state_controller
                 controllers/joint_state_controller
                 controllers/arm_trajectory_controller
+                controllers/gimbal_controller
                 controllers/chassis_controller
                 controllers/silver_lifter_controller
                 controllers/silver_pusher_controller
