@@ -41,7 +41,7 @@ common:
     get_small: &JOINT1_GET_SMALL_POS
       0.3
     ready_get_stored: &JOINT1_READY_GET_STORED_POS
-      0.57
+      0.545
     get_stored: &JOINT1_GET_STORED_POS
       0.5
     get_stored_gold: &JOINT1_GET_STORED_GOLD_POS
@@ -200,15 +200,19 @@ common:
     close_gold: &CLOSE_GOLD
       pin: 4
       state: false
-    open_s_gripper: &OPEN_S_GRIPPER
-      pin: 5
+    open_silver_gripper: &OPEN_S_GRIPPER
+      pin: 7
       state: true
-    close_s_gripper: &CLOSE_S_GRIPPER
-      pin: 5
+    close_silver_gripper: &CLOSE_S_GRIPPER
+      pin: 7
       state: false
 
 
 steps_list:
+  MIDDLE_PITCH_UP:
+    - step: "middld pitch up"
+      middle_pitch:
+        target: *MIDDLE_PITCH_NORMAL
   HOME:
     - step: "arm home pos"
       arm:
@@ -217,6 +221,18 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+
+  HOME_WITH_PITCH:
+    - step: "arm home pos"
+      arm:
+        joints: [ *JOINT1_HOME_POS, *JOINT2_HOME_POS, *JOINT3_HOME_POS, *JOINT4_HOME_POS, *JOINT5_HOME_POS, *JOINT6_HOME_POS ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "middle pitch up"
+      middle_pitch:
+        target: *MIDDLE_PITCH_NORMAL
 
   LV4_EXCHANGE:
     - step: "arm enter exchange pos"
@@ -281,7 +297,9 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     #    - step: "close main gripper"
-
+    - step: "add stone"
+      stone_num:
+        change: "+s1"
     - step: "left arm"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -309,7 +327,9 @@ steps_list:
           <<: *NORMAL_TOLERANCE
 
     #    - step: "close main gripper"
-
+    - step: "add stone"
+      stone_num:
+        change: "+s2"
     - step: "left arm"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_GET_STORED_SILVER2_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -337,6 +357,9 @@ steps_list:
           <<: *NORMAL_TOLERANCE
 
     #    - step: "close main gripper"
+    - step: "add stone"
+      stone_num:
+        change: "+s3"
     - step: "left arm"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_GET_STORED_SILVER3_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -395,7 +418,9 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
     #    - step: "close gripper1"
-
+    - step: "minus stone"
+      stone_num:
+        change: "-s1"
     - step: "lift arm"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER1_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -423,7 +448,9 @@ steps_list:
           <<: *NORMAL_TOLERANCE
 
     #    - step: "close gripper2"
-
+    - step: "minus stone"
+      stone_num:
+        change: "-s2"
     - step: "lift arm"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER2_POS, *JOINT3_GET_STORED_SILVER2_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -451,6 +478,9 @@ steps_list:
           <<: *NORMAL_TOLERANCE
 
     #    - step: "close gripper3"
+    - step: "minus stone"
+      stone_num:
+        change: "-s3"
     - step: "left arm"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER3_POS, *JOINT3_GET_STORED_SILVER3_POS, *JOINT4_HOME_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -476,6 +506,9 @@ steps_list:
         tolerance:
           <<: *NORMAL_TOLERANCE
 #    - step: "close gold gripper
+    - step: "add stone"
+      stone_num:
+        change: "+g"
     - step: "move out gold"
       arm:
         joints: [ *JOINT1_GET_STORED_GOLD_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_READY_GET_STORED_GOLD_POS, *JOINT4_R90_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -656,6 +689,15 @@ steps_list:
     - step: "lifter down"
       silver_lifter:
         target: 0.
+    - step: "add stone1"
+      stone_num:
+        change: "+s1"
+    - step: "add stone1"
+      stone_num:
+        change: "+s2"
+    - step: "add stone1"
+      stone_num:
+        change: "+s3"
 
   MID_BIG_ISLAND:
     - step: "pusher back"
@@ -680,55 +722,6 @@ steps_list:
     - step: "lifter down"
       gold_lifter:
         target: 0
-
-  TEST1:
-    - step: "main open"
-      gripper:
-        <<: *OPEN_MAIN_GRIPPER
-
-#
-  TEST2:
-    - step: "main close"
-      gripper:
-        <<: *CLOSE_MAIN_GRIPPER
-  TEST3:
-    - step: "s1 open"
-      gripper:
-        <<: *OPEN_S1
-  TEST4:
-    - step: "s1 c"
-      gripper:
-        <<: *CLOSE_S1
-  TEST5:
-    - step: "s2 open"
-      gripper:
-        <<: *OPEN_S2
-
-  TEST6:
-    - step: "s2 close"
-      gripper:
-        <<: *CLOSE_S2
-  TEST7:
-    - step: "s3 open"
-      gripper:
-        <<: *OPEN_S3
-  TEST8:
-    - step: "s3 close"
-      gripper:
-        <<: *CLOSE_S3
-  TEST9:
-    - step: "g1 open"
-      gripper:
-        <<: *OPEN_GOLD
-  TEST10:
-    - step: "g1 close"
-      gripper:
-        <<: *CLOSE_GOLD
-  TEST11:
-    - step: "g1 close"
-      gripper:
-        <<: *OPEN_S_GRIPPER
-  TEST12:
-    - step: "g1 close"
-      gripper:
-        <<: *CLOSE_S_GRIPPER
+    - step: "add stone"
+      stone_num:
+        change: "+g"
