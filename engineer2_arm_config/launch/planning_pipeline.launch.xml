@@ -5,6 +5,6 @@
 
   <arg name="pipeline" default="ompl" />
 
-  <include ns="$(arg pipeline)" file="$(dirname)/$(arg pipeline)_planning_pipeline.launch.xml" />
+    <include file="$(find engineer2_arm_config)/launch/$(arg pipeline)_planning_pipeline.launch.xml"/>
 
 </launch>

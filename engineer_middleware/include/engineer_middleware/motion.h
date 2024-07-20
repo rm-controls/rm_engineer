@@ -528,18 +528,49 @@ public:
   GpioMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
     : PublishMotion<rm_msgs::GpioData>(motion, interface)
   {
+    msg_.gpio_state.assign(8, false);
+    msg_.gpio_name.assign(8, "no_registered");
+    pin_ = motion["pin"];
     state_ = motion["state"];
-    msg_.gpio_state.push_back(0);
-    msg_.gpio_name.push_back("gripper");
+    switch (pin_)
+    {
+      case 0:
+        msg_.gpio_name[0] = "main_gripper";
+        break;
+      case 1:
+        msg_.gpio_name[1] = "silver_gripper1";
+        break;
+      case 2:
+        msg_.gpio_name[2] = "silver_gripper2";
+        break;
+      case 3:
+        msg_.gpio_name[3] = "silver_gripper3";
+        break;
+      case 4:
+        msg_.gpio_name[4] = "gold_gripper";
+        break;
+      case 5:
+        msg_.gpio_name[5] = "unused";
+        ROS_WARN_STREAM("GPIO port 6 is unused now!");
+        break;
+      case 6:
+        msg_.gpio_name[6] = "unused";
+        ROS_WARN_STREAM("GPIO port 7 is unused now!");
+        break;
+      case 7:
+        msg_.gpio_name[7] = "silver_pump";
+        break;
+    }
   }
   bool move() override
   {
-    msg_.gpio_state[0] = state_;
+    msg_.gpio_state[pin_] = state_;
     return PublishMotion::move();
   }
 
 private:
   bool state_;
+  int pin_;
 };
 
 class StoneNumMotion : public PublishMotion<std_msgs::String>
@@ -675,15 +706,22 @@ public:
   {
     ROS_ASSERT(motion.hasMember("target"));
     target_ = xmlRpcGetDouble(motion, "target", 0.0);
+    delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
   }
   bool move() override
   {
+    start_time_ = ros::Time::now();
     msg_.data = target_;
     return PublishMotion::move();
   }
+  bool isFinish() override
+  {
+    return ((ros::Time::now() - start_time_).toSec() > delay_);
+  }
 
 private:
-  double target_;
+  double target_, delay_;
+  ros::Time start_time_;
 };
 
 class ExtendMotion : public PublishMotion<std_msgs::Float64>
