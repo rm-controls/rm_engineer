@@ -29,7 +29,7 @@ common:
     down: &JOINT1_DOWN_POS
       0.0000001
     up: &JOINT1_UP_POS
-      0.579
+      0.545
     ready_get_ground: &JOINT1_READY_GET_GROUND_POS
       0.5
     get_ground: &JOINT1_GET_GROUND_POS
@@ -41,7 +41,7 @@ common:
     get_small: &JOINT1_GET_SMALL_POS
       0.3
     ready_get_stored: &JOINT1_READY_GET_STORED_POS
-      0.545
+      0.54
     get_stored: &JOINT1_GET_STORED_POS
       0.5
     get_stored_gold: &JOINT1_GET_STORED_GOLD_POS
@@ -108,6 +108,8 @@ common:
   joint5:
     home: &JOINT5_HOME_POS
       0.00001
+    down_45: &JOINT5_DOWN_45
+      0.77
     down_90: &JOINT5_DOWN_90
       1.57
     get_stored_gold: &JOINT5_GET_STORED_GOLD_POS
@@ -167,7 +169,7 @@ common:
         <<: *NORMAL_TOLERANCE
 
     lv4_exchange: &LV4_EXCHANGE
-      joints: [ *JOINT1_EXCHANGE_POS, *JOINT2_EXCHANGE_POS, *JOINT3_HOME_POS, *JOINT4_ZERO_POS, *JOINT5_HOME_POS, *JOINT6_HOME_POS ]
+      joints: [ *JOINT1_EXCHANGE_POS, *JOINT2_R_EXCHANGE_POS, *JOINT3_R_EXCHANGE_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_45, *JOINT6_HOME_POS ]
       common:
         <<: *NORMALLY
       tolerance:
@@ -186,6 +188,30 @@ common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
+
+  gimbal:
+    right_pos: &RIGHT_POS
+      frame: base_link
+      position: [ 0.001 , -3., 0. ]
+    left_pos: &LEFT_POS
+      frame: base_link
+      position: [ 0.001, 3., 0. ]
+    front_pos: &FRONT_POS
+      frame: base_link
+      position: [ 2., 0.001, 0. ]
+    follow_ee: &FOLLOW_EE
+      frame: link5
+      position: [ 0.001, 0.001, 0. ]
+
+  chassis_forward: &CHASSIS_FORWARD
+    frame: base_link
+    position: [ 0.1, 0. ]
+    yaw: 0.0
+    chassis_tolerance_position: 0.1
+    chassis_tolerance_angular: 0.2
+    common:
+      timeout: 2.
+
 
   gripper:
     open_main_gripper: &OPEN_MAIN_GRIPPER
@@ -227,6 +253,21 @@ common:
 
 
 steps_list:
+  GIMBAL_FRONT:
+    - step: "gimbal look front"
+      gimbal:
+        <<: *FRONT_POS
+
+  GIMBAL_RIGHT:
+    - step: "gimbal look right"
+      gimbal:
+        <<: *RIGHT_POS
+
+  GIMBAL_FOLLOW_EE:
+    - step: "gimbal follow ee"
+      gimbal:
+        <<: *FOLLOW_EE
+
   MIDDLE_PITCH_UP:
     - step: "middld pitch up"
       middle_pitch:
@@ -310,6 +351,9 @@ steps_list:
     - step: "silver rotator up"
       silver_rotator:
         target: 1.57
+    - step: "open silver gripper"
+      gripper:
+        <<: *OPEN_S_GRIPPER
     - step: "ready to store"
       arm:
         joints: [*JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER1_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS]
@@ -352,6 +396,9 @@ steps_list:
     - step: "silver rotator up"
       silver_rotator:
         target: 1.57
+    - step: "open silver gripper"
+      gripper:
+        <<: *OPEN_S_GRIPPER
     - step: "ready to store"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER2_POS, *JOINT3_GET_STORED_SILVER2_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -394,6 +441,9 @@ steps_list:
     - step: "silver rotator up"
       silver_rotator:
         target: 1.57
+    - step: "open silver gripper"
+      gripper:
+        <<: *OPEN_S_GRIPPER
     - step: "ready to store"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_SILVER3_POS, *JOINT3_GET_STORED_SILVER3_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -629,6 +679,9 @@ steps_list:
     - step: "silver rotator up"
       silver_rotator:
         target: 1.57
+    - step: "open silver gripper"
+      gripper:
+        <<: *OPEN_S_GRIPPER
     - step: "ready get small island silver"
       arm:
         joints: [ *JOINT1_READY_GET_SMALL_POS, *JOINT2_GET_SMALL_ISLAND_POS, *JOINT3_GET_SMALL_ISLAND_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -639,6 +692,7 @@ steps_list:
     - step: "open main gripper"
       gripper:
         <<: *OPEN_MAIN_GRIPPER
+  ARM_THREE_SILVER0:
     - step: "get small island silver"
       arm:
         joints: [ *JOINT1_GET_SMALL_POS, *JOINT2_GET_SMALL_ISLAND_POS, *JOINT3_GET_SMALL_ISLAND_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
@@ -764,16 +818,7 @@ steps_list:
           <<: *NORMAL_TOLERANCE
 
   GRIPPER_THREE_SILVER:
-    - step: "rotate down"
-      silver_rotator:
-        target: 0.0001
-    - step: "lifter down"
-      silver_lifter:
-        target: 0.
-    - step: "pusher back"
-      silver_pusher:
-        target: 0.
-        delay: 1
+#    - step: "gimbal look back"
     - step: "open gripper"
       gripper:
         <<: *OPEN_S1
@@ -783,27 +828,59 @@ steps_list:
     - step: "open gripper"
       gripper:
         <<: *OPEN_S3
+    - step: "rotate down"
+      silver_rotator:
+        target: 0.0001
+    - step: "lifter ready"
+      silver_lifter:
+        target: 0.07
+    - step: "pusher back"
+      silver_pusher:
+        target: -0.05
+    - step: "open gripper"
+      gripper:
+        <<: *OPEN_S1
+    - step: "open gripper"
+      gripper:
+        <<: *OPEN_S2
+    - step: "open gripper"
+      gripper:
+        <<: *OPEN_S3
+    - step: "open silver gripper"
+      gripper:
+        <<: *OPEN_S_GRIPPER
+  GRIPPER_THREE_SILVER0:
     - step: "get silver"
       silver_pusher:
-        target: -0.046
-        delay: 0.5
+        target: -0.03
+        delay: 0.3
     - step: "pusher back little"
       silver_pusher:
-        target: -0.04
-        delay: 0.5
+        target: -0.03
+        delay: 0.1
+#    - step: "rotate up"
+#      silver_rotator:
+#        target: 0.02
+#        delay: 0.5
     - step: "lifter up"
       silver_lifter:
-        target: 0.18
-    - step: "rotate up"
-      silver_rotator:
-        target: 1.57
+        target: 0.2
         delay: 0.5
     - step: "pusher back"
       silver_pusher:
         target: 0.
+        delay: 0.1
+    - step: "rotate up"
+      silver_rotator:
+        target: 1.64
+        delay: 0.5
     - step: "lifter down"
       silver_lifter:
-        target: 0.
+        target: 0.05
+        delay: 0.15
+    - step: "lifter down"
+      silver_lifter:
+        target: 0.0
     - step: "add stone1"
       stone_num:
         change: "+s1"
@@ -813,6 +890,7 @@ steps_list:
     - step: "add stone1"
       stone_num:
         change: "+s3"
+#    - step: "gimbal look front"
 
   MID_BIG_ISLAND:
     - step: "pusher back"
@@ -824,6 +902,7 @@ steps_list:
     - step: "open gold gripper"
       gripper:
         <<: *OPEN_GOLD
+  MID_BIG_ISLAND0:
     - step: "get gold"
       gold_pusher:
         target: -0.45
@@ -843,3 +922,52 @@ steps_list:
     - step: "add stone"
       stone_num:
         change: "+g"
+  OPEN_MAIN:
+    - step: "main open"
+      gripper:
+        <<: *OPEN_MAIN_GRIPPER
+  CLOSE_MAIN:
+    - step: "main close"
+      gripper:
+        <<: *CLOSE_MAIN_GRIPPER
+  OPEN_S1:
+    - step: "s1 open"
+      gripper:
+        <<: *OPEN_S1
+  CLOSE_S1:
+    - step: "s1 c"
+      gripper:
+        <<: *CLOSE_S1
+  OPEN_S2:
+    - step: "s2 open"
+      gripper:
+        <<: *OPEN_S2
+
+  CLOSE_S2:
+    - step: "s2 close"
+      gripper:
+        <<: *CLOSE_S2
+  OPEN_S3:
+    - step: "s3 open"
+      gripper:
+        <<: *OPEN_S3
+  CLSOE_S3:
+    - step: "s3 close"
+      gripper:
+        <<: *CLOSE_S3
+  OPEN_G:
+    - step: "g1 open"
+      gripper:
+        <<: *OPEN_GOLD
+  CLOSE_G:
+    - step: "g1 close"
+      gripper:
+        <<: *CLOSE_GOLD
+  OPEN_SG:
+    - step: "g1 close"
+      gripper:
+        <<: *OPEN_S_GRIPPER
+  CLOSE_SG:
+    - step: "g1 close"
+      gripper:
+        <<: *CLOSE_S_GRIPPER
