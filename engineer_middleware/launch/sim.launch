@@ -4,7 +4,7 @@
     <include file="$(find rm_gazebo)/launch/$(arg world).launch"/>
     <include file="$(find engineer_middleware)/launch/load.launch"/>
     <include file="$(find $(arg robot_type)_arm_config)/launch/load_move_group.launch"/>
-<!--    <include file="$(find rm_config)/launch/manual.launch"/>-->
+    <include file="$(find rm_config)/launch/manual.launch"/>
     <include file="$(find $(arg robot_type)_arm_config)/launch/load_controllers.launch">
         <arg name="use_simulation" value="true"/>
     </include>
