@@ -159,6 +159,8 @@ common:
       1.57
     normal: &MIDDLE_PITCH_NORMAL
       0.0
+    highest: &MIDDLE_PITCH_HIGHEST
+      -0.1
 
   arm:
     home: &HOME
@@ -269,7 +271,7 @@ steps_list:
         <<: *FOLLOW_EE
 
   MIDDLE_PITCH_UP:
-    - step: "middld pitch up"
+    - step: "middle pitch up"
       middle_pitch:
         target: *MIDDLE_PITCH_NORMAL
   HOME:
@@ -896,25 +898,27 @@ steps_list:
     - step: "pusher back"
       gold_pusher:
         target: 0.
-    - step: "lifter down"
+    - step: "lifter ready"
       gold_lifter:
-        target: 0
+        target: 0.015
     - step: "open gold gripper"
       gripper:
         <<: *OPEN_GOLD
   MID_BIG_ISLAND0:
     - step: "get gold"
       gold_pusher:
-        target: -0.45
+        target: -0.443
         delay: 0.5
+  MID_BIG_ISLAND00:
     - step: "lift gold"
       gold_lifter:
-        target: 0.05
+        target: 0.08
         delay: 0.5
+  MID_BIG_ISLAND000:
     - step: "pull back gold"
       gold_pusher:
         target: 0
-        delay: 0.5
+        delay: 0.6
 #    - step: "chassis left"
     - step: "lifter down"
       gold_lifter:
@@ -922,6 +926,46 @@ steps_list:
     - step: "add stone"
       stone_num:
         change: "+g"
+
+  SIDE_BIG_ISLAND:
+    - step: "middle pitch up"
+      middle_pitch:
+        target: *MIDDLE_PITCH_HIGHEST
+    - step: "arm ready"
+      arm:
+        joints: [ 0.037,0.929,-1.963,-1.474,-1.434,-1.528 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "open main gripper"
+      gripper:
+          <<: *OPEN_MAIN_GRIPPER
+  SIDE_BIG_ISLAND0:
+    - step: "arm get gold"
+      arm:
+        joints: [ 0.037,0.093,-1.38,-1.474,-1.571,-1.528 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+  #SIDE_BIG_ISLAND00:
+    - step: "arm lift gold"
+      arm:
+        joints: [ 0.127,0.093,-1.38,-1.474,-1.571,-1.528 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+  #SIDE_BIG_ISLAND000:
+    - step: "arm pull back gold"
+      arm:
+        joints: [ 0.127,1.04,-1.99,-1.474,-1.321,-1.528 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+
   OPEN_MAIN:
     - step: "main open"
       gripper:
@@ -951,7 +995,7 @@ steps_list:
     - step: "s3 open"
       gripper:
         <<: *OPEN_S3
-  CLSOE_S3:
+  CLOSE_S3:
     - step: "s3 close"
       gripper:
         <<: *CLOSE_S3
