@@ -42,7 +42,7 @@ common:
       bin_get_stone_left: &JOINT1_BIN_GET_STONE_LEFT
                      0.2
       bin_get_stone_right: &JOINT1_BIN_GET_STONE_RIGHT
-                            0.1131
+                            0.1198
       big_ready: &JOINT1_BIG_READY
                      0.005
       big_adjust_mid: &JOINT1_BIG_ADJUST_MID
@@ -82,7 +82,7 @@ common:
       bin_get_stone: &JOINT2_BIN_GET_STONE
                             0.13
       back_bin_position: &JOINT2_BACK_BIN_POSITION
-                             0.06651
+                             0.06451
       avoid_collision: &JOINT2_AVOID_COLLISION
                         0.1
       big_ready: &JOINT2_BIG_READY
@@ -258,6 +258,12 @@ common:
                   0.230
     small_island: &LIFTER_SMALL_ISLAND
                     0.05
+    gl_test1: &GL_TEST1
+      0.10
+    gl_test2: &GL_TEST2
+      0.15
+    gl_test3: &GL_TEST3
+      0.20
   gripper:
     open_gripper: &OPEN_GRIPPER
       pin: 0
@@ -392,6 +398,34 @@ steps_list:
     - step: "move arm to exchange pos"
       arm:
         joints: [ *JOINT1_EXCHANGE_POS, *JOINT2_EXCHANGE_POSITION, *JOINT3_MID_POSITION, *JOINT4_MID_POSITION, *JOINT5_MID_POSITION, *JOINT6_UP_POSITION, *JOINT7_BIN_GET_RIGHT ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "gimbal lifter tallest"
+      gimbal_lifter:
+        target: *TALLEST_POS
+  LEFT_EXCHANGE:
+    - step: "gimbal look front"
+      gimbal:
+        <<: *FRONT_POS
+    - step: "move arm to exchange pos"
+      arm:
+        joints: [*JOINT1_DOWN_POSITION, *JOINT2_EXCHANGE_POSITION, *JOINT3_MID_POSITION, *JOINT4_MID_POSITION, *JOINT5_L90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "gimbal lifter tallest"
+      gimbal_lifter:
+        target: *TALLEST_POS
+  RIGHT_EXCHANGE:
+    - step: "gimbal look front"
+      gimbal:
+        <<: *FRONT_POS
+    - step: "move arm to exchange pos"
+      arm:
+        joints: [*JOINT1_DOWN_POSITION, *JOINT2_EXCHANGE_POSITION, *JOINT3_MID_POSITION, *JOINT4_MID_POSITION, *JOINT5_R90_POSITION, *JOINT6_UP_POSITION, *JOINT7_MID_POSITION]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1757,6 +1791,19 @@ steps_list:
       gimbal_lifter:
         target: *TALLEST_POS
 
+  GIMBAL_TEST1:
+    - step: "gimbal 1"
+      gimbal_lifter:
+        target: *GL_TEST1
+  GIMBAL_TEST2:
+    - step: "gimbal 2"
+      gimbal_lifter:
+        target: *GL_TEST2
+  GIMBAL_TEST3:
+    - step: "gimbal 3"
+      gimbal_lifter:
+        target: *GL_TEST3
+
   ############## ORE ROTATOR ###############
   ORE_ROTATOR_INIT:
     - step: "ore rotator init pos"
@@ -1906,3 +1953,21 @@ steps_list:
         target_frame: arm
         common:
           timeout: 2.
+
+  JOINT2_TEST_F:
+    - step: "joint2 front"
+      arm:
+        joints: ["KEEP",*JOINT2_FURTHEST_POSITION, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *QUICKLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+
+  JOINT2_TEST_B:
+    - step: "joint2 front"
+      arm:
+        joints: [ "KEEP",*JOINT2_BACK_POSITION, "KEEP", "KEEP", "KEEP", "KEEP", "KEEP" ]
+        common:
+          <<: *QUICKLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
