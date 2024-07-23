@@ -149,7 +149,7 @@ common:
     get_small2: &JOINT6_SMALL2
       4.387
     get_small1: &JOINT6_SMALL1
-#      2.7
+      2.7
 
   middle_pitch:
     ground_stone: &MIDDLE_PITCH_GROUND_STONE
