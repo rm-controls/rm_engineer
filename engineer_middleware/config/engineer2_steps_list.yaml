@@ -82,7 +82,7 @@ common:
 
   joint3:
     home: &JOINT3_HOME_POS
-      0.9
+      -2.4
     zero: &JOINT3_ZERO_POS
       0.00000001
     l_exchange: &JOINT3_L_EXCHANGE_POS
