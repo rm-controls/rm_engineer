@@ -7,11 +7,11 @@ common:
     normally: &NORMALLY
       speed: 0.4
       accel: 0.3
-      timeout: 5
+      timeout: 6
     quickly: &QUICKLY
-      speed: 0.6
+      speed: 0.8
       accel: 0.6
-      timeout: 3.
+      timeout: 6.
 
   tolerance:
     small_tolerance: &SMALL_TOLERANCE
@@ -173,7 +173,7 @@ common:
       common:
         <<: *NORMALLY
       tolerance:
-        <<: *NORMAL_TOLERANCE
+        <<: *BIGGER_TOLERANCE
 
     lv4_exchange: &LV4_EXCHANGE
       joints: [ *JOINT1_EXCHANGE_POS, *JOINT2_R_EXCHANGE_POS, *JOINT3_R_EXCHANGE_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_45, *JOINT6_HOME_POS ]
@@ -210,7 +210,7 @@ common:
       frame: base_link
       position: [ -3., -0.3, 0. ]
     follow_ee: &FOLLOW_EE
-      frame: link6
+      frame: base_link
       position: [ 0.15, 0.00, 0. ]
 
   chassis_forward: &CHASSIS_FORWARD
@@ -342,7 +342,7 @@ steps_list:
         <<: *LV4_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
   LV5_L_EXCHANGE:
     - step: "middle pitch up"
       middle_pitch:
@@ -352,7 +352,7 @@ steps_list:
         <<: *LV5_L_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
 
   LV5_R_EXCHANGE:
     - step: "middle pitch up"
@@ -363,7 +363,7 @@ steps_list:
         <<: *LV5_R_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
 
   GET_SMALL_ISLAND:
     - step: "middle pitch up"
@@ -951,7 +951,7 @@ steps_list:
   GRIPPER_THREE_SILVER0:
     - step: "get silver"
       silver_pusher:
-        target: -0.03
+        target: -0.04
         delay: 0.5
     - step: "pusher back little"
       silver_pusher:
@@ -1212,7 +1212,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S1_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S1 ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
 
@@ -1247,7 +1247,7 @@ steps_list:
         <<: *LV5_L_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
 
 
 
@@ -1259,7 +1259,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S2_POS, *JOINT3_GET_STORED_SILVER2_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S2 ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "open main gripper"
@@ -1290,7 +1290,7 @@ steps_list:
         <<: *LV5_L_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
 
 
 
@@ -1302,7 +1302,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, 0.113, -2.063, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "ready to get silver from gripper3"
@@ -1340,7 +1340,7 @@ steps_list:
         <<: *LV5_L_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
   LV5_L_G:
     - step: "middle pitch up"
       middle_pitch:
@@ -1349,7 +1349,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_GET_STORED_GOLD_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_READY_GET_STORED_GOLD_POS, *JOINT4_R90_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "open main gripper"
@@ -1387,7 +1387,7 @@ steps_list:
         <<: *LV5_L_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
   LV5_R_S1:
     - step: "middle pitch up"
       middle_pitch:
@@ -1396,7 +1396,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S1_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S1 ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
 
@@ -1431,7 +1431,7 @@ steps_list:
         <<: *LV5_R_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
   LV5_R_S2:
     - step: "middle pitch up"
       middle_pitch:
@@ -1440,7 +1440,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S2_POS, *JOINT3_GET_STORED_SILVER2_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S2 ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "open main gripper"
@@ -1471,7 +1471,7 @@ steps_list:
         <<: *LV5_R_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
   LV5_R_S3:
     - step: "middle pitch up"
       middle_pitch:
@@ -1480,7 +1480,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, 0.113, -2.063, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "ready to get silver from gripper3"
@@ -1518,7 +1518,7 @@ steps_list:
         <<: *LV5_R_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
   LV5_R_G:
     - step: "middle pitch up"
       middle_pitch:
@@ -1565,7 +1565,7 @@ steps_list:
         <<: *LV5_R_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
   LV4_S1:
     - step: "middle pitch up"
       middle_pitch:
@@ -1609,7 +1609,7 @@ steps_list:
         <<: *LV4_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
   LV4_S2:
     - step: "middle pitch up"
       middle_pitch:
@@ -1649,7 +1649,7 @@ steps_list:
         <<: *LV4_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
   LV4_S3:
     - step: "middle pitch up"
       middle_pitch:
@@ -1696,7 +1696,7 @@ steps_list:
         <<: *LV4_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
   LV4_G:
     - step: "middle pitch up"
       middle_pitch:
@@ -1743,4 +1743,4 @@ steps_list:
         <<: *LV4_EXCHANGE
     - step: "gimbal ready"
       gimbal:
-        <<: *FOLLOW_EE
+        <<: *RIGHT_POS
