@@ -5,11 +5,11 @@ common:
       accel: 0.1
       timeout: 15.
     normally: &NORMALLY
-      speed: 0.4
+      speed: 0.6
       accel: 0.3
       timeout: 6
     quickly: &QUICKLY
-      speed: 0.8
+      speed: 1.0
       accel: 0.6
       timeout: 6.
 
@@ -26,10 +26,8 @@ common:
   joint1:
     home: &JOINT1_HOME_POS
       0.1
-    ready_get_ground: &JOINT1_READY_GET_GROUND_POS
+    ready_get_ground: &JOINT1_GET_GROUND_POS
       0.005
-    get_ground: &JOINT1_GET_GROUND_POS
-      0.4
     exchange: &JOINT1_EXCHANGE_POS
       0.35
     ready_get_small: &JOINT1_READY_GET_SMALL_POS
@@ -536,7 +534,7 @@ steps_list:
   GROUND_STONE:
     - step: "arm ready get ground stone"
       arm:
-        joints: [*JOINT1_READY_GET_GROUND_POS, *JOINT2_HOME_POS, *JOINT3_ZERO_POS, *JOINT4_HOME_POS, *JOINT5_HOME_POS, *JOINT6_HOME_POS]
+        joints: [*JOINT1_GET_GROUND_POS, 0.94, -1.266, *JOINT4_ZERO_POS, 1.112  , -0.655]
         common:
           <<: *NORMALLY
         tolerance:
@@ -547,7 +545,7 @@ steps_list:
   GROUND_STONE0:
     - step: "move arm to get ground stone"
       arm:
-        joints: [ *JOINT1_READY_GET_GROUND_POS, *JOINT2_HOME_POS, *JOINT3_ZERO_POS, *JOINT4_HOME_POS, *JOINT5_HOME_POS, *JOINT6_HOME_POS ]
+        joints: [*JOINT1_GET_GROUND_POS, 0.94, -2.066, *JOINT4_ZERO_POS, 1.112  , -0.655]
         common:
           <<: *NORMALLY
         tolerance:
@@ -555,12 +553,12 @@ steps_list:
     - step: "open main gripper"
       gripper:
         <<: *OPEN_MAIN_GRIPPER
-    - step: "ready to get ground stone"
+    - step: "get ground stone"
       middle_pitch:
-        target: *MIDDLE_PITCH_GROUND_STONE
+        target: 0.49
     - step: "arm pull up stone"
       arm:
-        joints: [*JOINT1_READY_GET_GROUND_POS, *JOINT2_EXCHANGE_POS, *JOINT3_ZERO_POS, *JOINT4_ZERO_POS, *JOINT5_HOME_POS, *JOINT6_HOME_POS]
+        joints: [0.2, 0.94, -2.066, *JOINT4_ZERO_POS, 1.112  , -0.655]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1048,7 +1046,7 @@ steps_list:
         target: *MIDDLE_PITCH_HIGHEST
     - step: "arm ready"
       arm:
-        joints: [ 0.037,0.9,-1.963,*JOINT4_L90_POS, 0., *JOINT6_R_90 ]
+        joints: [ 0.037,0.9,-1.963,*JOINT4_L90_POS, 0.00001, *JOINT6_R_90 ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1059,21 +1057,14 @@ steps_list:
   SIDE_BIG_ISLAND0:
     - step: "arm get gold"
       arm:
-        joints: [ 0.037,0.13,-1.38,*JOINT4_L90_POS,-0., *JOINT6_R_90 ]
+        joints: [ 0.037,0.12,-1.47,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "arm lift gold"
       arm:
-        joints: [ 0.127,0.13,-1.38,*JOINT4_L90_POS,-0., *JOINT6_R_90 ]
-        common:
-          <<: *NORMALLY
-        tolerance:
-          <<: *NORMAL_TOLERANCE
-    - step: "arm pull back gold"
-      arm:
-        joints: [ 0.127,1.0,-1.99,*JOINT4_L90_POS,-0.36, *JOINT6_R_90 ]
+        joints: [ 0.127,0.12,-1.47,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1081,6 +1072,23 @@ steps_list:
     - step: "gimbal look front"
       gimbal:
         <<: *FRONT_POS
+    - step: "arm pull back gold"
+      arm:
+        joints: [ 0.127,1.0,-1.99,*JOINT4_L90_POS,-0.36, *JOINT6_R_90 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "chassis left"
+      chassis:
+        <<: *CHASSIS_MOVE_LEFT
+    - step: "move stone towards down"
+      arm:
+        joints: [ 0.127, 1.0, -2.388, 0.0001, 1.57, -1.57 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   BOTH_BIG_ISLAND:
     - step: "middle pitch up"
@@ -1120,7 +1128,7 @@ steps_list:
         target: -0.443
     - step: "arm get gold"
       arm:
-        joints: [ 0.037,0.13,-1.38,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
+        joints: [ 0.037,0.12,-1.47,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1130,7 +1138,7 @@ steps_list:
         target: 0.06
     - step: "arm lift gold"
       arm:
-        joints: [ 0.127,0.13,-1.38,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
+        joints: [ 0.127,0.12,-1.47,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1154,6 +1162,13 @@ steps_list:
     - step: "chassis left"
       chassis:
         <<: *CHASSIS_MOVE_LEFT
+    - step: "move stone towards down"
+      arm:
+        joints: [ 0.127, 1.0, -2.388, 0.0001, 1.57, -1.57 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
 
   OM:
     - step: "main open"
