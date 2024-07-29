@@ -568,7 +568,14 @@ public:
     return PublishMotion::move();
   }
 
+  bool isFinish() override
+  {
+    return ((ros::Time::now() - start_time_).toSec() > delay_);
+  }
+
 private:
+  ros::Time start_time_;
+  double delay_{ 0.05 };
   bool state_;
   int pin_;
 };

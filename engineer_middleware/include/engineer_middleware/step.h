@@ -216,6 +216,8 @@ public:
       success &= silver_pusher_motion_->isFinish();
     if (silver_rotator_motion_)
       success &= silver_rotator_motion_->isFinish();
+    if (gpio_motion_)
+      success &= gpio_motion_->isFinish();
     if (gold_pusher_motion_)
       success &= gold_pusher_motion_->isFinish();
     if (gold_lifter_motion_)
