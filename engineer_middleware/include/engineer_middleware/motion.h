@@ -528,6 +528,7 @@ public:
   GpioMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
     : PublishMotion<rm_msgs::GpioData>(motion, interface)
   {
+    delay_ = xmlRpcGetDouble(motion, "delay", 0.01);
     msg_.gpio_state.assign(8, false);
     msg_.gpio_name.assign(8, "no_registered");
     pin_ = motion["pin"];
@@ -564,6 +565,7 @@ public:
   }
   bool move() override
   {
+    start_time_ = ros::Time::now();
     msg_.gpio_state[pin_] = state_;
     return PublishMotion::move();
   }
@@ -575,7 +577,7 @@ public:
 
 private:
   ros::Time start_time_;
-  double delay_{ 0.1 };
+  double delay_;
   bool state_;
   int pin_;
 };
