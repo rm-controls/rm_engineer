@@ -167,7 +167,7 @@ common:
 
   arm:
     home: &HOME
-      joints: [ *JOINT1_HOME_POS, *JOINT2_HOME_POS, *JOINT3_HOME_POS, *JOINT4_HOME_POS, *JOINT5_HOME_POS, *JOINT6_HOME_POS ]
+      joints: [ *JOINT1_HOME_POS, *JOINT2_HOME_POS, *JOINT3_HOME_POS, *JOINT4_ZERO_POS, *JOINT5_HOME_POS, *JOINT6_HOME_POS ]
       common:
         <<: *NORMALLY
       tolerance:
@@ -427,6 +427,38 @@ steps_list:
     - step: "gimbal ready"
       gimbal:
         <<: *RIGHT_POS
+
+  LV5_R_CAR_FRONT_EXCHANGE:
+    - step: "middle pitch up"
+      middle_pitch:
+        target: *MIDDLE_PITCH_NORMAL
+        delay: 0.3
+    - step: "arm enter exchange pos"
+      arm:
+        joints: [ *JOINT1_EXCHANGE_POS, -0.774, *JOINT3_R_EXCHANGE_POS, *JOINT4_L90_POS, *JOINT5_DOWN_90, *JOINT6_R_90 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "gimbal ready"
+      gimbal:
+        <<: *FRONT_POS
+
+  LV5_L_CAR_FRONT_EXCHANGE:
+    - step: "middle pitch up"
+      middle_pitch:
+        target: *MIDDLE_PITCH_NORMAL
+        delay: 0.3
+    - step: "arm enter exchange pos"
+      arm:
+        joints: [ *JOINT1_EXCHANGE_POS, 1.001, *JOINT3_L_EXCHANGE_POS, *JOINT4_R90_POS, *JOINT5_DOWN_90, *JOINT6_L_90 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+    - step: "gimbal ready"
+      gimbal:
+        <<: *FRONT_POS
 
   GET_SMALL_ISLAND:
     - step: "middle pitch up"
@@ -1116,9 +1148,10 @@ steps_list:
     - step: "middle pitch up"
       middle_pitch:
         target: *MIDDLE_PITCH_HIGHEST
+        delay: 0.3
     - step: "arm ready"
       arm:
-        joints: [ 0.040,0.885,-2.107,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
+        joints: [ 0.040,0.885,-2.107,*JOINT4_R90_POS,-0.00001, *JOINT6_HOME_POS ]
         common:
           <<: *QUICKLY
         tolerance:
@@ -1129,14 +1162,14 @@ steps_list:
   SIDE_BIG_ISLAND0:
     - step: "arm get gold"
       arm:
-        joints: [ 0.040,0.138,-1.649,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
+        joints: [ 0.040,0.162,-1.414,*JOINT4_R90_POS, 0.097, *JOINT6_HOME_POS ]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "arm lift gold"
       arm:
-        joints: [ 0.115,0.138,-1.649,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
+        joints: [ 0.115,0.162,-1.414,*JOINT4_R90_POS,0.097, *JOINT6_HOME_POS ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1146,17 +1179,17 @@ steps_list:
         <<: *FRONT_POS
     - step: "arm pull back gold"
       arm:
-        joints: [ 0.115,0.991,-2.142,*JOINT4_L90_POS,-0.335, *JOINT6_R_90 ]
+        joints: [ 0.115,0.988,-2.023,*JOINT4_R90_POS,0.233, *JOINT6_HOME_POS ]
         common:
           <<: *NORMALLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *BIGGER_TOLERANCE
     - step: "chassis left"
       chassis:
         <<: *CHASSIS_MOVE_LEFT
     - step: "move stone towards down"
       arm:
-        joints: [ 0.120, 0.998, -2.388, 0.0001, 1.57, -1.57 ]
+        joints: [ 0.127, 0.997, -1.163, 0.0001, 1.57, -1.57 ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1187,9 +1220,10 @@ steps_list:
     - step: "middle pitch up"
       middle_pitch:
         target: *MIDDLE_PITCH_HIGHEST
+        delay: 0.3
     - step: "arm ready"
       arm:
-        joints: [ 0.040,0.885,-2.107,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
+        joints: [ 0.040,0.885,-2.107,*JOINT4_R90_POS,-0.00001, *JOINT6_HOME_POS ]
         common:
           <<: *QUICKLY
         tolerance:
@@ -1203,7 +1237,7 @@ steps_list:
         target: -0.443
     - step: "arm get gold"
       arm:
-        joints: [ 0.040,0.138,-1.649,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
+        joints: [ 0.040,0.162,-1.414,*JOINT4_R90_POS, 0.097, *JOINT6_HOME_POS ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1213,7 +1247,7 @@ steps_list:
         target: 0.055
     - step: "arm lift gold"
       arm:
-        joints: [ 0.115,0.138,-1.649,*JOINT4_L90_POS,-0.00001, *JOINT6_R_90 ]
+        joints: [ 0.115,0.162,-1.414,*JOINT4_R90_POS,0.097, *JOINT6_HOME_POS ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1229,7 +1263,7 @@ steps_list:
         <<: *FRONT_POS
     - step: "arm pull back gold"
       arm:
-        joints: [ 0.115,0.991,-2.142,*JOINT4_L90_POS,-0.335, *JOINT6_R_90 ]
+        joints: [ 0.115,0.988,-2.023,*JOINT4_R90_POS,0.233, *JOINT6_HOME_POS ]
         common:
           <<: *NORMALLY
         tolerance:
