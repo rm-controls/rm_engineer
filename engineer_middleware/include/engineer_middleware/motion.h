@@ -575,7 +575,7 @@ public:
 
 private:
   ros::Time start_time_;
-  double delay_{ 0.05 };
+  double delay_{ 0.1 };
   bool state_;
   int pin_;
 };
