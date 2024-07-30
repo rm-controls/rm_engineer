@@ -139,7 +139,7 @@ common:
 
   joint6:
     home: &JOINT6_HOME_POS
-      0.0
+      0.00001
     l_90: &JOINT6_L_90
       1.57
     r_90: &JOINT6_R_90
@@ -1162,14 +1162,14 @@ steps_list:
   SIDE_BIG_ISLAND0:
     - step: "arm get gold"
       arm:
-        joints: [ 0.040,0.162,-1.414,*JOINT4_R90_POS, 0.097, *JOINT6_HOME_POS ]
+        joints: [ 0.040,0.16,-1.42,*JOINT4_R90_POS, 0.097, *JOINT6_HOME_POS ]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "arm lift gold"
       arm:
-        joints: [ 0.115,0.162,-1.414,*JOINT4_R90_POS,0.097, *JOINT6_HOME_POS ]
+        joints: [ 0.115,0.16,-1.42,*JOINT4_R90_POS,0.097, *JOINT6_HOME_POS ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1179,7 +1179,7 @@ steps_list:
         <<: *FRONT_POS
     - step: "arm pull back gold"
       arm:
-        joints: [ 0.115,0.988,-2.023,*JOINT4_R90_POS,0.233, *JOINT6_HOME_POS ]
+        joints: [ 0.114,0.988,-2.023,*JOINT4_R90_POS,0.232, *JOINT6_HOME_POS ]
         common:
           <<: *NORMALLY
         tolerance:
