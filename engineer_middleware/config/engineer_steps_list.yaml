@@ -42,7 +42,7 @@ common:
       bin_get_stone_left: &JOINT1_BIN_GET_STONE_LEFT
                      0.2
       bin_get_stone_right: &JOINT1_BIN_GET_STONE_RIGHT
-                            0.1198
+                            0.1248
       big_ready: &JOINT1_BIG_READY
                      0.005
       big_adjust_mid: &JOINT1_BIG_ADJUST_MID
@@ -80,9 +80,9 @@ common:
       small_store: &JOINT2_SMALL_STORE
                       0.060290
       bin_get_stone: &JOINT2_BIN_GET_STONE
-                            0.13
+                            0.1
       back_bin_position: &JOINT2_BACK_BIN_POSITION
-                             0.06451
+                             0.04551
       avoid_collision: &JOINT2_AVOID_COLLISION
                         0.1
       big_ready: &JOINT2_BIG_READY
@@ -113,7 +113,7 @@ common:
       small_turn: &JOINT3_SMALL_TURN
                    0.257
       bin_get_stone: &JOINT3_BIN_GET_STONE
-                          0.2608
+                          0.2528
       bin_get_lv4_stone: &JOINT3_BIN_GET_LV4_STONE
                            0.294414
       big_ready: &JOINT3_BIG_READY
@@ -160,7 +160,7 @@ common:
       right_90_position: &JOINT5_R90_POSITION
                            1.59
       bin_get_stone: &JOINT5_BIN_GET_STONE
-                           1.63912
+                           1.53912
       big_ready: &JOINT5_BIG_READY
                   -0.017
       big_ready_store: &JOINT5_BIG_READY_STORE
@@ -191,7 +191,7 @@ common:
       small_ready_store: &JOINT6_SMALL_READY_STORE
                    -1.633
       bin_get_stone: &JOINT6_BIN_GET_STONE
-                      -1.5936
+                      -1.6036
       big_ready: &JOINT6_BIG_READY
                        0.014
       big_adjust_mid: &JOINT6_BIG_ADJUST_MID
@@ -216,7 +216,7 @@ common:
       big_ready_store: &JOINT7_BIG_READY_STORE
                           -1.522
       small_ready: &JOINT7_SMALL_READY
-                         0.012
+                         -0.083
       small_ready_store: &JOINT7_SMALL_READY_STORE
                           1.722
       exchange: &JOINT7_EXCHANGE
@@ -224,7 +224,7 @@ common:
       lv4_ore: &JOINT7_LV4_ORE
                  -0.098300
       bin_get_left: &JOINT7_BIN_GET_LEFT
-                  -1.6973
+                  -1.5793
       to: &JOINT7_TAKE_ONE
         -0.844500
       bin_get_right: &JOINT7_BIN_GET_RIGHT
@@ -243,7 +243,12 @@ common:
     small_island_pos: &BIG_ISLAND_POS
       frame: gimbal_lifter
       position: [ 1., -1., 0.]
-
+    test: &GIMBAL_TEST
+      frame: link4
+      position: [1., 0., 0.]
+    test2: &GIMBAL_TEST2
+      frame: link7
+      position: [0., 0., -1.]
 
   gimbal_lifter:
     button_pos: &BUTTON_POS
@@ -363,6 +368,15 @@ common:
           2.6
 
 steps_list:
+  TEST1:
+    - step: "gimbal test1"
+      gimbal:
+        <<: *GIMBAL_TEST
+  TEST2:
+    - step: "gimbal test2"
+      gimbal:
+        <<: *GIMBAL_TEST2
+
   EXCHANGE_POS:
     - step: "gimbal look front"
       gimbal:
