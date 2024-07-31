@@ -529,8 +529,8 @@ public:
     : PublishMotion<rm_msgs::GpioData>(motion, interface)
   {
     delay_ = xmlRpcGetDouble(motion, "delay", 0.01);
-    msg_.gpio_state.assign(8, false);
-    msg_.gpio_name.assign(8, "no_registered");
+    msg_.gpio_state.assign(6, false);
+    msg_.gpio_name.assign(6, "no_registered");
     pin_ = motion["pin"];
     state_ = motion["state"];
     switch (pin_)
@@ -551,15 +551,15 @@ public:
         msg_.gpio_name[4] = "gold_gripper";
         break;
       case 5:
-        msg_.gpio_name[5] = "unused";
-        ROS_WARN_STREAM("GPIO port 6 is unused now!");
+        msg_.gpio_name[5] = "silver_pump";
         break;
       case 6:
         msg_.gpio_name[6] = "unused";
         ROS_WARN_STREAM("GPIO port 7 is unused now!");
         break;
       case 7:
-        msg_.gpio_name[7] = "silver_pump";
+        msg_.gpio_name[7] = "unused";
+        ROS_WARN_STREAM("GPIO port 7 is unused now!");
         break;
     }
   }
