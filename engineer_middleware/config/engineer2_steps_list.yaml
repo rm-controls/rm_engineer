@@ -182,14 +182,14 @@ common:
       tolerance:
         <<: *NORMAL_TOLERANCE
 
-    lv5_r_exchange: &LV5_R_EXCHANGE
+    lv5_r_exchange: &LV5_L_EXCHANGE
       joints: [ *JOINT1_EXCHANGE_POS, *JOINT2_L_EXCHANGE_POS, *JOINT3_L_EXCHANGE_POS, *JOINT4_R90_POS, *JOINT5_DOWN_90, *JOINT6_L_90]
       common:
         <<: *NORMALLY
       tolerance:
         <<: *NORMAL_TOLERANCE
 
-    lv5_l_exchange: &LV5_L_EXCHANGE
+    lv5_l_exchange: &LV5_R_EXCHANGE
       joints: [ *JOINT1_EXCHANGE_POS, *JOINT2_R_EXCHANGE_POS, *JOINT3_R_EXCHANGE_POS, *JOINT4_L90_POS, *JOINT5_DOWN_90, *JOINT6_R_90]
       common:
         <<: *NORMALLY
@@ -1151,12 +1151,13 @@ steps_list:
       gold_pusher:
         target: -0.054
         delay: 1
-    - step: "chassis left"
-      chassis:
-        <<: *CHASSIS_MOVE_LEFT
     - step: "add stone"
       stone_num:
         change: "+g"
+    - step: "chassis left"
+      chassis:
+        <<: *CHASSIS_MOVE_LEFT
+
 
 
   SIDE_BIG_ISLAND:
