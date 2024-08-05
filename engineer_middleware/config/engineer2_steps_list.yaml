@@ -33,7 +33,7 @@ common:
     ready_get_small: &JOINT1_READY_GET_SMALL_POS
       0.42
     get_small: &JOINT1_GET_SMALL_POS
-      0.3
+      0.34
     ready_get_stored: &JOINT1_READY_GET_STORED_POS
       0.54
     get_stored: &JOINT1_GET_STORED_POS
@@ -58,7 +58,7 @@ common:
     r_exchange: &JOINT2_R_EXCHANGE_POS
       -2.5
     get_small_island_l: &JOINT2_GET_SMALL_ISLAND_L_POS
-      -0.098
+      0.858
     get_small_island_m: &JOINT2_GET_SMALL_ISLAND_M_POS
                           -1.101
     get_small_island_r: &JOINT2_GET_SMALL_ISLAND_R_POS
@@ -88,7 +88,7 @@ common:
     r_exchange: &JOINT3_R_EXCHANGE_POS
       0.7
     get_small_island_l: &JOINT3_GET_SMALL_ISLAND_L_POS
-                          -1.948
+                          -1.643
     get_small_island_m: &JOINT3_GET_SMALL_ISLAND_M_POS
                           -1.833
     get_small_island_r: &JOINT3_GET_SMALL_ISLAND_R_POS
@@ -151,13 +151,13 @@ common:
     get_small2: &JOINT6_SMALL2
       4.387
     get_small1: &JOINT6_SMALL1
-      2.7
-    get_s3: &JOINT6_GET_S3
-      -0.9
-    get_s2: &JOINT6_GET_S2
-      -0.346
-    get_s1: &JOINT6_GET_S1
-      -0.65
+      -0.481
+    get_own_s3: &JOINT6_GET_S3
+                  0.6536
+    get_own_s2: &JOINT6_GET_S2
+                  1.22727
+    get_own_s1: &JOINT6_GET_S1
+                  0.9794
 
   middle_pitch:
     ground_stone: &MIDDLE_PITCH_GROUND_STONE
@@ -210,7 +210,7 @@ common:
       frame: base_link
       position: [ -3., -0.3, 0. ]
     follow_ee: &FOLLOW_EE
-      frame: base_link
+      frame: link6
       position: [ 0.15, 0.00, 0. ]
 
   chassis_forward: &CHASSIS_FORWARD
@@ -234,6 +234,15 @@ common:
   chassis_fmove_left: &CHASSIS_MOVE_LEFT
     frame: base_link
     position: [ 0.0, 0.4 ]
+    yaw: 0.0
+    chassis_tolerance_position: 0.1
+    chassis_tolerance_angular: 0.2
+    common:
+      timeout: 3.
+
+  chassis_move_back: &CHASSIS_MOVE_BACK
+    frame: base_link
+    position: [ -0.4, 0.0 ]
     yaw: 0.0
     chassis_tolerance_position: 0.1
     chassis_tolerance_angular: 0.2
@@ -474,9 +483,9 @@ steps_list:
       middle_pitch:
         target: *MIDDLE_PITCH_NORMAL
         delay: 0.3
-    - step: "gimbal look right"
+    - step: "gimbal look front"
       gimbal:
-        <<: *RIGHT_POS
+        <<: *FRONT_POS
     - step: "ready get small island silver"
       arm:
         joints: [*JOINT1_READY_GET_SMALL_POS, *JOINT2_GET_SMALL_ISLAND_L_POS, *JOINT3_GET_SMALL_ISLAND_L_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_SMALL1]
@@ -487,6 +496,7 @@ steps_list:
     - step: "open main gripper"
       gripper:
         <<: *OPEN_MAIN_GRIPPER
+  GET_SMALL_ISLAND0:
     - step: "get small island silver"
       arm:
         joints: [ *JOINT1_GET_SMALL_POS, *JOINT2_GET_SMALL_ISLAND_L_POS, *JOINT3_GET_SMALL_ISLAND_L_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_SMALL1 ]
@@ -496,11 +506,22 @@ steps_list:
           <<: *NORMAL_TOLERANCE
     - step: "pull up silver"
       arm:
-        joints: [ *JOINT1_READY_GET_SMALL_POS, *JOINT2_GET_SMALL_ISLAND_L_POS, *JOINT3_GET_SMALL_ISLAND_L_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_SMALL1 ]
+        joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_SMALL_ISLAND_L_POS, *JOINT3_GET_SMALL_ISLAND_L_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_SMALL1 ]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+    - step: "chassis back"
+      chassis:
+        <<: *CHASSIS_MOVE_BACK
+    - step: "move stone away"
+      arm:
+        joints: [ *JOINT1_GET_GROUND_POS, 0.94, -1.266, *JOINT4_ZERO_POS, *JOINT5_DOWN_90  , 0.000001 ]
+        common:
+          <<: *NORMALLY
+        tolerance:
+          <<: *NORMAL_TOLERANCE
+
 
   STORE_SILVER_TO_GRIPPER1:
     - step: "silver rotator up"
@@ -804,7 +825,7 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S3_POS, *JOINT3_GET_STORED_SILVER3_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S3 ]
         common:
-          <<: *NORMALLY
+          <<: *SLOWLY
         tolerance:
           <<: *BIGGER_TOLERANCE
     - step: "left arm"
@@ -1025,6 +1046,9 @@ steps_list:
     - step: "open gripper"
       gripper:
         <<: *OPEN_S3
+    - step: "open silver gripper"
+      gripper:
+        <<: *OPEN_S_GRIPPER
     - step: "lift gimbal up"
       arm:
         joints: [ *JOINT1_GET_SMALL_POS, *JOINT2_AVOID_CONTROLLER_POS, *JOINT3_HOME_POS, *JOINT4_HOME_POS, *JOINT5_HOME_POS, *JOINT6_HOME_POS ]
@@ -1035,15 +1059,6 @@ steps_list:
     - step: "gimbal look right"
       gimbal:
         <<: *RIGHT_POS
-    - step: "open gripper"
-      gripper:
-        <<: *OPEN_S1
-    - step: "open gripper"
-      gripper:
-        <<: *OPEN_S2
-    - step: "open gripper"
-      gripper:
-        <<: *OPEN_S3
     - step: "rotate down"
       silver_rotator:
         target: 0.0001
@@ -1053,28 +1068,16 @@ steps_list:
     - step: "pusher back"
       silver_pusher:
         target: -0.00001
-    - step: "turn 180"
-      chassis:
-        <<: *CHASSIS_TURN_180
-    - step: "open gripper"
-      gripper:
-        <<: *OPEN_S1
-    - step: "open gripper"
-      gripper:
-        <<: *OPEN_S2
-    - step: "open gripper"
-      gripper:
-        <<: *OPEN_S3
-    - step: "open silver gripper"
-      gripper:
-        <<: *OPEN_S_GRIPPER
     - step: "gimbal look back"
       gimbal:
         <<: *BACK_POS
+    - step: "turn 180"
+      chassis:
+        <<: *CHASSIS_TURN_180
   GRIPPER_THREE_SILVER0:
     - step: "get silver"
       silver_pusher:
-        target: -0.04
+        target: -0.06
         delay: 0.5
     - step: "pusher back little"
       silver_pusher:
@@ -1086,8 +1089,8 @@ steps_list:
         delay: 0.5
     - step: "pusher back"
       silver_pusher:
-        target: 0.
-        delay: 0.1
+        target: 0.05
+        delay: 0.05
     - step: "rotate up"
       silver_rotator:
         target: 1.64
@@ -1139,7 +1142,7 @@ steps_list:
     - step: "get gold"
       gold_pusher:
         target: -0.443
-        delay: 1.2
+        delay: 2
     - step: "gimbal look front"
       gimbal:
         <<: *FRONT_POS
@@ -1393,6 +1396,13 @@ steps_list:
       middle_pitch:
         target: *MIDDLE_PITCH_NORMAL
         delay: 0.3
+    - step: "lift arm"
+      arm:
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.2, -2.063, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        common:
+          <<: *QUICKLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
     - step: "ready to get silver from gripper1"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S1_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S1 ]
@@ -1421,12 +1431,19 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S1_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S1 ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "close silver gripper"
       gripper:
         <<: *CLOSE_S_GRIPPER
+    - step: "lift arm"
+      arm:
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.7, -1.263, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        common:
+          <<: *QUICKLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
     - step: "arm enter exchange pos"
       arm:
         <<: *LV5_L_EXCHANGE
@@ -1441,6 +1458,13 @@ steps_list:
       middle_pitch:
         target: *MIDDLE_PITCH_NORMAL
         delay: 0.3
+    - step: "lift arm"
+      arm:
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.2, -2.063, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        common:
+          <<: *QUICKLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
     - step: "ready to get silver from gripper2"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S2_POS, *JOINT3_GET_STORED_SILVER2_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S2 ]
@@ -1471,6 +1495,13 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+    - step: "lift arm"
+      arm:
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.7, -1.263, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        common:
+          <<: *QUICKLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
     - step: "arm enter exchange pos"
       arm:
         <<: *LV5_L_EXCHANGE
@@ -1487,16 +1518,16 @@ steps_list:
         delay: 0.3
     - step: "lift arm"
       arm:
-        joints: [ *JOINT1_READY_GET_STORED_POS, 0.113, -2.063, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.2, -2.063, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
         common:
           <<: *QUICKLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *BIGGER_TOLERANCE
     - step: "ready to get silver from gripper3"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S3_POS, *JOINT3_GET_STORED_SILVER3_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S3 ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "open main gripper"
@@ -1519,7 +1550,14 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S3_POS, *JOINT3_GET_STORED_SILVER3_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S3 ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
+    - step: "lift arm"
+      arm:
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.7, -1.263, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        common:
+          <<: *QUICKLY
         tolerance:
           <<: *BIGGER_TOLERANCE
     - step: "arm enter exchange pos"
@@ -1535,7 +1573,7 @@ steps_list:
         delay: 0.3
     - step: "ready to get stored gold"
       arm:
-        joints: [ *JOINT1_GET_STORED_GOLD_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_READY_GET_STORED_GOLD_POS, *JOINT4_R90_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        joints: [ *JOINT1_GET_STORED_GOLD_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_READY_GET_STORED_GOLD_POS, *JOINT4_R90_POS, *JOINT5_DOWN_90, *JOINT6_L_90 ]
         common:
           <<: *QUICKLY
         tolerance:
@@ -1545,7 +1583,7 @@ steps_list:
         <<: *OPEN_MAIN_GRIPPER
     - step: "get stored gold"
       arm:
-        joints: [ *JOINT1_GET_STORED_GOLD_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_GET_STORED_GOLD_POS, *JOINT4_R90_POS, *JOINT5_GET_STORED_GOLD_POS, *JOINT6_HOME_POS ]
+        joints: [ *JOINT1_GET_STORED_GOLD_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_GET_STORED_GOLD_POS, *JOINT4_R90_POS, *JOINT5_GET_STORED_GOLD_POS, *JOINT6_L_90 ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1561,14 +1599,14 @@ steps_list:
         change: "-g"
     - step: "move out gold"
       arm:
-        joints: [ *JOINT1_GET_STORED_GOLD_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_READY_GET_STORED_GOLD_POS, *JOINT4_R90_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        joints: [ *JOINT1_GET_STORED_GOLD_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_READY_GET_STORED_GOLD_POS, *JOINT4_R90_POS, *JOINT5_DOWN_90, *JOINT6_L_90 ]
         common:
           <<: *NORMALLY
         tolerance:
           <<: *BIGGER_TOLERANCE
     - step: "lift up gold"
       arm:
-        joints: [ *JOINT1_EXCHANGE_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_READY_GET_STORED_GOLD_POS, *JOINT4_R90_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        joints: [ *JOINT1_EXCHANGE_POS, *JOINT2_GET_STORED_GOLD_POS, *JOINT3_READY_GET_STORED_GOLD_POS, *JOINT4_R90_POS, *JOINT5_DOWN_90, *JOINT6_L_90 ]
         common:
           <<: *NORMALLY
         tolerance:
@@ -1584,6 +1622,13 @@ steps_list:
       middle_pitch:
         target: *MIDDLE_PITCH_NORMAL
         delay: 0.3
+    - step: "lift arm"
+      arm:
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.2, -2.063, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        common:
+          <<: *QUICKLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
     - step: "ready to get silver from gripper1"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S1_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S1 ]
@@ -1612,12 +1657,19 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S1_POS, *JOINT3_GET_STORED_SILVER1_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S1 ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
         tolerance:
           <<: *NORMAL_TOLERANCE
     - step: "close silver gripper"
       gripper:
         <<: *CLOSE_S_GRIPPER
+    - step: "lift arm"
+      arm:
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.7, -1.263, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        common:
+          <<: *QUICKLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
     - step: "arm enter exchange pos"
       arm:
         <<: *LV5_R_EXCHANGE
@@ -1629,6 +1681,13 @@ steps_list:
       middle_pitch:
         target: *MIDDLE_PITCH_NORMAL
         delay: 0.3
+    - step: "lift arm"
+      arm:
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.2, -2.063, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        common:
+          <<: *QUICKLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
     - step: "ready to get silver from gripper2"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S2_POS, *JOINT3_GET_STORED_SILVER2_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S2 ]
@@ -1659,6 +1718,13 @@ steps_list:
           <<: *NORMALLY
         tolerance:
           <<: *NORMAL_TOLERANCE
+    - step: "lift arm"
+      arm:
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.7, -1.263, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        common:
+          <<: *QUICKLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
     - step: "arm enter exchange pos"
       arm:
         <<: *LV5_R_EXCHANGE
@@ -1672,11 +1738,11 @@ steps_list:
         delay: 0.3
     - step: "lift arm"
       arm:
-        joints: [ *JOINT1_READY_GET_STORED_POS, 0.113, -2.063, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.2, -2.063, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
         common:
           <<: *QUICKLY
         tolerance:
-          <<: *NORMAL_TOLERANCE
+          <<: *BIGGER_TOLERANCE
     - step: "ready to get silver from gripper3"
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S3_POS, *JOINT3_GET_STORED_SILVER3_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S3 ]
@@ -1704,7 +1770,14 @@ steps_list:
       arm:
         joints: [ *JOINT1_READY_GET_STORED_POS, *JOINT2_GET_STORED_S3_POS, *JOINT3_GET_STORED_SILVER3_POS, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_GET_S3 ]
         common:
-          <<: *NORMALLY
+          <<: *QUICKLY
+        tolerance:
+          <<: *BIGGER_TOLERANCE
+    - step: "lift arm"
+      arm:
+        joints: [ *JOINT1_READY_GET_STORED_POS, -1.7, -1.263, *JOINT4_ZERO_POS, *JOINT5_DOWN_90, *JOINT6_HOME_POS ]
+        common:
+          <<: *QUICKLY
         tolerance:
           <<: *BIGGER_TOLERANCE
     - step: "arm enter exchange pos"
