@@ -1082,10 +1082,10 @@ steps_list:
       silver_lifter:
         target: 0.2
         delay: 0.5
+  GRIPPER_THREE_SILVER000:
     - step: "pusher back"
       silver_pusher:
         target: 0.0001
-  GRIPPER_THREE_SILVER000:
     - step: "rotate up"
       silver_rotator:
         target: 1.64
@@ -1093,7 +1093,7 @@ steps_list:
     - step: "lifter down"
       silver_lifter:
         target: 0.05
-        delay: 0.15
+        delay: 0.3
     - step: "lifter down"
       silver_lifter:
         target: 0.0
@@ -1136,16 +1136,14 @@ steps_list:
   MID_BIG_ISLAND0:
     - step: "get gold"
       gold_pusher:
-        target: -0.5
+        target: -0.438
   MID_BIG_ISLAND00:
     - step: "pull gold back"
       gold_pusher:
-        target: -0.444
-        delay: 0.2
+        target: -0.42
     - step: "lift gold"
       gold_lifter:
-        target: 0.062
-        delay: 0.6
+        target: 0.055
   MID_BIG_ISLAND000:
     - step: "pull back gold"
       gold_pusher:
