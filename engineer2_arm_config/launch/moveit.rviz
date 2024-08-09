@@ -4,6 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
         - /MotionPlanning1
         - /TF1
         - /TF1/Frames1
@@ -131,7 +132,7 @@ Visualization Manager:
       Frames:
         All Enabled: false
         base_link:
-          Value: false
+          Value: true
         fake_link4:
           Value: false
         gold_lifter_link:
@@ -151,15 +152,15 @@ Visualization Manager:
         link4:
           Value: false
         link5:
-          Value: false
+          Value: true
         link6:
           Value: true
         map:
-          Value: false
+          Value: true
         odom:
-          Value: false
+          Value: true
         pitch:
-          Value: false
+          Value: true
         right_back_wheel:
           Value: false
         right_front_wheel:
@@ -181,38 +182,37 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        base_link:
-          gold_pusher_link:
-            gold_lifter_link:
-              {}
-          left_back_wheel:
-            {}
-          left_front_wheel:
-            {}
-          link1:
-            link2:
-              link3:
-                fake_link4:
-                  {}
-                link4:
-                  link5:
-                    link6:
-                      tools_link:
-                        {}
-              yaw:
-                pitch:
-                  {}
-          right_back_wheel:
-            {}
-          right_front_wheel:
-            {}
-          silver_lifter_link:
-            silver_pusher_link:
-              silver_gripper_link:
-                {}
         map:
           odom:
-            {}
+            base_link:
+              gold_pusher_link:
+                gold_lifter_link:
+                  {}
+              left_back_wheel:
+                {}
+              left_front_wheel:
+                {}
+              link1:
+                link2:
+                  link3:
+                    fake_link4:
+                      {}
+                    link4:
+                      link5:
+                        link6:
+                          tools_link:
+                            {}
+                  yaw:
+                    pitch:
+                      {}
+              right_back_wheel:
+                {}
+              right_front_wheel:
+                {}
+              silver_lifter_link:
+                silver_pusher_link:
+                  silver_gripper_link:
+                    {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -334,7 +334,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base_link
+    Fixed Frame: odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -346,7 +346,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.3629440069198608
+      Distance: 1.3873012065887451
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -354,17 +354,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.75
       Focal Point:
-        X: -0.3085601031780243
-        Y: 0.24779054522514343
-        Z: 0.4662521481513977
+        X: 0.22694315016269684
+        Y: -0.3219256103038788
+        Z: 0.15961049497127533
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 1.3847957849502563
       Target Frame: base_link
-      Yaw: 3.154945135116577
+      Yaw: 4.408130168914795
     Saved: ~
 Window Geometry:
   Displays:

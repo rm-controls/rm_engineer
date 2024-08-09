@@ -72,8 +72,9 @@ public:
   }
   void run(ros::Duration period)
   {
-    if (is_middleware_control_)
-      chassis_interface_.run(period);
+    // TODO chassis run crazily in motion
+    //    if (is_middleware_control_)
+    //      chassis_interface_.run(period);
   }
 
 private:
