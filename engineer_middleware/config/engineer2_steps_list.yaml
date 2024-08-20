@@ -1217,11 +1217,11 @@ steps_list:
   MID_BIG_ISLAND0:
     - step: "get gold"
       gold_pusher:
-        target: -0.44
+        target: -0.46
   MID_BIG_ISLAND00:
     - step: "pull gold back"
       gold_pusher:
-        target: -0.42
+        target: -0.43
     - step: "lift gold"
       gold_lifter:
         target: 0.058
@@ -1391,7 +1391,7 @@ steps_list:
   BOTH_BIG_ISLAND0:
     - step: "get gold"
       gold_pusher:
-        target: -0.44
+        target: -0.46
     - step: "arm get gold"
       arm:
         joints: [ 0.040,0.147,-1.429,*JOINT4_R90_POS, 0.08, *JOINT6_HOME_POS ]
@@ -1405,7 +1405,7 @@ steps_list:
         <<: *RIGHT_POS
     - step: "pull gold"
       gold_pusher:
-        target: -0.42
+        target: -0.43
     - step: "lift gold"
       gold_lifter:
         target: 0.058
