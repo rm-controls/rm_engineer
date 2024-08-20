@@ -8,7 +8,7 @@
         <rosparam file="$(find rm_config)/config/rm_controllers/engineer.yaml" command="load"/>
     </group>
     <group if="$(arg use_simulation)">
-        <rosparam file="$(find engineer_middleware)/config/simulation_controllers.yaml" command="load"/>
+        <rosparam file="$(find engineer_middleware)/config/engineer_simulation_controllers.yaml" command="load"/>
     </group>
 
 

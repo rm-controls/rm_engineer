@@ -57,6 +57,12 @@ public:
       points_final_.push_back(p);
     }
   }
+  void generatePointsInLine(double center_x, double center_y, double center_z, double length, double roll, double pitch,
+                            double yaw, double point_resolution)
+  {
+    points_final_.clear();
+    std::vector<Point> points;
+  }
   sensor_msgs::PointCloud2 getPointCloud2()
   {
     sensor_msgs::PointCloud2 cloud2;

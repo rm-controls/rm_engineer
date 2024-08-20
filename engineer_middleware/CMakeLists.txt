@@ -69,7 +69,8 @@ include_directories(
 
 add_executable(${PROJECT_NAME}
         src/middleware.cpp
-        src/engineer_middleware.cpp include/engineer_middleware/auto_exchange.h include/engineer_middleware/auto_exchange.h)
+        src/engineer_middleware.cpp include/engineer_middleware/auto_exchange.h include/engineer_middleware/auto_exchange.h
+        include/engineer_middleware/moveit_exchange.h)
 
 add_dependencies(${PROJECT_NAME}
         ${catkin_EXPORTED_TARGETS}

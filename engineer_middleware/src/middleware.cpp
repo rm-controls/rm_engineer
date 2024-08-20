@@ -58,6 +58,12 @@ Middleware::Middleware(ros::NodeHandle& nh)
   , gimbal_lift_pub_(nh.advertise<std_msgs::Float64>("/controllers/gimbal_lifter_controller/command", 10))
   , extend_arm_f_pub_(nh.advertise<std_msgs::Float64>("/controllers/extend_arm_front_controller/command", 10))
   , extend_arm_b_pub_(nh.advertise<std_msgs::Float64>("/controllers/extend_arm_back_controller/command", 10))
+  , silver_lifter_pub_(nh.advertise<std_msgs::Float64>("/controllers/silver_lifter_controller/command", 10))
+  , silver_pusher_pub_(nh.advertise<std_msgs::Float64>("/controllers/silver_pusher_controller/command", 10))
+  , silver_rotator_pub_(nh.advertise<std_msgs::Float64>("/controllers/silver_rotator_controller/command", 10))
+  , gold_pusher_pub_(nh.advertise<std_msgs::Float64>("/controllers/gold_pusher_controller/command", 10))
+  , gold_lifter_pub_(nh.advertise<std_msgs::Float64>("/controllers/gold_lifter_controller/command", 10))
+  , middle_pitch_pub_(nh.advertise<std_msgs::Float64>("/controllers/middle_pitch_controller/command", 10))
   , tf_listener_(tf_)
   , is_middleware_control_(false)
 {
@@ -71,16 +77,18 @@ Middleware::Middleware(ros::NodeHandle& nh)
     ROS_ASSERT(scenes_list.getType() == XmlRpc::XmlRpcValue::Type::TypeStruct);
     for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = steps_list.begin(); it != steps_list.end(); ++it)
     {
-      step_queues_.insert(
-          std::make_pair(it->first, StepQueue(it->second, scenes_list, tf_, arm_group_, chassis_interface_, hand_pub_,
-                                              end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, stone_num_pub_,
-                                              planning_result_pub_, point_cloud_pub_, ore_rotate_pub_, ore_lift_pub_,
-                                              gimbal_lift_pub_, extend_arm_f_pub_, extend_arm_b_pub_)));
+      step_queues_.insert(std::make_pair(
+          it->first, StepQueue(it->second, scenes_list, tf_, arm_group_, chassis_interface_, hand_pub_,
+                               end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, stone_num_pub_,
+                               planning_result_pub_, point_cloud_pub_, ore_rotate_pub_, ore_lift_pub_, gimbal_lift_pub_,
+                               extend_arm_f_pub_, extend_arm_b_pub_, silver_lifter_pub_, silver_pusher_pub_,
+                               silver_rotator_pub_, gold_pusher_pub_, gold_lifter_pub_, middle_pitch_pub_)));
     }
   }
   else
     ROS_ERROR("no steps list define in yaml");
   as_.start();
 }
+geometry_msgs::TransformStamped engineer_middleware::JointMotion::arm2base;
 
 }  // namespace engineer_middleware

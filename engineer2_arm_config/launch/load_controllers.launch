@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- By default, we are not load controllers -->
+    <arg name="spawn_controllers" default="true"/>
+    <arg name="use_simulation" default="false"/>
+
+    <group unless="$(arg use_simulation)">
+        <rosparam file="$(find rm_config)/config/rm_controllers/engineer2.yaml" command="load"/>
+    </group>
+    <group if="$(arg use_simulation)">
+        <rosparam file="$(find engineer_middleware)/config/engineer2_simulation_controllers.yaml" command="load"/>
+    </group>
+
+
+    <!-- Load joint controller configurations from YAML file to parameter server -->
+
+    <!-- Load the controllers -->
+
+    <node name="controller_loader" pkg="controller_manager" type="controller_manager" output="screen"
+          args="load
+                controllers/robot_state_controller
+                controllers/joint_state_controller
+                controllers/arm_trajectory_controller
+                controllers/gimbal_controller
+                controllers/chassis_controller
+                controllers/silver_lifter_controller
+                controllers/silver_pusher_controller
+                controllers/silver_rotator_controller
+                controllers/gold_lifter_controller
+                controllers/gold_pusher_controller
+                "
+    />
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="odom_tf_publisher"
+          args="0 0 0 0 0 0 1 map odom"/>
+</launch>

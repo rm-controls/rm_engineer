@@ -236,31 +236,13 @@ public:
                 tf2_ros::Buffer& tf)
     : EndEffectorMotion(motion, interface, tf)
   {
-    drift_dimensions_.resize(6, true);
-    radius_ = xmlRpcGetDouble(motion, "radius", 0.1);
-    link7_length_ = xmlRpcGetDouble(motion, "link7_length", 0.);
-    if (motion.hasMember("drift_dimensions"))
-    {
-      for (int i = 0; i < (int)drift_dimensions_.size(); ++i)
-      {
-        drift_dimensions_[i] = motion["drift_dimensions"][i];
-      }
-    }
-    if (motion.hasMember("basics_length"))
-    {
-      ROS_ASSERT(motion["basics_length"].getType() == XmlRpc::XmlRpcValue::TypeArray);
-      x_length_ = xmlRpcGetDouble(motion["basics_length"], 0);
-      y_length_ = xmlRpcGetDouble(motion["basics_length"], 1);
-      z_length_ = xmlRpcGetDouble(motion["basics_length"], 2);
-    }
-    if (motion.hasMember("rpy_rectify"))
-    {
-      k_x_ = xmlRpcGetDouble(motion["rpy_rectify"], 0);
-      k_theta_ = xmlRpcGetDouble(motion["rpy_rectify"], 1);
-      k_beta_ = xmlRpcGetDouble(motion["rpy_rectify"], 2);
-    }
     point_resolution_ = xmlRpcGetDouble(motion, "point_resolution", 0.01);
+    radius_ = xmlRpcGetDouble(motion, "radius", 0.1);
     max_planning_times_ = (int)xmlRpcGetDouble(motion, "max_planning_times", 3);
+    if (motion.hasMember("is_refer_planning_frame"))
+      is_refer_planning_frame_ = motion["is_refer_planning_frame"];
+    else
+      is_refer_planning_frame_ = false;
     if (motion.hasMember("spacial_shape"))
     {
       points_.cleanPoints();
@@ -274,10 +256,6 @@ public:
         ROS_ERROR("NO SUCH SHAPE");
       points_.generateGeometryPoints();
     }
-    if (motion.hasMember("is_refer_planning_frame"))
-      is_refer_planning_frame_ = motion["is_refer_planning_frame"];
-    else
-      is_refer_planning_frame_ = false;
   }
   bool move() override
   {
@@ -291,42 +269,40 @@ public:
       {
         if (!is_refer_planning_frame_)
         {
-          try
-          {
-            double roll, pitch, yaw, roll_temp, pitch_temp, yaw_temp;
-            geometry_msgs::TransformStamped exchange2base;
-            exchange2base = tf_.lookupTransform("base_link", target_.header.frame_id, ros::Time(0));
-            quatToRPY(exchange2base.transform.rotation, roll_temp, pitch_temp, yaw_temp);
-            quatToRPY(target_.pose.orientation, roll, pitch, yaw);
-            roll = drift_dimensions_[3] ? roll : (roll - roll_temp);
-            pitch = drift_dimensions_[4] ? pitch : (pitch - pitch_temp);
-            yaw = drift_dimensions_[5] ? yaw : (yaw - yaw_temp);
-
-            tf2::Quaternion tmp_tf_quaternion;
-            tmp_tf_quaternion.setRPY(roll, pitch, yaw);
-            geometry_msgs::Quaternion quat_tf = tf2::toMsg(tmp_tf_quaternion);
-            quatToRPY(quat_tf, roll, pitch, yaw);
-            points_.rectifyForRPY(pitch_temp, yaw_temp, k_x_, k_theta_, k_beta_);
-            if (link7_length_)
-              points_.rectifyForLink7(pitch_temp, link7_length_);
-            target_.pose.position.x = points_.getPoints()[i].x;
-            target_.pose.position.y = points_.getPoints()[i].y;
-            target_.pose.position.z = points_.getPoints()[i].z;
-            geometry_msgs::PoseStamped temp_target;
-            temp_target.pose.position = target_.pose.position;
-            temp_target.pose.orientation = quat_tf;
-            tf2::doTransform(temp_target.pose, final_target_.pose,
-                             tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id, ros::Time(0)));
-            final_target_.pose.position.x = drift_dimensions_[0] ? final_target_.pose.position.x : 0.;
-            final_target_.pose.position.y = drift_dimensions_[1] ? final_target_.pose.position.y : 0.;
-            final_target_.pose.position.z = drift_dimensions_[2] ? final_target_.pose.position.z : 0.;
-            final_target_.header.frame_id = interface_.getPlanningFrame();
-          }
-          catch (tf2::TransformException& ex)
-          {
-            ROS_WARN("%s", ex.what());
-            return false;
-          }
+          //            try
+          //            {
+          //              double roll, pitch, yaw, roll_temp, pitch_temp, yaw_temp;
+          //              geometry_msgs::TransformStamped exchange2base;
+          //              exchange2base = tf_.lookupTransform("base_link", target_.header.frame_id, ros::Time(0));
+          //              quatToRPY(exchange2base.transform.rotation, roll_temp, pitch_temp, yaw_temp);
+          //              quatToRPY(target_.pose.orientation, roll, pitch, yaw);
+          //
+          //              tf2::Quaternion tmp_tf_quaternion;
+          //              tmp_tf_quaternion.setRPY(roll, pitch, yaw);
+          //              geometry_msgs::Quaternion quat_tf = tf2::toMsg(tmp_tf_quaternion);
+          //              quatToRPY(quat_tf, roll, pitch, yaw);
+          //              points_.rectifyForRPY(pitch_temp, yaw_temp, k_x_, k_theta_, k_beta_);
+          //              if (link7_length_)
+          //                points_.rectifyForLink7(pitch_temp, link7_length_);
+          //              target_.pose.position.x = points_.getPoints()[i].x;
+          //              target_.pose.position.y = points_.getPoints()[i].y;
+          //              target_.pose.position.z = points_.getPoints()[i].z;
+          //              geometry_msgs::PoseStamped temp_target;
+          //              temp_target.pose.position = target_.pose.position;
+          //              temp_target.pose.orientation = quat_tf;
+          //              tf2::doTransform(temp_target.pose, final_target_.pose,
+          //                               tf_.lookupTransform(interface_.getPlanningFrame(), target_.header.frame_id,
+          //                               ros::Time(0)));
+          //              final_target_.pose.position.x = final_target_.pose.position.x;
+          //              final_target_.pose.position.y = final_target_.pose.position.y;
+          //              final_target_.pose.position.z = final_target_.pose.position.z;
+          //              final_target_.header.frame_id = interface_.getPlanningFrame();
+          //            }
+          //            catch (tf2::TransformException& ex)
+          //            {
+          //              ROS_WARN("%s", ex.what());
+          //              return false;
+          //            }
         }
         else
         {
@@ -340,20 +316,27 @@ public:
             target_.pose.position.z = points_.getPoints()[i].z;
             quatToRPY(base2exchange.transform.rotation, roll, pitch, yaw);
             quatToRPY(target_.pose.orientation, roll_temp, pitch_temp, yaw_temp);
-            roll = drift_dimensions_[3] ? (roll + roll_temp) : 0.;
-            pitch = drift_dimensions_[4] ? (pitch + pitch_temp) : 0.;
-            yaw = drift_dimensions_[5] ? (yaw + yaw_temp) : 0.;
-            tf2::Quaternion tf_quaternion;
-            tf_quaternion.setRPY(roll, pitch, yaw);
-            geometry_msgs::Quaternion quat_tf = tf2::toMsg(tf_quaternion);
+            quat_base2exchange_.setW(base2exchange.transform.rotation.w);
+            quat_base2exchange_.setX(base2exchange.transform.rotation.x);
+            quat_base2exchange_.setY(base2exchange.transform.rotation.y);
+            quat_base2exchange_.setZ(base2exchange.transform.rotation.z);
 
-            final_target_.pose.position.x =
-                drift_dimensions_[0] ? base2exchange.transform.translation.x + target_.pose.position.x : 0.;
-            final_target_.pose.position.y =
-                drift_dimensions_[1] ? base2exchange.transform.translation.y + target_.pose.position.y : 0.;
-            final_target_.pose.position.z =
-                drift_dimensions_[2] ? base2exchange.transform.translation.z + target_.pose.position.z : 0.;
-            final_target_.pose.orientation = quat_tf;
+            quat_target_.setW(target_.pose.orientation.w);
+            quat_target_.setX(target_.pose.orientation.x);
+            quat_target_.setY(target_.pose.orientation.y);
+            quat_target_.setZ(target_.pose.orientation.z);
+
+            tf2::Quaternion tf_quaternion;
+            tf_quaternion = quat_base2exchange_ * quat_target_;
+
+            final_target_.pose.position.x = base2exchange.transform.translation.x + target_.pose.position.x;
+            final_target_.pose.position.y = base2exchange.transform.translation.y + target_.pose.position.y;
+            final_target_.pose.position.z = base2exchange.transform.translation.z + target_.pose.position.z;
+            final_target_.pose.orientation.w = tf_quaternion.w();
+            final_target_.pose.orientation.x = tf_quaternion.x();
+            final_target_.pose.orientation.y = tf_quaternion.y();
+            final_target_.pose.orientation.z = tf_quaternion.z();
+
             final_target_.header.frame_id = interface_.getPlanningFrame();
           }
           catch (tf2::TransformException& ex)
@@ -362,12 +345,12 @@ public:
             return false;
           }
         }
-        interface_.setPoseTarget(final_target_);
-        moveit::planning_interface::MoveGroupInterface::Plan plan;
-        msg_.data = interface_.plan(plan).val;
-        if (msg_.data == 1)
-          return interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
       }
+      interface_.setPoseTarget(final_target_);
+      moveit::planning_interface::MoveGroupInterface::Plan plan;
+      msg_.data = interface_.plan(plan).val;
+      if (msg_.data == 1)
+        return interface_.asyncExecute(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS;
     }
     return false;
   }
@@ -389,17 +372,18 @@ private:
                 tolerance_orientation_);
   }
   bool is_refer_planning_frame_;
-  std::vector<bool> drift_dimensions_;
   geometry_msgs::PoseStamped final_target_;
+  tf2::Quaternion quat_base2exchange_, quat_target_;
   int max_planning_times_{};
-  double radius_, point_resolution_, x_length_, y_length_, z_length_, k_theta_, k_beta_, k_x_, link7_length_;
+  double radius_, point_resolution_, x_length_, y_length_, z_length_;
 };
 
 class JointMotion : public MoveitMotionBase
 {
 public:
-  JointMotion(XmlRpc::XmlRpcValue& motion, moveit::planning_interface::MoveGroupInterface& interface)
-    : MoveitMotionBase(motion, interface)
+  JointMotion(XmlRpc::XmlRpcValue& motion, moveit::planning_interface::MoveGroupInterface& interface,
+              tf2_ros::Buffer& tf_buffer)
+    : MoveitMotionBase(motion, interface), tf_buffer_(tf_buffer)
   {
     if (motion.hasMember("joints"))
     {
@@ -422,9 +406,29 @@ public:
       for (int i = 0; i < motion["tolerance"]["tolerance_joints"].size(); ++i)
         tolerance_joints_.push_back(xmlRpcGetDouble(motion["tolerance"]["tolerance_joints"], i));
     }
+    if (motion.hasMember("record_arm2base"))
+      record_arm2base_ = bool(motion["record_arm2base"]);
   }
+  static geometry_msgs::TransformStamped arm2base;
   bool move() override
   {
+    if (record_arm2base_)
+    {
+      try
+      {
+        arm2base.header.frame_id = "base_link";
+        arm2base.header.stamp = ros::Time::now();
+        arm2base.child_frame_id = "chassis_target";
+
+        arm2base = tf_buffer_.lookupTransform("base_link", "link4", ros::Time(0));
+        ROS_INFO_STREAM("X is: " << arm2base.transform.translation.x << "Y is: " << arm2base.transform.translation.y);
+      }
+      catch (tf2::TransformException& ex)
+      {
+        ROS_WARN("%s", ex.what());
+        return false;
+      }
+    }
     final_target_.clear();
     if (target_.empty())
       return false;
@@ -451,15 +455,20 @@ private:
   {
     std::vector<double> current = interface_.getCurrentJointValues();
     double error = 0.;
-    bool flag = 1;
+    bool flag = 1, joint_reached = 0;
     for (int i = 0; i < (int)final_target_.size(); ++i)
     {
       error = std::abs(final_target_[i] - current[i]);
-      flag &= (error < tolerance_joints_[i]);
+      joint_reached = (error < tolerance_joints_[i]);
+      //      if (!joint_reached)
+      //        ROS_INFO_STREAM("Joint" << i + 1 << " didn't reach configured tolerance range,error: " << error);
+      flag &= joint_reached;
     }
     return flag;
   }
   std::vector<double> target_, final_target_, tolerance_joints_;
+  bool record_arm2base_{ false };
+  tf2_ros::Buffer& tf_buffer_;
 };
 
 template <class MsgType>
@@ -519,18 +528,58 @@ public:
   GpioMotion(XmlRpc::XmlRpcValue& motion, ros::Publisher& interface)
     : PublishMotion<rm_msgs::GpioData>(motion, interface)
   {
+    delay_ = xmlRpcGetDouble(motion, "delay", 0.01);
+    msg_.gpio_state.assign(6, false);
+    msg_.gpio_name.assign(6, "no_registered");
+    pin_ = motion["pin"];
     state_ = motion["state"];
-    msg_.gpio_state.push_back(0);
-    msg_.gpio_name.push_back("gripper");
+    switch (pin_)
+    {
+      case 0:
+        msg_.gpio_name[0] = "main_gripper";
+        break;
+      case 1:
+        msg_.gpio_name[1] = "silver_gripper1";
+        break;
+      case 2:
+        msg_.gpio_name[2] = "silver_gripper2";
+        break;
+      case 3:
+        msg_.gpio_name[3] = "silver_gripper3";
+        break;
+      case 4:
+        msg_.gpio_name[4] = "gold_gripper";
+        break;
+      case 5:
+        msg_.gpio_name[5] = "silver_pump";
+        break;
+      case 6:
+        msg_.gpio_name[6] = "unused";
+        ROS_WARN_STREAM("GPIO port 7 is unused now!");
+        break;
+      case 7:
+        msg_.gpio_name[7] = "unused";
+        ROS_WARN_STREAM("GPIO port 7 is unused now!");
+        break;
+    }
   }
   bool move() override
   {
-    msg_.gpio_state[0] = state_;
+    start_time_ = ros::Time::now();
+    msg_.gpio_state[pin_] = state_;
     return PublishMotion::move();
   }
 
+  bool isFinish() override
+  {
+    return ((ros::Time::now() - start_time_).toSec() > delay_);
+  }
+
 private:
+  ros::Time start_time_;
+  double delay_;
   bool state_;
+  int pin_;
 };
 
 class StoneNumMotion : public PublishMotion<std_msgs::String>
@@ -603,49 +652,6 @@ public:
   }
 };
 
-class ChassisMotion : public MotionBase<ChassisInterface>
-{
-public:
-  ChassisMotion(XmlRpc::XmlRpcValue& motion, ChassisInterface& interface)
-    : MotionBase<ChassisInterface>(motion, interface)
-  {
-    chassis_tolerance_position_ = xmlRpcGetDouble(motion, "chassis_tolerance_position", 0.01);
-    chassis_tolerance_angular_ = xmlRpcGetDouble(motion, "chassis_tolerance_angular", 0.01);
-    if (motion.hasMember("frame"))
-      target_.header.frame_id = std::string(motion["frame"]);
-    if (motion.hasMember("position"))
-    {
-      target_.pose.position.x = xmlRpcGetDouble(motion["position"], 0);
-      target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1);
-    }
-    if (motion.hasMember("yaw"))
-    {
-      tf2::Quaternion quat_tf;
-      quat_tf.setRPY(0, 0, motion["yaw"]);
-      geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
-      target_.pose.orientation = quat_msg;
-    }
-  }
-  bool move() override
-  {
-    interface_.setGoal(target_);
-    return true;
-  }
-  bool isFinish() override
-  {
-    return interface_.getErrorPos() < chassis_tolerance_position_ &&
-           interface_.getErrorYaw() < chassis_tolerance_angular_;
-  }
-  void stop() override
-  {
-    interface_.stop();
-  }
-
-private:
-  geometry_msgs::PoseStamped target_;
-  double chassis_tolerance_position_, chassis_tolerance_angular_;
-};
-
 class ReversalMotion : public PublishMotion<rm_msgs::MultiDofCmd>
 {
 public:
@@ -709,15 +715,22 @@ public:
   {
     ROS_ASSERT(motion.hasMember("target"));
     target_ = xmlRpcGetDouble(motion, "target", 0.0);
+    delay_ = xmlRpcGetDouble(motion, "delay", 0.0);
   }
   bool move() override
   {
+    start_time_ = ros::Time::now();
     msg_.data = target_;
     return PublishMotion::move();
   }
+  bool isFinish() override
+  {
+    return ((ros::Time::now() - start_time_).toSec() > delay_);
+  }
 
 private:
-  double target_;
+  double target_, delay_;
+  ros::Time start_time_;
 };
 
 class ExtendMotion : public PublishMotion<std_msgs::Float64>
@@ -740,6 +753,135 @@ public:
 
 private:
   double target_;
+};
+
+class ChassisMotion : public MotionBase<ChassisInterface>
+{
+public:
+  ChassisMotion(XmlRpc::XmlRpcValue& motion, ChassisInterface& interface)
+    : MotionBase<ChassisInterface>(motion, interface)
+  {
+    chassis_tolerance_position_ = xmlRpcGetDouble(motion, "chassis_tolerance_position", 0.01);
+    chassis_tolerance_angular_ = xmlRpcGetDouble(motion, "chassis_tolerance_angular", 0.01);
+    if (motion.hasMember("frame"))
+      target_.header.frame_id = std::string(motion["frame"]);
+    if (motion.hasMember("position"))
+    {
+      target_.pose.position.x = xmlRpcGetDouble(motion["position"], 0);
+      target_.pose.position.y = xmlRpcGetDouble(motion["position"], 1);
+    }
+    if (motion.hasMember("yaw"))
+    {
+      tf2::Quaternion quat_tf;
+      quat_tf.setRPY(0, 0, motion["yaw"]);
+      geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+      target_.pose.orientation = quat_msg;
+    }
+  }
+  bool move() override
+  {
+    interface_.setGoal(target_);
+    return true;
+  }
+  bool isFinish() override
+  {
+    return interface_.getErrorPos() < chassis_tolerance_position_ &&
+           interface_.getErrorYaw() < chassis_tolerance_angular_;
+  }
+  void stop() override
+  {
+    interface_.stop();
+  }
+
+protected:
+  geometry_msgs::PoseStamped target_;
+  double chassis_tolerance_position_, chassis_tolerance_angular_;
+};
+
+class ChassisTargetMotion : public ChassisMotion
+{
+public:
+  ChassisTargetMotion(XmlRpc::XmlRpcValue& motion, ChassisInterface& interface, tf2_ros::Buffer& tf_buffer)
+    : ChassisMotion(motion, interface), tf_buffer_(tf_buffer)
+  {
+    chassis_tolerance_position_ = xmlRpcGetDouble(motion, "chassis_tolerance_position", 0.01);
+    chassis_tolerance_angular_ = xmlRpcGetDouble(motion, "chassis_tolerance_angular", 0.01);
+    if (motion.hasMember("frame"))
+      target_.header.frame_id = std::string(motion["frame"]);
+    x_offset_ = xmlRpcGetDouble(motion["offset"], 0);
+    y_offset_ = xmlRpcGetDouble(motion["offset"], 1);
+    yaw_scale_ = xmlRpcGetDouble(motion, "yaw_scale", 1);
+    move_target_ = std::string(motion["target_frame"]);
+  }
+  bool move() override
+  {
+    if (move_target_ == "arm")
+    {
+      ROS_INFO_STREAM("TARGET IS ARM");
+      try
+      {
+        geometry_msgs::TransformStamped arm2base_now = tf_buffer_.lookupTransform("base_link", "link4", ros::Time(0));
+
+        target_.pose.position.x =
+            JointMotion::arm2base.transform.translation.x - arm2base_now.transform.translation.x + x_offset_;
+        target_.pose.position.y =
+            JointMotion::arm2base.transform.translation.y - arm2base_now.transform.translation.y + y_offset_;
+        tf2::Quaternion quat_tf;
+        quat_tf.setRPY(0, 0, 0);
+        geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+        target_.pose.orientation = quat_msg;
+        interface_.setGoal(target_);
+        return true;
+      }
+      catch (tf2::TransformException& ex)
+      {
+        ROS_WARN("%s", ex.what());
+        return false;
+      }
+    }
+    else
+    {
+      ROS_INFO_STREAM("TARGET IS " << move_target_);
+      try
+      {
+        double roll, pitch, yaw;
+        geometry_msgs::TransformStamped base2target;
+        base2target = tf_buffer_.lookupTransform("base_link", move_target_, ros::Time(0));
+        target_.pose.position.x = base2target.transform.translation.x + x_offset_;
+        target_.pose.position.y = base2target.transform.translation.y + y_offset_;
+        ROS_INFO_STREAM("base2target x: " << base2target.transform.translation.x);
+        ROS_INFO_STREAM("base2target y: " << base2target.transform.translation.y);
+        ROS_INFO_STREAM("target x: " << target_.pose.position.x);
+        ROS_INFO_STREAM("target y: " << target_.pose.position.y);
+        quatToRPY(base2target.transform.rotation, roll, pitch, yaw);
+        tf2::Quaternion quat_tf;
+        quat_tf.setRPY(0, 0, yaw * yaw_scale_);
+        geometry_msgs::Quaternion quat_msg = tf2::toMsg(quat_tf);
+        target_.pose.orientation = quat_msg;
+        interface_.setGoal(target_);
+        return true;
+      }
+      catch (tf2::TransformException& ex)
+      {
+        ROS_WARN("%s", ex.what());
+        return false;
+      }
+    }
+  }
+  bool isFinish() override
+  {
+    return interface_.getErrorPos() < chassis_tolerance_position_ &&
+           interface_.getErrorYaw() < chassis_tolerance_angular_;
+  }
+  void stop() override
+  {
+    interface_.stop();
+  }
+
+private:
+  double x_offset_{}, y_offset_{}, yaw_scale_{};
+  std::string move_target_{};
+  tf2_ros::Buffer& tf_buffer_;
 };
 
 };  // namespace engineer_middleware

@@ -84,16 +84,21 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-            Value: true
           camera_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          drag_link:
+          extend_arm_back:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          gimbal_base:
+            Value: true
+          extend_arm_front:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gimbal_lifter:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -143,23 +148,26 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mimic_drag_link:
+          mimic_link1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+            Value: true
+          ore_bin_lifter:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          ore_bin_rotator:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           pitch:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          pitch_behind_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          pitch_front_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           right_back_wheel:
             Alpha: 1
             Show Axes: false
@@ -170,19 +178,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          roll_left_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          roll_right_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           tools_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          tools_link6:
+          tools_link_st:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -246,16 +246,21 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-            Value: true
           camera_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          drag_link:
+          extend_arm_back:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          gimbal_base:
+            Value: true
+          extend_arm_front:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          gimbal_lifter:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -305,23 +310,26 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mimic_drag_link:
+          mimic_link1:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+            Value: true
+          ore_bin_lifter:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          ore_bin_rotator:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           pitch:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          pitch_behind_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          pitch_front_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           right_back_wheel:
             Alpha: 1
             Show Axes: false
@@ -332,19 +340,11 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          roll_left_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          roll_right_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           tools_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          tools_link6:
+          tools_link_st:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -359,12 +359,68 @@ Visualization Manager:
       Value: true
       Velocity_Scaling_Factor: 0.1
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Filter (blacklist): ""
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        base_link:
+          Value: true
+        camera_link:
+          Value: false
+        camera_optical_frame:
+          Value: false
+        exchanger:
+          Value: true
+        extend_arm_back:
+          Value: false
+        extend_arm_front:
+          Value: false
+        gimbal_lifter:
+          Value: false
+        left_back_wheel:
+          Value: false
+        left_front_wheel:
+          Value: false
+        link1:
+          Value: false
+        link2:
+          Value: false
+        link3:
+          Value: false
+        link4:
+          Value: false
+        link5:
+          Value: false
+        link6:
+          Value: false
+        link7:
+          Value: true
+        map:
+          Value: false
+        mimic_link1:
+          Value: false
+        odom:
+          Value: false
+        ore_bin_lifter:
+          Value: false
+        ore_bin_rotator:
+          Value: false
+        pitch:
+          Value: false
+        real_world:
+          Value: false
+        right_back_wheel:
+          Value: false
+        right_front_wheel:
+          Value: false
+        tools_link:
+          Value: false
+        tools_link_st:
+          Value: false
+        yaw:
+          Value: false
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
@@ -372,9 +428,62 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        base_link:
+          {}
+        exchanger:
+          {}
+        extend_arm_back:
+          {}
+        extend_arm_front:
+          {}
+        gimbal_lifter:
+          camera_link:
+            {}
+          camera_optical_frame:
+            {}
+        left_back_wheel:
+          {}
+        left_front_wheel:
+          {}
+        link1:
+          {}
+        link2:
+          {}
+        link3:
+          {}
+        link4:
+          {}
+        link5:
+          {}
+        link6:
+          {}
+        link7:
+          tools_link:
+            {}
+          tools_link_st:
+            {}
+        map:
+          {}
+        mimic_link1:
+          {}
+        odom:
+          {}
+        ore_bin_lifter:
+          {}
+        ore_bin_rotator:
+          {}
+        pitch:
+          {}
+        real_world:
+          {}
+        right_back_wheel:
+          {}
+        right_front_wheel:
+          {}
+        yaw:
+          {}
       Update Interval: 0
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -391,7 +500,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.8833990097045898
+      Distance: 1.4108070135116577
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -399,17 +508,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.75
       Focal Point:
-        X: 0.7602222561836243
-        Y: -0.15494105219841003
-        Z: 0.9399657249450684
+        X: 0.23874804377555847
+        Y: 0.04174364358186722
+        Z: 0.6224369406700134
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5947970747947693
+      Pitch: 0.48979732394218445
       Target Frame: base_link
-      Yaw: 1.4263750314712524
+      Yaw: 3.2827558517456055
     Saved: ~
 Window Geometry:
   Displays:
@@ -428,4 +537,4 @@ Window Geometry:
     collapsed: false
   Width: 1665
   X: 757
-  Y: 84
+  Y: 27

@@ -57,14 +57,17 @@ public:
             ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub, ros::Publisher& reversal_pub,
             ros::Publisher& planning_result_pub, ros::Publisher& point_cloud_pub, ros::Publisher& ore_rotate_pub,
             ros::Publisher& ore_lift_pub, ros::Publisher& gimbal_lift_pub, ros::Publisher& extend_arm_f_pub,
-            ros::Publisher& extend_arm_b_pub)
+            ros::Publisher& extend_arm_b_pub, ros::Publisher& silver_lifter_pub, ros::Publisher& silver_pusher_pub,
+            ros::Publisher& silver_rotator_pub, ros::Publisher& gold_pusher_pub, ros::Publisher& gold_lifter_pub,
+            ros::Publisher& middle_pitch_pub)
     : chassis_interface_(chassis_interface)
   {
     ROS_ASSERT(steps.getType() == XmlRpc::XmlRpcValue::TypeArray);
     for (int i = 0; i < steps.size(); ++i)
       queue_.emplace_back(steps[i], scenes, tf, arm_group, chassis_interface, hand_pub, end_effector_pub, stone_num_pub,
                           gimbal_pub, gpio_pub, reversal_pub, planning_result_pub, point_cloud_pub, ore_rotate_pub,
-                          ore_lift_pub, gimbal_lift_pub, extend_arm_f_pub, extend_arm_b_pub);
+                          ore_lift_pub, gimbal_lift_pub, extend_arm_f_pub, extend_arm_b_pub, silver_lifter_pub,
+                          silver_pusher_pub, silver_rotator_pub, gold_pusher_pub, gold_lifter_pub, middle_pitch_pub);
   }
   bool run(actionlib::SimpleActionServer<rm_msgs::EngineerAction>& as)
   {
