@@ -1,7 +1,8 @@
 <launch>
-    <rosparam file="$(find engineer_middleware)/config/steps_list.yaml" command="load"
+    <arg name="robot_type" default="$(env ROBOT_TYPE)" doc="Robot type [engineer, engineer2]"/>
+    <rosparam file="$(find engineer_middleware)/config/$(arg robot_type)_steps_list.yaml" command="load"
               ns="engineer_middleware"/>
-    <rosparam file="$(find engineer_middleware)/config/engineer.yaml" command="load"
+    <rosparam file="$(find engineer_middleware)/config/$(arg robot_type).yaml" command="load"
               ns="engineer_middleware"/>
     <rosparam file="$(find engineer_middleware)/config/scenes_list.yaml" command="load"
               ns="engineer_middleware"/>

@@ -50,7 +50,10 @@ public:
        moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
        ros::Publisher& hand_pub, ros::Publisher& end_effector_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
        ros::Publisher& reversal_pub, ros::Publisher& stone_num_pub, ros::Publisher& planning_result_pub,
-       ros::Publisher& point_cloud_pub)
+       ros::Publisher& point_cloud_pub, ros::Publisher& ore_rotate_pub, ros::Publisher& ore_lift_pub,
+       ros::Publisher& gimbal_lift_pub, ros::Publisher& extend_arm_f_pub, ros::Publisher& extend_arm_b_pub,
+       ros::Publisher& silver_lifter_pub, ros::Publisher& silver_pusher_pub, ros::Publisher& silver_rotator_pub,
+       ros::Publisher& gold_pusher_pub, ros::Publisher& gold_lifter_pub, ros::Publisher& middle_pitch_pub)
     : planning_result_pub_(planning_result_pub), point_cloud_pub_(point_cloud_pub), arm_group_(arm_group)
   {
     ROS_ASSERT(step.hasMember("step"));
@@ -58,7 +61,7 @@ public:
     if (step.hasMember("arm"))
     {
       if (step["arm"].hasMember("joints"))
-        arm_motion_ = new JointMotion(step["arm"], arm_group);
+        arm_motion_ = new JointMotion(step["arm"], arm_group, tf);
       else if (step["arm"].hasMember("spacial_shape"))
         arm_motion_ = new SpaceEeMotion(step["arm"], arm_group, tf);
       else
@@ -69,7 +72,7 @@ public:
     if (step.hasMember("hand"))
       hand_motion_ = new HandMotion(step["hand"], hand_pub);
     if (step.hasMember("end_effector"))
-      end_effector_motion_ = new JointPositionMotion(step["end_effector"], end_effector_pub);
+      end_effector_motion_ = new JointPositionMotion(step["end_effector"], end_effector_pub, tf);
     if (step.hasMember("stone_num"))
       stone_num_motion_ = new StoneNumMotion(step["stone_num"], stone_num_pub);
     if (step.hasMember("gimbal"))
@@ -84,6 +87,33 @@ public:
         if (step["scene_name"] == it->first)
           planning_scene_ = new PlanningScene(it->second, arm_group);
     }
+    if (step.hasMember("ore_rotator"))
+      ore_rotate_motion_ = new JointPointMotion(step["ore_rotator"], ore_rotate_pub);
+    if (step.hasMember("ore_lifter"))
+      ore_lift_motion_ = new JointPointMotion(step["ore_lifter"], ore_lift_pub);
+    if (step.hasMember("gimbal_lifter"))
+      gimbal_lift_motion_ = new JointPointMotion(step["gimbal_lifter"], gimbal_lift_pub);
+    if (step.hasMember("extend_arm"))
+    {
+      if (step["extend_arm"].hasMember("front"))
+        extend_arm_front_motion_ = new ExtendMotion(step["extend_arm"], extend_arm_f_pub, true);
+      if (step["extend_arm"].hasMember("back"))
+        extend_arm_back_motion_ = new ExtendMotion(step["extend_arm"], extend_arm_b_pub, false);
+    }
+    if (step.hasMember("chassis_target"))
+      chassis_target_motion_ = new ChassisTargetMotion(step["chassis_target"], chassis_interface, tf);
+    if (step.hasMember("silver_lifter"))
+      silver_lifter_motion_ = new JointPointMotion(step["silver_lifter"], silver_lifter_pub);
+    if (step.hasMember("silver_pusher"))
+      silver_pusher_motion_ = new JointPointMotion(step["silver_pusher"], silver_pusher_pub);
+    if (step.hasMember("silver_rotator"))
+      silver_rotator_motion_ = new JointPointMotion(step["silver_rotator"], silver_rotator_pub);
+    if (step.hasMember("gold_pusher"))
+      gold_pusher_motion_ = new JointPointMotion(step["gold_pusher"], gold_pusher_pub);
+    if (step.hasMember("gold_lifter"))
+      gold_lifter_motion_ = new JointPointMotion(step["gold_lifter"], gold_lifter_pub);
+    if (step.hasMember("middle_pitch"))
+      middle_pitch_motion_ = new JointPointMotion(step["middle_pitch"], middle_pitch_pub);
   }
   bool move()
   {
@@ -115,6 +145,30 @@ public:
       success &= reversal_motion_->move();
     if (planning_scene_)
       planning_scene_->add();
+    if (ore_lift_motion_)
+      success &= ore_lift_motion_->move();
+    if (ore_rotate_motion_)
+      success &= ore_rotate_motion_->move();
+    if (gimbal_lift_motion_)
+      success &= gimbal_lift_motion_->move();
+    if (extend_arm_back_motion_)
+      success &= extend_arm_back_motion_->move();
+    if (extend_arm_front_motion_)
+      success &= extend_arm_front_motion_->move();
+    if (chassis_target_motion_)
+      success &= chassis_target_motion_->move();
+    if (silver_lifter_motion_)
+      success &= silver_lifter_motion_->move();
+    if (silver_pusher_motion_)
+      success &= silver_pusher_motion_->move();
+    if (silver_rotator_motion_)
+      success &= silver_rotator_motion_->move();
+    if (gold_pusher_motion_)
+      success &= gold_pusher_motion_->move();
+    if (gold_lifter_motion_)
+      success &= gold_lifter_motion_->move();
+    if (middle_pitch_motion_)
+      success &= middle_pitch_motion_->move();
     return success;
   }
   void stop()
@@ -125,6 +179,8 @@ public:
       hand_motion_->stop();
     if (chassis_motion_)
       chassis_motion_->stop();
+    if (chassis_target_motion_)
+      chassis_target_motion_->stop();
   }
 
   void deleteScene()
@@ -150,6 +206,24 @@ public:
       success &= chassis_motion_->isFinish();
     if (gimbal_motion_)
       success &= gimbal_motion_->isFinish();
+    if (reversal_motion_)
+      success &= reversal_motion_->isFinish();
+    if (chassis_target_motion_)
+      success &= chassis_target_motion_->isFinish();
+    if (silver_lifter_motion_)
+      success &= silver_lifter_motion_->isFinish();
+    if (silver_pusher_motion_)
+      success &= silver_pusher_motion_->isFinish();
+    if (silver_rotator_motion_)
+      success &= silver_rotator_motion_->isFinish();
+    if (gpio_motion_)
+      success &= gpio_motion_->isFinish();
+    if (gold_pusher_motion_)
+      success &= gold_pusher_motion_->isFinish();
+    if (gold_lifter_motion_)
+      success &= gold_lifter_motion_->isFinish();
+    if (middle_pitch_motion_)
+      success &= middle_pitch_motion_->isFinish();
     return success;
   }
   bool checkTimeout(ros::Duration period)
@@ -165,6 +239,8 @@ public:
       success &= chassis_motion_->checkTimeout(period);
     if (gimbal_motion_)
       success &= gimbal_motion_->checkTimeout(period);
+    if (chassis_target_motion_)
+      success &= chassis_target_motion_->checkTimeout(period);
     return success;
   }
 
@@ -180,6 +256,10 @@ private:
   MoveitMotionBase* arm_motion_{};
   HandMotion* hand_motion_{};
   JointPositionMotion* end_effector_motion_{};
+  JointPointMotion *ore_rotate_motion_{}, *ore_lift_motion_{}, *gimbal_lift_motion_{};
+  JointPointMotion *silver_lifter_motion_{}, *silver_pusher_motion_{}, *silver_rotator_motion_{},
+      *gold_pusher_motion_{}, *gold_lifter_motion_{}, *middle_pitch_motion_{};
+  ExtendMotion *extend_arm_front_motion_{}, *extend_arm_back_motion_{};
   StoneNumMotion* stone_num_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
@@ -188,6 +268,7 @@ private:
   PlanningScene* planning_scene_{};
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
   moveit::planning_interface::MoveGroupInterface& arm_group_;
+  ChassisTargetMotion* chassis_target_motion_{};
 };
 
 }  // namespace engineer_middleware

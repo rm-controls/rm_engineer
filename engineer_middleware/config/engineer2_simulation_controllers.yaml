@@ -1,0 +1,132 @@
+controllers:
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 100
+  robot_state_controller:
+    type: robot_state_controller/RobotStateController
+    publish_rate: 100
+
+  arm_trajectory_controller:
+    type: effort_controllers/JointTrajectoryController
+    joints:
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
+      - joint6
+    gains:
+      joint1: { p: 20000.0, i: 0, d: 400.0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint2: { p: 100000, i: 0, d: 0.5, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint3: { p: 20.0, i: 0, d: 0.1, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint4: { p: 20.0, i: 0.0, d: 0.1, i_clamp_max: 0, i_clamp_min: 0.0, antiwindup: true, publish_state: true }
+      joint5: { p: 20.0, i: 0, d: 0.1, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+      joint6: { p: 5.0, i: 0, d: 0.1, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
+    constraints:
+      joint1: { trajectory: 0.05, goal: 0.05 }
+      joint2: { trajectory: 0.05, goal: 0.05 }
+      joint3: { trajectory: 0.05, goal: 0.05 }
+      joint4: { trajectory: 0.05, goal: 0.05 }
+      joint5: { trajectory: 0.05, goal: 0.05 }
+      joint6: { trajectory: 0.05, goal: 0.05 }
+
+  chassis_controller:
+    type: rm_chassis_controllers/OmniController
+    # ChassisBase
+    publish_rate: 100
+    enable_odom_tf: true
+    publish_odom_tf: true
+    power:
+      effort_coeff: 2.0
+      vel_coeff: 0.008
+      power_offset: -9.8
+    twist_angular: 0.5233
+    timeout: 0.1
+    pid_follow: { p: 4.0, i: 0, d: 0.02, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+    twist_covariance_diagonal: [ 0.001, 0.001, 0.001, 0.001, 0.001, 0.001 ]
+    max_odom_vel: 10.0
+    # OmniController
+    wheels:
+      left_front:
+        pose: [ 0.213, 0.1945, 0. ]
+        roller_angle: -0.785
+        joint: left_front_wheel_joint
+        <<: &wheel_setting
+          radius: 0.07
+          pid: { p: 0.4, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      right_front:
+        pose: [ 0.213, -0.1945, 0. ]
+        roller_angle: 0.785
+        joint: right_front_wheel_joint
+        <<: *wheel_setting
+      left_back:
+        pose: [ -0.213, 0.1945, 0. ]
+        roller_angle: 0.785
+        joint: left_back_wheel_joint
+        <<: *wheel_setting
+      right_back:
+        pose: [ -0.213, -0.1945, 0. ]
+        roller_angle: -0.785
+        joint: right_back_wheel_joint
+        <<: *wheel_setting
+
+  gimbal_controller:
+    type: rm_gimbal_controllers/Controller
+    yaw:
+      joint: "yaw_joint"
+      pid: { p: 0.5, i: 0, d: 0.0, i_clamp_max: 0.0, i_clamp_min: -0.0, antiwindup: true, publish_state: false }
+      pid_pos: { p: 15.0, i: 0, d: 0.0, i_clamp_max: 0.0, i_clamp_min: 0.0, antiwindup: true, publish_state: true }
+      k_chassis_vel: 0.035
+      k_v: 1.0
+    pitch:
+      joint: "pitch_joint"
+      pid: { p: 0., i: 0.0, d: 0.0, i_clamp_max: 0.0, i_clamp_min: -0.0, antiwindup: true, publish_state: false }
+      pid_pos: { p: 0.0, i: 0, d: 0.0, i_clamp_max: 0.0, i_clamp_min: 0.0, antiwindup: true, publish_state: true }
+      k_v: 1.0
+    feedforward:
+      gravity: 0.0
+      enable_gravity_compensation: false
+      mass_origin: [ 0.0,0.0,0.0 ]
+    bullet_solver:
+      resistance_coff_qd_10: 0.45
+      resistance_coff_qd_15: 1.0
+      resistance_coff_qd_16: 0.7
+      resistance_coff_qd_18: 0.55
+      resistance_coff_qd_30: 3.0
+      g: 9.81
+      delay: 0.1
+      dt: 0.001
+      timeout: 0.001
+      publish_rate: 50
+
+  middle_pitch_controller:
+    type: effort_controllers/JointPositionController
+    joint: middle_pitch_joint
+    pid: { p: 5., i: 0., d: 1, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+
+  silver_lifter_controller:
+    type: effort_controllers/JointPositionController
+    joint: silver_lifter_joint
+    pid: { p: 1000., i: 0., d: 100, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+
+  silver_pusher_controller:
+    type: effort_controllers/JointPositionController
+    joint: silver_pusher_joint
+    pid: { p: 1000., i: 0., d: 100, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+
+  silver_rotator_controller:
+    type: effort_controllers/JointPositionController
+    joint: silver_rotator_joint
+    pid: { p: 50., i: 0., d: 1, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+
+  ######################### Gold  Ore Controllers ########################
+
+  gold_lifter_controller:
+    type: effort_controllers/JointPositionController
+    joint: gold_lifter_joint
+    pid: { p: 100., i: 0., d: 10, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+
+  gold_pusher_controller:
+    type: effort_controllers/JointPositionController
+    joint: gold_pusher_joint
+    pid: { p: 1000., i: 0., d: 100, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
