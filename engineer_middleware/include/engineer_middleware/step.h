@@ -47,13 +47,12 @@ class Step
 {
 public:
   Step(const XmlRpc::XmlRpcValue& step, const XmlRpc::XmlRpcValue& scenes, tf2_ros::Buffer& tf,
-       moveit::planning_interface::MoveGroupInterface& arm_group, ChassisInterface& chassis_interface,
-       ros::Publisher& hand_pub, ros::Publisher& end_effector_pub, ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
-       ros::Publisher& reversal_pub, ros::Publisher& stone_num_pub, ros::Publisher& planning_result_pub,
-       ros::Publisher& point_cloud_pub, ros::Publisher& ore_rotate_pub, ros::Publisher& ore_lift_pub,
-       ros::Publisher& gimbal_lift_pub, ros::Publisher& extend_arm_f_pub, ros::Publisher& extend_arm_b_pub,
-       ros::Publisher& silver_lifter_pub, ros::Publisher& silver_pusher_pub, ros::Publisher& silver_rotator_pub,
-       ros::Publisher& gold_pusher_pub, ros::Publisher& gold_lifter_pub, ros::Publisher& middle_pitch_pub)
+       moveit::planning_interface::MoveGroupInterface& arm_group,
+       ChassisInterface& chassis_interface, actionlib::SimpleActionClient<rm_msgs::EngineerTrajectoryTeachingAction>& teaching_client,
+       ros::Publisher& hand_pub,ros::Publisher& end_effector_pub,ros::Publisher& gimbal_pub, ros::Publisher& gpio_pub,
+       ros::Publisher& reversal_pub,ros::Publisher& planning_result_pub, ros::Publisher& point_cloud_pub, ros::Publisher& left_gripper_pub, ros::Publisher& right_gripper_pub,
+       ros::Publisher& lifter_pub_,
+       robot_model::RobotModelConstPtr robot_model)
     : planning_result_pub_(planning_result_pub), point_cloud_pub_(point_cloud_pub), arm_group_(arm_group)
   {
     ROS_ASSERT(step.hasMember("step"));
@@ -62,10 +61,24 @@ public:
     {
       if (step["arm"].hasMember("joints"))
         arm_motion_ = new JointMotion(step["arm"], arm_group, tf);
-      else if (step["arm"].hasMember("spacial_shape"))
-        arm_motion_ = new SpaceEeMotion(step["arm"], arm_group, tf);
-      else
+      else if (step["arm"].hasMember("target_pose"))
+        arm_motion_ = new TargetPoseMotion(step["arm"], arm_group, tf);
+      // else if (step["arm"].hasMember("spacial_shape"))
+      //   arm_motion_ = new SpaceEeMotion(step["arm"], arm_group, tf);
+      else if (step["arm"].hasMember("end_effector"))
         arm_motion_ = new EndEffectorMotion(step["arm"], arm_group, tf);
+    }
+    if (step.hasMember("arms"))
+    {
+      arms_motion_ = new ArmsMotion(step["arms"], arm_group, tf, robot_model);
+      // if (step["arms"].hasMember("joints"))
+      //   arm_motion_ = new JointMotion(step["arms"], arm_group, tf);
+      // else if (step["arms"].hasMember("target_poses"))
+      //   arm_motion_ = new TargetPoseMotion(step["arms"], arm_group, tf);
+      // else if (step["arm"].hasMember("spacial_shape"))
+      //   arm_motion_ = new SpaceEeMotion(step["arm"], arm_group, tf);
+      // else if (step["arms"].hasMember("end_effectors"))
+      //   arm_motion_ = new EndEffectorMotion(step["arms"], arm_group, tf);
     }
     if (step.hasMember("chassis"))
       chassis_motion_ = new ChassisMotion(step["chassis"], chassis_interface);
@@ -73,47 +86,26 @@ public:
       hand_motion_ = new HandMotion(step["hand"], hand_pub);
     if (step.hasMember("end_effector"))
       end_effector_motion_ = new JointPositionMotion(step["end_effector"], end_effector_pub, tf);
-    if (step.hasMember("stone_num"))
-      stone_num_motion_ = new StoneNumMotion(step["stone_num"], stone_num_pub);
     if (step.hasMember("gimbal"))
       gimbal_motion_ = new GimbalMotion(step["gimbal"], gimbal_pub);
-    if (step.hasMember("gripper"))
-      gpio_motion_ = new GpioMotion(step["gripper"], gpio_pub);
     if (step.hasMember("reversal"))
       reversal_motion_ = new ReversalMotion(step["reversal"], reversal_pub);
     if (step.hasMember("scene_name"))
     {
-      for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = scenes.begin(); it != scenes.end(); ++it)
-        if (step["scene_name"] == it->first)
-          planning_scene_ = new PlanningScene(it->second, arm_group);
-    }
-    if (step.hasMember("ore_rotator"))
-      ore_rotate_motion_ = new JointPointMotion(step["ore_rotator"], ore_rotate_pub);
-    if (step.hasMember("ore_lifter"))
-      ore_lift_motion_ = new JointPointMotion(step["ore_lifter"], ore_lift_pub);
-    if (step.hasMember("gimbal_lifter"))
-      gimbal_lift_motion_ = new JointPointMotion(step["gimbal_lifter"], gimbal_lift_pub);
-    if (step.hasMember("extend_arm"))
-    {
-      if (step["extend_arm"].hasMember("front"))
-        extend_arm_front_motion_ = new ExtendMotion(step["extend_arm"], extend_arm_f_pub, true);
-      if (step["extend_arm"].hasMember("back"))
-        extend_arm_back_motion_ = new ExtendMotion(step["extend_arm"], extend_arm_b_pub, false);
+      for (const auto & scene : scenes)
+        if (step["scene_name"] == scene.first)
+          planning_scene_ = new PlanningScene(scene.second, arm_group);
     }
     if (step.hasMember("chassis_target"))
       chassis_target_motion_ = new ChassisTargetMotion(step["chassis_target"], chassis_interface, tf);
-    if (step.hasMember("silver_lifter"))
-      silver_lifter_motion_ = new JointPointMotion(step["silver_lifter"], silver_lifter_pub);
-    if (step.hasMember("silver_pusher"))
-      silver_pusher_motion_ = new JointPointMotion(step["silver_pusher"], silver_pusher_pub);
-    if (step.hasMember("silver_rotator"))
-      silver_rotator_motion_ = new JointPointMotion(step["silver_rotator"], silver_rotator_pub);
-    if (step.hasMember("gold_pusher"))
-      gold_pusher_motion_ = new JointPointMotion(step["gold_pusher"], gold_pusher_pub);
-    if (step.hasMember("gold_lifter"))
-      gold_lifter_motion_ = new JointPointMotion(step["gold_lifter"], gold_lifter_pub);
-    if (step.hasMember("middle_pitch"))
-      middle_pitch_motion_ = new JointPointMotion(step["middle_pitch"], middle_pitch_pub);
+    if (step.hasMember("trajectory_playback"))
+      trajectory_playback_motion_ = new TrajectoryPlaybackMotion(step["trajectory_playback"], teaching_client);
+    if (step.hasMember("left_gripper"))
+      left_gripper_motion_ = new GripperMotion(step["left_gripper"], left_gripper_pub);
+    if (step.hasMember("right_gripper"))
+      right_gripper_motion_ = new GripperMotion(step["right_gripper"], right_gripper_pub);
+    if (step.hasMember("lifter"))
+      lifter_motion_ = new LifterMotion(step["lifter"], lifter_pub_);
   }
   bool move()
   {
@@ -129,12 +121,12 @@ public:
       std_msgs::Int32 msg = arm_motion_->getPlanningResult();
       planning_result_pub_.publish(msg);
     }
+    if (arms_motion_)
+      success &= arms_motion_->move();
     if (hand_motion_)
       success &= hand_motion_->move();
     if (end_effector_motion_)
       success &= end_effector_motion_->move();
-    if (stone_num_motion_)
-      success &= stone_num_motion_->move();
     if (chassis_motion_)
       success &= chassis_motion_->move();
     if (gimbal_motion_)
@@ -145,42 +137,30 @@ public:
       success &= reversal_motion_->move();
     if (planning_scene_)
       planning_scene_->add();
-    if (ore_lift_motion_)
-      success &= ore_lift_motion_->move();
-    if (ore_rotate_motion_)
-      success &= ore_rotate_motion_->move();
-    if (gimbal_lift_motion_)
-      success &= gimbal_lift_motion_->move();
-    if (extend_arm_back_motion_)
-      success &= extend_arm_back_motion_->move();
-    if (extend_arm_front_motion_)
-      success &= extend_arm_front_motion_->move();
-    if (chassis_target_motion_)
-      success &= chassis_target_motion_->move();
-    if (silver_lifter_motion_)
-      success &= silver_lifter_motion_->move();
-    if (silver_pusher_motion_)
-      success &= silver_pusher_motion_->move();
-    if (silver_rotator_motion_)
-      success &= silver_rotator_motion_->move();
-    if (gold_pusher_motion_)
-      success &= gold_pusher_motion_->move();
-    if (gold_lifter_motion_)
-      success &= gold_lifter_motion_->move();
-    if (middle_pitch_motion_)
-      success &= middle_pitch_motion_->move();
+    if (trajectory_playback_motion_)
+      success &= trajectory_playback_motion_->move();
+    if (left_gripper_motion_)
+      success &= left_gripper_motion_->move();
+    if (right_gripper_motion_)
+      success &= right_gripper_motion_->move();
+    if (lifter_motion_)
+      success &= lifter_motion_->move();
     return success;
   }
   void stop()
   {
     if (arm_motion_)
       arm_motion_->stop();
+    if (arms_motion_)
+      arms_motion_->stop();
     if (hand_motion_)
       hand_motion_->stop();
     if (chassis_motion_)
       chassis_motion_->stop();
     if (chassis_target_motion_)
       chassis_target_motion_->stop();
+    if (trajectory_playback_motion_)
+      trajectory_playback_motion_->stop();
   }
 
   void deleteScene()
@@ -198,6 +178,8 @@ public:
     bool success = true;
     if (arm_motion_)
       success &= arm_motion_->isFinish();
+    if (arms_motion_)
+      success &= arms_motion_->isFinish();
     if (hand_motion_)
       success &= hand_motion_->isFinish();
     if (end_effector_motion_)
@@ -210,20 +192,16 @@ public:
       success &= reversal_motion_->isFinish();
     if (chassis_target_motion_)
       success &= chassis_target_motion_->isFinish();
-    if (silver_lifter_motion_)
-      success &= silver_lifter_motion_->isFinish();
-    if (silver_pusher_motion_)
-      success &= silver_pusher_motion_->isFinish();
-    if (silver_rotator_motion_)
-      success &= silver_rotator_motion_->isFinish();
     if (gpio_motion_)
       success &= gpio_motion_->isFinish();
-    if (gold_pusher_motion_)
-      success &= gold_pusher_motion_->isFinish();
-    if (gold_lifter_motion_)
-      success &= gold_lifter_motion_->isFinish();
-    if (middle_pitch_motion_)
-      success &= middle_pitch_motion_->isFinish();
+    if (trajectory_playback_motion_)
+      success &= trajectory_playback_motion_->isFinish();
+    if (left_gripper_motion_)
+      success &= left_gripper_motion_->isFinish();
+    if (right_gripper_motion_)
+      success &= right_gripper_motion_->isFinish();
+    if (lifter_motion_)
+      success &= lifter_motion_->isFinish();
     return success;
   }
   bool checkTimeout(ros::Duration period)
@@ -231,6 +209,8 @@ public:
     bool success = true;
     if (arm_motion_)
       success &= arm_motion_->checkTimeout(period);
+    if (arms_motion_)
+      success &= arms_motion_->checkTimeout(period);
     if (hand_motion_)
       success &= hand_motion_->checkTimeout(period);
     if (end_effector_motion_)
@@ -254,13 +234,9 @@ private:
   ros::Publisher planning_result_pub_;
   ros::Publisher point_cloud_pub_;
   MoveitMotionBase* arm_motion_{};
+  MoveitMotionBase* arms_motion_{};
   HandMotion* hand_motion_{};
   JointPositionMotion* end_effector_motion_{};
-  JointPointMotion *ore_rotate_motion_{}, *ore_lift_motion_{}, *gimbal_lift_motion_{};
-  JointPointMotion *silver_lifter_motion_{}, *silver_pusher_motion_{}, *silver_rotator_motion_{},
-      *gold_pusher_motion_{}, *gold_lifter_motion_{}, *middle_pitch_motion_{};
-  ExtendMotion *extend_arm_front_motion_{}, *extend_arm_back_motion_{};
-  StoneNumMotion* stone_num_motion_{};
   ChassisMotion* chassis_motion_{};
   GimbalMotion* gimbal_motion_{};
   GpioMotion* gpio_motion_{};
@@ -269,6 +245,10 @@ private:
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface_;
   moveit::planning_interface::MoveGroupInterface& arm_group_;
   ChassisTargetMotion* chassis_target_motion_{};
+  TrajectoryPlaybackMotion* trajectory_playback_motion_{};
+  GripperMotion* left_gripper_motion_{};
+  GripperMotion* right_gripper_motion_{};
+  LifterMotion* lifter_motion_{};
 };
 
 }  // namespace engineer_middleware

@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-Wall -Werror)
 
 ## Find catkin macros and libraries
+find_package(yaml-cpp REQUIRED)
+
 find_package(catkin REQUIRED
         COMPONENTS
         roscpp
@@ -79,6 +81,7 @@ add_dependencies(${PROJECT_NAME}
 ## Specify libraries to link executable targets against
 target_link_libraries(${PROJECT_NAME}
         ${catkin_LIBRARIES}
+        yaml-cpp
         )
 
 #############

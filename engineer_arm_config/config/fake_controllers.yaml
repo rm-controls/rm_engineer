@@ -1,14 +1,56 @@
 controller_list:
-  - name: fake_engineer_arm_controller
+  - name: fake_left_arm_controller
     type: $(arg fake_execution_type)
     joints:
-      - joint1
-      - joint2
-      - joint3
-      - joint4
-      - joint5
-      - joint6
-      - joint7
+      - left_joint1
+      - left_joint2
+      - left_joint3
+      - left_joint4
+      - left_joint5
+      - left_joint6
+      - left_joint7
+  - name: fake_right_arm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - right_joint1
+      - right_joint2
+      - right_joint3
+      - right_joint4
+      - right_joint5
+      - right_joint6
+      - right_joint7
+  - name: fake_gimbal_arm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - main_pitch
+      - gimbal_joint1
+      - gimbal_joint2
+      - gimbal_joint3
+  - name: fake_engineer_arms_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - main_pitch
+      - gimbal_joint1
+      - gimbal_joint2
+      - gimbal_joint3
+      - left_joint1
+      - left_joint2
+      - left_joint3
+      - left_joint4
+      - left_joint5
+      - left_joint6
+      - left_joint7
+      - right_joint1
+      - right_joint2
+      - right_joint3
+      - right_joint4
+      - right_joint5
+      - right_joint6
+      - right_joint7
 initial:  # Define initial robot poses per group
-  - group: engineer_arm
-    pose: home
+  - group: left_arm
+    pose: left_arm_home
+  - group: right_arm
+    pose: right_arm_home
+  - group: gimbal_arm
+    pose: gimbal_arm_home

@@ -20,27 +20,21 @@
           args="load
                 controllers/robot_state_controller
                 controllers/joint_state_controller
-                controllers/joint1_calibration_controller
-                controllers/joint2_calibration_controller
-                controllers/joint3_calibration_controller
-                controllers/joint4_calibration_controller
-                controllers/joint5_calibration_controller
-                controllers/joint6_calibration_controller
-                controllers/joint7_calibration_controller
-                controllers/arm_trajectory_controller
+                controllers/left_arm_controller
+                controllers/right_arm_controller
+                controllers/gimbal_arm_controller
                 controllers/chassis_controller
-                controllers/gpio_controller
-                controllers/gimbal_controller
-                controllers/ore_bin_rotate_controller
-                controllers/extend_arm_front_controller
-                controllers/extend_arm_back_controller
-                controllers/extend_arm_front_calibration_controller
-                controllers/extend_arm_back_calibration_controller
-                controllers/ore_bin_lifter_controller
-                controllers/ore_bin_lifter_calibration_controller
-                controllers/gimbal_lifter_controller
-                controllers/gimbal_lifter_calibration_controller
-                controllers/arm_trajectory_controller
+                "
+    />
+
+    <node name="controller_starter" pkg="controller_manager" type="controller_manager" output="screen"
+          args="start
+                controllers/robot_state_controller
+                controllers/joint_state_controller
+                controllers/left_arm_controller
+                controllers/right_arm_controller
+                controllers/gimbal_arm_controller
+                controllers/chassis_controller
                 "
     />
 

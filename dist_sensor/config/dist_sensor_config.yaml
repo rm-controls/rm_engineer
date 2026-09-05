@@ -1,0 +1,3 @@
+sensor_interval: 0.44
+dist_lower: 0.1
+dist_upper: 2.5

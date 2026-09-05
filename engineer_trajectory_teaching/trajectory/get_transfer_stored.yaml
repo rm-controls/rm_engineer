@@ -1,0 +1,26 @@
+joint_names: [joint1, joint2, joint3, joint4, joint5, joint6]
+points:
+  - timestamp: 1.5
+    positions: [0.55, -1.281, -2.189, -0.034, 1.575, -0.307]
+    middle_pitch: 0.071
+  - timestamp: 2.0
+    positions: [0.55, -2.142, -2.189, -0.034, 1.66, -0.307]
+    small_joint3: -0.01
+    small_joint1: 0.238
+    small_joint2: -0.176
+    main_gripper: true
+  - timestamp: 2.3
+    positions: [0.55, -2.142, -2.189, -0.034, 1.66, -0.307]
+  - timestamp: 2.45
+    positions: [0.47, -2.142, -2.189, -0.034, 1.66, -0.307]
+    transfer_gripper: false
+    small_gripper: false
+  - timestamp: 2.8
+    positions: [0.47, -2.142, -2.189, -0.034, 1.66, -0.307]
+  - timestamp: 3.0
+    positions: [0.55, -2.142, -2.189, -0.034, 1.66, -0.307]
+    small_joint3: -0.01
+    small_joint1: 0.01
+    small_joint2: -0.01
+  - timestamp: 3.5
+    positions: [0.55, -1.281, -2.189, -0.034, 1.575, -0.307]
