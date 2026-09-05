@@ -37,33 +37,26 @@
 
 #include "engineer_middleware/middleware.h"
 #include <unistd.h>
+#include "geometry_msgs/TransformStamped.h"
 namespace engineer_middleware
 {
 Middleware::Middleware(ros::NodeHandle& nh)
   : nh_(nh)
   , as_(
         nh_, "move_steps", [this](auto&& PH1) { executeCB(std::forward<decltype(PH1)>(PH1)); }, false)
-  , arm_group_(moveit::planning_interface::MoveGroupInterface("engineer_arm"))
+  , arm_group_(moveit::planning_interface::MoveGroupInterface("engineer_arms"))
   , chassis_interface_(nh, tf_)
+  , teaching_client_("/engineer_trajectory_teaching/trajectory_server", true)
   , hand_pub_(nh.advertise<std_msgs::Float64>("/controllers/hand_controller/command", 10))
   , end_effector_pub_(nh.advertise<std_msgs::Float64>("/controllers/joint7_controller/command", 10))
   , gimbal_pub_(nh.advertise<rm_msgs::GimbalCmd>("/controllers/gimbal_controller/command", 10))
   , gpio_pub_(nh.advertise<rm_msgs::GpioData>("/controllers/gpio_controller/command", 10))
   , reversal_pub_(nh.advertise<rm_msgs::MultiDofCmd>("/controllers/multi_dof_controller/command", 10))
   , planning_result_pub_(nh.advertise<std_msgs::Int32>("/planning_result", 10))
-  , stone_num_pub_(nh.advertise<std_msgs::String>("/stone_num", 10))
   , point_cloud_pub_(nh.advertise<sensor_msgs::PointCloud2>("/cloud", 100))
-  , ore_rotate_pub_(nh.advertise<std_msgs::Float64>("/controllers/ore_bin_rotate_controller/command", 10))
-  , ore_lift_pub_(nh.advertise<std_msgs::Float64>("/controllers/ore_bin_lifter_controller/command", 10))
-  , gimbal_lift_pub_(nh.advertise<std_msgs::Float64>("/controllers/gimbal_lifter_controller/command", 10))
-  , extend_arm_f_pub_(nh.advertise<std_msgs::Float64>("/controllers/extend_arm_front_controller/command", 10))
-  , extend_arm_b_pub_(nh.advertise<std_msgs::Float64>("/controllers/extend_arm_back_controller/command", 10))
-  , silver_lifter_pub_(nh.advertise<std_msgs::Float64>("/controllers/silver_lifter_controller/command", 10))
-  , silver_pusher_pub_(nh.advertise<std_msgs::Float64>("/controllers/silver_pusher_controller/command", 10))
-  , silver_rotator_pub_(nh.advertise<std_msgs::Float64>("/controllers/silver_rotator_controller/command", 10))
-  , gold_pusher_pub_(nh.advertise<std_msgs::Float64>("/controllers/gold_pusher_controller/command", 10))
-  , gold_lifter_pub_(nh.advertise<std_msgs::Float64>("/controllers/gold_lifter_controller/command", 10))
-  , middle_pitch_pub_(nh.advertise<std_msgs::Float64>("/controllers/middle_pitch_controller/command", 10))
+  , left_gripper_pub_(nh.advertise<std_msgs::Bool>("/controllers/left_gripper_controller/command", 10))
+  , right_gripper_pub_(nh.advertise<std_msgs::Bool>("/controllers/right_gripper_controller/command", 10))
+  , lifter_pub_(nh.advertise<std_msgs::Int32>("/engineer_lifter_cmd", 10))
   , tf_listener_(tf_)
   , is_middleware_control_(false)
 {
@@ -75,14 +68,17 @@ Middleware::Middleware(ros::NodeHandle& nh)
     nh.getParam("scenes_list", scenes_list);
     ROS_ASSERT(steps_list.getType() == XmlRpc::XmlRpcValue::Type::TypeStruct);
     ROS_ASSERT(scenes_list.getType() == XmlRpc::XmlRpcValue::Type::TypeStruct);
+    rml_ = robot_model_loader::RobotModelLoader("robot_description");
+    robot_model_ = rml_.getModel();
+    if (!robot_model_)
+      ROS_ERROR("cannot get robot model.");
     for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator it = steps_list.begin(); it != steps_list.end(); ++it)
     {
       step_queues_.insert(std::make_pair(
-          it->first, StepQueue(it->second, scenes_list, tf_, arm_group_, chassis_interface_, hand_pub_,
-                               end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, stone_num_pub_,
-                               planning_result_pub_, point_cloud_pub_, ore_rotate_pub_, ore_lift_pub_, gimbal_lift_pub_,
-                               extend_arm_f_pub_, extend_arm_b_pub_, silver_lifter_pub_, silver_pusher_pub_,
-                               silver_rotator_pub_, gold_pusher_pub_, gold_lifter_pub_, middle_pitch_pub_)));
+          it->first, StepQueue(it->second, scenes_list, tf_, arm_group_, chassis_interface_,
+                               teaching_client_, hand_pub_, end_effector_pub_, gimbal_pub_, gpio_pub_,
+                               reversal_pub_, planning_result_pub_, point_cloud_pub_, left_gripper_pub_,
+                               right_gripper_pub_, lifter_pub_, robot_model_)));
     }
   }
   else
@@ -90,5 +86,6 @@ Middleware::Middleware(ros::NodeHandle& nh)
   as_.start();
 }
 geometry_msgs::TransformStamped engineer_middleware::JointMotion::arm2base;
+geometry_msgs::TransformStamped engineer_middleware::ArmsMotion::arm2base;
 
 }  // namespace engineer_middleware

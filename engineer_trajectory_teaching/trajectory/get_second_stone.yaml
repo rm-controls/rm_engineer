@@ -1,0 +1,23 @@
+joint_names: [joint1, joint2, joint3, joint4, joint5, joint6]
+points:
+  - timestamp: 0.000050034
+    positions: [ 0.3, -1.311, -2.272, -0.062, 1.648, -1.106 ]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - timestamp: 0.2
+    positions: [ 0.3, -1.311, -2.272, -0.062, 1.648, -1.106 ]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    main_gripper: true
+  - timestamp: 0.6
+    positions: [ 0.139, -1.311, -2.272, -0.062, 1.648, -1.106 ]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - timestamp: 1.0
+    positions: [ 0.139, -1.311, -2.272, -0.062, 1.648, -1.106 ]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - timestamp: 1.5
+    positions: [ 0.4, -1.311, -2.272, -0.062, 1.648, -1.106 ]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    small_joint1: 0.001
+    small_joint2: -0.001
+    small_joint3: 0.001
+    small_gripper: false
+    transfer_gripper: false

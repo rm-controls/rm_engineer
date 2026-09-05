@@ -1,0 +1,6 @@
+joint_names: [joint1, joint2, joint3, joint4, joint5, joint6]
+points:
+  - timestamp: 0.000050034
+    positions: [ 0.01, -2.212, 1.862, -1.65, -0.565, -1.54 ]
+    middle_pitch: 0.06
+    main_gripper: true

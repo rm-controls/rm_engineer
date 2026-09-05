@@ -1,0 +1,4 @@
+<launch>
+    <rosparam ns="dist_sensor" file="$(find dist_sensor)/config/dist_sensor_config.yaml" command="load"/>
+    <node name="dist_sensor" pkg="dist_sensor" type="dist_sensor" respawn="true"/>
+</launch>

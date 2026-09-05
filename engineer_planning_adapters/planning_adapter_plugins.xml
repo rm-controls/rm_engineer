@@ -1,0 +1,5 @@
+<library path="lib/libengineer_planning_adapters">
+  <class name="engineer_planning_adapters/SpecialJointConstraintAdapter"
+         type="engineer_planning_adapters::SpecialJointConstraintAdapter"
+         base_class_type="planning_request_adapter::PlanningRequestAdapter"/>
+</library>

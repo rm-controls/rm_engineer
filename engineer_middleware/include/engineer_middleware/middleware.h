@@ -51,6 +51,8 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/transform_broadcaster.h>
+#include <rm_msgs/EngineerTrajectoryTeachingAction.h>
+#include <moveit/robot_model_loader/robot_model_loader.h>
 
 namespace engineer_middleware
 {
@@ -61,20 +63,22 @@ public:
   void executeCB(const actionlib::SimpleActionServer<rm_msgs::EngineerAction>::GoalConstPtr& goal)
   {
     std::string name;
+    bool success = false;
     name = goal->step_queue_name;
     is_middleware_control_ = true;
     ROS_INFO("Start step queue id %s", name.c_str());
     auto step_queue = step_queues_.find(name);
     if (step_queue != step_queues_.end())
-      step_queue->second.run(as_);
+      success = step_queue->second.run(as_);
     ROS_INFO("Finish step queue id %s", name.c_str());
+    if (!success)
+      as_.setAborted();
     is_middleware_control_ = false;
   }
   void run(ros::Duration period)
   {
-    // TODO chassis run crazily in motion
-    //    if (is_middleware_control_)
-    //      chassis_interface_.run(period);
+    if (is_middleware_control_)
+      chassis_interface_.run(period);
   }
 
 private:
@@ -82,14 +86,15 @@ private:
   actionlib::SimpleActionServer<rm_msgs::EngineerAction> as_;
   moveit::planning_interface::MoveGroupInterface arm_group_;
   ChassisInterface chassis_interface_;
-  ros::Publisher hand_pub_, end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_, planning_result_pub_,
-      stone_num_pub_, point_cloud_pub_, ore_rotate_pub_, ore_lift_pub_, gimbal_lift_pub_, extend_arm_f_pub_,
-      extend_arm_b_pub_, silver_lifter_pub_, silver_pusher_pub_, silver_rotator_pub_, gold_pusher_pub_,
-      gold_lifter_pub_, middle_pitch_pub_;
+  actionlib::SimpleActionClient<rm_msgs::EngineerTrajectoryTeachingAction> teaching_client_;
+  ros::Publisher hand_pub_, end_effector_pub_, gimbal_pub_, gpio_pub_, reversal_pub_,
+                 planning_result_pub_, point_cloud_pub_, left_gripper_pub_, right_gripper_pub_, lifter_pub_;
   std::unordered_map<std::string, StepQueue> step_queues_;
   tf2_ros::Buffer tf_;
   tf2_ros::TransformListener tf_listener_;
   bool is_middleware_control_;
+  robot_model_loader::RobotModelLoader rml_;
+  robot_model::RobotModelConstPtr robot_model_;
 };
 
 }  // namespace engineer_middleware

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<package format="2">
+  <name>auto_exchange_planner</name>
+  <version>0.0.0</version>
+  <description>The auto_exchange_planner package</description>
+  <maintainer email="3631676002@qq.com">ch</maintainer>
+  <license>BSD</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>pluginlib</build_depend>
+  <build_depend>moveit_core</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <exec_depend>pluginlib</exec_depend>
+  <exec_depend>moveit_core</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+
+
+  <export>
+    <moveit_core plugin="${prefix}/auto_exchange_planner_plugin_description.xml"/>
+  </export>
+</package>
