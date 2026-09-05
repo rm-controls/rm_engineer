@@ -62,6 +62,7 @@ public:
     pid_yaw_.init(ros::NodeHandle(nh_pid_w, "pid"));
     vel_pub_ = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
     nh_base_motion.getParam("yaw_start_threshold", yaw_start_threshold_);
+    nh_base_motion.getParam("linear_start_threshold", linear_start_threshold_);
     nh_base_motion.getParam("max_vel", max_vel_);
   }
 
@@ -136,10 +137,11 @@ public:
     quatToRPY(goal_.pose.orientation, roll, pitch, yaw_goal);
     error_yaw_ = angles::shortest_angular_distance(yaw_current, yaw_goal);
     geometry_msgs::Twist cmd_vel{};
-    cmd_vel.linear.x =
-        abs(pid_x_.computeCommand(error.x, period)) <= max_vel_ ? pid_x_.computeCommand(error.x, period) : 0;
-    cmd_vel.linear.y =
-        abs(pid_y_.computeCommand(error.y, period)) <= max_vel_ ? pid_y_.computeCommand(error.y, period) : 0;
+    const double cmd_x = pid_x_.computeCommand(error.x, period), cmd_y = pid_y_.computeCommand(error.y, period);
+    cmd_vel.linear.x = abs(cmd_x) <= max_vel_ ? cmd_x : max_vel_ * (cmd_x > 0 ? 1 : -1);
+    cmd_vel.linear.y = abs(cmd_y) <= max_vel_ ? cmd_y : max_vel_ * (cmd_y > 0 ? 1 : -1);
+    cmd_vel.linear.x = abs(cmd_x) >= linear_start_threshold_ ? cmd_vel.linear.x : 0;
+    cmd_vel.linear.y = abs(cmd_y) >= linear_start_threshold_ ? cmd_vel.linear.y : 0;
     cmd_vel.angular.z = abs(pid_yaw_.computeCommand(error_yaw_, period)) >= yaw_start_threshold_ ?
                             pid_yaw_.computeCommand(error_yaw_, period) :
                             0;
@@ -154,6 +156,6 @@ private:
   geometry_msgs::PoseStamped goal_{};
   ros::Publisher vel_pub_;
   double error_pos_{}, error_yaw_{};
-  double yaw_start_threshold_{}, max_vel_{};
+  double yaw_start_threshold_{}, linear_start_threshold_{}, max_vel_{};
 };
 }  // namespace engineer_middleware

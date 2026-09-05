@@ -1,0 +1,57 @@
+joint_names: [joint1, joint2, joint3, joint4, joint5, joint6]
+points:
+  - timestamp: 0.000093433
+    positions: [ 0.1, 1.12080810546875, -2.29154296875, -1.568243164062501, 0.08296142578125015, -1.59 ]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    small_joint3: -0.01
+    small_joint1: 0.238
+    small_joint2: -0.176
+    middle_pitch: 0.071
+    transfer_gripper: true
+    small_gripper: true
+  - timestamp: 0.2
+    positions: [ 0.2, 1.12080810546875, -2.29154296875, -1.568243164062501, 0.08296142578125015, -1.59 ]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - timestamp: 1.15
+    positions: [ 0.2, -0.763, -2.096, -1.568243164062501, 0.35, -1.59 ]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - timestamp: 1.7
+    positions: [ 0.2, -0.763, -2.096, -1.568243164062501, 0.35, -1.59 ]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    main_gripper: false
+  - timestamp: 2.2
+    positions: [ 0.4, -0.5, -2.096, -1.568243164062501, 0.35, -1.59 ]
+  - timestamp: 2.7
+    positions: [0.55, -1.281, -2.189, -0.034, 1.575, -0.307]
+  - timestamp: 3.2
+    positions: [0.55, -2.142, -2.189, -0.034, 1.66, -0.307]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    main_gripper: true
+  - timestamp: 3.5
+    positions: [0.55, -2.142, -2.189, -0.034, 1.66, -0.307]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - timestamp: 3.65
+    positions: [0.47, -2.142, -2.189, -0.034, 1.66, -0.307]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    transfer_gripper: false
+    small_gripper: true
+  - timestamp: 4.0
+    positions: [0.47, -2.142, -2.189, -0.034, 1.66, -0.307]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  - timestamp: 4.2
+    positions: [0.55, -2.142, -2.189, -0.034, 1.66, -0.307]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    small_joint3: 1.61
+  - timestamp: 4.7
+    positions: [0.55, -1.281, -2.189, -0.034, 1.575, -0.307]
+  - timestamp: 5.7
+    positions: [ 0.55, 0.871, -2.407, -0.064, 0.653, 0.01 ]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    small_joint1: 0.1805
+  - timestamp: 6.0
+    positions: [0.55, 0.871, -2.407, -0.064, 0.653, 0.01]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    middle_pitch: 1.057
+  - timestamp: 6.4
+    positions: [0.244, 0.871, -2.407, -0.064, 0.653, 0.01]
+    velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]

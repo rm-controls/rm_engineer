@@ -1,0 +1,4 @@
+<launch>
+    <rosparam file="$(find engineer_custom_controller)/config/engineer_custom_controller.yaml" command="load"/>
+    <node name="engineer_custom_controller" pkg="engineer_custom_controller" type="engineer_custom_controller" respawn="false"/>
+</launch>

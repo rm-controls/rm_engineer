@@ -6,6 +6,6 @@ moveit_setup_assistant_config:
   SRDF:
     relative_path: config/engineer2.srdf
   CONFIG:
-    author_name: Chonghong Cai
-    author_email: 792166012@qq.com
-    generated_timestamp: 1720344342
+    author_name: ch
+    author_email: 3631676002@qq.com
+    generated_timestamp: 1775277360
