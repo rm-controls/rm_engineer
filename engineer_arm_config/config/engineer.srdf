@@ -10,22 +10,10 @@
     <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="left_arm">
-        <joint name="left_joint1"/>
-        <joint name="left_joint2"/>
-        <joint name="left_joint3"/>
-        <joint name="left_joint4"/>
-        <joint name="left_joint5"/>
-        <joint name="left_joint6"/>
-        <joint name="left_joint7"/>
+        <chain base_link="main_pitch_link" tip_link="left_tool0_link"/>
     </group>
     <group name="right_arm">
-        <joint name="right_joint1"/>
-        <joint name="right_joint2"/>
-        <joint name="right_joint3"/>
-        <joint name="right_joint4"/>
-        <joint name="right_joint5"/>
-        <joint name="right_joint6"/>
-        <joint name="right_joint7"/>
+        <chain base_link="main_pitch_link" tip_link="right_tool0_link"/>
     </group>
     <group name="gimbal_arm">
         <joint name="main_pitch"/>
