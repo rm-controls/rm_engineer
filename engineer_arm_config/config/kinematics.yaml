@@ -1,3 +1,21 @@
-engineer_arm:
+left_arm:
   kinematics_solver: trac_ik_kinematics_plugin/TRAC_IKKinematicsPlugin
+  kinematics_solver_search_resolution: 0.005
   kinematics_solver_timeout: 0.005
+  goal_joint_tolerance: 0.001
+  goal_position_tolerance: 0.001
+  goal_orientation_tolerance: 0.01
+right_arm:
+  kinematics_solver: trac_ik_kinematics_plugin/TRAC_IKKinematicsPlugin
+  kinematics_solver_search_resolution: 0.005
+  kinematics_solver_timeout: 0.005
+  goal_joint_tolerance: 0.001
+  goal_position_tolerance: 0.001
+  goal_orientation_tolerance: 0.01
+gimbal_arm:
+  kinematics_solver: trac_ik_kinematics_plugin/TRAC_IKKinematicsPlugin
+  kinematics_solver_search_resolution: 0.005
+  kinematics_solver_timeout: 0.005
+  goal_joint_tolerance: 0.0001
+  goal_position_tolerance: 0.0001
+  goal_orientation_tolerance: 0.001

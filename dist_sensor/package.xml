@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>dist_sensor</name>
+  <version>0.0.0</version>
+  <description>The dist_sensor package</description>
+
+  <license>BSD</license>
+  <maintainer email="3631676002@qq.com">ch</maintainer>
+  <!-- buildtool_depend: dependencies of the build process -->
+  <buildtool_depend>catkin</buildtool_depend>
+  <!-- depend: build, export, and execution dependency -->
+  <depend>roscpp</depend>
+  <depend>rm_msgs</depend>
+  <depend>rm_common</depend>
+  <depend>serial</depend>
+</package>

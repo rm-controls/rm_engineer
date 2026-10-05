@@ -1,0 +1,4 @@
+<launch>
+    <rosparam file="$(find engineer_trajectory_teaching)/config/config.yaml" command="load" ns="/engineer_trajectory_teaching"/>
+    <node name="engineer_trajectory_teaching" pkg="engineer_trajectory_teaching" type="engineer_trajectory_teaching" respawn="false" output="screen"/>
+</launch>

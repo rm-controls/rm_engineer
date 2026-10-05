@@ -8,38 +8,93 @@ default_acceleration_scaling_factor: 0.1
 # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
 joint_limits:
-  joint1:
+  left_joint1:
     has_velocity_limits: true
-    max_velocity: 1.80
+    max_velocity: 10.46
     has_acceleration_limits: true
-    max_acceleration: 3.5
-  joint2:
+    max_acceleration: 10
+  left_joint2:
     has_velocity_limits: true
-    max_velocity: 2.75
+    max_velocity: 10.46
     has_acceleration_limits: true
-    max_acceleration: 6
-  joint3:
+    max_acceleration: 10
+  left_joint3:
     has_velocity_limits: true
-    max_velocity: 1.80
+    max_velocity: 3.76
     has_acceleration_limits: true
-    max_acceleration: 5
-  joint4:
+    max_acceleration: 10
+  left_joint4:
     has_velocity_limits: true
-    max_velocity: 19
+    max_velocity: 3.76
     has_acceleration_limits: true
-    max_acceleration: 50
-  joint5:
+    max_acceleration: 10
+  left_joint5:
     has_velocity_limits: true
-    max_velocity: 15
+    max_velocity: 12.56
     has_acceleration_limits: true
-    max_acceleration: 20
-  joint6:
+    max_acceleration: 10
+  left_joint6:
     has_velocity_limits: true
-    max_velocity: 50
+    max_velocity: 12.56
     has_acceleration_limits: true
-    max_acceleration: 90
-  joint7:
+    max_acceleration: 10
+  left_joint7:
     has_velocity_limits: true
-    max_velocity: 50
+    max_velocity: 12.56
     has_acceleration_limits: true
-    max_acceleration: 90
+    max_acceleration: 10
+  right_joint1:
+    has_velocity_limits: true
+    max_velocity: 10.46
+    has_acceleration_limits: true
+    max_acceleration: 10
+  right_joint2:
+    has_velocity_limits: true
+    max_velocity: 10.46
+    has_acceleration_limits: true
+    max_acceleration: 10
+  right_joint3:
+    has_velocity_limits: true
+    max_velocity: 3.76
+    has_acceleration_limits: true
+    max_acceleration: 10
+  right_joint4:
+    has_velocity_limits: true
+    max_velocity: 3.76
+    has_acceleration_limits: true
+    max_acceleration: 10
+  right_joint5:
+    has_velocity_limits: true
+    max_velocity: 10.46
+    has_acceleration_limits: true
+    max_acceleration: 10
+  right_joint6:
+    has_velocity_limits: true
+    max_velocity: 10.46
+    has_acceleration_limits: true
+    max_acceleration: 10
+  right_joint7:
+    has_velocity_limits: true
+    max_velocity: 10.46
+    has_acceleration_limits: true
+    max_acceleration: 10
+  main_pitch:
+    has_velocity_limits: true
+    max_velocity: 10.46
+    has_acceleration_limits: true
+    max_acceleration: 10
+  gimbal_joint1:
+    has_velocity_limits: true
+    max_velocity: 3.76
+    has_acceleration_limits: true
+    max_acceleration: 10
+  gimbal_joint2:
+    has_velocity_limits: true
+    max_velocity: 10.46
+    has_acceleration_limits: true
+    max_acceleration: 10
+  gimbal_joint3:
+    has_velocity_limits: true
+    max_velocity: 10.46
+    has_acceleration_limits: true
+    max_acceleration: 10

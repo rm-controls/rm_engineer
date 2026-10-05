@@ -1,0 +1,7 @@
+<library path="libmoveit_auto_exchange_planner_plugin">
+  <class name="auto_exchange_planner/AutoExchangePlanner" type="auto_exchange_planner::AutoExchangeManager" base_class_type="planning_interface::PlannerManager">
+    <description>
+      The motion planner plugin which plans a particular path for RM exchanger.
+    </description>
+  </class>
+</library>

@@ -6,120 +6,148 @@ controllers:
     type: robot_state_controller/RobotStateController
     publish_rate: 100
 
-  arm_trajectory_controller:
-    type: effort_controllers/JointTrajectoryController
+  left_arm_controller:
+    type: gravity_compensation_controller/GravityCompensationJointTrajectoryController
     joints:
-      - joint1
-      - joint2
-      - joint3
-      - joint4
-      - joint5
-      - joint6
-      - joint7
+      - left_joint1
+      - left_joint2
+      - left_joint3
+      - left_joint4
+      - left_joint5
+      - left_joint6
+      - left_joint7
     gains:
-      joint1: { p: 20000.0, i: 0, d: 400.0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint2: { p: 30000, i: 0, d: 1000.0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint3: { p: 10000.0, i: 0, d: 320.0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint4: { p: 1000.0, i: 0.0, d: 20, i_clamp_max: 0, i_clamp_min: 0.0, antiwindup: true, publish_state: true }
-      joint5: { p: 350.0, i: 0, d: 50.0, i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint6: { p: 1000.0, i: 0, d: 13., i_clamp_max: 0, i_clamp_min: 0, antiwindup: true, publish_state: true }
-      joint7: { p: 5000., i: 0., d: 10000.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      left_joint1: { p: 100, i: 2.0, d: 2.0, i_clamp_max: 5, i_clamp_min: -5, antiwindup: true, publish_state: false }
+      left_joint2: { p: 150, i: 5.0, d: 5.0, i_clamp_max: 6, i_clamp_min: -6, antiwindup: true, publish_state: false }
+      left_joint3: { p: 100, i: 1.0, d: 1.0, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: false }
+      left_joint4: { p: 120, i: 5.0, d: 2.0, i_clamp_max: 3, i_clamp_min: -3, antiwindup: true, publish_state: false }
+      left_joint5: { p: 30, i: 1.0, d: 0.5, i_clamp_max: 1, i_clamp_min: -1, antiwindup: true, publish_state: false }
+      left_joint6: { p: 30, i: 1.0, d: 0.5, i_clamp_max: 1, i_clamp_min: -1, antiwindup: true, publish_state： false }
+      left_joint7: { p: 30, i: 1.0, d: 0.5, i_clamp_max: 1, i_clamp_min: -1, antiwindup: true, publish_state: false }
     constraints:
-      joint1: { trajectory: 0.05, goal: 0.05 }
-      joint2: { trajectory: 0.05, goal: 0.05 }
-      joint3: { trajectory: 0.05, goal: 0.05 }
-      joint4: { trajectory: 0.05, goal: 0.05 }
-      joint5: { trajectory: 0.05, goal: 0.05 }
-      joint6: { trajectory: 0.05, goal: 0.05 }
-      joint7: { trajectory: 0.05, goal: 0.05 }
+      goal_time: 5.0
+      stopped_velocity_tolerance: 0.05
+      left_joint1: { trajectory: 0.08, goal: 0.05 }
+      left_joint2: { trajectory: 0.08, goal: 0.05 }
+      left_joint3: { trajectory: 0.08, goal: 0.05 }
+      left_joint4: { trajectory: 0.08, goal: 0.05 }
+      left_joint5: { trajectory: 0.08, goal: 0.05 }
+      left_joint6: { trajectory: 0.08, goal: 0.05 }
+      left_joint7: { trajectory: 0.08, goal: 0.05 }
+    tau_g_scale: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+
+  right_arm_controller:
+    type: gravity_compensation_controller/GravityCompensationJointTrajectoryController
+    joints:
+      - right_joint1
+      - right_joint2
+      - right_joint3
+      - right_joint4
+      - right_joint5
+      - right_joint6
+      - right_joint7
+    gains:
+      right_joint1: { p: 100, i: 2.0, d: 2.0, i_clamp_max: 5, i_clamp_min: -5, antiwindup: true, publish_state: false }
+      right_joint2: { p: 150, i: 5.0, d: 5.0, i_clamp_max: 6, i_clamp_min: -6, antiwindup: true, publish_state: false }
+      right_joint3: { p: 100, i: 1.0, d: 1.0, i_clamp_max: 2, i_clamp_min: -2, antiwindup: true, publish_state: false }
+      right_joint4: { p: 120, i: 5.0, d: 2.0, i_clamp_max: 3, i_clamp_min: -3, antiwindup: true, publish_state: false }
+      right_joint5: { p: 30, i: 1.0, d: 0.5, i_clamp_max: 1, i_clamp_min: -1, antiwindup: true, publish_state: false }
+      right_joint6: { p: 30, i: 1.0, d: 0.5, i_clamp_max: 1, i_clamp_min: -1, antiwindup: true, publish_state: false }
+      right_joint7: { p: 30, i: 1.0, d: 0.5, i_clamp_max: 1, i_clamp_min: -1, antiwindup: true, publish_state: false }
+    constraints:
+      goal_time: 5.0
+      stopped_velocity_tolerance: 0.05
+      right_joint1: { trajectory: 0.08, goal: 0.05 }
+      right_joint2: { trajectory: 0.08, goal: 0.05 }
+      right_joint3: { trajectory: 0.08, goal: 0.05 }
+      right_joint4: { trajectory: 0.08, goal: 0.05 }
+      right_joint5: { trajectory: 0.08, goal: 0.05 }
+      right_joint6: { trajectory: 0.08, goal: 0.05 }
+      right_joint7: { trajectory: 0.08, goal: 0.05 }
+    tau_g_scale: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+
+  gimbal_arm_controller:
+    type: gravity_compensation_controller/GravityCompensationJointTrajectoryController
+    joints:
+      - main_pitch
+      - gimbal_joint1
+      - gimbal_joint2
+      - gimbal_joint3
+    gains:
+      main_pitch: { p: 350, i: 25.0, d: 7.0, i_clamp_max: 10, i_clamp_min: -10, antiwindup: true, publish_state: false }
+      gimbal_joint1: { p: 100.0, i: 10.0, d: 5.0, i_clamp_max: 3, i_clamp_min: -3, antiwindup: true, publish_state: false }
+      gimbal_joint2: { p: 100.0, i: 10.0, d: 5.0, i_clamp_max: 3, i_clamp_min: -3, antiwindup: true, publish_state: false }
+      gimbal_joint3: { p: 10.0, i: 1.0, d: 0.5, i_clamp_max: 1, i_clamp_min: -1, antiwindup: true, publish_state: false }
+    constraints:
+      goal_time: 5.0
+      stopped_velocity_tolerance: 0.05
+      main_pitch: { trajectory: 0.08, goal: 0.05 }
+      gimbal_joint1: { trajectory: 0.08, goal: 0.05 }
+      gimbal_joint2: { trajectory: 0.08, goal: 0.05 }
+      gimbal_joint3: { trajectory: 0.08, goal: 0.05 }
+    tau_g_scale: [0.0, 1.0, 1.0, 1.0]
 
   chassis_controller:
-    type: rm_chassis_controllers/OmniController
+    type: rm_chassis_controllers/SwerveController
     # ChassisBase
     publish_rate: 100
-    enable_odom_tf: true
+    publish_map_tf: false
     publish_odom_tf: true
+    slam_topic: "/Odometry"
+    localization_topic: "/hdl_global_localization/result"
     power:
-      effort_coeff: 2.0
-      vel_coeff: 0.008
-      power_offset: -9.8
+      effort_coeff: 1.8
+      vel_coeff: 0.01
+      power_offset: 7.0
+      pivot_max_power: 50
+      pivot_effort_coeff: 50
+      pivot_vel_coeff: 0.01
+      pivot_power_ratio: 0.8
+      power_factor: -0.2
+      use_rls: false
+      use_K_angle: true
     twist_angular: 0.5233
-    timeout: 0.1
-    pid_follow: { p: 4.0, i: 0, d: 0.02, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
-    twist_covariance_diagonal: [ 0.001, 0.001, 0.001, 0.001, 0.001, 0.001 ]
     max_odom_vel: 10.0
-    # OmniController
-    wheels:
+    timeout: 0.1
+    pid_follow: { p: 6.5, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+    twist_covariance_diagonal: [ 0.001, 0.001, 0.001, 0.001, 0.001, 0.001 ]
+
+    # SwerveController
+    modules:
       left_front:
-        pose: [ 0.213, 0.1945, 0. ]
-        roller_angle: -0.785
-        joint: left_front_wheel_joint
-        <<: &wheel_setting
-          radius: 0.07
-          pid: { p: 0.4, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+        position: [ 0.205, 0.200 ]
+        pivot:
+          joint: left_front_pivot_joint
+          <<: &pivot_setting
+            buffer_threshold: 10.0
+            offset: 0.
+            pid: { p: 4.5, i: 0, d: 0.03, i_clamp_max: 0.0, i_clamp_min: -0.0, antiwindup: true, publish_state: false }
+        wheel:
+          joint: left_front_wheel_joint
+          <<: &wheel_setting
+            radius: 0.061
+            pid: { p: 0.35, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: false }
       right_front:
-        pose: [ 0.213, -0.1945, 0. ]
-        roller_angle: 0.785
-        joint: right_front_wheel_joint
-        <<: *wheel_setting
+        position: [ 0.205, -0.200 ]
+        pivot:
+          joint: right_front_pivot_joint
+          <<: *pivot_setting
+        wheel:
+          joint: right_front_wheel_joint
+          <<: *wheel_setting
       left_back:
-        pose: [ -0.213, 0.1945, 0. ]
-        roller_angle: 0.785
-        joint: left_back_wheel_joint
-        <<: *wheel_setting
+        position: [ -0.205, 0.200 ]
+        pivot:
+          joint: left_back_pivot_joint
+          <<: *pivot_setting
+        wheel:
+          joint: left_back_wheel_joint
+          <<: *wheel_setting
       right_back:
-        pose: [ -0.213, -0.1945, 0. ]
-        roller_angle: -0.785
-        joint: right_back_wheel_joint
-        <<: *wheel_setting
-
-
-  gimbal_controller:
-    type: rm_gimbal_controllers/Controller
-    yaw:
-      joint: "yaw_joint"
-      pid: { p: 0.5, i: 0.0, d: 0.0, i_clamp_max: 0.0, i_clamp_min: -0.0, antiwindup: true, publish_state: true }
-    pitch:
-      joint: "pitch_joint"
-      pid: { p: 0., i: 0.0, d: 0.0, i_clamp_max: 0.0, i_clamp_min: -0.0, antiwindup: true, publish_state: true }
-    feedforward:
-      gravity: 0.0
-      enable_gravity_compensation: false
-      mass_origin: [ 0.0,0.0,0.0 ]
-    bullet_solver:
-      resistance_coff_qd_10: 0.45
-      resistance_coff_qd_15: 1.0
-      resistance_coff_qd_16: 0.7
-      resistance_coff_qd_18: 0.55
-      resistance_coff_qd_30: 3.0
-      g: 9.81
-      delay: 0.1
-      dt: 0.001
-      timeout: 0.001
-      publish_rate: 50
-
-  ####################### Position Controllers ######################
-  ore_bin_lifter_controller:
-    type: effort_controllers/JointPositionController
-    joint: ore_bin_lifter_joint
-    pid: { p: 100000., i: 0., d: 5000, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
-
-  ore_bin_rotate_controller:
-    type: effort_controllers/JointPositionController
-    joint: ore_bin_rotate_joint
-    pid: { p: 0.9, i: 0., d: 0.06, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
-
-  gimbal_lifter_controller:
-    type: effort_controllers/JointPositionController
-    joint: gimbal_lifter_joint
-    pid: { p: 20000., i: 0., d: 1200, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
-
-  extend_arm_front_controller:
-    type: effort_controllers/JointPositionController
-    joint: extend_arm_front_joint
-    pid: { p: 3., i: 0.1, d: 0.05, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
-
-  extend_arm_back_controller:
-    type: effort_controllers/JointPositionController
-    joint: extend_arm_back_joint
-    pid: { p: 3., i: 0.1, d: 0.05, i_max: 0.01, i_min: 0.01, antiwindup: true, publish_state: true }
+        position: [ -0.205, -0.200 ]
+        pivot:
+          joint: right_back_pivot_joint
+          <<: *pivot_setting
+        wheel:
+          joint: right_back_wheel_joint
+          <<: *wheel_setting
